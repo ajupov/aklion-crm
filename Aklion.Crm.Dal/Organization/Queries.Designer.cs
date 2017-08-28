@@ -70,9 +70,24 @@ namespace Aklion.Crm.DateAccessLayer.Organization {
         ///	from dbo.Organization
         ///	where Id = @id;.
         /// </summary>
-        internal static string Select {
+        internal static string Get {
             get {
-                return ResourceManager.GetString("Select", resourceCulture);
+                return ResourceManager.GetString("Get", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на select
+        ///	Id,
+        ///    [Name],
+        ///    IsDeleted,
+        ///    CreateDate,
+        ///    ModifyDate
+        ///	from dbo.Organization;.
+        /// </summary>
+        internal static string GetList {
+            get {
+                return ResourceManager.GetString("GetList", resourceCulture);
             }
         }
     }

@@ -19,9 +19,11 @@
         </div>
     </main>
     <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/scripts/shared/index.js"></script>
     </environment>
     <environment names="Staging,Production">
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/scripts/shared/index.min.js"></script>
     </environment>
     @RenderSection("Scripts", false)

@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Mvc
+namespace Aklion.Crm.Controllers
 {
     public class HomeController : Controller
     {
         public IActionResult Index()
         {
-            return RedirectToAction("Index", "Organization");
+            return RedirectToAction("Index", "Organizations");
         }
 
         public IActionResult Error()

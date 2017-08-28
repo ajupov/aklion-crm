@@ -14,5 +14,11 @@
       "enabled": true,
       "renameLocals": true
     }
+  },
+  {
+    "outputFileName": "wwwroot/scripts/organizations/index.min.js",
+    "inputFiles": [
+      "wwwroot/scripts/organizations/index.js"
+    ]
   }
 ]

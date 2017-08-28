@@ -16,12 +16,12 @@ namespace Aklion.Crm.DateAccessLayer.Organization
 
         public Task<OrganizationDomainModel> Get(int id)
         {
-            return _dataBaseExecutor.SelectOne<OrganizationDomainModel>(Queries.Select, new {id});
+            return _dataBaseExecutor.SelectOne<OrganizationDomainModel>(Queries.Get, new {id});
         }
 
         public Task<List<OrganizationDomainModel>> GetList()
         {
-            throw new System.NotImplementedException();
+            return _dataBaseExecutor.SelectList<OrganizationDomainModel>(Queries.GetList);
         }
 
         public Task<List<OrganizationDomainModel>> GetPagedList(int page, int size)
