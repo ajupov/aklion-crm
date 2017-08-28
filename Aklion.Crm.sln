@@ -5,6 +5,22 @@ VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aklion.Crm", "Aklion.Crm\Aklion.Crm.csproj", "{973018BC-FA82-4FE0-BAC3-0EC97E706CEF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aklion.Crm.Domain", "Aklion.Crm.Domain\Aklion.Crm.Domain.csproj", "{395B1047-D095-4803-9599-D58B9CDBFBD3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aklion.Crm.Business", "Aklion.Crm.Business\Aklion.Crm.Business.csproj", "{C3FAE165-373E-4428-BD04-9B6AE62ADBFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aklion.Crm.DateAccessLayer", "Aklion.Crm.Dal\Aklion.Crm.DateAccessLayer.csproj", "{76DCA560-CB75-4361-AB2B-40F854DD69F2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infrastructure", "infrastructure", "{C40D818E-4559-4F76-885C-DF22D7A0D956}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aklion.InfrastructureV1", "Aklion.InfrastructureV1\Aklion.InfrastructureV1.csproj", "{28D7876A-CCA3-4375-8B9B-FD528CC1F9C4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "v1", "v1", "{B6F94979-B834-4C4F-9A23-B8BF7033F49D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aklion.Crm.Settings", "Aklion.Crm.Settings\Aklion.Crm.Settings.csproj", "{4D297E23-A98B-4A32-A87D-B8D538577E9B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aklion.Crm.Enums", "Aklion.Crm.Enums\Aklion.Crm.Enums.csproj", "{3213FB3F-B486-4C15-90F2-82F1443D1D7D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,9 +31,37 @@ Global
 		{973018BC-FA82-4FE0-BAC3-0EC97E706CEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{973018BC-FA82-4FE0-BAC3-0EC97E706CEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{973018BC-FA82-4FE0-BAC3-0EC97E706CEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{395B1047-D095-4803-9599-D58B9CDBFBD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{395B1047-D095-4803-9599-D58B9CDBFBD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{395B1047-D095-4803-9599-D58B9CDBFBD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{395B1047-D095-4803-9599-D58B9CDBFBD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3FAE165-373E-4428-BD04-9B6AE62ADBFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3FAE165-373E-4428-BD04-9B6AE62ADBFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3FAE165-373E-4428-BD04-9B6AE62ADBFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3FAE165-373E-4428-BD04-9B6AE62ADBFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76DCA560-CB75-4361-AB2B-40F854DD69F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76DCA560-CB75-4361-AB2B-40F854DD69F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76DCA560-CB75-4361-AB2B-40F854DD69F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76DCA560-CB75-4361-AB2B-40F854DD69F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28D7876A-CCA3-4375-8B9B-FD528CC1F9C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28D7876A-CCA3-4375-8B9B-FD528CC1F9C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28D7876A-CCA3-4375-8B9B-FD528CC1F9C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28D7876A-CCA3-4375-8B9B-FD528CC1F9C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D297E23-A98B-4A32-A87D-B8D538577E9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D297E23-A98B-4A32-A87D-B8D538577E9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D297E23-A98B-4A32-A87D-B8D538577E9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D297E23-A98B-4A32-A87D-B8D538577E9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3213FB3F-B486-4C15-90F2-82F1443D1D7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3213FB3F-B486-4C15-90F2-82F1443D1D7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3213FB3F-B486-4C15-90F2-82F1443D1D7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3213FB3F-B486-4C15-90F2-82F1443D1D7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{28D7876A-CCA3-4375-8B9B-FD528CC1F9C4} = {B6F94979-B834-4C4F-9A23-B8BF7033F49D}
+		{B6F94979-B834-4C4F-9A23-B8BF7033F49D} = {C40D818E-4559-4F76-885C-DF22D7A0D956}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8292A160-CFA7-405D-AAFC-2FB0780B3FC1}

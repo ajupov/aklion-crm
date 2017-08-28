@@ -1,0 +1,18 @@
+[
+  {
+    "outputFileName": "wwwroot/styles/shared/index.min.css",
+    "inputFiles": [
+      "wwwroot/styles/shared/index.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/scripts/shared/index.min.js",
+    "inputFiles": [
+      "wwwroot/scripts/shared/index.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  }
+]

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace Aklion.Crm
 {
@@ -14,12 +8,8 @@ namespace Aklion.Crm
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
+            WebHost.CreateDefaultBuilder(args).UseContentRoot(Directory.GetCurrentDirectory()).UseStartup<Startup>()
+                .Build().Run();
         }
-
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .Build();
     }
 }
