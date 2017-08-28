@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.10
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aklion.Crm", "Aklion.Crm\Aklion.Crm.csproj", "{973018BC-FA82-4FE0-BAC3-0EC97E706CEF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{973018BC-FA82-4FE0-BAC3-0EC97E706CEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{973018BC-FA82-4FE0-BAC3-0EC97E706CEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{973018BC-FA82-4FE0-BAC3-0EC97E706CEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{973018BC-FA82-4FE0-BAC3-0EC97E706CEF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8292A160-CFA7-405D-AAFC-2FB0780B3FC1}
+	EndGlobalSection
+EndGlobal
