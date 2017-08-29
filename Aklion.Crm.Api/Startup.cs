@@ -1,6 +1,6 @@
 ﻿using Aklion.Crm.Dao.Organization;
-using Aklion.InfrastructureV1.ConnectionFactory;
-using Aklion.InfrastructureV1.DataBaseExecutor;
+using Aklion.Infrastructure.Storage.ConnectionFactory;
+using Aklion.Infrastructure.Storage.DataBaseExecutor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;

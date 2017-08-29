@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace Aklion.InfrastructureV1.ConnectionFactory
+namespace Aklion.Infrastructure.Storage.ConnectionFactory
 {
     public interface IConnectionFactory
     {

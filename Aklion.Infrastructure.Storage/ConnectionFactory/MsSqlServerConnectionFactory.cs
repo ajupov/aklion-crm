@@ -2,7 +2,7 @@
 using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 
-namespace Aklion.InfrastructureV1.ConnectionFactory
+namespace Aklion.Infrastructure.Storage.ConnectionFactory
 {
     public sealed class MsSqlServerConnectionFactory : IConnectionFactory
     {

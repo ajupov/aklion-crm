@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Aklion.InfrastructureV1.DataBaseExecutor;
+using Aklion.Infrastructure.Storage.DataBaseExecutor;
 
 namespace Aklion.Crm.Dao.Organization
 {

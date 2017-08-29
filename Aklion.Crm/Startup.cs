@@ -1,4 +1,4 @@
-﻿using Aklion.InfrastructureV1.ApiClient;
+﻿using Aklion.Infrastructure.ApiClient;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;

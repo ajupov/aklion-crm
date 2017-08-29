@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using Aklion.Crm.Models;
-using Aklion.InfrastructureV1.ApiClient;
+using Aklion.Infrastructure.ApiClient;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aklion.Crm.Controllers
@@ -26,7 +26,7 @@ namespace Aklion.Crm.Controllers
         {
             var result1 = await _apiClient.Get<List<OrganizationModel>>("organizations").ConfigureAwait(false);
 
-            var result2 = await _apiClient.Get<OrganizationModel>("organizations", new {id = 3}).ConfigureAwait(false);
+            var result2 = await _apiClient.Get<OrganizationModel>("organizations", new {id = 5}).ConfigureAwait(false);
 
             var model1 = new OrganizationModel
             {

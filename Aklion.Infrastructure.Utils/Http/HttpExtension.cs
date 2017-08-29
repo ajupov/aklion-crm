@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Net.Http;
 using System.Text;
-using Aklion.Utils.Json;
+using Aklion.Infrastructure.Utils.Json;
 
-namespace Aklion.Utils.Http
+namespace Aklion.Infrastructure.Utils.Http
 {
     public static class HttpExtension
     {

@@ -7,22 +7,28 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aklion.Crm", "Aklion.Crm\Ak
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aklion.Crm.Business", "Aklion.Crm.Business\Aklion.Crm.Business.csproj", "{C3FAE165-373E-4428-BD04-9B6AE62ADBFE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aklion.Crm.Dao", "Aklion.Crm.Dal\Aklion.Crm.Dao.csproj", "{76DCA560-CB75-4361-AB2B-40F854DD69F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aklion.Crm.Dao", "Aklion.Crm.Dao\Aklion.Crm.Dao.csproj", "{76DCA560-CB75-4361-AB2B-40F854DD69F2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infrastructure", "infrastructure", "{C40D818E-4559-4F76-885C-DF22D7A0D956}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aklion.InfrastructureV1", "Aklion.InfrastructureV1\Aklion.InfrastructureV1.csproj", "{28D7876A-CCA3-4375-8B9B-FD528CC1F9C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aklion.Infrastructure.Storage", "Aklion.Infrastructure.Storage\Aklion.Infrastructure.Storage.csproj", "{28D7876A-CCA3-4375-8B9B-FD528CC1F9C4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aklion.Crm.ApiV1", "Aklion.Crm.Api\Aklion.Crm.ApiV1.csproj", "{2D08A250-A263-44AA-BE8D-9BCBCBD14A30}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "crm", "crm", "{E6F7CEED-2768-4DA9-877D-395C85FB22F8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aklion.Utils", "Aklion.Utils\Aklion.Utils.csproj", "{D0351422-29C4-4859-B07E-EEDF94C177ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aklion.Infrastructure.Utils", "Aklion.Infrastructure.Utils\Aklion.Infrastructure.Utils.csproj", "{D0351422-29C4-4859-B07E-EEDF94C177ED}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "database", "database", "{6022B7D5-2C6D-42BE-A5D9-B2019FA3F78C}"
 	ProjectSection(SolutionItems) = preProject
 		Init.sql = Init.sql
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "enums", "enums", "{85EDA8C3-0EAB-4646-B376-C28E4BBC71CC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aklion.Crm.Enums", "Aklion.Crm.Enums\Aklion.Crm.Enums.csproj", "{3E461501-EB05-4E20-94F7-2DB29701776F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aklion.Infrastructure.ApiClient", "Aklion.Infrastructure.ApiClient\Aklion.Infrastructure.ApiClient.csproj", "{1EF20783-80D8-4EC2-B90A-D2189B678F76}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,6 +60,14 @@ Global
 		{D0351422-29C4-4859-B07E-EEDF94C177ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0351422-29C4-4859-B07E-EEDF94C177ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0351422-29C4-4859-B07E-EEDF94C177ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E461501-EB05-4E20-94F7-2DB29701776F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E461501-EB05-4E20-94F7-2DB29701776F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E461501-EB05-4E20-94F7-2DB29701776F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E461501-EB05-4E20-94F7-2DB29701776F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EF20783-80D8-4EC2-B90A-D2189B678F76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EF20783-80D8-4EC2-B90A-D2189B678F76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EF20783-80D8-4EC2-B90A-D2189B678F76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EF20783-80D8-4EC2-B90A-D2189B678F76}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,6 +77,8 @@ Global
 		{76DCA560-CB75-4361-AB2B-40F854DD69F2} = {E6F7CEED-2768-4DA9-877D-395C85FB22F8}
 		{28D7876A-CCA3-4375-8B9B-FD528CC1F9C4} = {C40D818E-4559-4F76-885C-DF22D7A0D956}
 		{D0351422-29C4-4859-B07E-EEDF94C177ED} = {C40D818E-4559-4F76-885C-DF22D7A0D956}
+		{3E461501-EB05-4E20-94F7-2DB29701776F} = {85EDA8C3-0EAB-4646-B376-C28E4BBC71CC}
+		{1EF20783-80D8-4EC2-B90A-D2189B678F76} = {C40D818E-4559-4F76-885C-DF22D7A0D956}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8292A160-CFA7-405D-AAFC-2FB0780B3FC1}

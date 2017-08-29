@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Aklion.InfrastructureV1.DataBaseExecutor
+namespace Aklion.Infrastructure.Storage.DataBaseExecutor
 {
     public interface IDataBaseExecutor
     {

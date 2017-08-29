@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Aklion.InfrastructureV1.ConnectionFactory;
+using Aklion.Infrastructure.Storage.ConnectionFactory;
 using Dapper;
 
-namespace Aklion.InfrastructureV1.DataBaseExecutor
+namespace Aklion.Infrastructure.Storage.DataBaseExecutor
 {
     public sealed class MsSqlServerDataBaseExecutor : IDataBaseExecutor
     {

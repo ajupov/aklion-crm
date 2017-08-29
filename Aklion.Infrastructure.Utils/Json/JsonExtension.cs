@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Aklion.Utils.Json
+namespace Aklion.Infrastructure.Utils.Json
 {
     public static class JsonExtension
     {

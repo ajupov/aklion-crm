@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Aklion.InfrastructureV1\Aklion.InfrastructureV1.csproj" />
+    <ProjectReference Include="..\Aklion.Infrastructure.Storage\Aklion.Infrastructure.Storage.csproj" />
   </ItemGroup>
 
   <ItemGroup>

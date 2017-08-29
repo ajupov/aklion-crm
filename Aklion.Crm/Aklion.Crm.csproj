@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Aklion.InfrastructureV1\Aklion.InfrastructureV1.csproj" />
+    <ProjectReference Include="..\Aklion.Infrastructure.ApiClient\Aklion.Infrastructure.ApiClient.csproj" />
   </ItemGroup>
 
 </Project>

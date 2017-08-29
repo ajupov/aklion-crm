@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Aklion.InfrastructureV1.ApiClient
+namespace Aklion.Infrastructure.ApiClient
 {
     public interface IApiClient
     {

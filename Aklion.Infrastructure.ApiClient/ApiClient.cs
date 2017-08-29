@@ -1,10 +1,10 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
-using Aklion.Utils.Http;
-using Aklion.Utils.Json;
+using Aklion.Infrastructure.Utils.Http;
+using Aklion.Infrastructure.Utils.Json;
 using Microsoft.Extensions.Configuration;
 
-namespace Aklion.InfrastructureV1.ApiClient
+namespace Aklion.Infrastructure.ApiClient
 {
     public class ApiClient : IApiClient
     {
