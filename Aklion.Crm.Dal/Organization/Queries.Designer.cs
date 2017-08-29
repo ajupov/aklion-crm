@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Aklion.Crm.DateAccessLayer.Organization {
+namespace Aklion.Crm.Dao.Organization {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Aklion.Crm.DateAccessLayer.Organization {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Aklion.Crm.DateAccessLayer.Organization.Queries", typeof(Queries).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Aklion.Crm.Dao.Organization.Queries", typeof(Queries).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,42 @@ namespace Aklion.Crm.DateAccessLayer.Organization {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на insert dbo.Organization
+        ///(
+        ///    [Name],
+        ///    IsDeleted,
+        ///    CreateDate,
+        ///    ModifyDate
+        ///)
+        ///values
+        ///(
+        ///    @Name,
+        ///    @IsDeleted,
+        ///    getdate(),
+        ///	null
+        ///);
+        ///
+        ///select
+        ///	scope_identity();.
+        /// </summary>
+        internal static string Create {
+            get {
+                return ResourceManager.GetString("Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на delete
+        ///	from dbo.Organization
+        ///	where Id = @id;.
+        /// </summary>
+        internal static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
             }
         }
         
@@ -88,6 +124,34 @@ namespace Aklion.Crm.DateAccessLayer.Organization {
         internal static string GetList {
             get {
                 return ResourceManager.GetString("GetList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на select
+        ///	Id,
+        ///    [Name],
+        ///    IsDeleted,
+        ///    CreateDate,
+        ///    ModifyDate
+        ///	from dbo.Organization;.
+        /// </summary>
+        internal static string GetPagedList {
+            get {
+                return ResourceManager.GetString("GetPagedList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на update dbo.Organization
+        ///	set [Name] = @Name,
+        ///		IsDeleted = @IsDeleted,
+        ///        ModifyDate = getdate()
+        ///	where Id = @Id;.
+        /// </summary>
+        internal static string Update {
+            get {
+                return ResourceManager.GetString("Update", resourceCulture);
             }
         }
     }

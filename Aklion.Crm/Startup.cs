@@ -1,6 +1,4 @@
-﻿using Aklion.Crm.DateAccessLayer.Organization;
-using Aklion.InfrastructureV1.ConnectionFactory;
-using Aklion.InfrastructureV1.DataBaseExecutor;
+﻿using Aklion.InfrastructureV1.ApiClient;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -26,9 +24,7 @@ namespace Aklion.Crm
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(Configuration)
-                .AddSingleton<IConnectionFactory, MsSqlServerConnectionFactory>()
-                .AddSingleton<IDataBaseExecutor, MsSqlServerDataBaseExecutor>()
-                .AddSingleton<IOrganizationDao, OrganizationDao>()
+                .AddSingleton<IApiClient, ApiClient>()
                 .AddMvc();
         }
         

@@ -5,9 +5,8 @@ var indexUi = {
 };
 
 $(document).ready(() => {
-    $.get('organizations/',
+    $.get('Organizations/GetList',
         result => {
-            debugger;
             indexUi.organizations.val(result);
         },
         'json').fail(() => alert('Произошла ошибка'));

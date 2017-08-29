@@ -1,4 +1,4 @@
-﻿using Aklion.Crm.DateAccessLayer.Organization;
+﻿using Aklion.Crm.Dao.Organization;
 using Aklion.InfrastructureV1.ConnectionFactory;
 using Aklion.InfrastructureV1.DataBaseExecutor;
 using Microsoft.AspNetCore.Builder;

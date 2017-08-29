@@ -1,20 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Aklion.Crm.Domain.Organization;
 
-namespace Aklion.Crm.DateAccessLayer.Organization
+namespace Aklion.Crm.Dao.Organization
 {
     public interface IOrganizationDao
     {
-        Task<OrganizationDomainModel> Get(int id);
+        Task<Models.Organization> Get(int id);
 
-        Task<List<OrganizationDomainModel>> GetList();
+        Task<List<Models.Organization>> GetList(int page, int size);
 
-        Task<List<OrganizationDomainModel>> GetPagedList(int page, int size);
+        Task<int> Create(Models.Organization model);
 
-        Task Create(OrganizationDomainModel model);
-
-        Task Update(OrganizationDomainModel model);
+        Task Update(Models.Organization model);
 
         Task Delete(int id);
     }

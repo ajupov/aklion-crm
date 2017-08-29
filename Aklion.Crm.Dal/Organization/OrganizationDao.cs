@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Aklion.Crm.Domain.Organization;
 using Aklion.InfrastructureV1.DataBaseExecutor;
 
-namespace Aklion.Crm.DateAccessLayer.Organization
+namespace Aklion.Crm.Dao.Organization
 {
     public class OrganizationDao : IOrganizationDao
     {
@@ -14,34 +13,29 @@ namespace Aklion.Crm.DateAccessLayer.Organization
             _dataBaseExecutor = dataBaseExecutor;
         }
 
-        public Task<OrganizationDomainModel> Get(int id)
+        public Task<Models.Organization> Get(int id)
         {
-            return _dataBaseExecutor.SelectOne<OrganizationDomainModel>(Queries.Get, new {id});
+            return _dataBaseExecutor.SelectOne<Models.Organization>(Queries.Get, new {id});
         }
 
-        public Task<List<OrganizationDomainModel>> GetList()
+        public Task<List<Models.Organization>> GetList(int page, int size)
         {
-            return _dataBaseExecutor.SelectList<OrganizationDomainModel>(Queries.GetList);
+            return _dataBaseExecutor.SelectList<Models.Organization>(Queries.GetList, new {page, size});
         }
 
-        public Task<List<OrganizationDomainModel>> GetPagedList(int page, int size)
+        public Task<int> Create(Models.Organization model)
         {
-            throw new System.NotImplementedException();
+            return _dataBaseExecutor.SelectOne<int>(Queries.Create, model);
         }
 
-        public Task Create(OrganizationDomainModel model)
+        public Task Update(Models.Organization model)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public Task Update(OrganizationDomainModel model)
-        {
-            throw new System.NotImplementedException();
+            return _dataBaseExecutor.Execute(Queries.Update, model);
         }
 
         public Task Delete(int id)
         {
-            throw new System.NotImplementedException();
+            return _dataBaseExecutor.Execute(Queries.Delete, new {id});
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Aklion.Crm.Domain.Organization
+namespace Aklion.Crm.Dao.Organization.Models
 {
-    public class OrganizationDomainModel
+    public class Organization
     {
         public int Id { get; set; }
 

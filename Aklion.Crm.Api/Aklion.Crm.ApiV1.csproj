@@ -9,7 +9,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Aklion.Crm.Dal\Aklion.Crm.DateAccessLayer.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Aklion.Crm.Dal\Aklion.Crm.Dao.csproj" />
   </ItemGroup>
 
 </Project>
