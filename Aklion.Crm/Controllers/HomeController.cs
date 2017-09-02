@@ -6,7 +6,7 @@ namespace Aklion.Crm.Controllers
     {
         public IActionResult Index()
         {
-            return RedirectToAction("Index", "Organizations");
+            return View();
         }
 
         public IActionResult Error()

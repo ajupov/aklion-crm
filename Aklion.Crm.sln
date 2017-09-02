@@ -22,6 +22,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "database", "database", "{6022B7D5-2C6D-42BE-A5D9-B2019FA3F78C}"
 	ProjectSection(SolutionItems) = preProject
 		Init.sql = Init.sql
+		InitLogs.sql = InitLogs.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "enums", "enums", "{85EDA8C3-0EAB-4646-B376-C28E4BBC71CC}"

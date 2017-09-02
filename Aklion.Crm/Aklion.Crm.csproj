@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Aklion.Crm.Dao\Aklion.Crm.Dao.csproj" />
     <ProjectReference Include="..\Aklion.Infrastructure.ApiClient\Aklion.Infrastructure.ApiClient.csproj" />
   </ItemGroup>
 

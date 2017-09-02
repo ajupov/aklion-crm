@@ -1,0 +1,16 @@
+﻿@model List<Aklion.Crm.Models.Store>
+
+<table>
+    <thead>
+        <tr>
+            <td>№</td>
+            <td>Название</td>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var store in Model)
+    {
+        @Html.Partial("Partials/Store", store)
+    }
+    </tbody>
+</table>
