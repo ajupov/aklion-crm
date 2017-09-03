@@ -1,32 +1,21 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    @RenderSection("Meta", false)
     <title>@ViewData["Title"] - Aklion CRM</title>
-    <environment names="Development">
-        <link rel="stylesheet" href="~/styles/shared/index.css" />
-    </environment>
-    <environment names="Staging,Production">
-        <link rel="stylesheet" href="~/styles/shared/index.min.css" asp-append-version="true" />
-    </environment>
+    @await Html.PartialAsync("_Styles").ConfigureAwait(false)
     @RenderSection("Styles", false)
 </head>
 <body>
-    <main>
-        @await Html.PartialAsync("_Menu").ConfigureAwait(false)
-        <div>
-            @RenderBody()
-        </div>
-    </main>
-    <environment names="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/scripts/shared/index.js"></script>
-    </environment>
-    <environment names="Staging,Production">
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/scripts/shared/index.min.js"></script>
-    </environment>
-    @RenderSection("Scripts", false)
+<main>
+    @await Html.PartialAsync("_Menu").ConfigureAwait(false)
+    <div class="content">
+        @RenderBody()
+    </div>
+</main>
+@await Html.PartialAsync("_Scripts").ConfigureAwait(false)
+@RenderSection("Scripts", false)
 </body>
 </html>

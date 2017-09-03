@@ -1,0 +1,17 @@
+@model Aklion.Crm.Models.Stores.EditStore
+
+<div id="add-store-modal" class="modal">
+    <div class="modal-content card">
+        <span class="modal-close"><i class="fa fa-times"></i></span>
+        <h4 class="center-align">Изменение магазина</h4>
+        <form id="add-store-form" method="post" asp-controller="Stores" asp-action="Add">
+            <input type="hidden" asp-for="Id">
+            <div class="input-field">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" placeholder="например, Берёзка"/>
+                <span asp-validation-for="Name" class="error-text"></span>
+            </div>
+            <button type="submit" class="btn right">Сохранить</button>
+        </form>
+    </div>
+</div>

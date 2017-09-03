@@ -1,30 +1,56 @@
-﻿@font-face {
+﻿/*Fonts*/
+@font-face {
     font-family: RobotoRegular;
     src: url("../../fonts/RobotoRegular/RobotoRegular.ttf");
 }
-
 @font-face {
     font-family: RobotoLight;
     src: url("../../fonts/RobotoLight/RobotoLight.ttf");
 }
-
 @font-face {
     font-family: RobotoMedium;
     src: url("../../fonts/RobotoMedium/RobotoMedium.ttf");
 }
-
 @font-face {
     font-family: RobotoBold;
     src: url("../../fonts/RobotoBold/RobotoBold.ttf");
 }
 
+/*Common*/
 body {
-    font-family: RobotoRegular;
+    font-family: RobotoRegular !important;
+}
+body {
     margin: 0;
 }
 
-b { font-family: RobotoBold; }
+/*Modal*/
+.modal {
+    background-color: #000000;
+    background-color: rgba(0, 0, 0, 0.2);
+    display: none;
+    height: 100%;
+    left: 0;
+    overflow: auto;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+.modal-content {
+    background-color: #ffffff;
+    display: table;
+    margin: 15% auto;
+    padding: 10px;
+}
+.modal-close {
+    float: right;
+}
+.modal-close:hover, .modal-close:focus {
+    cursor: pointer;
+}
 
+/*Navbar*/
 ul#navbar {
     background-color: #263238;
     list-style-type: none;
@@ -32,9 +58,9 @@ ul#navbar {
     overflow: hidden;
     padding: 0;
 }
-
-ul#navbar li { float: left; }
-
+ul#navbar li {
+    float: left;
+}
 ul#navbar li a {
     color: white;
     display: block;
@@ -42,5 +68,119 @@ ul#navbar li a {
     text-align: center;
     text-decoration: none;
 }
+ul#navbar li a:hover {
+    color: #FFFFFF;
+}
 
-ul#navbar li a:hover { color: #FFFFFF; }
+/*Card*/
+.card {
+    border-radius: 1px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+/*H elements*/
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 0;
+}
+
+/*Form*/
+.input-field {
+    margin-bottom: 10px;
+}
+.input-field input[type="text"] {
+        border: none;
+        border-bottom: #616161 1px solid;
+        padding: 5px 2px;
+    }
+.input-field input[type="text"]:focus {
+            outline: none;
+            padding: 5px 2px;
+            border-bottom: #4caf50 1px solid;
+        }
+.input-field label {
+        font-size: 0.75em;
+        color: #616161;
+    }
+.input-field span.error-text {
+    color: #f44336 !important;
+    display: block;
+    font-size: 0.75em;
+}
+
+/*Button*/
+.btn {
+    background: transparent;
+    border: #388E3C 1px solid;
+    border-radius: 3px;
+    display: inline-block;
+    font-family: RobotoRegular !important;
+    font-size: 0.85em;
+    margin-bottom: 10px;
+    padding: 4px 8px;
+    text-decoration: none;
+}
+.btn:focus {
+    border: #81C784 1px solid;
+    outline: none;
+}
+.btn:active {
+    color: #81C784;
+}
+.btn:hover {
+    cursor: pointer;
+}
+
+/*Container*/
+.content {
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+/*Table*/
+table {
+    border: #388E3C 1px solid;
+    font-size: 0.95em;
+    border-collapse: collapse;
+}
+table td {
+    border: #388E3C 1px solid;
+}
+table thead tr {
+    background: #FFECB3;
+    font-weight: bold;
+    word-break: break-all;
+}
+table tbody tr:nth-child(odd) {
+    background: #C8E6C9;
+}
+table tbody tr:hover {
+    background: #E8F5E9;
+}
+table a {
+    text-decoration: none;
+    color: #263238;
+}
+
+@media only screen and (max-width: 600px) {
+
+}
+
+@media only screen and (min-width: 601px) and (max-width: 992px) {
+
+}
+
+@media only screen and (min-width: 993px) {
+
+}
+
+
+
+
+
+.center-align {
+    text-align: center;
+}
+
+.right {
+    float: right;   
+}

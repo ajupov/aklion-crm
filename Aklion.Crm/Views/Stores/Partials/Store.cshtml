@@ -1,6 +1,15 @@
-﻿@model Aklion.Crm.Models.Store
+@using Aklion.Infrastructure.Utils.DateTime
+@model Aklion.Crm.Models.Stores.Store
 
 <tr>
     <td>@Model.Id</td>
     <td>@Model.Name</td>
+    <td>@Model.ApiKey</td>
+    <td>@Model.ApiSecret</td>
+    <td class="center-align">@(Model.IsLocked ? "Да": "Нет")</td>
+    <td class="center-align">@(Model.IsDeleted ? "Да": "Нет")</td>
+    <td class="center-align">@Model.CreateDate.ToDateString()</td>
+    <td class="center-align">@Model.ModifyDate?.ToDateString()</td>
+    <td class="center-align"><a href="#" onclick="getItem(@Model.Id);"><i class="fa fa-pencil"></i></a></td>
+    <td class="center-align"><a href="#" onclick="deleteItem(@Model.Id);"><i class="fa fa-times"></i></a></td>
 </tr>

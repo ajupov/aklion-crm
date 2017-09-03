@@ -1,4 +1,7 @@
-﻿using Aklion.Infrastructure.ApiClient;
+﻿using Aklion.Crm.Dao.Store;
+using Aklion.Infrastructure.ApiClient;
+using Aklion.Infrastructure.Storage.ConnectionFactory;
+using Aklion.Infrastructure.Storage.DataBaseExecutor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -25,6 +28,9 @@ namespace Aklion.Crm
         {
             services.AddSingleton(Configuration)
                 .AddSingleton<IApiClient, ApiClient>()
+                .AddSingleton<IConnectionFactory, MsSqlServerConnectionFactory>()
+                .AddSingleton<IDataBaseExecutor, MsSqlServerDataBaseExecutor>()
+                .AddSingleton<IStoreDao, StoreDao>()
                 .AddMvc();
         }
         

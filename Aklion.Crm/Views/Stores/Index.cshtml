@@ -2,5 +2,19 @@
     ViewBag.Title = "Магазины";
 }
 
-<h1><b>@ViewBag.Title</b></h1>
+<h1>@ViewBag.Title</h1>
+<a href="#" class="modal-trigger btn" data-modal-id="add-store-modal">Добавить магазин</a>
 <div id="stores"></div>
+
+@await Html.PartialAsync("Partials/AddStore").ConfigureAwait(false)
+
+@section Scripts {
+    @{
+        <environment names="Development">
+            <script src="~/scripts/stores/index.js"></script>
+        </environment>
+        <environment names="Staging,Production">
+            <script src="~/scripts/stores/index.min.js"></script>
+        </environment>
+    }
+}

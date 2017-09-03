@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AppStore = Aklion.Crm.Models.Store;
+using Aklion.Crm.Models.Stores;
+using AppStore = Aklion.Crm.Models.Stores.Store;
 using DaoStore = Aklion.Crm.Dao.Store.Models.Store;
 
 namespace Aklion.Crm.Mappers
@@ -26,6 +27,31 @@ namespace Aklion.Crm.Mappers
                     IsDeleted = model.IsDeleted,
                     CreateDate = model.CreateDate,
                     ModifyDate = model.ModifyDate
+                };
+        }
+
+        public static DaoStore Map(this AddStore model)
+        {
+            return model == null
+                ? null
+                : new DaoStore
+                {
+                    Name = model.Name,
+                    IsLocked = false,
+                    IsDeleted = false,
+                    ApiKey = null,
+                    ApiSecret = null
+                };
+        }
+
+        public static EditStore MapToEdit(this DaoStore model)
+        {
+            return model == null
+                ? null
+                : new EditStore
+                {
+                    Id = model.Id,
+                    Name = model.Name
                 };
         }
     }
