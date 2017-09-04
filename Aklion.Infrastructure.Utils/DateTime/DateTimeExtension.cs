@@ -6,6 +6,7 @@ namespace Aklion.Infrastructure.Utils.DateTime
     public static class DateTimeExtension
     {
         private const string DateFormat = "dd.MM.yyyy";
+        private const string IsoDateFormat = "yyyy-MM-dd";
         private const string TimeFormat = "HH:mm";
         private const string DateTimeFormat = "dd.MM.yyyy HH:mm";
         private const string DateTimeWithSecondsFormat = "dd.MM.yyyy HH:mm:ss";
@@ -14,6 +15,11 @@ namespace Aklion.Infrastructure.Utils.DateTime
         public static string ToDateString(this System.DateTime date)
         {
             return date.ToString(DateFormat);
+        }
+
+        public static string ToIsoDateString(this System.DateTime date)
+        {
+            return date.ToString(IsoDateFormat);
         }
 
         public static string ToTimeString(this System.DateTime time)

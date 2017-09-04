@@ -115,9 +115,10 @@ h1, h2, h3, h4, h5, h6 {
     display: inline-block;
     font-family: RobotoRegular !important;
     font-size: 0.85em;
-    margin-bottom: 10px;
+    margin: 5px;
     padding: 4px 8px;
     text-decoration: none;
+    cursor: pointer;
 }
 .btn:focus {
     border: #81C784 1px solid;
@@ -129,6 +130,20 @@ h1, h2, h3, h4, h5, h6 {
 .btn:hover {
     cursor: pointer;
 }
+.small-btn {
+    background: transparent;
+    border: #388E3C 1px solid;
+    border-radius: 3px;
+    font-family: RobotoRegular !important;
+    font-size: 0.75em;
+    margin: 2px;
+    text-decoration: none;
+    cursor: pointer;
+}
+.small-btn:focus {
+    border: #81C784 1px solid;
+    outline: none;
+}
 
 /*Container*/
 .content {
@@ -138,28 +153,28 @@ h1, h2, h3, h4, h5, h6 {
 
 /*Table*/
 table {
-    border: #388E3C 1px solid;
-    font-size: 0.95em;
+    font-size: 0.85em;
     border-collapse: collapse;
+    width: 100%;
 }
-table td {
+thead, tfoot {
+    background: #FFECB3;
+}
+
+td, th {
     border: #388E3C 1px solid;
 }
-table thead tr {
-    background: #FFECB3;
-    font-weight: bold;
-    word-break: break-all;
-}
-table tbody tr:nth-child(odd) {
+
+tbody tr:nth-child(odd), tbody tr:hover {
     background: #C8E6C9;
 }
-table tbody tr:hover {
-    background: #E8F5E9;
-}
+
 table a {
     text-decoration: none;
     color: #263238;
 }
+
+
 
 @media only screen and (max-width: 600px) {
 
@@ -181,6 +196,27 @@ table a {
     text-align: center;
 }
 
+.right-align {
+    text-align: right;
+}
+
 .right {
-    float: right;   
+    float: right;
+}
+
+input[type="text"], input[type="date"], select {
+    border: none;
+    border-bottom: #616161 1px solid;
+}
+input[type="text"]:focus, input[type="date"]:focus, select:focus {
+    outline: none;
+    border-bottom: #4caf50 1px solid;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.scroll-panel {
+    overflow-x: auto;
 }

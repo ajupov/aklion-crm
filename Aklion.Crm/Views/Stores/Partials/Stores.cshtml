@@ -1,24 +1,25 @@
+@using Aklion.Infrastructure.Utils.DateTime
 @model List<Aklion.Crm.Models.Stores.Store>
 
-<table>
-    <thead class="center-align">
-        <tr>
-            <td width="5%">№</td>
-            <td width="40%">Название</td>
-            <td width="10%">АПИ-ключ</td>
-            <td width="15%">АПИ-секрет</td>
-            <td width="5%">Заблокирован</td>
-            <td width="5%">Скрыт</td>
-            <td width="7.5%">Дата/время создания</td>
-            <td width="7.5%">Дата/время изменения</td>
-            <td width="2.5%"></td>
-            <td width="2.5%"></td>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var store in Model)
-    {
-        @Html.Partial("Partials/Store", store)
-    }
-    </tbody>
-</table>
+@foreach (var store in Model)
+{
+    <tr>
+        <td>@store.Id</td>
+        <td>@store.Name</td>
+        <td>@store.ApiKey</td>
+        <td>@store.ApiSecret</td>
+        <td class="center-align">@(store.IsLocked ? "Да" : "Нет")</td>
+        <td class="center-align">@(store.IsDeleted ? "Да" : "Нет")</td>
+        <td class="center-align">@store.CreateDate.ToDateString()</td>
+        <td class="center-align">
+            <a href="#" onclick="getItem(@store.Id);">
+                <i class="fa fa-pencil"></i>
+            </a>
+        </td>
+        <td class="center-align">
+            <a href="#" onclick="deleteItem(@store.Id);">
+                <i class="fa fa-times"></i>
+            </a>
+        </td>
+    </tr>
+}
