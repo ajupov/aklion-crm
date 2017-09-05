@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Aklion.Crm.Dao.Store;
 using Aklion.Crm.Mappers;
 using Aklion.Crm.Models.Stores;
@@ -22,10 +23,11 @@ namespace Aklion.Crm.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetList()
+        public async Task<List<Store>> GetList()
         {
             var result = await _storeDao.GetList(0, int.MaxValue).ConfigureAwait(false);
-            return PartialView("Partials/Stores", result.Map());
+            return result.Map();
+            //return PartialView("Partials/Stores", result.Map());
         }
 
         [HttpGet]

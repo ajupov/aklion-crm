@@ -3,29 +3,20 @@
     font-family: RobotoRegular;
     src: url("../../fonts/RobotoRegular/RobotoRegular.ttf");
 }
-@font-face {
-    font-family: RobotoLight;
-    src: url("../../fonts/RobotoLight/RobotoLight.ttf");
-}
-@font-face {
-    font-family: RobotoMedium;
-    src: url("../../fonts/RobotoMedium/RobotoMedium.ttf");
-}
-@font-face {
-    font-family: RobotoBold;
-    src: url("../../fonts/RobotoBold/RobotoBold.ttf");
-}
 
 /*Common*/
-body {
-    font-family: RobotoRegular !important;
+* {
+    font-family: RobotoRegular;
+    color: #212121;
+    outline: none;
+    text-decoration: none;
 }
 body {
     margin: 0;
 }
 
 /*Modal*/
-.modal {
+/*.modal {
     background-color: #000000;
     background-color: rgba(0, 0, 0, 0.2);
     display: none;
@@ -35,7 +26,7 @@ body {
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 1;
+    z-index: 9999;
 }
 .modal-content {
     background-color: #ffffff;
@@ -48,43 +39,43 @@ body {
 }
 .modal-close:hover, .modal-close:focus {
     cursor: pointer;
-}
+}*/
 
 /*Navbar*/
-ul#navbar {
+#navbar {
     background-color: #263238;
     list-style-type: none;
     margin: 0;
     overflow: hidden;
     padding: 0;
 }
-ul#navbar li {
+#navbar li {
     float: left;
 }
-ul#navbar li a {
-    color: white;
+#navbar li a {
+    color: #ffffff;
     display: block;
     padding: 10px;
     text-align: center;
     text-decoration: none;
 }
-ul#navbar li a:hover {
-    color: #FFFFFF;
+#navbar li a:hover {
+    background: #37474F;
 }
 
 /*Card*/
-.card {
+/*.card {
     border-radius: 1px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-}
+}*/
 
 /*H elements*/
-h1, h2, h3, h4, h5, h6 {
+/*h1, h2, h3, h4, h5, h6 {
     margin-top: 0;
-}
+}*/
 
 /*Form*/
-.input-field {
+/*.input-field {
     margin-bottom: 10px;
 }
 .input-field input[type="text"] {
@@ -105,32 +96,38 @@ h1, h2, h3, h4, h5, h6 {
     color: #f44336 !important;
     display: block;
     font-size: 0.75em;
-}
+}*/
 
 /*Button*/
-.btn {
+.ui-button {
     background: transparent;
     border: #388E3C 1px solid;
-    border-radius: 3px;
+    border-radius: 2px;
     display: inline-block;
-    font-family: RobotoRegular !important;
-    font-size: 0.85em;
-    margin: 5px;
-    padding: 4px 8px;
-    text-decoration: none;
+    font-size: 0.75em;
+    margin: 3px;
+    padding: 4px 4px;
     cursor: pointer;
 }
-.btn:focus {
-    border: #81C784 1px solid;
-    outline: none;
-}
-.btn:active {
+.ui-button:active {
     color: #81C784;
 }
-.btn:hover {
+.ui-button:hover {
     cursor: pointer;
 }
-.small-btn {
+
+.ui-jqgrid tr.ui-search-toolbar td > input,
+.ui-jqgrid tr.ui-search-toolbar td > select {
+    width: 100%;
+}
+.ui-search-clear {
+    display: none;
+}
+.jqgrow td[role="gridcell"] {
+    border: 1px solid #9E9E9E;
+}
+
+/*.small-btn {
     background: transparent;
     border: #388E3C 1px solid;
     border-radius: 3px;
@@ -143,7 +140,7 @@ h1, h2, h3, h4, h5, h6 {
 .small-btn:focus {
     border: #81C784 1px solid;
     outline: none;
-}
+}*/
 
 /*Container*/
 .content {
@@ -151,33 +148,36 @@ h1, h2, h3, h4, h5, h6 {
     margin-right: 1%;
 }
 
-/*Table*/
-table {
-    font-size: 0.85em;
-    border-collapse: collapse;
-    width: 100%;
-}
-thead, tfoot {
-    background: #FFECB3;
-}
-
-td, th {
-    border: #388E3C 1px solid;
-}
-
-tbody tr:nth-child(odd), tbody tr:hover {
+/*.jqgrow:nth-child(odd), .jqgrow:hover {
     background: #C8E6C9;
-}
+    cursor: pointer;
+}*/
 
+/*Table*/
+/*.ui-jqgrid-htable, .ui-jqgrid-btable {
+    border: #388E3C 1px solid;
+    border-collapse: collapse;
+}*/
+
+
+/*
+.ui-jqgrid-view {
+    border-top: #388E3C 1px solid;
+    border-left: #388E3C 1px solid;
+}*/
+/*.ui-jqgrid-resize {
+    display: none;    
+}*/
+/*td, th {
+    border: #388E3C 1px solid;
+}*/
+/*
 table a {
     text-decoration: none;
     color: #263238;
-}
-
-
+}*/
 
 @media only screen and (max-width: 600px) {
-
 }
 
 @media only screen and (min-width: 601px) and (max-width: 992px) {
@@ -204,15 +204,23 @@ table a {
     float: right;
 }
 
-input[type="text"], input[type="date"], select {
+/*input[type="text"], input[type="date"], select {
     border: none;
     border-bottom: #616161 1px solid;
 }
 input[type="text"]:focus, input[type="date"]:focus, select:focus {
     outline: none;
     border-bottom: #4caf50 1px solid;
-}
-
+}*/
+/*.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default,
+.ui-button,
+html .ui-button.ui-state-disabled:hover,
+html .ui-button.ui-state-disabled:active {
+    background: #ffffff;
+    border: #C8E6C9 1px solid;
+}*/
 .full-width {
     width: 100%;
 }

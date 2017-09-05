@@ -4,10 +4,14 @@
 }
 
 <h1>@ViewBag.Title</h1>
-<a href="#" class="modal-trigger btn" data-modal-id="add-store-modal">Добавить</a>
-<a href="#" class="modal-trigger btn" data-modal-id="add-store-modal">Выгрузить в Excel</a>
+<a href="#" class="modal-trigger ui-button btn" data-modal-id="add-store-modal">Добавить</a>
+<a href="#" class="modal-trigger ui-button btn" data-modal-id="add-store-modal">Выгрузить в Excel</a>
 <br>
 <br>
+
+<table id="jqGrid"></table>
+<div id="jqGridPager"></div>
+
 @*<div class="scroll-panel">
     <table>
         <thead class="center-align">
@@ -69,23 +73,23 @@
             <th colspan="9">
                 <div class="pagination-container">
                     <ul class="pagination">
-                        @*@if (Model.Page > 1)
+                        @if (Model.Page > 1)
                             {
                                 if (Model.Page > 2)
-                                {*@
+                                {
                         <li>
                             <a href="#" data-predestination="pagination">1</a>
                             ...
                         </li>
-                        @*}
+                        }
                                 <li>
                                     <a href="#" data-predestination="pagination">@(Model.Page - 1)</a>
                                 </li>
-                            }*@
-                        @*<li class="active">
+                            }
+                        <li class="active">
                                 <a href="#" data-predestination="pagination">@Model.Page</a>
-                            </li>*@
-                        @*@if (Model.Page < Model.TotalPages)
+                            </li>
+                        @if (Model.Page < Model.TotalPages)
                             {
                                 <li>
                                     <a href="#" data-predestination="pagination">@(Model.Page + 1)</a>
@@ -97,7 +101,7 @@
                                         <a href="#" data-predestination="pagination">@Model.TotalPages</a>
                                     </li>
                                 }
-                            }*@
+                            }
                     </ul>
                 </div>
             </th>
