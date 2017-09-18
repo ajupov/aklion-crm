@@ -1,5 +1,6 @@
 ﻿insert dbo.Store
 (
+	CreateUserId,
     [Name],
     ApiKey,
     ApiSecret,
@@ -10,6 +11,7 @@
 )
 values
 (
+	@CreateUserId,
     @Name,
     @ApiKey,
     @ApiSecret,

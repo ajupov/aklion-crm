@@ -31,14 +31,15 @@ go
 -- Магазин
 create table dbo.Store
 (
-    Id         int          not null identity(1, 1) constraint PK_Store_Id primary key,
-    [Name]     varchar(256) not null constraint UQ_Store_Name unique,
-    ApiKey     varchar(32)  null,
-    ApiSecret  varchar(128) null,
-    IsLocked   bit          not null,
-    IsDeleted  bit          not null,
-    CreateDate datetime2(7) not null,
-    ModifyDate datetime2(7) null
+    Id           int          not null identity(1, 1) constraint PK_Store_Id primary key,
+	CreateUserId int          not null constraint FK_UserPost_CreateUser_Id foreign key (CreateUserId) references dbo.[User] (Id),
+    [Name]       varchar(256) not null constraint UQ_Store_Name unique,
+    ApiKey       varchar(32)  null,
+    ApiSecret    varchar(128) null,
+    IsLocked     bit          not null,
+    IsDeleted    bit          not null,
+    CreateDate   datetime2(7) not null,
+    ModifyDate   datetime2(7) null
 );
 go
 

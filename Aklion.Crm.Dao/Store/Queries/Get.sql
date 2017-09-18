@@ -1,5 +1,6 @@
 ﻿select top 1
 	Id,
+	CreateUserId,
     [Name],
     ApiKey,
     ApiSecret,

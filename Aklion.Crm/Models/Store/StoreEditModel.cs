@@ -1,8 +1,9 @@
 ﻿using System;
+using Aklion.Crm.Models.JqGrid;
 
-namespace Aklion.Crm.Dao.Store.Models
+namespace Aklion.Crm.Models.Store
 {
-    public class Store
+    public class StoreEditModel : JqGridEditModel
     {
         public int Id { get; set; }
 
@@ -17,9 +18,5 @@ namespace Aklion.Crm.Dao.Store.Models
         public bool IsLocked { get; set; }
 
         public bool IsDeleted { get; set; }
-
-        public DateTime CreateDate { get; set; }
-
-        public DateTime? ModifyDate { get; set; }
     }
 }

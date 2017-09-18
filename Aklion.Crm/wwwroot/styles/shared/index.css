@@ -117,8 +117,9 @@ body {
 }
 
 .ui-jqgrid tr.ui-search-toolbar td > input,
-.ui-jqgrid tr.ui-search-toolbar td > select {
-    width: 100%;
+.ui-jqgrid tr.ui-search-toolbar td > select,
+.ui-jqgrid tr td > .inline-edit-cell {
+    width: 100% !important;
 }
 .ui-search-clear {
     display: none;

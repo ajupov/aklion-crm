@@ -8,6 +8,7 @@ namespace Aklion.Infrastructure.Utils.Http
 {
     public static class HttpExtension
     {
+        private const int DefaultSize = 10;
         private const string Id = "id";
         private const string MediaType = "application/json";
         private const string AmpersandMark = "&";
@@ -42,6 +43,16 @@ namespace Aklion.Infrastructure.Utils.Http
         public static StringContent ToStringContent(this object model)
         {
             return new StringContent(model.ToJsonString(), Encoding.UTF8, MediaType);
+        }
+
+        public static int ToDataBasePage(this int page)
+        {
+            return page > 0 ? page - 1 : 0;
+        }
+
+        public static int ToDataBaseSize(this int size)
+        {
+            return size > 0 ? size : DefaultSize;
         }
     }
 }

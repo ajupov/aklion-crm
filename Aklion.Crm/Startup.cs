@@ -1,4 +1,5 @@
-﻿using Aklion.Crm.Dao.Store;
+﻿using Aklion.Crm.Dao;
+using Aklion.Crm.Dao.Store;
 using Aklion.Infrastructure.ApiClient;
 using Aklion.Infrastructure.Storage.ConnectionFactory;
 using Aklion.Infrastructure.Storage.DataBaseExecutor;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Serialization;
 
 namespace Aklion.Crm
 {
@@ -31,7 +33,18 @@ namespace Aklion.Crm
                 .AddSingleton<IConnectionFactory, MsSqlServerConnectionFactory>()
                 .AddSingleton<IDataBaseExecutor, MsSqlServerDataBaseExecutor>()
                 .AddSingleton<IStoreDao, StoreDao>()
-                .AddMvc();
+                .AddSingleton<IDao, Dao.Dao>()
+                .AddMvc()
+                .AddJsonOptions(o =>
+                {
+                    o.SerializerSettings.ContractResolver =
+                        new DefaultContractResolver() {IgnoreSerializableAttribute = false};
+                    //var resolver = o.SerializerSettings.ContractResolver;
+                    //if (resolver is DefaultContractResolver defaultContractResolver)
+                    //{
+                    //    defaultContractResolver.NamingStrategy = null;
+                    //}
+                });
         }
         
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Threading.Tasks;
+using Aklion.Crm.Dao;
 using Aklion.Crm.Dao.Store;
-using Aklion.Crm.Mappers;
-using Aklion.Crm.Models.Stores;
+using Aklion.Crm.Dao.Store.Models;
+using Aklion.Crm.Models.JqGrid;
+using Aklion.Crm.Models.Store;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aklion.Crm.Controllers
@@ -10,10 +12,12 @@ namespace Aklion.Crm.Controllers
     public class StoresController : Controller
     {
         private readonly IStoreDao _storeDao;
+        private readonly IDao _dao;
 
-        public StoresController(IStoreDao storeDao)
+        public StoresController(IStoreDao storeDao, IDao dao)
         {
             _storeDao = storeDao;
+            _dao = dao;
         }
 
         [HttpGet]
@@ -23,47 +27,55 @@ namespace Aklion.Crm.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Store>> GetList()
+        public async Task<JqGridDataModel> Get(StoreGetModel model)
         {
-            var result = await _storeDao.GetList(0, int.MaxValue).ConfigureAwait(false);
-            return result.Map();
-            //return PartialView("Partials/Stores", result.Map());
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Get(int id)
-        {
-            var result = await _storeDao.Get(id).ConfigureAwait(false);
-            return PartialView("Partials/EditStore", result.MapToEdit());
+            var rows = await _storeDao.GetList(0, int.MaxValue).ConfigureAwait(false);
+            return new JqGridDataModel(rows, 1000, 1, 10);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<int> Add(AddStore model)
+        public async Task Edit(StoreEditModel model)
         {
-            if (!ModelState.IsValid)
+            switch (model.oper)
             {
-                return 0;
+                case "add":
+                {
+                    var store = new Store
+                    {
+                        CreateUserId = 0,
+                        Name = model.Name,
+                        ApiKey = null,
+                        ApiSecret = null,
+                        IsLocked = model.IsLocked,
+                        IsDeleted = model.IsDeleted,
+                        CreateDate = DateTime.Now,
+                        ModifyDate = null
+                    };
+                    
+                    await _dao.Create(store).ConfigureAwait(false);
+                    break;
+                }
+                case "edit":
+                {
+                    var store = await _storeDao.Get(model.Id).ConfigureAwait(false);
+
+                    store.CreateUserId = model.CreateUserId;
+                    store.Name = model.Name;
+                    store.ApiKey = model.ApiKey;
+                    store.ApiSecret = model.ApiSecret;
+                    store.ModifyDate = DateTime.Now;
+                    store.IsLocked = model.IsLocked;
+                    store.IsDeleted = model.IsDeleted;
+
+                    await _storeDao.Update(store).ConfigureAwait(false);
+                    break;
+                }
+                case "del":
+                {
+                    await _storeDao.Delete(model.Id).ConfigureAwait(false);
+                    break;
+                }
             }
-
-            var result = await _storeDao.Create(model.Map()).ConfigureAwait(false);
-            return result;
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async void Update(EditStore model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return;
-            }
-
-            var result = await _storeDao.Get(model.Id).ConfigureAwait(false);
-
-            result.Name = model.Name;
-
-            await _storeDao.Update(result).ConfigureAwait(false);
         }
     }
 }
