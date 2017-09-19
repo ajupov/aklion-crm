@@ -9,9 +9,9 @@ namespace Aklion.Crm.Models.Store
 
         public string ApiKey { get; set; }
 
-        public int CreateUserId { get; set; }
+        public int? CreateUserId { get; set; }
 
-        public int CreateUserEmail { get; set; }
+        public string CreateUserEmail { get; set; }
 
         public string ApiSecret { get; set; }
 

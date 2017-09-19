@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Aklion.Crm.Dao;
-using Aklion.Crm.Dao.Store;
 using Aklion.Crm.Dao.Store.Models;
 using Aklion.Crm.Models.JqGrid;
 using Aklion.Crm.Models.Store;
@@ -11,12 +10,10 @@ namespace Aklion.Crm.Controllers
 {
     public class StoresController : Controller
     {
-        private readonly IStoreDao _storeDao;
         private readonly IDao _dao;
 
-        public StoresController(IStoreDao storeDao, IDao dao)
+        public StoresController(IDao dao)
         {
-            _storeDao = storeDao;
             _dao = dao;
         }
 
@@ -29,7 +26,7 @@ namespace Aklion.Crm.Controllers
         [HttpGet]
         public async Task<JqGridDataModel> Get(StoreGetModel model)
         {
-            var rows = await _storeDao.GetList(0, int.MaxValue).ConfigureAwait(false);
+            var rows = await _dao.GetList<Store>(model).ConfigureAwait(false);
             return new JqGridDataModel(rows, 1000, 1, 10);
         }
 
@@ -57,7 +54,7 @@ namespace Aklion.Crm.Controllers
                 }
                 case "edit":
                 {
-                    var store = await _storeDao.Get(model.Id).ConfigureAwait(false);
+                    var store = await _dao.Get<Store>(model.Id).ConfigureAwait(false);
 
                     store.CreateUserId = model.CreateUserId;
                     store.Name = model.Name;
@@ -67,12 +64,12 @@ namespace Aklion.Crm.Controllers
                     store.IsLocked = model.IsLocked;
                     store.IsDeleted = model.IsDeleted;
 
-                    await _storeDao.Update(store).ConfigureAwait(false);
+                    await _dao.Update(store).ConfigureAwait(false);
                     break;
                 }
                 case "del":
                 {
-                    await _storeDao.Delete(model.Id).ConfigureAwait(false);
+                    await _dao.Delete<Store>(model.Id).ConfigureAwait(false);
                     break;
                 }
             }

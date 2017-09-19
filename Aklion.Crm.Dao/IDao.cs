@@ -7,7 +7,7 @@ namespace Aklion.Crm.Dao
     {
         Task<TModel> Get<TModel>(int id);
 
-        Task<List<TModel>> GetList<TModel>(int page, int size);
+        Task<List<TModel>> GetList<TModel>(object parameters);
 
         Task<int> Create<TModel>(TModel model);
 
