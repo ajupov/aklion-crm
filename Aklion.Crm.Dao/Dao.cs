@@ -26,6 +26,19 @@ namespace Aklion.Crm.Dao
             return _dataBaseExecutor.SelectOne<TModel>(query, new {id});
         }
 
+        public Task<int> GetCount<TModel>(object parameters)
+        {
+            var type = typeof(TModel);
+            var table = type.Name;
+            var pairs = parameters.GetType().GetProperties().ToDictionary(k => k.Name, v => v.GetValue(parameters));
+
+            var filter = DaoHelper.GetFilter(pairs);
+            var query = $"select count(0) from [dbo].[{table}] " +
+                        $"{filter}";
+
+            return _dataBaseExecutor.SelectOne<int>(query, parameters);
+        }
+
         public Task<List<TModel>> GetList<TModel>(object parameters)
         {
             var type = typeof(TModel);

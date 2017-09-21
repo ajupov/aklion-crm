@@ -1,5 +1,6 @@
 ﻿using Aklion.Crm.Dao;
 using Aklion.Crm.Dao.Store;
+using Aklion.Crm.Helpers;
 using Aklion.Infrastructure.ApiClient;
 using Aklion.Infrastructure.Storage.ConnectionFactory;
 using Aklion.Infrastructure.Storage.DataBaseExecutor;
@@ -33,6 +34,7 @@ namespace Aklion.Crm
                 .AddSingleton<IConnectionFactory, MsSqlServerConnectionFactory>()
                 .AddSingleton<IDataBaseExecutor, MsSqlServerDataBaseExecutor>()
                 .AddSingleton<IStoreDao, StoreDao>()
+                .AddSingleton<IJqGridHelper, JqGridHelper>()
                 .AddSingleton<IDao, Dao.Dao>()
                 .AddMvc()
                 .AddJsonOptions(o =>
