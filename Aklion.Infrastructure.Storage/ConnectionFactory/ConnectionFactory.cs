@@ -4,13 +4,13 @@ using Microsoft.Extensions.Configuration;
 
 namespace Aklion.Infrastructure.Storage.ConnectionFactory
 {
-    public sealed class MsSqlServerConnectionFactory : IConnectionFactory
+    public sealed class ConnectionFactory : IConnectionFactory
     {
         private readonly string _msSqlServerConnectionString;
 
-        public MsSqlServerConnectionFactory(IConfiguration configuration)
+        public ConnectionFactory(IConfiguration configuration)
         {
-            _msSqlServerConnectionString = configuration.GetConnectionString("MsSqlServerConnection");
+            _msSqlServerConnectionString = configuration.GetConnectionString("ConnectionString");
         }
 
         public IDbConnection GetConnection()

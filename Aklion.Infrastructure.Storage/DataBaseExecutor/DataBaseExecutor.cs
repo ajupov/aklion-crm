@@ -6,11 +6,11 @@ using Dapper;
 
 namespace Aklion.Infrastructure.Storage.DataBaseExecutor
 {
-    public sealed class MsSqlServerDataBaseExecutor : IDataBaseExecutor
+    public sealed class DataBaseExecutor : IDataBaseExecutor
     {
         private readonly IConnectionFactory _connectionFactory;
 
-        public MsSqlServerDataBaseExecutor(IConnectionFactory connectionFactory)
+        public DataBaseExecutor(IConnectionFactory connectionFactory)
         {
             _connectionFactory = connectionFactory;
         }

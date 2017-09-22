@@ -1,9 +1,7 @@
-﻿using Aklion.Crm.Dao;
-using Aklion.Crm.Dao.Store;
-using Aklion.Crm.Helpers;
-using Aklion.Infrastructure.ApiClient;
+﻿using Aklion.Infrastructure.ApiClient;
 using Aklion.Infrastructure.Storage.ConnectionFactory;
 using Aklion.Infrastructure.Storage.DataBaseExecutor;
+using Aklion.Infrastructure.Storage.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -31,21 +29,16 @@ namespace Aklion.Crm
         {
             services.AddSingleton(Configuration)
                 .AddSingleton<IApiClient, ApiClient>()
-                .AddSingleton<IConnectionFactory, MsSqlServerConnectionFactory>()
-                .AddSingleton<IDataBaseExecutor, MsSqlServerDataBaseExecutor>()
-                .AddSingleton<IStoreDao, StoreDao>()
-                .AddSingleton<IJqGridHelper, JqGridHelper>()
-                .AddSingleton<IDao, Dao.Dao>()
+                .AddSingleton<IConnectionFactory, ConnectionFactory>()
+                .AddSingleton<IDataBaseExecutor, DataBaseExecutor>()
+                .AddSingleton<IRepository, Repository>()
                 .AddMvc()
                 .AddJsonOptions(o =>
                 {
-                    o.SerializerSettings.ContractResolver =
-                        new DefaultContractResolver() {IgnoreSerializableAttribute = false};
-                    //var resolver = o.SerializerSettings.ContractResolver;
-                    //if (resolver is DefaultContractResolver defaultContractResolver)
-                    //{
-                    //    defaultContractResolver.NamingStrategy = null;
-                    //}
+                    o.SerializerSettings.ContractResolver = new DefaultContractResolver
+                    {
+                        IgnoreSerializableAttribute = false
+                    };
                 });
         }
         

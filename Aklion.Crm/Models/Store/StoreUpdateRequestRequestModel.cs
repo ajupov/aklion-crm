@@ -1,12 +1,7 @@
-﻿using System;
-using Aklion.Crm.Models.JqGrid;
-
-namespace Aklion.Crm.Models.Store
+﻿namespace Aklion.Crm.Models.Store
 {
-    public class StoreEditModel : JqGridEditModel
+    public class StoreUpdateRequestRequestModel : BaseUpdateRequestModel
     {
-        public int Id { get; set; }
-
         public int CreateUserId { get; set; }
 
         public string Name { get; set; }

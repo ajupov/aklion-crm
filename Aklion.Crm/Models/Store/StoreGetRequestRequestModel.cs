@@ -1,9 +1,8 @@
 ﻿using System;
-using Aklion.Crm.Models.JqGrid;
 
 namespace Aklion.Crm.Models.Store
 {
-    public class StoreGetModel : JqGridGetModel
+    public class StoreGetRequestRequestModel : BaseGetRequestModel
     {
         public string Name { get; set; }
 

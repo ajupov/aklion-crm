@@ -20,8 +20,8 @@ namespace Aklion.Crm.ApiV1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(Configuration)
-                .AddSingleton<IConnectionFactory, MsSqlServerConnectionFactory>()
-                .AddSingleton<IDataBaseExecutor, MsSqlServerDataBaseExecutor>()
+                .AddSingleton<IConnectionFactory, ConnectionFactory>()
+                .AddSingleton<IDataBaseExecutor, DataBaseExecutor>()
                 .AddSingleton<IOrganizationDao, OrganizationDao>()
                 .AddMvc();
         }
