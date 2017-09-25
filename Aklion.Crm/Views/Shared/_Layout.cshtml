@@ -3,19 +3,23 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    @RenderSection("Meta", false)
+    @await RenderSectionAsync("Meta", false).ConfigureAwait(false)
     <title>@ViewData["Title"] - Aklion CRM</title>
     @await Html.PartialAsync("_Styles").ConfigureAwait(false)
-    @RenderSection("Styles", false)
+    @await RenderSectionAsync("Styles", false).ConfigureAwait(false)
 </head>
 <body>
 <main>
-    @await Html.PartialAsync("_Menu").ConfigureAwait(false)
-    <div class="content">
+    <nav>
+        <div class="container">
+            @await Html.PartialAsync("_Menu").ConfigureAwait(false)
+        </div>
+    </nav>
+    <div class="container">
         @RenderBody()
     </div>
 </main>
 @await Html.PartialAsync("_Scripts").ConfigureAwait(false)
-@RenderSection("Scripts", false)
+@await RenderSectionAsync("Scripts", false).ConfigureAwait(false)
 </body>
 </html>

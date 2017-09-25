@@ -46,7 +46,7 @@ namespace Aklion.Infrastructure.Utils.QueryBuilder
         public static Query AddSelectTop1(this Query query)
         {
             var joinedColumns = string.Join(", ", query.Columns.Select(x => $"[{x}]"));
-            query.General = $"select top 1 {joinedColumns} from [dbo].[{query.Table}];";
+            query.General = $"select top 1 {joinedColumns} from [dbo].[{query.Table}]";
 
             return query;
         }
@@ -54,7 +54,7 @@ namespace Aklion.Infrastructure.Utils.QueryBuilder
         public static Query AddSelectList(this Query query)
         {
             var joinedColumns = string.Join(", ", query.Columns.Select(x => $"[{x}]"));
-            query.General = $"select {joinedColumns} from [dbo].[{query.Table}] ";
+            query.General = $"select {joinedColumns} from [dbo].[{query.Table}]";
 
             return query;
         }
@@ -138,7 +138,7 @@ namespace Aklion.Infrastructure.Utils.QueryBuilder
                 return query;
             }
 
-            var sortingOrder = query.Parameters["SortingOrder"]?.ToString() == "descending" ? "desc" : "asc";
+            var sortingOrder = query.Parameters["SortingOrder"]?.ToString() == "desc" ? "desc" : "asc";
             query.Sorting = $"order by [{name}] {sortingOrder}";
 
             return query;
@@ -172,8 +172,9 @@ namespace Aklion.Infrastructure.Utils.QueryBuilder
                 return query;
             }
 
+            var pageParameter = 0;
             var sizeParameter = 0;
-            if (!int.TryParse(pageString, out var pageParameter) || !int.TryParse(rowsString, out sizeParameter))
+            if (!int.TryParse(pageString, out pageParameter) || !int.TryParse(rowsString, out sizeParameter))
             {
                 query.Paging = $"offset {page * size} rows fetch next {size} rows only";
             }
@@ -185,7 +186,7 @@ namespace Aklion.Infrastructure.Utils.QueryBuilder
                 return query;
             }
 
-            page = pageParameter - 1;
+            page = pageParameter - 1 > 0 ? pageParameter - 1 : 0;
             size = sizeParameter;
 
             query.Paging = $"offset {page * size} rows fetch next {size} rows only";
@@ -208,21 +209,21 @@ namespace Aklion.Infrastructure.Utils.QueryBuilder
         {
             var joinedPairs = string.Join(", ", query.Columns.Where(x => x != "Id").Select(x => $"[{x}] = @{x}"));
 
-            query.General = $"update [dbo].[{query.Table}] set {joinedPairs} where [Id] = @Id;";
+            query.General = $"update [dbo].[{query.Table}] set {joinedPairs} where [Id] = @Id";
 
             return query;
         }
 
         public static Query AddDelete(this Query query)
         {
-            query.General = $"delete from [dbo].[{query.Table}] where [Id] = @id;";
+            query.General = $"delete from [dbo].[{query.Table}] where [Id] = @id";
 
             return query;
         }
 
         public static string Build(this Query query)
         {
-            return query.General + query.Filter + query.Sorting + query.Paging;
+            return $"{query.General} {query.Filter} {query.Sorting} {query.Paging}";
         }
     }
 }

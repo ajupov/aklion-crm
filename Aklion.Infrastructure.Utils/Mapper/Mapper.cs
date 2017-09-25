@@ -11,7 +11,7 @@
             {
                 var newModelProperty = newModelType.GetProperty(oldModelProperty.Name);
 
-                if (oldModelProperty.PropertyType != newModelProperty)
+                if (oldModelProperty.PropertyType != newModelProperty.PropertyType)
                 {
                     continue;
                 }

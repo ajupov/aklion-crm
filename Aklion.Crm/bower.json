@@ -5,8 +5,8 @@
     "jQuery": "3.2.1",
     "jquery-validation": "1.17.0",
     "jquery-validation-unobtrusive": "v3.2.6",
-    "inputmask": "jquery.inputmask#3.3.8",
     "font-awesome": "Font-Awesome#v4.7.0",
-    "jqGrid": "jqgrid#v5.2.1"
+    "inputmask": "jquery.inputmask#3.3.8",
+    "materialize": "v0.100.2"
   }
 }

@@ -1,4 +1,15 @@
-﻿<ul id="navbar">
-    <li><a href="/">Главная</a></li>
-    <li><a asp-controller="Stores" asp-action="Index">Магазины</a></li>
-</ul>
+﻿<div class="nav-wrapper">
+    <a href="#" data-activates="mobile-demo" class="button-collapse">
+        <i class="fa fa-bars"></i>
+    </a>
+    <ul class="left hide-on-med-and-down">
+        <li>
+            <a asp-controller="Stores" asp-action="Index">Магазины</a>
+        </li>
+    </ul>
+    <ul class="side-nav" id="mobile-demo">
+        <li>
+            <a asp-controller="Stores" asp-action="Index">Магазины</a>
+        </li>
+    </ul>
+</div>

@@ -1,231 +1,46 @@
-﻿/*Fonts*/
-@font-face {
-    font-family: RobotoRegular;
-    src: url("../../fonts/RobotoRegular/RobotoRegular.ttf");
-}
-
-/*Common*/
-* {
-    font-family: RobotoRegular;
-    color: #212121;
-    outline: none;
-    text-decoration: none;
-}
+﻿/*Body*/
 body {
-    margin: 0;
+    background: #edeef0;
 }
-
-/*Modal*/
-/*.modal {
-    background-color: #000000;
-    background-color: rgba(0, 0, 0, 0.2);
-    display: none;
-    height: 100%;
-    left: 0;
-    overflow: auto;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 9999;
-}
-.modal-content {
-    background-color: #ffffff;
-    display: table;
-    margin: 15% auto;
-    padding: 10px;
-}
-.modal-close {
-    float: right;
-}
-.modal-close:hover, .modal-close:focus {
-    cursor: pointer;
-}*/
 
 /*Navbar*/
-#navbar {
-    background-color: #263238;
-    list-style-type: none;
-    margin: 0;
-    overflow: hidden;
-    padding: 0;
+nav {
+    box-shadow: none;
+    height: 42px;
+    line-height: 42px;
+    background-color: #4c75a3;
 }
-#navbar li {
-    float: left;
+
+nav .button-collapse i {
+    height: 42px;
+    line-height: 42px;
 }
-#navbar li a {
-    color: #ffffff;
-    display: block;
-    padding: 10px;
-    text-align: center;
-    text-decoration: none;
-}
-#navbar li a:hover {
-    background: #37474F;
+
+/*Container*/
+.container {
+    width: 98%;
 }
 
 /*Card*/
-/*.card {
-    border-radius: 1px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-}*/
-
-/*H elements*/
-/*h1, h2, h3, h4, h5, h6 {
-    margin-top: 0;
-}*/
-
-/*Form*/
-/*.input-field {
-    margin-bottom: 10px;
+.card-panel {
+    padding: 16px 8px;
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1), 0 1px 0 0 rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(0, 0, 0, 0.1);
 }
-.input-field input[type="text"] {
-        border: none;
-        border-bottom: #616161 1px solid;
-        padding: 5px 2px;
-    }
-.input-field input[type="text"]:focus {
-            outline: none;
-            padding: 5px 2px;
-            border-bottom: #4caf50 1px solid;
-        }
-.input-field label {
-        font-size: 0.75em;
-        color: #616161;
-    }
-.input-field span.error-text {
-    color: #f44336 !important;
-    display: block;
-    font-size: 0.75em;
-}*/
-
-/*Button*/
-.ui-button {
-    background: transparent;
-    border: #388E3C 1px solid;
-    border-radius: 2px;
-    display: inline-block;
-    font-size: 0.75em;
-    margin: 3px;
-    padding: 4px 4px;
-    cursor: pointer;
-}
-.ui-button:active {
-    color: #81C784;
-}
-.ui-button:hover {
-    cursor: pointer;
-}
-
-.ui-jqgrid tr.ui-search-toolbar td > input,
-.ui-jqgrid tr.ui-search-toolbar td > select,
-.ui-jqgrid tr td > .inline-edit-cell {
-    width: 100% !important;
-}
-.ui-search-clear {
-    display: none;
-}
-.jqgrow td[role="gridcell"] {
-    border: 1px solid #9E9E9E;
-}
-
-/*.small-btn {
-    background: transparent;
-    border: #388E3C 1px solid;
-    border-radius: 3px;
-    font-family: RobotoRegular !important;
-    font-size: 0.75em;
-    margin: 2px;
-    text-decoration: none;
-    cursor: pointer;
-}
-.small-btn:focus {
-    border: #81C784 1px solid;
-    outline: none;
-}*/
-
-/*Container*/
-.content {
-    margin-left: 1%;
-    margin-right: 1%;
-}
-
-/*.jqgrow:nth-child(odd), .jqgrow:hover {
-    background: #C8E6C9;
-    cursor: pointer;
-}*/
 
 /*Table*/
-/*.ui-jqgrid-htable, .ui-jqgrid-btable {
-    border: #388E3C 1px solid;
-    border-collapse: collapse;
-}*/
-
-
-/*
-.ui-jqgrid-view {
-    border-top: #388E3C 1px solid;
-    border-left: #388E3C 1px solid;
-}*/
-/*.ui-jqgrid-resize {
-    display: none;    
-}*/
-/*td, th {
-    border: #388E3C 1px solid;
-}*/
-/*
-table a {
-    text-decoration: none;
-    color: #263238;
-}*/
-
-@media only screen and (max-width: 600px) {
+table, input {
+    font-size: 0.85em !important;
+    height: 2.5em !important;
+    margin: 0 !important;
 }
 
-@media only screen and (min-width: 601px) and (max-width: 992px) {
-
+td, th {
+    padding: 3px;
+    border: 1px solid #d0d0d0;
 }
 
-@media only screen and (min-width: 993px) {
-
+/**/
+.pointer {
+    cursor: pointer;
 }
 
-
-
-
-
-.center-align {
-    text-align: center;
-}
-
-.right-align {
-    text-align: right;
-}
-
-.right {
-    float: right;
-}
-
-/*input[type="text"], input[type="date"], select {
-    border: none;
-    border-bottom: #616161 1px solid;
-}
-input[type="text"]:focus, input[type="date"]:focus, select:focus {
-    outline: none;
-    border-bottom: #4caf50 1px solid;
-}*/
-/*.ui-state-default,
-.ui-widget-content .ui-state-default,
-.ui-widget-header .ui-state-default,
-.ui-button,
-html .ui-button.ui-state-disabled:hover,
-html .ui-button.ui-state-disabled:active {
-    background: #ffffff;
-    border: #C8E6C9 1px solid;
-}*/
-.full-width {
-    width: 100%;
-}
-
-.scroll-panel {
-    overflow-x: auto;
-}

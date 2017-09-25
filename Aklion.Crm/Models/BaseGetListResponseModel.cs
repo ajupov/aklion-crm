@@ -5,12 +5,13 @@ namespace Aklion.Crm.Models
 {
     public class BaseGetListResponseModel<TModel>
     {
-        public BaseGetListResponseModel(List<TModel> items, int totalSize, int page, int size)
+        public BaseGetListResponseModel(List<TModel> items, int totalCount, int page, int size)
         {
             Items = items;
-            TotalSize = totalSize;
-            Page = page;
-            Size = (int) Math.Ceiling((double) totalSize / size);
+            TotalCount = totalCount;
+            Page = page > 0 ? page : 1;
+            Size = size > 0 ? size : 10;
+            PageCount = size > 0 ? (int) Math.Ceiling((double) totalCount / size) : 0;
         }
 
         public List<TModel> Items { get; set; }
@@ -19,6 +20,8 @@ namespace Aklion.Crm.Models
 
         public int Size { get; set; }
 
-        public int TotalSize { get; set; }
+        public int PageCount { get; set; }
+
+        public int TotalCount { get; set; }
     }
 }
