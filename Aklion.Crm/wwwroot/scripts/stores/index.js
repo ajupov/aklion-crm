@@ -6,7 +6,6 @@ var storesUi = {
 
 function createTable(tableWrapper, columns, dataUrl) {
     createHead(tableWrapper, columns, dataUrl);
-    //createBody(tableWrapper, columns, dataUrl);
 }
 
 function createHead(tableWrapper, columns, dataUrl) {
@@ -49,8 +48,23 @@ function createHead(tableWrapper, columns, dataUrl) {
 
             // Create filter input
             if (e.search) {
-                html += '<input type="text" class="' + tableId + '-table-filter">';
-                html += '</input>';
+                if (e.type === 'int' || e.type === 'string') {
+                    html += '<input type="text" class="' + tableId + '-table-filter" />';
+                } else if (e.type === 'bool') {
+                    html += '<select>';
+                    html += '<option>';
+                    html += 'Неизвестно';
+                    html += '</option>';
+                    html += '<option>';
+                    html += 'Да';
+                    html += '</option>';
+                    html += '<option>';
+                    html += 'Нет';
+                    html += '</option>';
+                    html += '</select>';
+                } else if (e.type === 'datetime') {
+                    html += '<input type="text" class="datepicker ' + tableId + '-table-filter" />';
+                }
             }
 
             html += '</th>';
@@ -62,6 +76,14 @@ function createHead(tableWrapper, columns, dataUrl) {
 
     // Append table
     tableWrapper.append(html);
+
+    // Initialize material select
+    $('select').material_select();
+
+    // Initialize material datepicker
+    $('.datepicker').pickadate();
+
+    createBody(tableWrapper, columns, dataUrl);
 
     // Bind table sorting events
     $('.' + tableId + '-table-sorting').click(e => {
@@ -93,7 +115,9 @@ function createHead(tableWrapper, columns, dataUrl) {
     });
 }
 
-function createBody(table, columns, dataUrl, page, size, sortingColumn, sortingOrder) {
+function createBody(tableWrapper, columns, dataUrl, page, size, sortingColumn, sortingOrder) {
+    var tableId = tableWrapper[0].id;
+    var table = $('table#' + tableId + '-table');
 
     // Clear
     table.children('tbody').empty();
@@ -218,7 +242,6 @@ function createBody(table, columns, dataUrl, page, size, sortingColumn, sortingO
 }
 
 $(document).ready(() => {
-
     var storesColumns = [
         {
             label: '№',
@@ -229,8 +252,8 @@ $(document).ready(() => {
             width: 60,
             align: 'left',
             hidden: false,
-            search: false,
-            sorting: false,
+            search: true,
+            sorting: true,
             edit: false
         },
         //{
@@ -267,8 +290,8 @@ $(document).ready(() => {
             width: 100,
             align: 'left',
             hidden: false,
-            search: false,
-            sorting: false,
+            search: true,
+            sorting: true,
             edit: true
         },
         {
@@ -280,8 +303,8 @@ $(document).ready(() => {
             width: 150,
             align: 'left',
             hidden: false,
-            search: false,
-            sorting: false,
+            search: true,
+            sorting: true,
             edit: true
         },
         {
