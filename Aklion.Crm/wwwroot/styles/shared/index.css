@@ -1,6 +1,11 @@
-﻿/*Body*/
+﻿html {
+    overflow-x: hidden;
+}
+
+/*Body*/
 body {
     background: #edeef0;
+
 }
 
 /*Navbar*/
@@ -23,24 +28,103 @@ nav .button-collapse i {
 
 /*Card*/
 .card-panel {
-    padding: 16px 8px;
+    padding: 10px;
     box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1), 0 1px 0 0 rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(0, 0, 0, 0.1);
 }
 
 /*Table*/
-table, input {
+table > tbody > tr > td,
+table > thead > tr > th {
+    font-size: 0.85em !important;
+    padding: 2px 5px !important;
+    border: 1px solid #d0d0d0;
+}
+
+table > tfoot > tr > td {
+    text-align: center;
+    border: 1px solid #d0d0d0;
+}
+table > thead > tr > th {
+    text-align: center;
+}
+
+table > tbody > tr > td input,
+table > thead > tr > th input {
     font-size: 0.85em !important;
     height: 2.5em !important;
     margin: 0 !important;
 }
 
-td, th {
-    padding: 3px;
-    border: 1px solid #d0d0d0;
+table > thead > tr > th > button {
+    padding: 0;
+    border: none;
+    background: transparent;
 }
 
-/**/
-.pointer {
-    cursor: pointer;
+table > thead > tr > th > button:focus {
+    background: transparent;
+}
+
+table > tfoot > tr > td button {
+    padding: 3px;
+    border: none;
+    background: transparent;
+    font-size: 0.85em;
+}
+
+table > tfoot > tr > td button:focus {
+    background: transparent;
+}
+
+table > tfoot > tr > td div {
+    display: inline-block;
+}
+
+table > tfoot > tr > td div {
+    padding: 0 5px;
+}
+table > tfoot > tr > td {
+    font-size: 0.85em !important;
+    padding: 10px !important;
+}
+
+table > tfoot > tr > td * {
+    font-size: 0.8rem !important;
+    font-weight: bold;
+}
+
+table > tfoot > tr > td input {
+    text-align: left !important;
+    width: 35px !important;
+    margin: 0 !important;
+    height: 1.5em !important;
+}
+
+.dropdown-content {
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1), 0 1px 0 0 rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(0, 0, 0, 0.1);
+}
+.select-wrapper {
+    display: inline-block;    
+}
+
+table .dropdown-content li > a,
+table .dropdown-content li > span {
+    font-size: 0.85em;
+    color: rgba(0, 0, 0, 0.87);
+    line-height: 0.85em;
+    padding: 14px 16px;
+}
+
+table .dropdown-content li {
+    min-height: 10px;
+}
+
+table .select-dropdown {
+    text-align: center;
+}
+
+.scrollable {
+    width: 100%;
+    overflow-x: auto;
 }
 
