@@ -82,3 +82,6 @@ function table(element, pagerSelector) {
 
     element.jqGrid('filterToolbar', { searchOperators: false });
 }
+
+
+

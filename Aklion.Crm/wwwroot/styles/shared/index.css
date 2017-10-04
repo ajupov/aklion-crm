@@ -5,7 +5,6 @@
 /*Body*/
 body {
     background: #edeef0;
-
 }
 
 /*Navbar*/
@@ -15,10 +14,14 @@ nav {
     line-height: 42px;
     background-color: #4c75a3;
 }
-
 nav .button-collapse i {
     height: 42px;
     line-height: 42px;
+}
+
+/*Select*/
+select {
+    display: inline-block;
 }
 
 /*Container*/
@@ -33,72 +36,129 @@ nav .button-collapse i {
 }
 
 /*Table*/
-table > tbody > tr > td,
-table > thead > tr > th {
-    font-size: 0.85em !important;
-    padding: 2px 5px !important;
+.c-table {
+    width: max-content;
+}
+.c-table * {
+    font-size: 0.85rem !important;
+}
+.c-table thead * {
+    text-align: center;
+    font-weight: bold;
+}
+.c-table td,
+.c-table th {
+    padding: 2px 4px;
     border: 1px solid #d0d0d0;
 }
-
-table > tfoot > tr > td {
-    text-align: center;
-    border: 1px solid #d0d0d0;
-}
-table > thead > tr > th {
-    text-align: center;
-}
-
-table > tbody > tr > td input,
-table > thead > tr > th input {
-    font-size: 0.85em !important;
-    height: 2.5em !important;
-    margin: 0 !important;
-}
-
-table > thead > tr > th > button {
-    padding: 0;
+.c-table input[type="button"], .c-table button {
+    padding: 0 2px;
     border: none;
+    outline: none;
     background: transparent;
 }
-
-table > thead > tr > th > button:focus {
-    background: transparent;
+.c-table input[type="text"], .c-table input[type="date"], .c-table input[type="number"] {
+    height: 2em;
+    margin: 0;
+}
+.c-table select {
+    height: 2em;
+    padding: 0;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #9e9e9e;
+}
+.c-table select:focus {
+    border-bottom: 1px solid #26a69a;
+    -webkit-box-shadow: 0 1px 0 0 #26a69a;
+    box-shadow: 0 1px 0 0 #26a69a;
 }
 
-table > tfoot > tr > td button {
+
+
+/*.left {
+    float: left;
+}
+.right {
+    float: right;
+}
+.center {
+    text-align: center;
+}*/
+
+.scrollable {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.left-border {
+    border-left: #d0d0d0 1px solid;
+    padding-left: 2px;
+    margin-left: 2px;
+}
+.right-border {
+    border-right: #d0d0d0 1px solid;
+    padding-right: 2px;
+    margin-right: 2px;
+}
+
+/*table.c-table > tfoot > tr > td {
+    text-align: center;
+    border: 1px solid #d0d0d0;
+}
+table.c-table > thead > tr > th {
+    text-align: center;
+}
+
+    table.c-table > tbody > tr > td input,
+    table.c-table > thead > tr > th input {
+        font-size: 0.85em !important;
+        height: 2.5em !important;
+        margin: 0 !important;
+    }
+
+
+
+        table.c-table > thead > tr > th > button:focus {
+            background: transparent;
+        }
+
+table.c-table > tfoot > tr > td button {
     padding: 3px;
     border: none;
     background: transparent;
     font-size: 0.85em;
 }
 
-table > tfoot > tr > td button:focus {
-    background: transparent;
-}
+    table.c-table > tfoot > tr > td button:focus {
+        background: transparent;
+    }
 
-table > tfoot > tr > td div {
+table.c-table > tfoot > tr > td div {
     display: inline-block;
 }
 
-table > tfoot > tr > td div {
+table.c-table > tfoot > tr > td div {
     padding: 0 5px;
 }
-table > tfoot > tr > td {
+
+table.c-table > tfoot > tr > td {
     font-size: 0.85em !important;
     padding: 10px !important;
 }
 
-table > tfoot > tr > td * {
-    font-size: 0.8rem !important;
-    font-weight: bold;
-}
+    table.c-table > tfoot > tr > td * {
+        font-size: 0.8rem !important;
+        font-weight: bold;
+    }
 
-table > tfoot > tr > td input {
-    text-align: left !important;
-    width: 35px !important;
-    margin: 0 !important;
-    height: 1.5em !important;
-}
+    table.c-table > tfoot > tr > td input {
+        text-align: left !important;
+        width: 35px !important;
+        margin: 0 !important;
+        height: 1.5em !important;
+    }
 
 .dropdown-content {
     box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1), 0 1px 0 0 rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(0, 0, 0, 0.1);
@@ -107,24 +167,50 @@ table > tfoot > tr > td input {
     display: inline-block;    
 }
 
-table .dropdown-content li > a,
-table .dropdown-content li > span {
+table.grid .dropdown-content li > a,
+table.grid .dropdown-content li > span {
     font-size: 0.85em;
     color: rgba(0, 0, 0, 0.87);
     line-height: 0.85em;
     padding: 14px 16px;
 }
 
-table .dropdown-content li {
+table.grid .dropdown-content li {
     min-height: 10px;
 }
 
-table .select-dropdown {
+table.grid .select-dropdown {
     text-align: center;
 }
 
-.scrollable {
-    width: 100%;
-    overflow-x: auto;
+
+
+.picker__date-display {
+    display: none;
 }
 
+.picker__wrap {
+    width: 260px;
+    font-size: 0.85em;
+    display: inline-block;
+    padding-top: 15%;
+}
+
+.picker__day {
+    height: 32px;
+    line-height: 32px;
+    padding: 0;
+}
+
+.picker__frame {
+    position: center;
+    text-align: center;
+}
+
+.picker__box {
+    display: inline-block;
+}
+
+.center-align {
+    text-align: center;
+}*/
