@@ -2,142 +2,215 @@
     ViewBag.Title = "Магазины";
 }
 
-@*<div class="card-panel">
-        <h5>@ViewBag.Title</h5>
-        <div id="stores" class="scrollable"></div>
-    </div>*@
-
 <div class="card-panel">
     <h5>@ViewBag.Title</h5>
     <div id="stores" class="scrollable">
-    <table id="stores-table" class="bordered striped highlight c-table">
-        <thead>
-        <tr>
-            <td>
-                <button data-label="№" data-name="Id" data-sorting-order="asc" data-sorting-enable="false" onclick="order(this);">№</button>
-            </td>
-            <td>
-                <button data-label="Создатель" data-name="CerateUserId" data-sorting-order="asc" data-sorting-enable="false" onclick="order(this);">Создатель</button>
-            </td>
-            <td>
-                <button data-label="Название" data-name="Name" data-sorting-order="asc" data-sorting-enable="false" onclick="order(this);">Название</button>
-            </td>
-            <td>
-                <button data-label="АПИ-ключ" data-name="ApiKey" data-sorting-order="asc" data-sorting-enable="false" onclick="order(this);">АПИ-ключ</button>
-            </td>
-            <td>
-                <button data-label="АПИ-секрет" data-name="ApiSecret" data-sorting-order="asc" data-sorting-enable="false" onclick="order(this);">АПИ-секрет</button>
-            </td>
-            <td>
-                <button data-label="Заблокирован" data-name="IsLocked" data-sorting-order="asc" data-sorting-enable="false" onclick="order(this);">Заблокирован</button>
-            </td>
-            <td>
-                <button data-label="Скрыт" data-name="IsDeleted" data-sorting-order="asc" data-sorting-enable="false" onclick="order(this);">Скрыт</button>
-            </td>
-            <td>
-                <button data-label="Создан" data-name="CreateDate" data-sorting-order="asc" data-sorting-enable="false" onclick="order(this);">Создан</button>
-            </td>
-            <td>
-                <button data-label="Изменён" data-name="ModifyDate" data-sorting-order="asc" data-sorting-enable="false" onclick="order(this);">Изменён</button>
-            </td>
-            <td>
-                Выбрать
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 60px;">
-                <input type="text" onchange="change(this);" />
-            </td>
-            <td style="width: 130px;">
-                <input type="text" />
-            </td>
-            <td style="width: 150px;">
-                <input type="text" onchange="change(this);" />
-            </td>
-            <td style="width: 170px;">
-                <input type="text" onchange="change(this);" />
-            </td>
-            <td style="width: 200px;">
-                <input type="text" onchange="change(this);" />
-            </td>
-            <td style="width: 120px;">
-                <select onchange="change(this);">
-                    <option></option>
-                    <option>Да</option>
-                    <option>Нет</option>
-                </select>
-            </td>
-            <td style="width: 80px;">
-                <select onchange="change(this);">
-                    <option></option>
-                    <option>Да</option>
-                    <option>Нет</option>
-                </select>
-            </td>
-            <td style="width: 140px;">
-                <input type="date" onchange="change(this);" />
-            </td>
-            <td style="width: 140px;">
-                <input type="date" onchange="change(this);" />
-            </td>
-            <td>
-                <input type="checkbox" id="stores-table-select-all"/><label for="stores-table-select-all"></label>
-            </td>
-        </tr>
-        </thead>
-        <tbody>
-        </tbody>
-        <tfoot>
-        <tr>
-            <td colspan="9" class="center">
-                <button type="button" class="left" onclick="refresh(this);">
-                    <i class="fa fa-refresh"></i>
-                </button>
-                <button type="button" onclick="fastBackward(this);">
-                    <i class="fa fa-fast-backward"></i>
-                </button>
-                <button type="button" onclick="backward(this);">
-                    <i class="fa fa-backward"></i>
-                </button>
-                <span class="left-border">Стр.</span>
-                <input type="number" value="0" min="0" style="width:45px;" onchange="changePage(this);">
-                <span>из</span>
-                <span class="right-border">0</span>
-                <select style="width:45px;" onchange="changeSize(this);">
-                    <option>5</option>
-                    <option selected="selected">10</option>
-                    <option>20</option>
-                    <option>50</option>
-                    <option>100</option>
-                </select>
-                <span class="right-border">
-                </span>
-                <button type="button" onclick="forward(this);">
-                    <i class="fa fa-forward"></i>
-                </button>
-                <button type="button"  onclick="fastForward(this);">
-                    <i class="fa fa-fast-forward"></i>
-                </button>
-                <span class="right">
-                    <span>0</span>
-                    <span>-</span>
-                    <span>10</span>
+        <table id="stores-table" class="bordered striped highlight c-table" data-url="/Stores/GetList">
+            <thead>
+            <tr>
+                <td>
+                    <button data-role="sorting" 
+                            data-label="№" 
+                            data-name="Id" 
+                            data-key="true"
+                            data-type="int"
+                            data-align="left"
+                            data-sorting-order="asc" 
+                            data-sorting-enable="false" 
+                            title="Сортировать по №"
+                            onclick="order(this);">№</button>
+                </td>
+                <td>
+                    <button data-role="sorting" 
+                            data-label="Создатель" 
+                            data-name="CreateUserId" 
+                            data-key="false"
+                            data-type="int"
+                            data-align="left"
+                            data-sorting-order="asc" 
+                            data-sorting-enable="false"
+                            title="Сортировать по Создатель"
+                            onclick="order(this);">Создатель</button>
+                </td>
+                <td>
+                    <button data-role="sorting" 
+                            data-label="Название" 
+                            data-name="Name" 
+                            data-key="false"
+                            data-type="string"
+                            data-align="left"
+                            data-sorting-order="asc" 
+                            data-sorting-enable="false" 
+                            title="Сортировать по Название"
+                            onclick="order(this);">Название</button>
+                </td>
+                <td>
+                    <button data-role="sorting" 
+                            data-label="АПИ-ключ" 
+                            data-name="ApiKey" 
+                            data-key="false"
+                            data-type="string"
+                            data-align="left"
+                            data-sorting-order="asc" 
+                            data-sorting-enable="false"
+                            title="Сортировать по АПИ-ключ"
+                            onclick="order(this);">АПИ-ключ</button>
+                </td>
+                <td>
+                    <button data-role="sorting" 
+                            data-label="АПИ-секрет" 
+                            data-name="ApiSecret"
+                            data-key="false"
+                            data-type="string"
+                            data-align="left"
+                            data-sorting-order="asc" 
+                            data-sorting-enable="false"
+                            title="Сортировать по АПИ-секрет"
+                            onclick="order(this);">АПИ-секрет</button>
+                </td>
+                <td>
+                    <button data-role="sorting" 
+                            data-label="Заблокирован" 
+                            data-name="IsLocked"
+                            data-key="false"
+                            data-type="bool"
+                            data-align="center"
+                            data-sorting-order="asc" 
+                            data-sorting-enable="false" 
+                            title="Сортировать по Заблокирован"
+                            onclick="order(this);">Заблокирован</button>
+                </td>
+                <td>
+                    <button data-role="sorting" 
+                            data-label="Скрыт" 
+                            data-name="IsDeleted"
+                            data-key="false"
+                            data-type="bool"
+                            data-align="center"
+                            data-sorting-order="asc" 
+                            data-sorting-enable="false"
+                            title="Сортировать по Скрыт"
+                            onclick="order(this);">Скрыт</button>
+                </td>
+                <td>
+                    <button data-role="sorting" 
+                            data-label="Создан" 
+                            data-name="CreateDate" 
+                            data-key="false"
+                            data-type="datetime"
+                            data-align="center"
+                            data-sorting-order="asc" 
+                            data-sorting-enable="false" 
+                            title="Сортировать по Создан"
+                            onclick="order(this);">Создан</button>
+                </td>
+                <td>
+                    <button data-role="sorting"
+                            data-label="Изменён"
+                            data-name="ModifyDate" 
+                            data-key="false"
+                            data-type="datetime"
+                            data-align="center"
+                            data-sorting-order="asc" 
+                            data-sorting-enable="false" 
+                            title="Сортировать по Изменён"
+                            onclick="order(this);">Изменён</button>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="width: 50px;">
+                    <input data-role="filter" type="text" data-name="Id" onchange="filter(this);" title="Фильтровать по №"/>
+                </td>
+                <td style="width: 100px;">
+                    <input data-role="filter" type="text" data-name="CerateUserId" title="Фильтровать по Создатель"/>
+                </td>
+                <td style="width: 120px;">
+                    <input data-role="filter" type="text" data-name="Name" onchange="filter(this);" title="Фильтровать по Название"/>
+                </td>
+                <td style="width: 170px;">
+                    <input data-role="filter" type="text" data-name="ApiKey" onchange="filter(this);" title="Фильтровать по АПИ-ключ"/>
+                </td>
+                <td style="width: 200px;">
+                    <input type="text" data-name="ApiSecret" onchange="filter(this);" title="Фильтровать по АПИ-секрет"/>
+                </td>
+                <td style="width: 120px;">
+                    <select data-role="filter" data-name="IsLocked" onchange="filter(this);" title="Фильтровать по Заблокирован">
+                        <option></option>
+                        <option>Да</option>
+                        <option>Нет</option>
+                    </select>
+                </td>
+                <td style="width: 80px;" title="Фильтровать по Скрыт">
+                    <select data-role="filter" data-name="IsDeleted" onchange="filter(this);">
+                        <option></option>
+                        <option>Да</option>
+                        <option>Нет</option>
+                    </select>
+                </td>
+                <td style="width: 140px;">
+                    <input data-role="filter" type="date" data-name="CreateDate" onchange="filter(this);" title="Фильтровать по Создан"/>
+                </td>
+                <td style="width: 140px;">
+                    <input data-role="filter" type="date" data-name="ModifyDate" onchange="filter(this);" title="Фильтровать по Изменён"/>
+                </td>
+                <td>
+                </td>
+            </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+            <tr>
+                <td colspan="11" class="center">
+                    <button type="button" class="left" onclick="refresh(this);" title="Обновить">
+                        <i class="fa fa-refresh"></i>
+                    </button>
+                    <button type="button" onclick="fastBackward(this);" title="Первая страница">
+                        <i class="fa fa-fast-backward"></i>
+                    </button>
+                    <button type="button" onclick="backward(this);" title="Предыдущая страница">
+                        <i class="fa fa-backward"></i>
+                    </button>
+                    <span class="left-border">Стр.</span>
+                    <input type="number" value="0" min="0" style="width: 45px;" data-role="page" onchange="changePage(this);" title="Текущая страница">
                     <span>из</span>
-                    <span>100</span>
-                </span>
-            </td>
-        </tr>
-        </tfoot>
-    </table>
+                    <span class="right-border">0</span>
+                    <select style="width: 45px;" data-role="size" onchange="changeSize(this);" title="Размер страницы">
+                        <option>5</option>
+                        <option selected="selected">10</option>
+                        <option>20</option>
+                        <option>50</option>
+                        <option>100</option>
+                    </select>
+                    <span class="right-border">
+                    </span>
+                    <button type="button" onclick="forward(this);" title="Следующая страница">
+                        <i class="fa fa-forward"></i>
+                    </button>
+                    <button type="button" onclick="fastForward(this);" title="Последняя страница">
+                        <i class="fa fa-fast-forward"></i>
+                    </button>
+                    <span class="right">
+                        <span>0</span>
+                        <span>-</span>
+                        <span>10</span>
+                        <span>из</span>
+                        <span>100</span>
+                    </span>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
     </div>
 </div>
+
 @section Scripts {
     @{
         <environment names="Development">
             <script src="~/scripts/stores/index.js"></script>
         </environment>
-            <environment names="Staging,Production">
-                <script src="~/scripts/stores/index.min.js"></script>
-            </environment>
+        <environment names="Staging,Production">
+            <script src="~/scripts/stores/index.min.js"></script>
+        </environment>
     }
 }

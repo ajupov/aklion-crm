@@ -35,6 +35,11 @@ select {
     box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1), 0 1px 0 0 rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(0, 0, 0, 0.1);
 }
 
+/*Checkbox*/
+[type="checkbox"] + label {
+    padding-left: 16px;
+}
+
 /*Table*/
 .c-table {
     width: max-content;

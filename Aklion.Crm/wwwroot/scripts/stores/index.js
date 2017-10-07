@@ -227,81 +227,15 @@ $(document).ready(() => {
     //    //    edit: false
     //    //}
     //];
-    //var storesDataUrl = '/Stores/GetList';
 
     const $storesTable = $('#stores-table');
-    const $storesTableBody = $storesTable.find('tbody');
-    
-    $storesTableBody.empty();
 
-    $.get('/Stores/GetList',
-        {},
-        result => {
-
-            let html = '';
-
-            $.each(result.Items,
-                (i, e) => {
-                    html += '<tr>';
-
-                    html += '<td>';
-                    html += e.Id;
-                    html += '</td>';
-
-                    html += '<td>';
-                    html += e.CreateUserId;
-                    html += '</td>';
-
-                    html += '<td>';
-                    html += e.Name;
-                    html += '</td>';
-
-                    html += '<td>';
-                    html += e.ApiKey;
-                    html += '</td>';
-
-                    html += '<td>';
-                    html += e.ApiSecret;
-                    html += '</td>';
-
-                    html += '<td>';
-                    html += e.IsLocked ? 'Да' : 'Нет';
-                    html += '</td>';
-
-                    html += '<td>';
-                    html += e.IsDeleted ? 'Да' : 'Нет';
-                    html += '</td>';
-
-                    html += '<td>';
-                    html += e.CreateDate !== null
-                        ? (new Date(e.CreateDate).toLocaleDateString('ru-RU') +
-                            ' ' +
-                            new Date(e.CreateDate).toLocaleTimeString('en-GB'))
-                        : '';
-                    html += '</td>';
-
-                    html += '<td>';
-                    html += e.ModifyDate !== null
-                        ? (new Date(e.ModifyDate).toLocaleDateString('ru-RU') +
-                            ' ' +
-                            new Date(e.ModifyDate).toLocaleTimeString('en-GB'))
-                        : '';
-                    html += '</td>';
-                    html += '<td>';
-                    const id = $storesTable[0].id + '-' + e.Id;
-                    html += `<input type="checkbox" id="${id}"/><label for="${id}"></label>`;
-                    html += '</td>';
-
-                    html += '</tr>';
-                });
-
-            $storesTableBody.append(html);
-        });
+    getList($storesTable);
 });
 
 function order(button) {
     const $button = $(button);
-    const $elementSortingOrder = $button.attr('data-sorting-order');
+    const $buttonSortingOrder = $button.attr('data-sorting-order');
 
     $button.closest('td').closest('tr').find('button').each((index, otherButton) => {
         const $otherButton = $(otherButton);
@@ -309,9 +243,10 @@ function order(button) {
         $otherButton.attr('data-sorting-enable', 'false');
         $otherButton.html($otherButton.attr('data-label'));
     });
+
     $button.attr('data-sorting-enable', 'true');
 
-    if ($elementSortingOrder === 'desc') {
+    if ($buttonSortingOrder === 'desc') {
         $button.attr('data-sorting-order', 'asc');
         $button.html($button.attr('data-label') + '<i class="fa fa-sort-down"></i>');
     } else {
@@ -322,7 +257,7 @@ function order(button) {
     getRows($button);
 }
 
-function change(input) {
+function filter(input) {
     getRows(input);
 }
 
@@ -331,6 +266,8 @@ function refresh(element) {
 }
 
 function fastBackward(element) {
+
+
     getRows(element);
 }
 
@@ -355,8 +292,165 @@ function fastForward(element) {
 }
 
 function getRows(element) {
-    const table = element.closest('table');
+    const $table = $(element.closest('table'));
 
-    alert(table);
+    let parameters = {};
+    parameters = Object.assign(parameters, getSorting($table));
+    parameters = Object.assign(parameters, getFilters($table));
+    parameters = Object.assign(parameters, getPage($table));
+    parameters = Object.assign(parameters, getSize($table));
+
+    getList($table, parameters);
 }
 
+function getSorting($table) {
+    const sorting = {};
+
+    $table.find('[data-role="sorting"]').each((index, button) => {
+        const $button = $(button);
+
+        const dataSortingEnable = $button.attr('data-sorting-enable') === 'true';
+        if (dataSortingEnable) {
+            sorting['SortingColumn'] = $button.attr('data-name');
+            sorting['SortingOrder'] = $button.attr('data-sorting-order');
+        }
+    });
+
+    return sorting;
+}
+
+function getFilters($table) {
+    const filters = {};
+
+    $table.find('[data-role="filter"]').each((index, input) => {
+        const $input = $(input);
+
+        const value = $input.val();
+
+        if (value.length > 0) {
+            const dataName = $input.attr('data-name');
+
+            filters[dataName] = value;
+        }
+    });
+
+    return filters;
+}
+
+function getPage($table) {
+    const page = {};
+
+    const input = $table.find('[data-role="page"]')[0];
+    const value = parseInt($(input).val());
+    page['Page'] = value > 0 ? value : 1;
+
+    return page;
+}
+
+function getSize($table) {
+    const size = {};
+
+    const input = $table.find('[data-role="size"]')[0];
+    const value = parseInt($(input).val());
+    size['Size'] = value > 0 ? value : 1;
+
+    return size;
+}
+
+function getList($table, parameters) {
+    const dataUrl = $table.attr('data-url');
+
+    const $tableBody = $table.find('tbody');
+
+    $tableBody.empty();
+
+    $.get(dataUrl,
+        parameters,
+        result => {
+            if (result === undefined || result === null) {
+                return;
+            }
+
+            const columns = getColumns($table);
+            
+            let html = '';
+
+            $.each(result.Items,
+                (itemIndex, row) => {
+                    html += '<tr>';
+
+                    $.each(columns,
+                        (columnIndex, column) => {
+                            if (row.hasOwnProperty(column.Name)) {
+                                const value = row[column.Name];
+                                
+                                html += `<td class="${column.Align}-align">`;
+
+                                if (value !== null) {
+                                    switch (column.Type) {
+                                    case 'int':
+                                    case 'decimal':
+                                    case 'double':
+                                    case 'string':
+                                        html += value;
+                                        break;
+                                    case 'date':
+                                        html += new Date(value).toLocaleDateString('ru-RU');
+                                        break;
+                                    case 'datetime':
+                                        html += new Date(value).toLocaleDateString('ru-RU') +
+                                            ' ' +
+                                            new Date(value).toLocaleTimeString('en-GB');
+                                        break;
+                                    case 'time':
+                                        html += new Date(value).toLocaleTimeString('en-GB');
+                                        break;
+                                    case 'bool':
+                                        html += value ? 'Да' : 'Нет';
+                                        break;
+                                    }
+                                }
+
+                                html += '</td>';
+                            }
+                        });
+
+                    //html += '<td class="center">';
+                    //html += `<button type="button" onclick="edit(${row.Id});" title="Изменить">`;
+                    //html += '<i class="fa fa-pencil"></i>';
+                    //html += '</button>';
+                    //html += `<button type="button" onclick="remove(${row.Id});" title="Удалить">`;
+                    //html += '<i class="fa fa-times"></i>';
+                    //html += '</button>';
+                    //html += '</td>';
+
+                    html += '</tr>';
+                });
+
+            $tableBody.append(html);
+        });
+}
+
+function getColumns($table) {
+    const columns = new Array();
+
+    $table.find('[data-role="sorting"]').each((index, button) => {
+        const $button = $(button);
+
+        columns.push({
+            Name: $button.attr('data-name'),
+            Type: $button.attr('data-type'),
+            Align: $button.attr('data-align')
+        });
+    });
+
+    return columns;
+}
+
+function edit(id) {
+    alert(id);
+}
+
+function remove(id) {
+    alert(id);
+}
