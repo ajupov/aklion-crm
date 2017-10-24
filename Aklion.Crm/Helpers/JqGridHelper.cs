@@ -65,7 +65,7 @@
 //                        return;
 //                    }
 
-//                    var domain = await _dao.Get<TModel>(id).ConfigureAwait(false);
+//                    var domain = await _dao.GetList<TModel>(id).ConfigureAwait(false);
 //                    if (domain == null)
 //                    {
 //                        return;

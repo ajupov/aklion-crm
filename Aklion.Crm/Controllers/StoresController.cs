@@ -22,18 +22,17 @@ namespace Aklion.Crm.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            ViewBag.CanManage = true;
             return View();
         }
 
         [HttpGet]
-        public async Task<BaseGetListResponseModel<StoreGetResponseModel>> GetList(StoreGetRequestRequestModel model)
+        public async Task<BaseListModel<StoreGetResponseModel>> GetList(StoreRequestRequestModel model)
         {
             var result = await _repository.Get<Store>(model).ConfigureAwait(false);
-
-            //TODO Написать маппер для списка моделей
             var list = result.Item2.Select(x => x.MapNew<Store, StoreGetResponseModel>()).ToList();
 
-            return new BaseGetListResponseModel<StoreGetResponseModel>(list, result.Item1, model.Page, model.Size);
+            return new BaseListModel<StoreGetResponseModel>(list, result.Item1, model.Page, model.Size);
         }
 
         [HttpGet]

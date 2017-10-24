@@ -13,6 +13,8 @@ namespace Aklion.Infrastructure.Utils.QueryBuilder
 
         public Dictionary<string, object> Parameters { get; set; }
 
+        public List<QueryFilter> Parameters2 { get; set; }
+
         public string General { get; set; }
 
         public string Filter { get; set; }

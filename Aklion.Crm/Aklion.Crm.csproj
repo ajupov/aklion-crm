@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Folder Include="Views\Organizations\" />
+    <Folder Include="Views\Users\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -14,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Aklion.Crm.Dao\Aklion.Crm.Dao.csproj" />
+    <ProjectReference Include="..\Aklion.Crm.Domain\Aklion.Crm.Domain.csproj" />
     <ProjectReference Include="..\Aklion.Infrastructure.ApiClient\Aklion.Infrastructure.ApiClient.csproj" />
   </ItemGroup>
 

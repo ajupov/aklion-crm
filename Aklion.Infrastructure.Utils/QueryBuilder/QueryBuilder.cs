@@ -33,6 +33,22 @@ namespace Aklion.Infrastructure.Utils.QueryBuilder
                 .GetProperties()
                 .ToDictionary(k => k.Name, v => v.GetValue(parameters));
 
+            var value = parameters
+                .GetType()
+                .GetProperties()
+                .FirstOrDefault(p => p.Name == "Filters")
+                ?.GetValue(parameters);
+
+            //query.Parameters2 = ((List<object>)value)?.Select(e =>
+            //{
+            //    var type = e.GetType();
+
+            //    var properties = type.GetProperties();
+
+            //    Mapper.Mapper.MapNew<>()
+            //}).ToList();
+
+
             return query;
         }
 

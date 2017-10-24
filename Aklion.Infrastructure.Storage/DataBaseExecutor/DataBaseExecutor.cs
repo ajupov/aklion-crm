@@ -38,5 +38,17 @@ namespace Aklion.Infrastructure.Storage.DataBaseExecutor
                 return (await connection.QueryAsync<TModel>(query, parameters).ConfigureAwait(false)).ToList();
             }
         }
+
+        public async Task<KeyValuePair<int, List<T>>> SelectListWithTotalCount<T>(string query, object parameters = null)
+        {
+            using (var connection = _connectionFactory.GetConnection())
+            {
+                var reader = await connection.QueryMultipleAsync(query, parameters).ConfigureAwait(false);
+                var totalCount = await reader.ReadFirstOrDefaultAsync<int>().ConfigureAwait(false);
+                var items = await reader.ReadAsync<T>().ConfigureAwait(false);
+
+                return new KeyValuePair<int, List<T>>(totalCount, items.ToList());
+            }
+        }
     }
 }

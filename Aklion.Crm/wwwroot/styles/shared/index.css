@@ -42,26 +42,38 @@ select {
 
 /*Table*/
 .c-table {
-    width: max-content;
+    /*width: max-content;*/
+    table-layout: fixed;
+    width: 100%;
 }
 .c-table * {
     font-size: 0.85rem !important;
 }
 .c-table thead * {
-    text-align: center;
     font-weight: bold;
 }
 .c-table td,
 .c-table th {
-    padding: 2px 4px;
+    padding: 2px 5px;
     border: 1px solid #d0d0d0;
 }
+
+.c-table td {
+    word-break: break-all !important;
+    /*overflow-x: auto;*/
+}
+
 .c-table input[type="button"], .c-table button {
     padding: 0 2px;
     border: none;
     outline: none;
     background: transparent;
 }
+
+    .c-table input[type="button"]:hover, .c-table button:hover {
+        color: #039be5;
+    }
+
 .c-table input[type="text"], .c-table input[type="date"], .c-table input[type="number"] {
     height: 2em;
     margin: 0;
@@ -79,8 +91,18 @@ select {
     -webkit-box-shadow: 0 1px 0 0 #26a69a;
     box-shadow: 0 1px 0 0 #26a69a;
 }
+.c-table .dropdown-content {
+        padding: 5px 10px;
+    }
 
+.no-margin-vertical {
+    margin-top: 0;
+    margin-bottom: 0;
+}
 
+.margin-top-10 {
+    margin-top: 10px;
+}
 
 /*.left {
     float: left;
@@ -91,7 +113,6 @@ select {
 .center {
     text-align: center;
 }*/
-
 .scrollable {
     width: 100%;
     overflow-x: auto;
@@ -108,6 +129,9 @@ select {
     margin-right: 2px;
 }
 
+.hidden {
+    display: none;
+}
 /*table.c-table > tfoot > tr > td {
     text-align: center;
     border: 1px solid #d0d0d0;

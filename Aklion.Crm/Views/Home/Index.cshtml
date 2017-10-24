@@ -1,5 +1,18 @@
-﻿@{
-    ViewBag.Title = "Главная";
-}
+﻿<a href="#" id="users-anchor" data-table="user-table">Пользователи</a>
 
-<h1><b>Система учета клиентов</b></h1>
+<div class="card-panel">
+    <h5>@ViewBag.Title</h5>
+    <div id="main-block" class="scrollable"></div>
+</div>
+
+
+@section Scripts {
+    @{
+        <environment names="Development">
+            <script src="~/scripts/home/index.js"></script>
+        </environment>
+        <environment names="Staging,Production">
+            <script src="~/scripts/home/index.min.js"></script>
+        </environment>
+    }
+}

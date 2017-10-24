@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Aklion.Crm.Models
 {
-    public class BaseGetListResponseModel<TModel>
+    public class BaseListModel<T>
     {
-        public BaseGetListResponseModel(List<TModel> items, int totalCount, int page, int size)
+        public BaseListModel(List<T> items, int totalCount, int page, int size)
         {
             Items = items;
             TotalCount = totalCount;
@@ -14,7 +14,7 @@ namespace Aklion.Crm.Models
             PageCount = size > 0 ? (int) Math.Ceiling((double) totalCount / size) : 0;
         }
 
-        public List<TModel> Items { get; set; }
+        public List<T> Items { get; set; }
 
         public int Page { get; set; }
 

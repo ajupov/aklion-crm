@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Aklion.Crm.Domain\Aklion.Crm.Domain.csproj" />
     <ProjectReference Include="..\Aklion.Infrastructure.Storage\Aklion.Infrastructure.Storage.csproj" />
   </ItemGroup>
 
@@ -19,6 +20,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Queries.resx</DependentUpon>
     </Compile>
+    <Compile Update="User\Queries.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Queries.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +33,10 @@
       <LastGenOutput>Queries.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Store\Queries.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Queries.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="User\Queries.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Queries.Designer.cs</LastGenOutput>
     </EmbeddedResource>

@@ -34,18 +34,12 @@ create table dbo.Store
     Id           int          not null identity(1, 1) constraint PK_Store_Id primary key,
 	CreateUserId int          not null constraint FK_UserPost_CreateUser_Id foreign key (CreateUserId) references dbo.[User] (Id),
     [Name]       varchar(256) not null constraint UQ_Store_Name unique,
-    ApiKey       varchar(32)  null,
-    ApiSecret    varchar(128) null,
+    ApiSecret    varchar(16)  null,
     IsLocked     bit          not null,
     IsDeleted    bit          not null,
     CreateDate   datetime2(7) not null,
     ModifyDate   datetime2(7) null
 );
-go
-
-create unique nonclustered index UQ_Store_ApiKey
-on dbo.Store (ApiKey)
-where ApiKey is not null;
 go
 
 -- Должность
@@ -81,10 +75,10 @@ create table dbo.UserRule
     Id         int          not null identity(1, 1) constraint PK_UserRule_Id primary key,
     UserId     int          not null constraint FK_UserRule_User_Id foreign key (UserId) references dbo.[User] (Id),
     StoreId    int          not null constraint FK_UserRule_Store_Id foreign key (StoreId) references dbo.Store (Id),
-    [Rule]     tinyint      not null,
+    Permission tinyint      not null,
     CreateDate datetime2(7) not null,
     ModifyDate datetime2(7) null,
-    constraint UQ_UserRule_UserId_StoreId_Rule unique (UserId, StoreId, [Rule])
+    constraint UQ_UserRule_UserId_StoreId_Rule unique (UserId, StoreId, Permission)
 );
 go
 
@@ -275,3 +269,11 @@ create table dbo.OrderItem
     ModifyDate datetime2(7)   null
 );
 go
+
+--password: admin
+set identity_insert dbo.[User] on;
+insert dbo.[User] (Id, [Login], PasswordHash, Email, Phone, Surname, [Name], Patronymic, Gender, BirthDate, IsEmailConfirmed, IsPhoneConfirmed, IsLocked, IsDeleted, AvatarUrl, CreateDate, ModifyDate)
+	values	(1, 'admin', 'ACCSme+dFh2xam1fnEW5HTSefoK4bS6hOPHIbz6J7gwojfR82BA6MHJmThclzPN7VgTcHpdax+rTCkbuoAdVjwlvD/XSNcuzbOKgY4V3u5h72OFauWyi/7dfSST/5odIbMz0qoBkYU6+FdzY7g8p//i5uNNCVfBJvTHPvlQ/qZloDECeC6NKtHF3T4zSWocO6Gj286sO6jmcouzVL17OtxdFGbJZbJb6snVFOxNsboNzxQovlw8xFEjCpifN5BoWAqulMF2uxAjg/il3ZYl6peWymauKTqHXcY/FszLAjwL2VWwwSLHPwvzYZUriSZb7vj/oIFlLLXRLu6g2JLI8oQ==', 'au073@mail.ru', '9378164793', 'Аюпов', 'Усман', 'Кябирович', 1, '1994-10-17', 1, 1, 0, 0, null, getdate(), null);
+set identity_insert dbo.[User] off;
+go
+
