@@ -18,6 +18,23 @@ nav .button-collapse i {
     height: 42px;
     line-height: 42px;
 }
+nav img {
+    padding: 5px;
+}
+
+    nav img, nav a, nav i, nav div {
+        height: 42px !important;
+        line-height: 42px !important;
+    }
+
+    /*Input*/
+input {
+    margin-bottom: 0 !important;
+}
+
+    input[type=search] {
+        padding-left: 3rem !important;
+    }
 
 /*Select*/
 select {

@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Filters\" />
     <Folder Include="Views\Organizations\" />
     <Folder Include="Views\Users\" />
   </ItemGroup>

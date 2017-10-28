@@ -1,7 +1,19 @@
 ﻿'use strict';
 
 $(document).ready(() => {
+    debugger;
 
+    switch (window.location.pathname.toLowerCase()) {
+        case '/account':
+            
+            $.get('/account/get',
+                {},
+                result => {
+                    debugger;
+                    history.pushState('', 'Аккаунт', 'eeee');
+                });
+    default:
+    }
 });
 
 var datePickerOptions = {
