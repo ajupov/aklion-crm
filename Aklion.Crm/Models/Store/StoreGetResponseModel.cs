@@ -2,7 +2,7 @@
 
 namespace Aklion.Crm.Models.Store
 {
-    public class StoreGetResponseModel : BaseGetResponseModel
+    public class StoreGetResponseModel
     {
         public int CreateUserId { get; set; }
 

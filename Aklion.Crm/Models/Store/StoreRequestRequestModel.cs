@@ -2,7 +2,7 @@
 
 namespace Aklion.Crm.Models.Store
 {
-    public class StoreRequestRequestModel : BaseRequestModel
+    public class StoreRequestRequestModel : ParameterModel
     {
         public string Name { get; set; }
 

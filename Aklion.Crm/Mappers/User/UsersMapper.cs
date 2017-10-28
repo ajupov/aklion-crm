@@ -1,55 +1,31 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ViewListModel = Aklion.Crm.Models.BaseListModel<Aklion.Crm.Models.Users.User>;
-using DomainModel = Aklion.Crm.Domain.Models.User.UserModel;
-using DomainListModel2 = System.Collections.Generic.KeyValuePair<int, System.Collections.Generic.List<Aklion.Crm.Domain.Models.User.UserModel>>;
+using Aklion.Crm.Domain.Models.User;
+using Aklion.Crm.Models;
+using Aklion.Crm.Models.Administration.Users;
+using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
 
 namespace Aklion.Crm.Mappers.User
 {
     public static class UsersMapper
     {
-        #region Domain to View
-        public static ViewListModel Map(this DomainListModel2 model, int page, int size)
+        public static PagingModel<UserModel> Map(this Paging<Domain.Models.User.User> model, int page, int size)
         {
-            return model.Value != null 
-                ? new ViewListModel(model.Value.Map(), model.Key, page, size)
-                : null;
+            return model == null
+                ? null
+                : new PagingModel<UserModel>(model.List.Map(), model.TotalCount, page, size);
         }
 
-        private static List<Models.Users.User> Map(this IEnumerable<DomainModel> models)
+        private static List<UserModel> Map(this IEnumerable<Domain.Models.User.User> models)
         {
             return models?.Select(Map).ToList();
         }
 
-        public static Models.Users.User Map(this DomainModel model)
+        public static UserModel Map(this Domain.Models.User.User model)
         {
-            return model != null
-                ? new Models.Users.User
-                {
-                     Id = model.Id,
-                    Email = model.Email,
-                    Phone = model.Phone,
-                    Surname = model.Surname,
-                    Name = model.Name,
-                    Patronymic = model.Patronymic,
-                    Gender = model.Gender,
-                    BirthDate = model.BirthDate,
-                    IsEmailConfirmed = model.IsEmailConfirmed,
-                    IsPhoneConfirmed = model.IsPhoneConfirmed,
-                    IsLocked = model.IsLocked,
-                    IsDeleted = model.IsDeleted,
-                    CreateDate = model.CreateDate,
-                    ModifyDate = model.ModifyDate,
-                }
-                : null;
-        }
-        #endregion
-
-        #region View to Domain
-        public static DomainModel Map(this Models.Users.User model)
-        {
-            return model != null
-                ? new DomainModel
+            return model == null
+                ? null
+                : new UserModel
                 {
                     Id = model.Id,
                     Email = model.Email,
@@ -64,10 +40,23 @@ namespace Aklion.Crm.Mappers.User
                     IsLocked = model.IsLocked,
                     IsDeleted = model.IsDeleted,
                     CreateDate = model.CreateDate,
-                    ModifyDate = model.ModifyDate,
-                }
-                : null;
+                    ModifyDate = model.ModifyDate
+                };
         }
-        #endregion
+
+        public static UserParameter Map(this UserParameterModel model)
+        {
+            return model == null
+                ? null
+                : new UserParameter
+                {
+                    IsSearch = model.IsSearch,
+                    Timestamp = model.Timestamp,
+                    SortingColumn = model.SortingColumn,
+                    SortingOrder = model.SortingOrder,
+                    Page = model.Page - 1,
+                    Size = model.Size
+                };
+        }
     }
 }

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Aklion.Infrastructure.Storage.ConnectionFactory;
+using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
 using Dapper;
 
 namespace Aklion.Infrastructure.Storage.DataBaseExecutor
@@ -39,15 +40,17 @@ namespace Aklion.Infrastructure.Storage.DataBaseExecutor
             }
         }
 
-        public async Task<KeyValuePair<int, List<T>>> SelectListWithTotalCount<T>(string query, object parameters = null)
+        public async Task<Paging<T>> SelectListWithTotalCount<T>(string query, object parameters = null)
         {
             using (var connection = _connectionFactory.GetConnection())
             {
                 var reader = await connection.QueryMultipleAsync(query, parameters).ConfigureAwait(false);
-                var totalCount = await reader.ReadFirstOrDefaultAsync<int>().ConfigureAwait(false);
-                var items = await reader.ReadAsync<T>().ConfigureAwait(false);
 
-                return new KeyValuePair<int, List<T>>(totalCount, items.ToList());
+                return new Paging<T>
+                {
+                    TotalCount = await reader.ReadFirstOrDefaultAsync<int>().ConfigureAwait(false),
+                    List = (await reader.ReadAsync<T>().ConfigureAwait(false)).ToList()
+                };
             }
         }
     }

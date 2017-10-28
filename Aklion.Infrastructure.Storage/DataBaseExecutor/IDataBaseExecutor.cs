@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
 
 namespace Aklion.Infrastructure.Storage.DataBaseExecutor
 {
@@ -11,6 +12,6 @@ namespace Aklion.Infrastructure.Storage.DataBaseExecutor
 
         Task<List<T>> SelectList<T>(string query, object parameters = null);
 
-        Task<KeyValuePair<int, List<T>>> SelectListWithTotalCount<T>(string query, object parameters = null);
+        Task<Paging<T>> SelectListWithTotalCount<T>(string query, object parameters = null);
     }
 }

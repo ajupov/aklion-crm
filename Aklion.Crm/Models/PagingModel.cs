@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Aklion.Crm.Models
 {
-    public class BaseListModel<T>
+    public class PagingModel<T>
     {
-        public BaseListModel(List<T> items, int totalCount, int page, int size)
+        public PagingModel(List<T> items, int totalCount, int page, int size)
         {
             Items = items;
             TotalCount = totalCount;

@@ -1,6 +1,6 @@
 ﻿namespace Aklion.Crm.Models.Store
 {
-    public class StoreCreateRequestRequestModel : BaseCreateRequestModel
+    public class StoreCreateRequestRequestModel
     {
         public int CreateUserId { get; set; }
 

@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Aklion.Crm.Domain.Interfaces.User;
 using Aklion.Crm.Domain.Models.User;
 using Aklion.Infrastructure.Storage.DataBaseExecutor;
+using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
 
 namespace Aklion.Crm.Dao.User
 {
@@ -15,22 +15,22 @@ namespace Aklion.Crm.Dao.User
             _dataBaseExecutor = dataBaseExecutor;
         }
 
-        public Task<KeyValuePair<int, List<UserModel>>> GetList(object parameters)
+        public Task<Paging<Domain.Models.User.User>> GetPagedList(UserParameter parameter)
         {
-            return _dataBaseExecutor.SelectListWithTotalCount<UserModel>(Queries.GetList, parameters);
+            return _dataBaseExecutor.SelectListWithTotalCount<Domain.Models.User.User>(Queries.GetPagedList, parameter);
         }
 
-        public Task<UserModel> Get(int id)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<int> Insert(UserModel model)
+        public Task<Domain.Models.User.User> Get(int id)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task Update(UserModel model)
+        public Task<int> Insert(Domain.Models.User.User model)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task Update(Domain.Models.User.User model)
         {
             throw new System.NotImplementedException();
         }

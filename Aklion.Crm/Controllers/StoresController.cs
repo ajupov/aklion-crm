@@ -27,12 +27,12 @@ namespace Aklion.Crm.Controllers
         }
 
         [HttpGet]
-        public async Task<BaseListModel<StoreGetResponseModel>> GetList(StoreRequestRequestModel model)
+        public async Task<PagingModel<StoreGetResponseModel>> GetList(StoreRequestRequestModel model)
         {
             var result = await _repository.Get<Store>(model).ConfigureAwait(false);
             var list = result.Item2.Select(x => x.MapNew<Store, StoreGetResponseModel>()).ToList();
 
-            return new BaseListModel<StoreGetResponseModel>(list, result.Item1, model.Page, model.Size);
+            return new PagingModel<StoreGetResponseModel>(list, result.Item1, model.Page, model.Size);
         }
 
         [HttpGet]
@@ -52,16 +52,16 @@ namespace Aklion.Crm.Controllers
             await _repository.Create(newModel).ConfigureAwait(false);
         }
 
-        [HttpPost]
-        public async Task Update(StoreUpdateRequestRequestModel model)
-        {
-            var store = await _repository.Get<Store>(model.Id).ConfigureAwait(false);
+        //[HttpPost]
+        //public async Task Update(StoreUpdateRequestRequestModel model)
+        //{
+        //    var store = await _repository.Get<Store>(model.Id).ConfigureAwait(false);
 
-            model.Map(store);
-            store.ModifyDate = DateTime.Now;
+        //    model.Map(store);
+        //    store.ModifyDate = DateTime.Now;
 
-            await _repository.Update(store).ConfigureAwait(false);
-        }
+        //    await _repository.Update(store).ConfigureAwait(false);
+        //}
 
         [HttpPost]
         public async Task Delete(int id)

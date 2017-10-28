@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Управление пользователями";
+}
+
+<div class="card horisontal-scrollable">
+    <table id="users-table"></table>
+    <div id="users-table-pagination"></div>
+</div>
+
+@section Scripts {
+    @{
+        <environment names="Development">
+            <script src="~/scripts/administration/index.js"></script>
+        </environment>
+        <environment names="Staging,Production">
+            <script src="~/scripts/administration/index.min.js"></script>
+        </environment>
+    }
+}

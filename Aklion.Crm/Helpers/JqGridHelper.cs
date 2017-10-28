@@ -19,7 +19,7 @@
 //        public async Task<JqGridDataModel> GetData<TModel>(JqGridGetModel model)
 //        {
 //            var count = await _dao.GetCount<TModel>(model).ConfigureAwait(false);
-//            var rows = await _dao.GetList<TModel>(model).ConfigureAwait(false);
+//            var rows = await _dao.GetPagedList<TModel>(model).ConfigureAwait(false);
 //            return new JqGridDataModel((IEnumerable<object>)rows, count, model.page, model.rows);
 //        }
 
@@ -65,7 +65,7 @@
 //                        return;
 //                    }
 
-//                    var domain = await _dao.GetList<TModel>(id).ConfigureAwait(false);
+//                    var domain = await _dao.GetPagedList<TModel>(id).ConfigureAwait(false);
 //                    if (domain == null)
 //                    {
 //                        return;

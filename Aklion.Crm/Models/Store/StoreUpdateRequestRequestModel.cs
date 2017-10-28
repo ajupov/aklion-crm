@@ -1,6 +1,6 @@
 ﻿namespace Aklion.Crm.Models.Store
 {
-    public class StoreUpdateRequestRequestModel : BaseUpdateRequestModel
+    public class StoreUpdateRequestRequestModel
     {
         public int CreateUserId { get; set; }
 

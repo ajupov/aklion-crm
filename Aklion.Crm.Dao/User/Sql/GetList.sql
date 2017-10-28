@@ -1,8 +1,4 @@
 ﻿select
-	count(0)
-	from dbo.[User];
-
-select
 	Id,
     [Login],
     PasswordHash,

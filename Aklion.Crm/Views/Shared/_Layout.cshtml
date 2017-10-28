@@ -9,16 +9,14 @@
     @await RenderSectionAsync("Styles", false).ConfigureAwait(false)
 </head>
 <body>
-<main class="navbar-fixed">
-    <nav>
-        <div class="container">
-            @await Html.PartialAsync("_Menu").ConfigureAwait(false)
-        </div>
-    </nav>
+<nav>
     <div class="container">
-        @RenderBody()
+        @await Html.PartialAsync("_Menu").ConfigureAwait(false)
     </div>
-</main>
+</nav>
+<div class="container">
+    @RenderBody()
+</div>
 @await Html.PartialAsync("_Scripts").ConfigureAwait(false)
 @await RenderSectionAsync("Scripts", false).ConfigureAwait(false)
 </body>

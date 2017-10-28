@@ -63,9 +63,16 @@ namespace Aklion.Crm.Dao.User {
         /// <summary>
         ///   Ищет локализованную строку, похожую на select
         ///	count(0)
-        ///	from dbo.[User];
-        ///
-        ///select
+        ///	from dbo.[User];.
+        /// </summary>
+        internal static string GetCount {
+            get {
+                return ResourceManager.GetString("GetCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на select
         ///	Id,
         ///    [Login],
         ///    PasswordHash,
@@ -88,6 +95,41 @@ namespace Aklion.Crm.Dao.User {
         internal static string GetList {
             get {
                 return ResourceManager.GetString("GetList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на select
+        ///	count(0)
+        ///	from dbo.[User];
+        ///
+        ///select
+        ///	Id,
+        ///    [Login],
+        ///    PasswordHash,
+        ///    Email,
+        ///    Phone,
+        ///    Surname,
+        ///    [Name],
+        ///    Patronymic,
+        ///    Gender,
+        ///    BirthDate,
+        ///    IsEmailConfirmed,
+        ///    IsPhoneConfirmed,
+        ///    IsLocked,
+        ///    IsDeleted,
+        ///    AvatarUrl,
+        ///    CreateDate,
+        ///    ModifyDate
+        ///	from dbo.[User]
+        ///	order by
+        ///		case when @SortingColumn = &apos;Id&apos; and @SortingOrder = &apos;asc&apos; then Id end,
+        ///		case when @SortingColumn = &apos;Id&apos; and @SortingOrder = &apos;desc&apos; then Id end desc,
+        ///		case when @Sortin [остаток строки не уместился]&quot;;.
+        /// </summary>
+        internal static string GetPagedList {
+            get {
+                return ResourceManager.GetString("GetPagedList", resourceCulture);
             }
         }
     }

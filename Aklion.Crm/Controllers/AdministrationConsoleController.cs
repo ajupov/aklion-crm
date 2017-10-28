@@ -2,11 +2,12 @@
 
 namespace Aklion.Crm.Controllers
 {
-    public class HomeController : Controller
+    [Route("Administration/Console")]
+    public class AdministrationConsoleController : Controller
     {
         public IActionResult Index()
         {
-            return RedirectToAction("Index", "AdministrationConsole");
+            return View();
         }
     }
 }
