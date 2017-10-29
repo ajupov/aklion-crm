@@ -64,7 +64,7 @@ nav { background-color: #507299; }
     min-width: 160px;
     position: absolute;
     top: 43px;
-    z-index: 1;
+    z-index: 999;
     right: 1%;
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
@@ -106,8 +106,88 @@ nav { background-color: #507299; }
     overflow-x: auto;
 }
 
-/*Jqgrid*/
+.pading-10 {
+    padding: 10px;    
+}
 
+input, select {
+    outline: none;
+    border: 1px solid #dbe4ec !important;
+    border-radius: 2px !important;
+    background: #ffffff !important;
+}
+
+input[type=checkbox]:after {
+    content: " ";
+    width: 11px;
+    height: 11px;
+    background-color: #ffffff;
+    display: inline-block;
+    border: 1px solid #dbe4ec !important;
+}
+
+input[type=checkbox]:checked:after {
+    content: "\2714";
+}
+
+/*Jqgrid*/
 .ui-search-clear {
     display: none;
+}
+
+.ui-widget {
+    background: #ffffff;
+    border-radius: 2px;
+    border: none !important;
+    box-shadow: 0 1px 0 0 #d7d8db, 0 0 0 1px #e3e4e8;
+}
+
+.ui-widget-header {
+    background: #507299;
+    color: #ffffff;
+    border-radius: 2px;
+}
+
+.ui-widget-content {
+    background: #ffffff;
+}
+
+td.ui-state-default, a.ui-state-default, .ui-jqgrid-hdiv {
+    border: 1px solid #dbe4ec !important;
+}
+
+.ui-state-default, td[role="gridcell"] {   
+    border-right: 1px solid #dbe4ec !important;
+}
+
+.ui-button.ui-state-disabled {
+    border: 1px solid #dbe4ec;
+    background: #ffffff;
+}
+
+.ui-jqgrid-hdiv {
+    border: 1px solid #dbe4ec;
+}
+
+.ui-th-ltr {
+    border-bottom: none !important;
+}
+
+.ui-datepicker {
+    padding: 4px;
+    width: 200px;
+    font-size: 0.8em;
+}
+
+.ui-jqgrid-titlebar, .ui-jqdialog-titlebar {
+    padding-bottom: 5px !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    padding-top: 10px !important;
+}
+
+.ui-state-highlight {
+    /*border: none !important;*/
+    color: #000000 !important;
+    /*background: #EDF0F5 !important;*/
 }
