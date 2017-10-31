@@ -42,14 +42,11 @@ function createTable(options) {
 
     options.Element.jqGrid('navGrid', options.Pager,
         { view: options.IsViewable, refresh: false, search: false, add: options.IsCreatable, del: options.IsDeletable, edit: options.IsEditable },
-        { width: 'auto', recreateForm: true, closeOnEscape: true, resize: true},
-        { width: 'auto', recreateForm: true, closeOnEscape: true, resize: true},
-        { width: 'auto', recreateForm: true, closeOnEscape: true, resize: true},
-        { width: 'auto', recreateForm: true, closeOnEscape: true, resize: true},
-        { width: 500, recreateForm: true, closeOnEscape: true, resize: true}
-        //update('edit'), // обновление
-        //update('add'), // добавление
-        //update('del') // удаление
+        { width: 'auto', recreateForm: true, closeOnEscape: true, resize: true, url: options.UpdateUrl, },
+        { width: 'auto', recreateForm: true, closeOnEscape: true, resize: true, url: options.CreateUrl },
+        { width: 'auto', recreateForm: true, closeOnEscape: true, resize: true, url: options.DeleteUrl },
+        { },
+        { width: 500, recreateForm: true, closeOnEscape: true, resize: true }
     );
 
     if (options.IsFilterable) {

@@ -128,6 +128,8 @@ input[type=checkbox]:after {
 
 input[type=checkbox]:checked:after {
     content: "\2714";
+    line-height: 11px;
+    text-align: center;
 }
 
 /*Jqgrid*/
@@ -187,7 +189,6 @@ td.ui-state-default, a.ui-state-default, .ui-jqgrid-hdiv {
 }
 
 .ui-state-highlight {
-    /*border: none !important;*/
     color: #000000 !important;
-    /*background: #EDF0F5 !important;*/
 }
+

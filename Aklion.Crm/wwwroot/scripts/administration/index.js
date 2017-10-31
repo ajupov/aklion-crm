@@ -19,8 +19,7 @@ $(document).ready(() => {
             label: '№',
             width: 70,
             formatter: 'integer',
-            key: true,
-
+            key: true
         },
         {
             name: 'Email',
@@ -28,6 +27,7 @@ $(document).ready(() => {
             width: 150,
             editable: true,
             formatter: 'email',
+            edittype: 'email',
             editoptions: {
                 maxlength: 256
             }
@@ -94,6 +94,11 @@ $(document).ready(() => {
             formatter: 'date',
             formatoptions: {
                 newformat: 'd.m.Y'
+            },
+            editoptions: {
+                dataInit: e => {
+                    $(e).datepicker();
+                }
             }
         },
         {
@@ -163,10 +168,12 @@ $(document).ready(() => {
             sorttype: 'date',
             datefmt: 'd.m.Y H:i:s',
             searchoptions: {
-                dataInit: function (e) {
+                dataInit: e => {
                     $(e).datepicker();
                 },
-                attr: { title: 'Select Date' }
+                attr: {
+                    title: 'Select Date'
+                }
             }
         },
         {
@@ -191,6 +198,9 @@ $(document).ready(() => {
         Element: ui.usersTable,
         Title: 'Пользователи',
         DataUrl: urls.usersGetList,
+        CreateUrl: urls.usersCreate,
+        UpdateUrl: urls.usersUpdate,
+        DeleteUrl: urls.usersDelete,
         Columns: colModel,
         Pager: '#users-table-pagination',
         IsViewable: true,
@@ -200,32 +210,5 @@ $(document).ready(() => {
         IsFilterable: true
     }
 
-
     createTable(options);
-    
-
-    function update(act) {
-        debugger;
-        return {
-            closeAfterAdd: true,
-            closeAfterEdit: true,
-            reloadAfterSubmit: true,
-            onclickSubmit: function(params) {
-                const list = $('#jqg');
-                const selectedRow = list.getGridParam('selrow');
-                rowData = list.getRowData(selectedRow);
-                if (act === 'add')
-                    params.url = urls.usersCreate;
-                else if (act === 'del')
-                    params.url = '@Url.Action("Delete")';
-                else if (act === 'edit')
-                    params.url = '@Url.Action("Edit")';
-            },
-            afterSubmit: function(response, postdata) {
-                // обновление грида
-                $(this).jqGrid('setGridParam', { datatype: 'json' }).trigger('reloadGrid');
-                return [true, '', 0];
-            }
-        };
-    };
 });
