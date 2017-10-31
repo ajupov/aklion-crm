@@ -42,9 +42,10 @@ function createTable(options) {
 
     options.Element.jqGrid('navGrid', options.Pager,
         { view: options.IsViewable, refresh: false, search: false, add: options.IsCreatable, del: options.IsDeletable, edit: options.IsEditable },
-        { width: 'auto', recreateForm: true, closeOnEscape: true, resize: true, url: options.UpdateUrl, },
-        { width: 'auto', recreateForm: true, closeOnEscape: true, resize: true, url: options.CreateUrl },
-        { width: 'auto', recreateForm: true, closeOnEscape: true, resize: true, url: options.DeleteUrl },
+        {
+            width: 'auto', recreateForm: true, closeOnEscape: true, resize: true, url: options.UpdateUrl, closeAfterEdit: true, errorTextFormat: e => e.responseJSON.Error },
+        { width: 'auto', recreateForm: true, closeOnEscape: true, resize: true, url: options.CreateUrl, closeAfterAdd: true, clearAfterAdd: true, errorTextFormat: e => e.responseJSON.Error },
+        { width: 'auto', recreateForm: true, closeOnEscape: true, resize: true, url: options.DeleteUrl, errorTextFormat: e => e.responseJSON.Error },
         { },
         { width: 500, recreateForm: true, closeOnEscape: true, resize: true }
     );

@@ -22,7 +22,7 @@ namespace Aklion.Crm.Dao.User
 
         public Task<Domain.Models.User.User> Get(int id)
         {
-            throw new System.NotImplementedException();
+            return _dataBaseExecutor.SelectOne<Domain.Models.User.User>(Queries.Get, new {id});
         }
 
         public Task<int> Insert(Domain.Models.User.User model)
@@ -32,7 +32,7 @@ namespace Aklion.Crm.Dao.User
 
         public Task Update(Domain.Models.User.User model)
         {
-            throw new System.NotImplementedException();
+            return _dataBaseExecutor.Execute(Queries.Update, model);
         }
 
         public Task Delete(int id)

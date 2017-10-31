@@ -61,6 +61,34 @@ namespace Aklion.Crm.Dao.User {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на select top 1
+        ///	Id,
+        ///    [Login],
+        ///    PasswordHash,
+        ///    Email,
+        ///    Phone,
+        ///    Surname,
+        ///    [Name],
+        ///    Patronymic,
+        ///    Gender,
+        ///    BirthDate,
+        ///    IsEmailConfirmed,
+        ///    IsPhoneConfirmed,
+        ///    IsLocked,
+        ///    IsDeleted,
+        ///    AvatarUrl,
+        ///    CreateDate,
+        ///    ModifyDate
+        ///	from dbo.[User]
+        ///	where Id = @id;.
+        /// </summary>
+        internal static string Get {
+            get {
+                return ResourceManager.GetString("Get", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на select
         ///	count(0)
         ///	from dbo.[User];.
@@ -130,6 +158,31 @@ namespace Aklion.Crm.Dao.User {
         internal static string GetPagedList {
             get {
                 return ResourceManager.GetString("GetPagedList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на update dbo.[User]
+        ///	set [Login] = @Login,
+        ///		PasswordHash = @PasswordHash,
+        ///		Email = @Email,
+        ///		Phone = @Phone,
+        ///		Surname = @Surname,
+        ///		[Name] = @Name,
+        ///		Patronymic = @Patronymic,
+        ///		Gender = @Gender,
+        ///		BirthDate = @BirthDate,
+        ///		IsEmailConfirmed = @IsEmailConfirmed,
+        ///		IsPhoneConfirmed = @IsPhoneConfirmed,
+        ///		IsLocked = @IsLocked,
+        ///		IsDeleted = @IsDeleted,
+        ///		AvatarUrl = @AvatarUrl,
+        ///		ModifyDate = getdate()
+        ///	where Id = @id;.
+        /// </summary>
+        internal static string Update {
+            get {
+                return ResourceManager.GetString("Update", resourceCulture);
             }
         }
     }

@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
+using Aklion.Crm.Attributes;
 using Aklion.Crm.Domain.Interfaces.User;
 using Aklion.Crm.Mappers.User;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.Users;
-using Aklion.Crm.Models.Client;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aklion.Crm.Controllers
@@ -37,8 +37,18 @@ namespace Aklion.Crm.Controllers
 
         [HttpPost]
         [Route("Update")]
-        public async Task Update(UserModel model, string Operation)
+        [AjaxErrorHandle]
+        public async Task Update(UserModel model)
         {
+            var user = await _userDao.Get(model.Id).ConfigureAwait(false);
+            if (user == null)
+            {
+                return;
+            }
+
+            model.Map(user);
+
+            await _userDao.Update(user).ConfigureAwait(false);
         }
     }
 }

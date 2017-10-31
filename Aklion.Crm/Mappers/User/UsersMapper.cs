@@ -58,5 +58,23 @@ namespace Aklion.Crm.Mappers.User
                     Size = model.Size
                 };
         }
+
+        public static void Map(this UserModel viewModel, Domain.Models.User.User domainModel)
+        {
+            domainModel.Id = viewModel.Id;
+            domainModel.Email = viewModel.Email;
+            domainModel.Phone = viewModel.Phone;
+            domainModel.Surname = viewModel.Surname;
+            domainModel.Name = viewModel.Name;
+            domainModel.Patronymic = viewModel.Patronymic;
+            domainModel.Gender = viewModel.Gender;
+            domainModel.BirthDate = viewModel.BirthDate;
+            domainModel.IsEmailConfirmed = viewModel.IsEmailConfirmed;
+            domainModel.IsPhoneConfirmed = viewModel.IsPhoneConfirmed;
+            domainModel.IsLocked = viewModel.IsLocked;
+            domainModel.IsDeleted = viewModel.IsDeleted;
+            domainModel.CreateDate = viewModel.CreateDate;
+            domainModel.ModifyDate = viewModel.ModifyDate;
+        }
     }
 }

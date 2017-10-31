@@ -27,7 +27,6 @@ $(document).ready(() => {
             width: 150,
             editable: true,
             formatter: 'email',
-            edittype: 'email',
             editoptions: {
                 maxlength: 256
             }
