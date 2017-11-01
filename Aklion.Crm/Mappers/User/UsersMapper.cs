@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Aklion.Crm.Domain.Models.User;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.Users;
 using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
+using Aklion.Infrastructure.Utils.DateTime;
 
 namespace Aklion.Crm.Mappers.User
 {
@@ -28,6 +31,7 @@ namespace Aklion.Crm.Mappers.User
                 : new UserModel
                 {
                     Id = model.Id,
+                    Login = model.Login,
                     Email = model.Email,
                     Phone = model.Phone,
                     Surname = model.Surname,
@@ -50,6 +54,21 @@ namespace Aklion.Crm.Mappers.User
                 ? null
                 : new UserParameter
                 {
+                    Id = model.Id,
+                    Login = model.Login,
+                    Email = model.Email,
+                    Phone = model.Phone,
+                    Surname = model.Surname,
+                    Name = model.Name,
+                    Patronymic = model.Patronymic,
+                    Gender = model.Gender,
+                    BirthDate = model.BirthDate.ToNullableDate(),
+                    IsEmailConfirmed = model.IsEmailConfirmed,
+                    IsPhoneConfirmed = model.IsPhoneConfirmed,
+                    IsLocked = model.IsLocked,
+                    IsDeleted = model.IsDeleted,
+                    CreateDate = model.CreateDate,
+                    ModifyDate = model.ModifyDate,
                     IsSearch = model.IsSearch,
                     Timestamp = model.Timestamp,
                     SortingColumn = model.SortingColumn,
@@ -62,6 +81,7 @@ namespace Aklion.Crm.Mappers.User
         public static void Map(this UserModel viewModel, Domain.Models.User.User domainModel)
         {
             domainModel.Id = viewModel.Id;
+            domainModel.Login = viewModel.Login;
             domainModel.Email = viewModel.Email;
             domainModel.Phone = viewModel.Phone;
             domainModel.Surname = viewModel.Surname;

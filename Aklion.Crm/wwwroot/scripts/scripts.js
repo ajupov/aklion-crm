@@ -9,7 +9,7 @@ const commonUi = {
 
 $(document).ready(() => {
     commonUi.mobileMenuLink.click(() => {
-        ui.navbar.toggleClass('responsive');
+        commonUi.navbar.toggleClass('responsive');
     });
 
     commonUi.dropdownMenuLink.click('*',

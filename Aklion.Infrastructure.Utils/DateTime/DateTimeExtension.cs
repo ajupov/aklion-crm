@@ -123,5 +123,21 @@ namespace Aklion.Infrastructure.Utils.DateTime
         {
             return new System.DateTime(date.Year, 1, 1);
         }
+
+        public static System.DateTime? ToNullableDate(this string dateString)
+        {
+            if (string.IsNullOrWhiteSpace(dateString))
+            {
+                return null;
+            }
+
+            if (System.DateTime.TryParseExact(dateString, DateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None,
+                out var outDate))
+            {
+                return outDate;
+            }
+
+            return null;
+        }
     }
 }

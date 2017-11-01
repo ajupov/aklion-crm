@@ -1,7 +1,9 @@
 ﻿'use strict';
 
 function createTable(options) {
-    options.Element.jqGrid({
+    const $table = $(options.Element);
+
+    $table.jqGrid({
         url: options.DataUrl,
         datatype: 'json',
         rowNum: 10,
@@ -40,10 +42,9 @@ function createTable(options) {
         }
     });
 
-    options.Element.jqGrid('navGrid', options.Pager,
+    $table.jqGrid('navGrid', options.Pager,
         { view: options.IsViewable, refresh: false, search: false, add: options.IsCreatable, del: options.IsDeletable, edit: options.IsEditable },
-        {
-            width: 'auto', recreateForm: true, closeOnEscape: true, resize: true, url: options.UpdateUrl, closeAfterEdit: true, errorTextFormat: e => e.responseJSON.Error },
+        { width: 'auto', recreateForm: true, closeOnEscape: true, resize: true, url: options.UpdateUrl, closeAfterEdit: true, errorTextFormat: e => e.responseJSON.Error },
         { width: 'auto', recreateForm: true, closeOnEscape: true, resize: true, url: options.CreateUrl, closeAfterAdd: true, clearAfterAdd: true, errorTextFormat: e => e.responseJSON.Error },
         { width: 'auto', recreateForm: true, closeOnEscape: true, resize: true, url: options.DeleteUrl, errorTextFormat: e => e.responseJSON.Error },
         { },
@@ -51,7 +52,7 @@ function createTable(options) {
     );
 
     if (options.IsFilterable) {
-        options.Element.jqGrid('filterToolbar', {});
+        $table.jqGrid('filterToolbar', { });
     }
 }
 

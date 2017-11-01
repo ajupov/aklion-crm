@@ -23,7 +23,7 @@ namespace Aklion.Crm.Controllers
         [Route("Index")]
         public IActionResult Index()
         {
-            return View();
+            return View("~/Views/Administration/Users/Index.cshtml");
         }
 
         [HttpGet]
