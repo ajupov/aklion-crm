@@ -8,12 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Aklion.Crm.Controllers.Administration
 {
-    [Route("Administration/Users")]
-    public class AdministrationUsersController : Controller
+    [Route("Administration/Stores")]
+    public class AdministrationStoresController : Controller
     {
         private readonly IUserDao _userDao;
 
-        public AdministrationUsersController(IUserDao userDao)
+        public AdministrationStoresController(IUserDao userDao)
         {
             _userDao = userDao;
         }
@@ -23,7 +23,7 @@ namespace Aklion.Crm.Controllers.Administration
         [Route("Index")]
         public IActionResult Index()
         {
-            return View("~/Views/Administration/Users/Index.cshtml");
+            return View("~/Views/Administration/Stores/Index.cshtml");
         }
 
         [HttpGet]

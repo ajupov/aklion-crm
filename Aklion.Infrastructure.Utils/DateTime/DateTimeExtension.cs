@@ -139,5 +139,21 @@ namespace Aklion.Infrastructure.Utils.DateTime
 
             return null;
         }
+
+        public static System.DateTime? ToNullableDateTime(this string dateTimeString)
+        {
+            if (string.IsNullOrWhiteSpace(dateTimeString))
+            {
+                return null;
+            }
+
+            if (System.DateTime.TryParseExact(dateTimeString, DateTimeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None,
+                out var outDateTime))
+            {
+                return outDateTime;
+            }
+
+            return null;
+        }
     }
 }

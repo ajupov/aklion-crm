@@ -3,6 +3,88 @@
 function createTable(options) {
     const $table = $(options.Element);
 
+    const colModel = [];
+
+    $.each(options.Columns,
+        (index, column) => {
+            colModel.push({
+                key: column.Name === 'Id',
+                name: column.Name.length > 0 ? column.Name : '',
+                label: column.Label.length > 0 ? column.Label : 'Без названия',
+                width: column.Width > 0 ? column.Width : 100,
+                align: column.Type === 'checkbox' ||
+                    column.Type === 'select' ||
+                    column.Type === 'date' ||
+                    column.Type === 'datetime'
+                    ? 'center'
+                    : column.Type === 'money'
+                    ? 'right'
+                    : 'left',
+                hidden: column.Hidden === true,
+                datefmt: column.Type === 'datetime'
+                    ? 'd.m.Y H:i:s'
+                    : 'd.m.Y',
+                formatter: column.Type === 'checkbox'
+                    ? 'checkbox'
+                    : column.Type === 'select'
+                    ? 'select'
+                    : column.Type === 'date' || column.Type === 'datetime'
+                    ? 'date'
+                    : column.Type === 'number'
+                    ? 'integer'
+                    : 'text',
+                formatoptions: column.Type === 'datetime'
+                    ? { srcformat: 'Y-m-d h:i:s', newformat: 'd.m.Y H:i:s' }
+                    : column.Type === 'date'
+                        ? { srcformat: 'Y-m-d', newformat: 'd.m.Y' }
+                        : undefined,
+                editable: column.Editable === true,
+                edittype: column.Type === 'checkbox'
+                    ? 'checkbox'
+                    : column.Type === 'select'
+                    ? 'select'
+                    : 'text',
+                editoptions: {
+                    value: column.Type === 'checkbox'
+                        ? 'true:false'
+                        : column.Type === 'select'
+                        ? column.SelectValues.replace('0:;', '')
+                        : [],
+                    maxlength: column.MaxLength > 0 ? column.MaxLength : 0,
+                    dataInit: e => {
+                        if (column.Type === 'date' || column.Type === 'datetime') {
+                            initDatePicker(e, $table);
+                        }
+                    }
+                },
+                editrules: {
+                    edithidden: column.EditHidden === true
+                },
+                stype: column.Type === 'select' || column.Type === 'checkbox'
+                    ? 'select'
+                    : 'text',
+                searchoptions: {
+                    dataInit: e => {
+                        if (column.Type === 'date' || column.Type === 'datetime') {
+                            initDatePicker(e, $table);
+                        }
+                    },
+                    value: column.Type === 'select'
+                        ? column.SelectValues
+                        : column.Type === 'checkbox'
+                        ? 'null:;false:Нет;true:Да'
+                        : []
+                },
+                sorttype: column.Type === 'date' || column.Type === 'datetime'
+                    ? 'date'
+                    : column.Type === 'number'
+                    ? 'int'
+                    : column.Type === 'money' || column.Type === 'double'
+                    ? 'currency'
+                    : 'text'
+            });
+        });
+
     $table.jqGrid({
         url: options.DataUrl,
         datatype: 'json',
@@ -15,9 +97,9 @@ function createTable(options) {
         sortorder: 'desc',
         caption: options.Title,
         viewrecords: true,
-        colModel: options.Columns,
+        colModel: colModel,
         sortable: true,
-        multiselect: true,
+        multiselect: options.Multiselect === true,
         prmNames: {
             page: 'Page',
             rows: 'Size',
@@ -42,29 +124,53 @@ function createTable(options) {
         }
     });
 
-    $table.jqGrid('navGrid', options.Pager,
-        { view: options.IsViewable, refresh: false, search: false, add: options.IsCreatable, del: options.IsDeletable, edit: options.IsEditable },
-        { width: 'auto', recreateForm: true, closeOnEscape: true, resize: true, url: options.UpdateUrl, closeAfterEdit: true, errorTextFormat: e => e.responseJSON.Error },
-        { width: 'auto', recreateForm: true, closeOnEscape: true, resize: true, url: options.CreateUrl, closeAfterAdd: true, clearAfterAdd: true, errorTextFormat: e => e.responseJSON.Error },
-        { width: 'auto', recreateForm: true, closeOnEscape: true, resize: true, url: options.DeleteUrl, errorTextFormat: e => e.responseJSON.Error },
-        { },
-        { width: 500, recreateForm: true, closeOnEscape: true, resize: true }
+    $table.jqGrid('navGrid',
+        options.Pager,
+        {
+            view: options.IsViewable === true,
+            refresh: false,
+            search: false,
+            add: options.IsCreatable === true,
+            del: options.IsDeletable === true,
+            edit: options.IsEditable === true
+        },
+        {
+            width: 'auto',
+            recreateForm: true,
+            closeOnEscape: true,
+            resize: false,
+            url: options.UpdateUrl,
+            closeAfterEdit: true,
+            errorTextFormat: e => e.responseJSON.Error
+        },
+        {
+            width: 'auto',
+            recreateForm: true,
+            closeOnEscape: true,
+            resize: false,
+            url: options.CreateUrl,
+            closeAfterAdd: true,
+            clearAfterAdd: true,
+            errorTextFormat: e => e.responseJSON.Error
+        },
+        {
+            width: 'auto',
+            recreateForm: true,
+            closeOnEscape: true,
+            resize: false,
+            url: options.DeleteUrl,
+            errorTextFormat: e => e.responseJSON.Error
+        },
+        {},
+        {
+            width: 'auto',
+            recreateForm: true,
+            closeOnEscape: true,
+            resize: false
+        }
     );
 
-    if (options.IsFilterable) {
-        $table.jqGrid('filterToolbar', { });
+    if (options.IsFilterable === true) {
+        $table.jqGrid('filterToolbar', {});
     }
-}
-
-function addSubGridOptions(options, url, colModel) {
-    options.subGrid = true;
-    options.subGridUrl = url;
-    options.subGridModel = colModel;
-
-    //subGridUrl: 'subgrid.php?q=2',
-    //subGridModel: [{
-    //        name: ['No', 'Item', 'Qty', 'Unit', 'Line Total'],
-    //        width: [55, 200, 80, 80, 80]
-    //    }
-    //],
 }

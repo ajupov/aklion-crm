@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Aklion.Crm.Domain.Models.User;
 using Aklion.Crm.Models;
@@ -67,8 +65,8 @@ namespace Aklion.Crm.Mappers.User
                     IsPhoneConfirmed = model.IsPhoneConfirmed,
                     IsLocked = model.IsLocked,
                     IsDeleted = model.IsDeleted,
-                    CreateDate = model.CreateDate,
-                    ModifyDate = model.ModifyDate,
+                    CreateDate = model.CreateDate.ToNullableDate(),
+                    ModifyDate = model.ModifyDate.ToNullableDate(),
                     IsSearch = model.IsSearch,
                     Timestamp = model.Timestamp,
                     SortingColumn = model.SortingColumn,

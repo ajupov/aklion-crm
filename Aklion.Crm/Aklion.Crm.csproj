@@ -14,4 +14,10 @@
     <ProjectReference Include="..\Aklion.Infrastructure.ApiClient\Aklion.Infrastructure.ApiClient.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\scripts\shared\utils.min.js">
+      <DependentUpon>utils.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+
 </Project>

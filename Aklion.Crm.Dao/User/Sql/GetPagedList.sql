@@ -1,7 +1,8 @@
 ﻿select
 	count(0)
 	from dbo.[User]
-	where (coalesce(@Id, 0) = 0 or Id = @Id)
+	where @IsSearch = 1
+		and (coalesce(@Id, 0) = 0 or Id = @Id)
 		and (coalesce(@Login, '') = '' or [Login] like @Login + '%')
 		and (coalesce(@Email, '') = '' or Email like @Email + '%')
 		and (coalesce(@Phone, '') = '' or Phone like @Phone + '%')
@@ -10,12 +11,12 @@
 		and (coalesce(@Patronymic, '') = '' or Patronymic like @Patronymic + '%')
 		and (coalesce(@Gender, 0) = 0 or Gender = @Gender)
 		and (@BirthDate is null or BirthDate = @BirthDate)
-		/*and (@IsEmailConfirmed is null or IsEmailConfirmed = @IsEmailConfirmed)
+		and (@IsEmailConfirmed is null or IsEmailConfirmed = @IsEmailConfirmed)
 		and (@IsPhoneConfirmed is null or IsPhoneConfirmed = @IsPhoneConfirmed)
 		and (@IsLocked is null or IsLocked = @IsLocked)
 		and (@IsDeleted is null or IsDeleted = @IsDeleted)
-		and (@CreateDate is null or convert(date, CreateDate) = @CreateDate)
-		and (@ModifyDate is null or convert(date, ModifyDate) = @ModifyDate);*/
+		and (@CreateDate is null or convert(date, CreateDate) = convert(date, @CreateDate))
+		and (@ModifyDate is null or convert(date, ModifyDate) = convert(date, @ModifyDate));
 
 select
 	Id,
@@ -36,7 +37,8 @@ select
     CreateDate,
     ModifyDate
 	from dbo.[User]
-	where (coalesce(@Id, 0) = 0 or Id = @Id)
+	where @IsSearch = 1
+		and (coalesce(@Id, 0) = 0 or Id = @Id)
 		and (coalesce(@Login, '') = '' or [Login] like @Login + '%')
 		and (coalesce(@Email, '') = '' or Email like @Email + '%')
 		and (coalesce(@Phone, '') = '' or Phone like @Phone + '%')
@@ -45,12 +47,12 @@ select
 		and (coalesce(@Patronymic, '') = '' or Patronymic like @Patronymic + '%')
 		and (coalesce(@Gender, 0) = 0 or Gender = @Gender)
 		and (@BirthDate is null or BirthDate = @BirthDate)
-		/*and (@IsEmailConfirmed is null or IsEmailConfirmed = @IsEmailConfirmed)
+		and (@IsEmailConfirmed is null or IsEmailConfirmed = @IsEmailConfirmed)
 		and (@IsPhoneConfirmed is null or IsPhoneConfirmed = @IsPhoneConfirmed)
 		and (@IsLocked is null or IsLocked = @IsLocked)
 		and (@IsDeleted is null or IsDeleted = @IsDeleted)
-		and (@CreateDate is null or convert(date, CreateDate) = @CreateDate)
-		and (@ModifyDate is null or convert(date, ModifyDate) = @ModifyDate)*/
+		and (@CreateDate is null or convert(date, CreateDate) = convert(date, @CreateDate))
+		and (@ModifyDate is null or convert(date, ModifyDate) = convert(date, @ModifyDate))
 	order by
 		case when @SortingColumn = 'Id' and @SortingOrder = 'asc' then Id end,
 		case when @SortingColumn = 'Id' and @SortingOrder = 'desc' then Id end desc,

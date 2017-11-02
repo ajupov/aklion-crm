@@ -31,8 +31,8 @@ namespace Aklion.Crm.Models.Administration.Users
 
         public bool? IsDeleted { get; set; }
 
-        public DateTime? CreateDate { get; set; }
+        public string CreateDate { get; set; }
 
-        public DateTime? ModifyDate { get; set; }
+        public string ModifyDate { get; set; }
     }
 }

@@ -128,13 +128,16 @@ input[type=checkbox]:after {
     background-color: #ffffff;
     display: inline-block;
     border: 1px solid #dbe4ec !important;
-    cursor: pointer;
 }
 
 input[type=checkbox]:checked:after {
     content: "\2714";
     line-height: 11px;
     text-align: center;
+}
+
+input:enabled[type=checkbox], select:enabled, input:enabled.hasDatepicker, option {
+    cursor: pointer;
 }
 
 select[searchopermenu="true"] {
@@ -207,4 +210,9 @@ td.ui-state-default, a.ui-state-default, .ui-jqgrid-hdiv {
     border: none !important;
     border-radius: 2px;
     box-shadow: 0 1px 0 0 #d7d8db, 0 0 0 1px #e3e4e8;
+}
+
+.ViewTable {
+    table-layout: auto;
+    width: min-content !important;
 }
