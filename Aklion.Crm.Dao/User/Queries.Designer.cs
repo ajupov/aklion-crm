@@ -61,6 +61,66 @@ namespace Aklion.Crm.Dao.User {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на insert dbo.[User]
+        ///(
+        ///	[Login],
+        ///	PasswordHash,
+        ///	Email,
+        ///	Phone,
+        ///	Surname,
+        ///	[Name],
+        ///	Patronymic,
+        ///	Gender,
+        ///	BirthDate,
+        ///	IsEmailConfirmed,
+        ///	IsPhoneConfirmed,
+        ///	IsLocked,
+        ///	IsDeleted,
+        ///	AvatarUrl,
+        ///	CreateDate,
+        ///	ModifyDate
+        ///)
+        ///values
+        ///(
+        ///	@Login,
+        ///	@PasswordHash,
+        ///	@Email,
+        ///	@Phone,
+        ///	@Surname,
+        ///	@Name,
+        ///	@Patronymic,
+        ///	@Gender,
+        ///	@BirthDate,
+        ///	@IsEmailConfirmed,
+        ///	@IsPhoneConfirmed,
+        ///	@IsLocked,
+        ///	@IsDeleted,
+        ///	@AvatarUrl,
+        ///    getdate(),
+        ///    null
+        ///);
+        ///
+        ///select
+        ///	scope_identity();.
+        /// </summary>
+        internal static string Create {
+            get {
+                return ResourceManager.GetString("Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на delete
+        ///	from dbo.[User]
+        ///	where Id = @id;.
+        /// </summary>
+        internal static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на select top 1
         ///	Id,
         ///    [Login],
@@ -91,69 +151,16 @@ namespace Aklion.Crm.Dao.User {
         /// <summary>
         ///   Ищет локализованную строку, похожую на select
         ///	count(0)
-        ///	from dbo.[User];.
-        /// </summary>
-        internal static string GetCount {
-            get {
-                return ResourceManager.GetString("GetCount", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на select
-        ///	Id,
-        ///    [Login],
-        ///    PasswordHash,
-        ///    Email,
-        ///    Phone,
-        ///    Surname,
-        ///    [Name],
-        ///    Patronymic,
-        ///    Gender,
-        ///    BirthDate,
-        ///    IsEmailConfirmed,
-        ///    IsPhoneConfirmed,
-        ///    IsLocked,
-        ///    IsDeleted,
-        ///    AvatarUrl,
-        ///    CreateDate,
-        ///    ModifyDate
-        ///	from dbo.[User];.
-        /// </summary>
-        internal static string GetList {
-            get {
-                return ResourceManager.GetString("GetList", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на select
-        ///	count(0)
-        ///	from dbo.[User];
-        ///
-        ///select
-        ///	Id,
-        ///    [Login],
-        ///    PasswordHash,
-        ///    Email,
-        ///    Phone,
-        ///    Surname,
-        ///    [Name],
-        ///    Patronymic,
-        ///    Gender,
-        ///    BirthDate,
-        ///    IsEmailConfirmed,
-        ///    IsPhoneConfirmed,
-        ///    IsLocked,
-        ///    IsDeleted,
-        ///    AvatarUrl,
-        ///    CreateDate,
-        ///    ModifyDate
         ///	from dbo.[User]
-        ///	order by
-        ///		case when @SortingColumn = &apos;Id&apos; and @SortingOrder = &apos;asc&apos; then Id end,
-        ///		case when @SortingColumn = &apos;Id&apos; and @SortingOrder = &apos;desc&apos; then Id end desc,
-        ///		case when @Sortin [остаток строки не уместился]&quot;;.
+        ///	where @IsSearch = 0 or
+        ///		((coalesce(@Id, 0) = 0 or Id = @Id)
+        ///			and (coalesce(@Login, &apos;&apos;) = &apos;&apos; or [Login] like @Login + &apos;%&apos;)
+        ///			and (coalesce(@Email, &apos;&apos;) = &apos;&apos; or Email like @Email + &apos;%&apos;)
+        ///			and (coalesce(@Phone, &apos;&apos;) = &apos;&apos; or Phone like @Phone + &apos;%&apos;)
+        ///			and (coalesce(@Surname, &apos;&apos;) = &apos;&apos; or Surname like @Surname + &apos;%&apos;)
+        ///			and (coalesce(@Name, &apos;&apos;) = &apos;&apos; or [Name] like @Name + &apos;%&apos;)
+        ///			and (coalesce(@Patronymic, &apos;&apos;) = &apos;&apos; or Patronymic like @Patronymic + &apos;%&apos;)
+        ///			and (coa [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string GetPagedList {
             get {

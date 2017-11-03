@@ -1,17 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Aklion.Crm.Domain.Store;
+using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
 
 namespace Aklion.Crm.Dao.Store
 {
     public interface IStoreDao
     {
-        Task<Models.Store> Get(int id);
+        Task<Paging<StoreModel>> GetPagedList(StoreParameterModel parameterModel);
 
-        Task<List<Models.Store>> GetList(int page, int size);
+        Task<StoreModel> Get(int id);
 
-        Task<int> Create(Models.Store model);
+        Task<int> Create(StoreModel model);
 
-        Task Update(Models.Store model);
+        Task Update(StoreModel model);
 
         Task Delete(int id);
     }

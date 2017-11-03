@@ -1,5 +1,5 @@
-﻿using Aklion.Crm.Dao.User;
-using Aklion.Crm.Domain.Interfaces.User;
+﻿using Aklion.Crm.Dao.Store;
+using Aklion.Crm.Dao.User;
 using Aklion.Infrastructure.ApiClient;
 using Aklion.Infrastructure.Storage.ConnectionFactory;
 using Aklion.Infrastructure.Storage.DataBaseExecutor;
@@ -30,11 +30,10 @@ namespace Aklion.Crm
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(Configuration)
-                .AddSingleton<IApiClient, ApiClient>()
                 .AddSingleton<IConnectionFactory, ConnectionFactory>()
                 .AddSingleton<IDataBaseExecutor, DataBaseExecutor>()
-                .AddSingleton<IRepository, Repository>()
                 .AddSingleton<IUserDao, UserDao>()
+                .AddSingleton<IStoreDao, StoreDao>()
                 .AddMvc()
                 .AddJsonOptions(o =>
                 {

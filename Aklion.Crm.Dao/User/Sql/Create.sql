@@ -1,0 +1,41 @@
+﻿insert dbo.[User]
+(
+	[Login],
+	PasswordHash,
+	Email,
+	Phone,
+	Surname,
+	[Name],
+	Patronymic,
+	Gender,
+	BirthDate,
+	IsEmailConfirmed,
+	IsPhoneConfirmed,
+	IsLocked,
+	IsDeleted,
+	AvatarUrl,
+	CreateDate,
+	ModifyDate
+)
+values
+(
+	@Login,
+	@PasswordHash,
+	@Email,
+	@Phone,
+	@Surname,
+	@Name,
+	@Patronymic,
+	@Gender,
+	@BirthDate,
+	@IsEmailConfirmed,
+	@IsPhoneConfirmed,
+	@IsLocked,
+	@IsDeleted,
+	@AvatarUrl,
+    getdate(),
+    null
+);
+
+select
+	scope_identity();

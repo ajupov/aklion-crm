@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Aklion.Crm.Domain.Interfaces.User;
-using Aklion.Crm.Domain.Models.User;
+using Aklion.Crm.Domain.User;
 using Aklion.Infrastructure.Storage.DataBaseExecutor;
 using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
 
@@ -15,29 +14,29 @@ namespace Aklion.Crm.Dao.User
             _dataBaseExecutor = dataBaseExecutor;
         }
 
-        public Task<Paging<Domain.Models.User.User>> GetPagedList(UserParameter parameter)
+        public Task<Paging<UserModel>> GetPagedList(UserParameterModel parameterModel)
         {
-            return _dataBaseExecutor.SelectListWithTotalCount<Domain.Models.User.User>(Queries.GetPagedList, parameter);
+            return _dataBaseExecutor.SelectListWithTotalCount<UserModel>(Queries.GetPagedList, parameterModel);
         }
 
-        public Task<Domain.Models.User.User> Get(int id)
+        public Task<UserModel> Get(int id)
         {
-            return _dataBaseExecutor.SelectOne<Domain.Models.User.User>(Queries.Get, new {id});
+            return _dataBaseExecutor.SelectOne<UserModel>(Queries.Get, new {id});
         }
 
-        public Task<int> Insert(Domain.Models.User.User model)
+        public Task<int> Create(UserModel model)
         {
-            throw new System.NotImplementedException();
+            return _dataBaseExecutor.SelectOne<int>(Queries.Create, model);
         }
 
-        public Task Update(Domain.Models.User.User model)
+        public Task Update(UserModel model)
         {
             return _dataBaseExecutor.Execute(Queries.Update, model);
         }
 
         public Task Delete(int id)
         {
-            throw new System.NotImplementedException();
+            return _dataBaseExecutor.Execute(Queries.Delete, new {id});
         }
     }
 }

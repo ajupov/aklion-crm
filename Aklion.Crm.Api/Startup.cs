@@ -1,5 +1,4 @@
-﻿using Aklion.Crm.Dao.Organization;
-using Aklion.Infrastructure.Storage.ConnectionFactory;
+﻿using Aklion.Infrastructure.Storage.ConnectionFactory;
 using Aklion.Infrastructure.Storage.DataBaseExecutor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,7 +21,6 @@ namespace Aklion.Crm.ApiV1
             services.AddSingleton(Configuration)
                 .AddSingleton<IConnectionFactory, ConnectionFactory>()
                 .AddSingleton<IDataBaseExecutor, DataBaseExecutor>()
-                .AddSingleton<IOrganizationDao, OrganizationDao>()
                 .AddMvc();
         }
 

@@ -63,6 +63,7 @@ namespace Aklion.Crm.Dao.Store {
         /// <summary>
         ///   Ищет локализованную строку, похожую на insert dbo.Store
         ///(
+        ///	CreateUserId,
         ///    [Name],
         ///    ApiKey,
         ///    ApiSecret,
@@ -73,12 +74,13 @@ namespace Aklion.Crm.Dao.Store {
         ///)
         ///values
         ///(
+        ///	@CreateUserId,
         ///    @Name,
         ///    @ApiKey,
         ///    @ApiSecret,
         ///    @IsLocked,
         ///    @IsDeleted,
-        ///    sysdatetime(),
+        ///    getdate(),
         ///    null
         ///);
         ///
@@ -105,6 +107,7 @@ namespace Aklion.Crm.Dao.Store {
         /// <summary>
         ///   Ищет локализованную строку, похожую на select top 1
         ///	Id,
+        ///	CreateUserId,
         ///    [Name],
         ///    ApiKey,
         ///    ApiSecret,
@@ -123,33 +126,17 @@ namespace Aklion.Crm.Dao.Store {
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на select
-        ///	Id,
-        ///    [Name],
-        ///    ApiKey,
-        ///    ApiSecret,
-        ///    IsLocked,
-        ///    IsDeleted,
-        ///    CreateDate,
-        ///    ModifyDate
-        ///	from dbo.Store;.
-        /// </summary>
-        internal static string GetList {
-            get {
-                return ResourceManager.GetString("GetList", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на select
-        ///	Id,
-        ///    [Name],
-        ///    ApiKey,
-        ///    ApiSecret,
-        ///    IsLocked,
-        ///    IsDeleted,
-        ///    CreateDate,
-        ///    ModifyDate
-        ///	from dbo.Store;.
+        ///	count(0)
+        ///	from dbo.Store
+        ///	where @IsSearch = 0 or
+        ///		((coalesce(@Id, 0) = 0 or Id = @Id)
+        ///			and (coalesce(@CreateUserId, 0) = 0 or CreateUserId = @CreateUserId)
+        ///			and (coalesce(@Name, &apos;&apos;) = &apos;&apos; or [Name] like @Name + &apos;%&apos;)
+        ///			and (coalesce(@ApiKey, &apos;&apos;) = &apos;&apos; or ApiKey like @ApiKey + &apos;%&apos;)
+        ///			and (coalesce(@ApiSecret, &apos;&apos;) = &apos;&apos; or ApiSecret like @ApiSecret + &apos;%&apos;)
+        ///			and (@IsLocked is null or IsLocked = @IsLocked)
+        ///			and (@IsDeleted is null or IsDeleted = @IsDeleted)
+        ///			and (@CreateDate is null o [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string GetPagedList {
             get {
@@ -159,12 +146,13 @@ namespace Aklion.Crm.Dao.Store {
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на update dbo.Store
-        ///    set [Name] = @Name,
+        ///    set CreateUserId = @CreateUserId,
+        ///		[Name] = @Name,
         ///		ApiKey = @ApiKey,
         ///		ApiSecret = @ApiSecret,
         ///		IsLocked = @IsLocked,
         ///		IsDeleted = @IsDeleted,
-        ///		ModifyDate = sysdatetime()
+        ///		ModifyDate = getdate()
         ///    where Id = @Id;.
         /// </summary>
         internal static string Update {

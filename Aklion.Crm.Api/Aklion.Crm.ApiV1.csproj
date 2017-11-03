@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Aklion.Infrastructure.Storage\Aklion.Infrastructure.Storage.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Mappers\" />
+  </ItemGroup>
+
 </Project>

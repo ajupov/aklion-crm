@@ -2,7 +2,7 @@
 
 function createTable(options) {
     const $table = $(options.Element);
-
+    const filters = getFilters();
     const colModel = [];
 
     $.each(options.Columns,
@@ -99,6 +99,8 @@ function createTable(options) {
         viewrecords: true,
         colModel: colModel,
         sortable: true,
+        search: filters != null,
+        postData: filters,
         multiselect: options.Multiselect === true,
         prmNames: {
             page: 'Page',

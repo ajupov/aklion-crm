@@ -1,8 +1,8 @@
 ﻿update dbo.Store
-    set [Name] = @Name,
-		ApiKey = @ApiKey,
+    set CreateUserId = @CreateUserId,
+		[Name] = @Name,
 		ApiSecret = @ApiSecret,
 		IsLocked = @IsLocked,
 		IsDeleted = @IsDeleted,
-		ModifyDate = sysdatetime()
+		ModifyDate = getdate()
     where Id = @Id;

@@ -10,11 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Organization\Queries.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Queries.resx</DependentUpon>
-    </Compile>
     <Compile Update="Store\Queries.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -28,10 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Organization\Queries.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Queries.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Update="Store\Queries.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Queries.Designer.cs</LastGenOutput>

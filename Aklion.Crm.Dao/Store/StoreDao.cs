@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Aklion.Crm.Domain.Store;
 using Aklion.Infrastructure.Storage.DataBaseExecutor;
+using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
 
 namespace Aklion.Crm.Dao.Store
 {
@@ -13,22 +14,22 @@ namespace Aklion.Crm.Dao.Store
             _dataBaseExecutor = dataBaseExecutor;
         }
 
-        public Task<Models.Store> Get(int id)
+        public Task<Paging<StoreModel>> GetPagedList(StoreParameterModel parameterModel)
         {
-            return _dataBaseExecutor.SelectOne<Models.Store>(Queries.Get, new {id});
+            return _dataBaseExecutor.SelectListWithTotalCount<StoreModel>(Queries.GetPagedList, parameterModel);
         }
 
-        public Task<List<Models.Store>> GetList(int page, int size)
+        Task<StoreModel> IStoreDao.Get(int id)
         {
-            return _dataBaseExecutor.SelectList<Models.Store>(Queries.GetList, new {page, size});
+            return _dataBaseExecutor.SelectOne<StoreModel>(Queries.Get, new {id});
         }
 
-        public Task<int> Create(Models.Store model)
+        public Task<int> Create(StoreModel model)
         {
             return _dataBaseExecutor.SelectOne<int>(Queries.Create, model);
         }
 
-        public Task Update(Models.Store model)
+        public Task Update(StoreModel model)
         {
             return _dataBaseExecutor.Execute(Queries.Update, model);
         }

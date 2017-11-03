@@ -2,7 +2,6 @@
 (
 	CreateUserId,
     [Name],
-    ApiKey,
     ApiSecret,
     IsLocked,
     IsDeleted,
@@ -13,11 +12,10 @@ values
 (
 	@CreateUserId,
     @Name,
-    @ApiKey,
     @ApiSecret,
     @IsLocked,
     @IsDeleted,
-    sysdatetime(),
+    getdate(),
     null
 );
 

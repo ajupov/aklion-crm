@@ -9,3 +9,15 @@
         }
     });
 }
+
+function getFilters() {
+    var params = {};
+
+    window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,
+        (str, key, value) => {
+            params[key] = value;
+        }
+    );
+
+    return params;
+}

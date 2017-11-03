@@ -2,7 +2,6 @@
 	Id,
 	CreateUserId,
     [Name],
-    ApiKey,
     ApiSecret,
     IsLocked,
     IsDeleted,
