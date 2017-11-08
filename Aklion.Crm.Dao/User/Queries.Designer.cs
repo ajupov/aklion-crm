@@ -150,6 +150,21 @@ namespace Aklion.Crm.Dao.User {
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на select
+        ///	Id,
+        ///    [Login]	as [Value]
+        ///	from dbo.[User]
+        ///	where IsLocked = 0
+        ///		and IsDeleted = 0
+        ///		and [Login] like loginPattern + &apos;%&apos;;.
+        /// </summary>
+        internal static string GetForAutocompleteByLoginPattern {
+            get {
+                return ResourceManager.GetString("GetForAutocompleteByLoginPattern", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на select
         ///	count(0)
         ///	from dbo.[User]
         ///	where @IsSearch = 0 or

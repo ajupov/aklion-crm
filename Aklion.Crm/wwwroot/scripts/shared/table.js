@@ -12,10 +12,10 @@ function createTable(options) {
                 name: column.Name.length > 0 ? column.Name : '',
                 label: column.Label.length > 0 ? column.Label : 'Без названия',
                 width: column.Width > 0 ? column.Width : 100,
-                align: column.Type === 'checkbox' ||
-                    column.Type === 'select' ||
-                    column.Type === 'date' ||
-                    column.Type === 'datetime'
+                align: column.Align !== null && column.Align !== undefined && column.Align.length > 0
+                    ? column.Align
+                    : column.Type === 'checkbox' || column.Type === 'select' ||
+                        column.Type === 'date' || column.Type === 'datetime'
                     ? 'center'
                     : column.Type === 'money'
                     ? 'right'
@@ -24,7 +24,9 @@ function createTable(options) {
                 datefmt: column.Type === 'datetime'
                     ? 'd.m.Y H:i:s'
                     : 'd.m.Y',
-                formatter: column.Type === 'checkbox'
+                formatter: column.Type === 'custom' || column.Type === 'autocomplete'
+                    ? column.Formatter
+                    : column.Type === 'checkbox'
                     ? 'checkbox'
                     : column.Type === 'select'
                     ? 'select'
@@ -32,7 +34,7 @@ function createTable(options) {
                     ? 'date'
                     : column.Type === 'number'
                     ? 'integer'
-                    : 'text',
+                    : e => e === undefined || e === null ? '' : e,
                 formatoptions: column.Type === 'datetime'
                     ? { srcformat: 'Y-m-d h:i:s', newformat: 'd.m.Y H:i:s' }
                     : column.Type === 'date'
@@ -50,16 +52,39 @@ function createTable(options) {
                         : column.Type === 'select'
                         ? column.SelectValues.replace('0:;', '')
                         : [],
-                    maxlength: column.MaxLength > 0 ? column.MaxLength : 0,
+                    maxlength: column.MaxLength > 0 ? column.MaxLength : 0x7FFFFFFF,
                     dataInit: e => {
                         if (column.Type === 'date' || column.Type === 'datetime') {
                             initDatePicker(e, $table);
+                        }
+
+                        if (column.Type === 'autocomplete') {
+                            $(e).autocomplete({
+                                delay: 200,
+                                minLength: 1,
+                                autoFocus: true,
+                                source: (request, response) => {
+                                    $.get(column.AutocompleteUrl,
+                                        { loginPattern: request.term }, result => {
+                                            response($.map(result, function (item) {
+                                                return {
+                                                    label: item.Value,
+                                                    value: item.Value
+                                                }
+                                            }));
+                                        }, 'json');
+                                },
+                                select: function(event, ui) {
+                                    debugger;
+                                }
+                            });
                         }
                     }
                 },
                 editrules: {
                     edithidden: column.EditHidden === true
                 },
+                search: column.Search === false ? false : true,
                 stype: column.Type === 'select' || column.Type === 'checkbox'
                     ? 'select'
                     : 'text',

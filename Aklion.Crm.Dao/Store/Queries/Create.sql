@@ -12,7 +12,7 @@ values
 (
 	@CreateUserId,
     @Name,
-    @ApiSecret,
+    null,
     @IsLocked,
     @IsDeleted,
     getdate(),

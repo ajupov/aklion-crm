@@ -30,6 +30,25 @@ namespace Aklion.Crm.Mappers.Store
                 {
                     Id = model.Id,
                     CreateUserId = model.CreateUserId,
+                    CreateUserLogin = model.CreateUserLogin,
+                    Name = model.Name,
+                    ApiSecret = model.ApiSecret,
+                    IsLocked = model.IsLocked,
+                    IsDeleted = model.IsDeleted,
+                    CreateDate = model.CreateDate,
+                    ModifyDate = model.ModifyDate
+                };
+        }
+
+        public static Domain.Store.StoreModel Map(this StoreModel model)
+        {
+            return model == null
+                ? null
+                : new Domain.Store.StoreModel
+                {
+                    Id = model.Id,
+                    CreateUserId = model.CreateUserId,
+                    CreateUserLogin = model.CreateUserLogin,
                     Name = model.Name,
                     ApiSecret = model.ApiSecret,
                     IsLocked = model.IsLocked,
@@ -47,6 +66,8 @@ namespace Aklion.Crm.Mappers.Store
                 {
                     Id = model.Id,
                     Name = model.Name,
+                    CreateUserId = model.CreateUserId,
+                    CreateUserLogin = model.CreateUserLogin,
                     ApiSecret = model.ApiSecret,
                     IsLocked = model.IsLocked,
                     IsDeleted = model.IsDeleted,

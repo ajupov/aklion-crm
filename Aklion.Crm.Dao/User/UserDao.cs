@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Aklion.Crm.Domain;
 using Aklion.Crm.Domain.User;
 using Aklion.Infrastructure.Storage.DataBaseExecutor;
 using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
@@ -17,6 +19,12 @@ namespace Aklion.Crm.Dao.User
         public Task<Paging<UserModel>> GetPagedList(UserParameterModel parameterModel)
         {
             return _dataBaseExecutor.SelectListWithTotalCount<UserModel>(Queries.GetPagedList, parameterModel);
+        }
+
+        public Task<List<AutocompleteModel>> GetForAutocompleteByLoginPattern(string loginPattern)
+        {
+            return _dataBaseExecutor.SelectList<AutocompleteModel>(Queries.GetForAutocompleteByLoginPattern,
+                new {loginPattern});
         }
 
         public Task<UserModel> Get(int id)

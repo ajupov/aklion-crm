@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
 using Aklion.Crm.Dao.User;
+using Aklion.Crm.Mappers;
 using Aklion.Crm.Mappers.User;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.User;
@@ -33,6 +35,15 @@ namespace Aklion.Crm.Controllers.Administration
             var result = await _userDao.GetPagedList(model.Map()).ConfigureAwait(false);
 
             return result.Map(model.Page, model.Size);
+        }
+
+        [HttpGet]
+        [Route("GetForAutocompleteByLoginPattern")]
+        public async Task<List<AutocompleteModel>> GetForAutocompleteByLoginPattern(string loginPattern)
+        {
+            var result = await _userDao.GetForAutocompleteByLoginPattern(loginPattern).ConfigureAwait(false);
+
+            return result.Map();
         }
 
         [HttpPost]

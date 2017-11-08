@@ -204,6 +204,12 @@ td.ui-state-default, a.ui-state-default, .ui-jqgrid-hdiv {
     color: #000000 !important;
 }
 
+.ui-state-active {
+    color: #000000 !important;
+    border: 1px solid #dad55e !important;
+    background: #fffa90 !important;
+}
+
 .loading {
     background: #507299 !important;
     display: block;
@@ -215,4 +221,21 @@ td.ui-state-default, a.ui-state-default, .ui-jqgrid-hdiv {
 .ViewTable {
     table-layout: auto;
     width: min-content !important;
+}
+
+.ui-autocomplete {
+    z-index: 1000 !important;
+    font-size: 0.8em;
+}
+
+.ui-search-input input, .ui-search-input select {
+    padding: 2px 3px !important;
+}
+
+.ui-jqgrid .ui-jqgrid-htable th {
+    height: 20px !important;
+}
+
+.ui-jqgrid .ui-jqgrid-htable th div {
+    margin: 0;
 }

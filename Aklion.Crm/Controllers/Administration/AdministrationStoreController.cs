@@ -40,6 +40,9 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Create(StoreModel model)
         {
+            var store = model.Map();
+
+            await _storeDao.Create(store).ConfigureAwait(false);
         }
 
         [HttpPost]

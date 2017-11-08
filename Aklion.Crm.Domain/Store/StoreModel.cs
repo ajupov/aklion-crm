@@ -8,6 +8,8 @@ namespace Aklion.Crm.Domain.Store
 
         public int CreateUserId { get; set; }
 
+        public string CreateUserLogin { get; set; }
+
         public string Name { get; set; }
 
         public string ApiSecret { get; set; }
