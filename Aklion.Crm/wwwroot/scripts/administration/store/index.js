@@ -21,8 +21,9 @@ $(document).ready(() => {
             {
                 Name: 'CreateUserLogin', Label: 'Логин создателя', Type: 'autocomplete', Width: 130,
                 Formatter: createUserIdFormatter, AutocompleteUrl: '/Administration/Users/GetForAutocompleteByLoginPattern',
-                Edit: true
+                Editable: true, AutocompleteHidden: 'CreateUserId'
             },
+            { Name: 'CreateUserId', Type: 'number', Hidden: true, Editable: true },
             { Name: 'ApiSecret', Label: 'АПИ-секрет', Type: 'text', Hidden: true, EditHidden: true },
             { Name: 'IsLocked', Label: 'Заблокирован', Type: 'checkbox', Width: 100, Editable: true },
             { Name: 'IsDeleted', Label: 'Удален', Type: 'checkbox', Width: 70, Editable: true },

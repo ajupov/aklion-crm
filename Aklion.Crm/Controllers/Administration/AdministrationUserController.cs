@@ -39,9 +39,9 @@ namespace Aklion.Crm.Controllers.Administration
 
         [HttpGet]
         [Route("GetForAutocompleteByLoginPattern")]
-        public async Task<List<AutocompleteModel>> GetForAutocompleteByLoginPattern(string loginPattern)
+        public async Task<List<AutocompleteModel>> GetForAutocompleteByLoginPattern(string pattern)
         {
-            var result = await _userDao.GetForAutocompleteByLoginPattern(loginPattern).ConfigureAwait(false);
+            var result = await _userDao.GetForAutocompleteByLoginPattern(pattern).ConfigureAwait(false);
 
             return result.Map();
         }
