@@ -1,4 +1,5 @@
-﻿using Aklion.Crm.Dao.Store;
+﻿using Aklion.Crm.Dao.Post;
+using Aklion.Crm.Dao.Store;
 using Aklion.Crm.Dao.User;
 using Aklion.Infrastructure.ApiClient;
 using Aklion.Infrastructure.Storage.ConnectionFactory;
@@ -34,6 +35,7 @@ namespace Aklion.Crm
                 .AddSingleton<IDataBaseExecutor, DataBaseExecutor>()
                 .AddSingleton<IUserDao, UserDao>()
                 .AddSingleton<IStoreDao, StoreDao>()
+                .AddSingleton<IPostDao, PostDao>()
                 .AddMvc()
                 .AddJsonOptions(o =>
                 {

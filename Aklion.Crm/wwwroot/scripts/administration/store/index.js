@@ -1,7 +1,8 @@
 ﻿'use strict';
 
 const ui = {
-    storesTable: $('#stores-table')
+    storesTable: $('#stores-table'),
+    postTable: $('#post-table')
 }
 
 $(document).ready(() => {
@@ -33,6 +34,34 @@ $(document).ready(() => {
                 Formatter: generateApiSecretFormatter, Sortable: false, Search: false
             },
             { Name: 'IsLocked', Label: 'Заблокирован', Type: 'checkbox', Width: 100, Editable: true, Sortable: false },
+            { Name: 'IsDeleted', Label: 'Удален', Type: 'checkbox', Width: 70, Editable: true, Sortable: false },
+            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 120 },
+            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Hidden: true, EditHidden: true }
+        ],
+        OnSelectRow: id => ui.postTable.jqGrid('setGridParam', { postData: { StoreId: id } }).trigger('reloadGrid')
+    });
+
+    createTable({
+        Title: 'Должности',
+        Element: '#post-table',
+        Pager: '#post-table-pagination',
+        IsViewable: true,
+        IsEditable: true,
+        IsCreatable: true,
+        IsDeletable: true,
+        IsFilterable: true,
+        DataUrl: '/Administration/Posts/GetList',
+        CreateUrl: '/Administration/Posts/Create',
+        UpdateUrl: '/Administration/Posts/Update',
+        DeleteUrl: '/Administration/Posts/Delete',
+        Columns: [
+            { Name: 'Id', Label: '№', Type: 'number', Width: 70 },
+            { Name: 'Name', Label: 'Имя', Type: 'text', Width: 130, Editable: true, MaxLength: 256 },
+            { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
+            {
+                Name: 'StoreName', Label: 'Название магазина', Type: 'autocomplete', Editable: true, Width: 120,
+                AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId'
+            },
             { Name: 'IsDeleted', Label: 'Удален', Type: 'checkbox', Width: 70, Editable: true, Sortable: false },
             { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 120 },
             { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Hidden: true, EditHidden: true }

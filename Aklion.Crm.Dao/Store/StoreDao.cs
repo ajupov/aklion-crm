@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Aklion.Crm.Domain;
 using Aklion.Crm.Domain.Store;
 using Aklion.Infrastructure.Storage.DataBaseExecutor;
 using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
@@ -19,7 +21,13 @@ namespace Aklion.Crm.Dao.Store
             return _dataBaseExecutor.SelectListWithTotalCount<StoreModel>(Queries.GetPagedList, parameterModel);
         }
 
-        Task<StoreModel> IStoreDao.Get(int id)
+        public Task<List<AutocompleteModel>> GetForAutocompleteByNamePattern(string pattern)
+        {
+            return _dataBaseExecutor.SelectList<AutocompleteModel>(Queries.GetForAutocompleteByNamePattern,
+                new {pattern});
+        }
+
+        public Task<StoreModel> Get(int id)
         {
             return _dataBaseExecutor.SelectOne<StoreModel>(Queries.Get, new {id});
         }

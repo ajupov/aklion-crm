@@ -21,10 +21,10 @@ namespace Aklion.Crm.Dao.User
             return _dataBaseExecutor.SelectListWithTotalCount<UserModel>(Queries.GetPagedList, parameterModel);
         }
 
-        public Task<List<AutocompleteModel>> GetForAutocompleteByLoginPattern(string loginPattern)
+        public Task<List<AutocompleteModel>> GetForAutocompleteByLoginPattern(string pattern)
         {
             return _dataBaseExecutor.SelectList<AutocompleteModel>(Queries.GetForAutocompleteByLoginPattern,
-                new {loginPattern});
+                new {pattern});
         }
 
         public Task<UserModel> Get(int id)

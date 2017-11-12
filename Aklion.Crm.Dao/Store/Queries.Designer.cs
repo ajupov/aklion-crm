@@ -65,7 +65,6 @@ namespace Aklion.Crm.Dao.Store {
         ///(
         ///	CreateUserId,
         ///    [Name],
-        ///    ApiKey,
         ///    ApiSecret,
         ///    IsLocked,
         ///    IsDeleted,
@@ -76,8 +75,7 @@ namespace Aklion.Crm.Dao.Store {
         ///(
         ///	@CreateUserId,
         ///    @Name,
-        ///    @ApiKey,
-        ///    @ApiSecret,
+        ///    null,
         ///    @IsLocked,
         ///    @IsDeleted,
         ///    getdate(),
@@ -106,17 +104,19 @@ namespace Aklion.Crm.Dao.Store {
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на select top 1
-        ///	Id,
-        ///	CreateUserId,
-        ///    [Name],
-        ///    ApiKey,
-        ///    ApiSecret,
-        ///    IsLocked,
-        ///    IsDeleted,
-        ///    CreateDate,
-        ///    ModifyDate
-        ///	from dbo.Store
-        ///	where Id = @id;.
+        ///	s.Id,
+        ///	s.CreateUserId,
+        ///	u.[Login]		as CreateUserLogin,
+        ///    s.[Name],
+        ///    s.ApiSecret,
+        ///    s.IsLocked,
+        ///    s.IsDeleted,
+        ///    s.CreateDate,
+        ///    s.ModifyDate
+        ///	from dbo.Store as s
+        ///		inner join dbo.[User] as u on
+        ///			s.CreateUserId = u.Id
+        ///	where s.Id = @id;.
         /// </summary>
         internal static string Get {
             get {
@@ -126,17 +126,32 @@ namespace Aklion.Crm.Dao.Store {
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на select
-        ///	count(0)
+        ///	Id,
+        ///    [Name]	as [Value]
         ///	from dbo.Store
+        ///	where IsLocked = 0
+        ///		and IsDeleted = 0
+        ///		and [Name] like @pattern + &apos;%&apos;;.
+        /// </summary>
+        internal static string GetForAutocompleteByNamePattern {
+            get {
+                return ResourceManager.GetString("GetForAutocompleteByNamePattern", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на select
+        ///	count(0)
+        ///	from dbo.Store as s
+        ///		inner join dbo.[User] as u on
+        ///			s.CreateUserId = u.Id
         ///	where @IsSearch = 0 or
-        ///		((coalesce(@Id, 0) = 0 or Id = @Id)
-        ///			and (coalesce(@CreateUserId, 0) = 0 or CreateUserId = @CreateUserId)
-        ///			and (coalesce(@Name, &apos;&apos;) = &apos;&apos; or [Name] like @Name + &apos;%&apos;)
-        ///			and (coalesce(@ApiKey, &apos;&apos;) = &apos;&apos; or ApiKey like @ApiKey + &apos;%&apos;)
-        ///			and (coalesce(@ApiSecret, &apos;&apos;) = &apos;&apos; or ApiSecret like @ApiSecret + &apos;%&apos;)
-        ///			and (@IsLocked is null or IsLocked = @IsLocked)
-        ///			and (@IsDeleted is null or IsDeleted = @IsDeleted)
-        ///			and (@CreateDate is null o [остаток строки не уместился]&quot;;.
+        ///		((coalesce(@Id, 0) = 0 or s.Id = @Id)
+        ///			and (coalesce(@CreateUserId, 0) = 0 or s.CreateUserId = @CreateUserId)
+        ///			and (coalesce(@Name, &apos;&apos;) = &apos;&apos; or s.[Name] like @Name + &apos;%&apos;)
+        ///			and (coalesce(@CreateUserLogin, &apos;&apos;) = &apos;&apos; or u.[Login] like @CreateUserLogin + &apos;%&apos;)
+        ///			and (coalesce(@ApiSecret, &apos;&apos;) = &apos;&apos; or s.ApiSecret like @ApiSecret + &apos;%&apos;)
+        ///			and (@IsLocked is null or s.IsLocked = @ [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string GetPagedList {
             get {
@@ -148,7 +163,6 @@ namespace Aklion.Crm.Dao.Store {
         ///   Ищет локализованную строку, похожую на update dbo.Store
         ///    set CreateUserId = @CreateUserId,
         ///		[Name] = @Name,
-        ///		ApiKey = @ApiKey,
         ///		ApiSecret = @ApiSecret,
         ///		IsLocked = @IsLocked,
         ///		IsDeleted = @IsDeleted,

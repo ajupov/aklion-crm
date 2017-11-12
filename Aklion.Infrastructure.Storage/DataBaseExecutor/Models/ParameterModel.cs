@@ -1,6 +1,6 @@
 ﻿namespace Aklion.Infrastructure.Storage.DataBaseExecutor.Models
 {
-    public class Parameter
+    public class ParameterModel
     {
         public bool IsSearch { get; set; }
 

@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
 using Aklion.Crm.Dao.Store;
+using Aklion.Crm.Mappers;
 using Aklion.Crm.Mappers.Store;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.Store;
@@ -34,6 +36,15 @@ namespace Aklion.Crm.Controllers.Administration
             var result = await _storeDao.GetPagedList(model.Map()).ConfigureAwait(false);
 
             return result.Map(model.Page, model.Size);
+        }
+
+        [HttpGet]
+        [Route("GetForAutocompleteByNamePattern")]
+        public async Task<List<AutocompleteModel>> GetForAutocompleteByNamePattern(string pattern)
+        {
+            var result = await _storeDao.GetForAutocompleteByNamePattern(pattern).ConfigureAwait(false);
+
+            return result.Map();
         }
 
         [HttpPost]

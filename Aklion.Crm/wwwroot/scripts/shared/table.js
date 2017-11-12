@@ -120,6 +120,7 @@ function createTable(options) {
         search: filters != null,
         postData: filters,
         multiselect: options.Multiselect === true,
+        onSelectRow: options.OnSelectRow !== null && options.OnSelectRow !== undefined ? options.OnSelectRow : undefined,
         prmNames: {
             page: 'Page',
             rows: 'Size',

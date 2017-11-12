@@ -10,7 +10,7 @@ namespace Aklion.Crm.Dao.User
     {
         Task<Paging<UserModel>> GetPagedList(UserParameterModel parameterModel);
 
-        Task<List<AutocompleteModel>> GetForAutocompleteByLoginPattern(string loginPattern);
+        Task<List<AutocompleteModel>> GetForAutocompleteByLoginPattern(string pattern);
 
         Task<UserModel> Get(int id);
 

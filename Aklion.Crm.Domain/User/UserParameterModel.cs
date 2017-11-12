@@ -4,7 +4,7 @@ using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
 
 namespace Aklion.Crm.Domain.User
 {
-    public class UserParameterModel : Parameter
+    public class UserParameterModel : ParameterModel
     {
         public int? Id { get; set; }
 

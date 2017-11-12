@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Aklion.Crm.Dao.User {
+namespace Aklion.Crm.Dao.Post {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Aklion.Crm.Dao.User {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Aklion.Crm.Dao.User.Queries", typeof(Queries).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Aklion.Crm.Dao.Post.Queries", typeof(Queries).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,41 +61,19 @@ namespace Aklion.Crm.Dao.User {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на insert dbo.[User]
+        ///   Ищет локализованную строку, похожую на insert dbo.Post
         ///(
-        ///	[Login],
-        ///	PasswordHash,
-        ///	Email,
-        ///	Phone,
-        ///	Surname,
+        ///	StoreId,
         ///	[Name],
-        ///	Patronymic,
-        ///	Gender,
-        ///	BirthDate,
-        ///	IsEmailConfirmed,
-        ///	IsPhoneConfirmed,
-        ///	IsLocked,
         ///	IsDeleted,
-        ///	AvatarUrl,
         ///	CreateDate,
         ///	ModifyDate
         ///)
         ///values
         ///(
-        ///	@Login,
-        ///	@PasswordHash,
-        ///	@Email,
-        ///	@Phone,
-        ///	@Surname,
+        ///	@StoreId,
         ///	@Name,
-        ///	@Patronymic,
-        ///	@Gender,
-        ///	@BirthDate,
-        ///	@IsEmailConfirmed,
-        ///	@IsPhoneConfirmed,
-        ///	@IsLocked,
         ///	@IsDeleted,
-        ///	@AvatarUrl,
         ///    getdate(),
         ///    null
         ///);
@@ -111,7 +89,7 @@ namespace Aklion.Crm.Dao.User {
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на delete
-        ///	from dbo.[User]
+        ///	from dbo.Post
         ///	where Id = @id;.
         /// </summary>
         internal static string Delete {
@@ -122,25 +100,17 @@ namespace Aklion.Crm.Dao.User {
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на select top 1
-        ///	Id,
-        ///    [Login],
-        ///    PasswordHash,
-        ///    Email,
-        ///    Phone,
-        ///    Surname,
-        ///    [Name],
-        ///    Patronymic,
-        ///    Gender,
-        ///    BirthDate,
-        ///    IsEmailConfirmed,
-        ///    IsPhoneConfirmed,
-        ///    IsLocked,
-        ///    IsDeleted,
-        ///    AvatarUrl,
-        ///    CreateDate,
-        ///    ModifyDate
-        ///	from dbo.[User]
-        ///	where Id = @id;.
+        ///	p.Id,
+        ///	p.StoreId,
+        ///	s.[Name]	as StoreName,
+        ///    p.[Name],
+        ///    p.IsDeleted,
+        ///    p.CreateDate,
+        ///    p.ModifyDate
+        ///	from dbo.Post as p
+        ///		inner join dbo.Store as s on
+        ///			p.StoreId = s.Id
+        ///	where p.Id = @id;.
         /// </summary>
         internal static string Get {
             get {
@@ -150,32 +120,18 @@ namespace Aklion.Crm.Dao.User {
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на select
-        ///	Id,
-        ///    [Login]	as [Value]
-        ///	from dbo.[User]
-        ///	where IsLocked = 0
-        ///		and IsDeleted = 0
-        ///		and [Login] like @loginPattern + &apos;%&apos;;.
-        /// </summary>
-        internal static string GetForAutocompleteByLoginPattern {
-            get {
-                return ResourceManager.GetString("GetForAutocompleteByLoginPattern", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на select
         ///	count(0)
-        ///	from dbo.[User]
+        ///	from dbo.Post as p
+        ///		inner join dbo.Store as s on
+        ///			p.StoreId = s.Id
         ///	where @IsSearch = 0 or
-        ///		((coalesce(@Id, 0) = 0 or Id = @Id)
-        ///			and (coalesce(@Login, &apos;&apos;) = &apos;&apos; or [Login] like @Login + &apos;%&apos;)
-        ///			and (coalesce(@Email, &apos;&apos;) = &apos;&apos; or Email like @Email + &apos;%&apos;)
-        ///			and (coalesce(@Phone, &apos;&apos;) = &apos;&apos; or Phone like @Phone + &apos;%&apos;)
-        ///			and (coalesce(@Surname, &apos;&apos;) = &apos;&apos; or Surname like @Surname + &apos;%&apos;)
-        ///			and (coalesce(@Name, &apos;&apos;) = &apos;&apos; or [Name] like @Name + &apos;%&apos;)
-        ///			and (coalesce(@Patronymic, &apos;&apos;) = &apos;&apos; or Patronymic like @Patronymic + &apos;%&apos;)
-        ///			and (coa [остаток строки не уместился]&quot;;.
+        ///		((coalesce(@Id, 0) = 0 or s.Id = @Id)
+        ///			and (coalesce(@StoreId, 0) = 0 or p.StoreId = @StoreId)
+        ///			and (coalesce(@StoreName, &apos;&apos;) = &apos;&apos; or s.[Name] like @StoreName + &apos;%&apos;)
+        ///			and (coalesce(@Name, &apos;&apos;) = &apos;&apos; or p.[Name] like @Name + &apos;%&apos;)
+        ///			and (@IsDeleted is null or s.IsDeleted = @IsDeleted)
+        ///			and (@CreateDate is null or convert(date, s.CreateDate) = convert(date, @CreateDate))
+        ///			and ( [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string GetPagedList {
             get {
@@ -184,23 +140,13 @@ namespace Aklion.Crm.Dao.User {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на update dbo.[User]
-        ///	set [Login] = @Login,
-        ///		PasswordHash = @PasswordHash,
-        ///		Email = @Email,
-        ///		Phone = @Phone,
-        ///		Surname = @Surname,
+        ///   Ищет локализованную строку, похожую на update dbo.Post
+        ///    set StoreId = @StoreId,
         ///		[Name] = @Name,
-        ///		Patronymic = @Patronymic,
-        ///		Gender = @Gender,
-        ///		BirthDate = @BirthDate,
-        ///		IsEmailConfirmed = @IsEmailConfirmed,
-        ///		IsPhoneConfirmed = @IsPhoneConfirmed,
         ///		IsLocked = @IsLocked,
         ///		IsDeleted = @IsDeleted,
-        ///		AvatarUrl = @AvatarUrl,
         ///		ModifyDate = getdate()
-        ///	where Id = @id;.
+        ///    where Id = @Id;.
         /// </summary>
         internal static string Update {
             get {

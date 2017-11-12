@@ -1,19 +1,17 @@
 ﻿using System;
 using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
 
-namespace Aklion.Crm.Domain.Store
+namespace Aklion.Crm.Domain.Post
 {
-    public class StoreParameterModel : ParameterModel
+    public class PostParameterModel : ParameterModel
     {
         public int? Id { get; set; }
 
-        public int? CreateUserId { get; set; }
+        public int? StoreId { get; set; }
 
-        public string CreateUserLogin { get; set; }
+        public string StoreName { get; set; }
 
         public string Name { get; set; }
-
-        public string ApiSecret { get; set; }
 
         public bool? IsLocked { get; set; }
 
