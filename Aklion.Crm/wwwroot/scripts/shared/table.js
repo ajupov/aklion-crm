@@ -38,7 +38,14 @@ function createTable(options) {
                     ? 'date'
                     : column.Type === 'number'
                     ? 'integer'
-                    : e => e === undefined || e === null ? '' : e,
+                    : column.Type === 'email'
+                    ? 'email'
+                    : e => e === undefined || e === null
+                    ? ''
+                    : e,
+                unformat: column.Unformatter !== null && column.Formatter !== undefined
+                    ? column.Unformatter
+                    : null,
                 formatoptions: column.Type === 'datetime'
                     ? { srcformat: 'Y-m-d h:i:s', newformat: 'd.m.Y H:i:s' }
                     : column.Type === 'date'
@@ -85,6 +92,7 @@ function createTable(options) {
                         ? 'null:;false:Нет;true:Да'
                         : []
                 },
+                sortable: column.Sortable === false ? false : true,
                 sorttype: column.Type === 'date' || column.Type === 'datetime'
                     ? 'date'
                     : column.Type === 'number'
@@ -178,7 +186,8 @@ function createTable(options) {
             width: 'auto',
             recreateForm: true,
             closeOnEscape: true,
-            resize: false
+            resize: false,
+            viewPagerButtons: false
         }
     );
 

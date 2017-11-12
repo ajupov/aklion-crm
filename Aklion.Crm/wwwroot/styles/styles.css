@@ -117,7 +117,7 @@ input, select {
     background: #ffffff !important;
 }
 
-a:focus {
+a:focus, button:focus {
     outline: none; 
 }
 
@@ -238,4 +238,24 @@ td.ui-state-default, a.ui-state-default, .ui-jqgrid-hdiv {
 
 .ui-jqgrid .ui-jqgrid-htable th div {
     margin: 0;
+}
+
+.ui-jqgrid tr.jqgrow td, .ui-jqdialog-content .form-view-data {
+    white-space: nowrap;
+}
+
+button.cell-button {
+    border: 1px solid #dbe4ec;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+button.cell-button {
+    border: 1px solid #dbe4ec;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.EditTable td.form-view-data {
+    display: flex;
 }

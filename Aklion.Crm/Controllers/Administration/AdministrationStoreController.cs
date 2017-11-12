@@ -4,6 +4,7 @@ using Aklion.Crm.Dao.Store;
 using Aklion.Crm.Mappers.Store;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.Store;
+using Aklion.Infrastructure.Utils.RandomGenerator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aklion.Crm.Controllers.Administration
@@ -38,35 +39,59 @@ namespace Aklion.Crm.Controllers.Administration
         [HttpPost]
         [Route("Create")]
         [AjaxErrorHandle]
-        public async Task Create(StoreModel model)
+        public async Task<bool> Create(StoreModel model)
         {
             var store = model.Map();
 
             await _storeDao.Create(store).ConfigureAwait(false);
+
+            return true;
         }
 
         [HttpPost]
         [Route("Update")]
         [AjaxErrorHandle]
-        public async Task Update(StoreModel model)
+        public async Task<bool> Update(StoreModel model)
         {
             var store = await _storeDao.Get(model.Id).ConfigureAwait(false);
             if (store == null)
             {
-                return;
+                return false;
             }
 
             model.Map(store);
 
             await _storeDao.Update(store).ConfigureAwait(false);
+
+            return true;
         }
 
         [HttpPost]
         [Route("Delete")]
         [AjaxErrorHandle]
-        public async Task Delete(int id)
+        public async Task<bool> Delete(int id)
         {
             await _storeDao.Delete(id).ConfigureAwait(false);
+
+            return true;
+        }
+
+        [HttpPost]
+        [Route("GenerateApiSecret")]
+        [AjaxErrorHandle]
+        public async Task<bool> GenerateApiSecret(int id)
+        {
+            var store = await _storeDao.Get(id).ConfigureAwait(false);
+            if (store == null)
+            {
+                return false;
+            }
+
+            store.ApiSecret = RandomGenerator.GenerateAlphaNumbericString(16);
+
+            await _storeDao.Update(store).ConfigureAwait(false);
+
+            return true;
         }
     }
 }

@@ -16,29 +16,27 @@ function initAutocomplete(element, url, hiddenId) {
         minLength: 1,
         autoFocus: true,
         source: (request, response) => {
-            $.get(url,
+            getJson(url,
                 { pattern: request.term },
-                result => {
-                    response($.map(result,
-                        (item) => {
-                            return {
-                                label: item.Value,
-                                value: item.Id
-                            };
-                        }));
-                },
-                'json');
+                result =>
+                response($.map(result,
+                    item => {
+                        return {
+                            label: item.Value,
+                            value: item.Id
+                        };
+                    })));
         },
         select: (event, ui) => {
+            event.preventDefault();
+            event.stopPropagation();
+
             const $input = $(event.target);
             const $form = $input.closest('table.EditTable');
             const $hidden = $form.find(`#${hiddenId}`);
 
             $input.val(ui.item.label);
             $hidden.val(ui.item.value);
-            debugger;
-            event.preventDefault();
-            event.stopPropagation();
         }
     });
 }
@@ -53,4 +51,22 @@ function getFilters() {
     );
 
     return params;
+}
+
+function getJson(url, parameters, callback) {
+    $.get(url,
+        parameters,
+        result => {
+            callback(result);
+        },
+        'json');
+}
+
+function postJson(url, parameters, callback) {
+    $.post(url,
+        parameters,
+        result => {
+            callback(result);
+        },
+        'json');
 }

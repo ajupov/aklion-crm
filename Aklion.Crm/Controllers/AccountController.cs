@@ -194,7 +194,7 @@
 //            var identity = new SqlMapper.Identity
 //            {
 //                Login = model.Login,
-//                PasswordHash = PasswordHelper.Generate(model.Password)
+//                PasswordHash = PasswordHelper.GenerateAlphaNumbericString(model.Password)
 //            };
 
 //            await IdentityRepository.InsertAsync(identity).ConfigureAwait(false);
@@ -340,7 +340,7 @@
 //                return View(model);
 //            }
 
-//            CurrentIdentity.PasswordHash = PasswordHelper.Generate(model.Password);
+//            CurrentIdentity.PasswordHash = PasswordHelper.GenerateAlphaNumbericString(model.Password);
 //            await IdentityRepository.UpdateAsync(CurrentIdentity).ConfigureAwait(false);
 
 //            await SignInAsync().ConfigureAwait(false);
@@ -653,7 +653,7 @@
 
 //            var identity = await IdentityRepository.SelectAsync(gamer.IdentityId).ConfigureAwait(false);
 
-//            identity.PasswordHash = PasswordHelper.Generate(model.Password);
+//            identity.PasswordHash = PasswordHelper.GenerateAlphaNumbericString(model.Password);
 
 //            await IdentityRepository.UpdateAsync(identity).ConfigureAwait(false);
 
