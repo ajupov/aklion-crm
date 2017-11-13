@@ -1,6 +1,8 @@
-﻿using Aklion.Crm.Dao.Post;
+﻿using Aklion.Crm.Business.Permission;
+using Aklion.Crm.Dao.Post;
 using Aklion.Crm.Dao.Store;
 using Aklion.Crm.Dao.User;
+using Aklion.Crm.Dao.UserPermission;
 using Aklion.Crm.Dao.UserPost;
 using Aklion.Infrastructure.Storage.ConnectionFactory;
 using Aklion.Infrastructure.Storage.DataBaseExecutor;
@@ -32,10 +34,12 @@ namespace Aklion.Crm
             services.AddSingleton(Configuration)
                 .AddSingleton<IConnectionFactory, ConnectionFactory>()
                 .AddSingleton<IDataBaseExecutor, DataBaseExecutor>()
+                .AddSingleton<IPermissionService, PermissionService>()
                 .AddSingleton<IUserDao, UserDao>()
                 .AddSingleton<IStoreDao, StoreDao>()
                 .AddSingleton<IPostDao, PostDao>()
                 .AddSingleton<IUserPostDao, UserPostDao>()
+                .AddSingleton<IUserPermissionDao, UserPermissionDao>()
                 .AddMvc()
                 .AddJsonOptions(o =>
                 {

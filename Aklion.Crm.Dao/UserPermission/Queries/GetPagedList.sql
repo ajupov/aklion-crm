@@ -1,21 +1,17 @@
 ﻿select
 	count(0)
-	from dbo.UserPost as up
+	from dbo.UserPermission as up
 		inner join dbo.[User] as u on
 			up.UserId = u.Id
 		inner join dbo.Store as s on
 			up.StoreId = s.Id
-		inner join dbo.Post as p on
-			up.PostId = p.Id
 	where @IsSearch = 0 or
 		((coalesce(@Id, 0) = 0 or s.Id = @Id)
 			and (coalesce(@UserId, 0) = 0 or up.UserId = @StoreId)
 			and (coalesce(@UserLogin, '') = '' or u.[Login] like @UserLogin + '%')
 			and (coalesce(@StoreId, 0) = 0 or up.StoreId = @StoreId)
-			and (coalesce(@StoreName, '') = '' or s.[Name] like @StoreName + '%')		
-			and (coalesce(@PostId, 0) = 0 or up.StoreId = @PostId)
-			and (coalesce(@PostName, '') = '' or p.[Name] like @PostName + '%')
-			and (@IsDeleted is null or up.IsDeleted = @IsDeleted)
+			and (coalesce(@StoreName, '') = '' or s.[Name] like @StoreName + '%')
+			and (coalesce(@Permission, 0) = 0 or up.Permission = @Permission)
 			and (@CreateDate is null or convert(date, up.CreateDate) = convert(date, @CreateDate))
 			and (@ModifyDate is null or convert(date, up.ModifyDate) = convert(date, @ModifyDate)));
 
@@ -25,27 +21,21 @@ select
 	u.[Login]	as UserLogin,
 	up.StoreId,
 	s.[Name]	as StoreName,
-	up.PostId,
-    p.[Name]	as PostName,
-    up.IsDeleted,
+	up.Permission,
     up.CreateDate,
     up.ModifyDate
-	from dbo.UserPost as up
+	from dbo.UserPermission as up
 		inner join dbo.[User] as u on
 			up.UserId = u.Id
 		inner join dbo.Store as s on
 			up.StoreId = s.Id
-		inner join dbo.Post as p on
-			up.PostId = p.Id
 	where @IsSearch = 0 or
 		((coalesce(@Id, 0) = 0 or s.Id = @Id)
 			and (coalesce(@UserId, 0) = 0 or up.UserId = @StoreId)
 			and (coalesce(@UserLogin, '') = '' or u.[Login] like @UserLogin + '%')
 			and (coalesce(@StoreId, 0) = 0 or up.StoreId = @StoreId)
-			and (coalesce(@StoreName, '') = '' or s.[Name] like @StoreName + '%')		
-			and (coalesce(@PostId, 0) = 0 or up.StoreId = @PostId)
-			and (coalesce(@PostName, '') = '' or p.[Name] like @PostName + '%')
-			and (@IsDeleted is null or up.IsDeleted = @IsDeleted)
+			and (coalesce(@StoreName, '') = '' or s.[Name] like @StoreName + '%')
+			and (coalesce(@Permission, 0) = 0 or up.Permission = @Permission)
 			and (@CreateDate is null or convert(date, up.CreateDate) = convert(date, @CreateDate))
 			and (@ModifyDate is null or convert(date, up.ModifyDate) = convert(date, @ModifyDate)))
 	order by
@@ -59,12 +49,8 @@ select
 		case when @SortingColumn = 'StoreId' and @SortingOrder = 'desc' then up.StoreId end desc,
 		case when @SortingColumn = 'StoreName' and @SortingOrder = 'asc' then s.[Name] end,
 		case when @SortingColumn = 'StoreName' and @SortingOrder = 'desc' then s.[Name] end desc,
-		case when @SortingColumn = 'PostId' and @SortingOrder = 'asc' then up.PostId end,
-		case when @SortingColumn = 'PostId' and @SortingOrder = 'desc' then up.PostId end desc,
-		case when @SortingColumn = 'PostName' and @SortingOrder = 'asc' then p.[Name] end,
-		case when @SortingColumn = 'PostName' and @SortingOrder = 'desc' then p.[Name] end desc,
-		case when @SortingColumn = 'IsDeleted' and @SortingOrder = 'asc' then up.IsDeleted end,
-		case when @SortingColumn = 'IsDeleted' and @SortingOrder = 'desc' then up.IsDeleted end desc,
+		case when @SortingColumn = 'Permission' and @SortingOrder = 'asc' then up.Permission end,
+		case when @SortingColumn = 'Permission' and @SortingOrder = 'desc' then up.Permission end desc,
 		case when @SortingColumn = 'CreateDate' and @SortingOrder = 'asc' then up.CreateDate end,
 		case when @SortingColumn = 'CreateDate' and @SortingOrder = 'desc' then up.CreateDate end desc,
 		case when @SortingColumn = 'ModifyDate' and @SortingOrder = 'asc' then up.ModifyDate end,

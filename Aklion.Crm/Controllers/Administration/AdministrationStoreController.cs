@@ -90,19 +90,19 @@ namespace Aklion.Crm.Controllers.Administration
         [HttpPost]
         [Route("GenerateApiSecret")]
         [AjaxErrorHandle]
-        public async Task<bool> GenerateApiSecret(int id)
+        public async Task<string> GenerateApiSecret(int id)
         {
             var store = await _storeDao.Get(id).ConfigureAwait(false);
             if (store == null)
             {
-                return false;
+                return string.Empty;
             }
 
             store.ApiSecret = RandomGenerator.GenerateAlphaNumbericString(16);
 
             await _storeDao.Update(store).ConfigureAwait(false);
 
-            return true;
+            return store.ApiSecret;
         }
     }
 }

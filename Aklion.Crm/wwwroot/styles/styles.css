@@ -24,7 +24,7 @@ nav { background-color: #507299; }
 .navbar a {
     color: #ffffff;
     cursor: pointer;
-    padding: 12px;
+    padding: 12px 8px;
     text-decoration: none;
 }
 

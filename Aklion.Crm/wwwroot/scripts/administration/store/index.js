@@ -1,9 +1,7 @@
 ﻿'use strict';
 
 const ui = {
-    storesTable: $('#stores-table'),
-    postTable: $('#post-table'),
-    userPostTable: $('#user-post-table')
+    storesTable: $('#stores-table')
 }
 
 $(document).ready(() => {
@@ -38,77 +36,6 @@ $(document).ready(() => {
             { Name: 'IsDeleted', Label: 'Удален', Type: 'checkbox', Width: 70, Editable: true, Sortable: false },
             { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 120 },
             { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Hidden: true, EditHidden: true }
-        ],
-        OnSelectRow: id => {
-            ui.postTable.jqGrid('setGridParam', { postData: { StoreId: id } }).trigger('reloadGrid');
-            ui.userPostTable.jqGrid('setGridParam', { postData: { StoreId: id } }).trigger('reloadGrid');
-        }
-    });
-
-    createTable({
-        Title: 'Должности',
-        Element: '#post-table',
-        Pager: '#post-table-pagination',
-        IsViewable: true,
-        IsEditable: true,
-        IsCreatable: true,
-        IsDeletable: true,
-        IsFilterable: true,
-        DataUrl: '/Administration/Posts/GetList',
-        CreateUrl: '/Administration/Posts/Create',
-        UpdateUrl: '/Administration/Posts/Update',
-        DeleteUrl: '/Administration/Posts/Delete',
-        Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 70 },
-            { Name: 'Name', Label: 'Имя', Type: 'text', Width: 130, Editable: true, MaxLength: 256 },
-            { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
-            {
-                Name: 'StoreName', Label: 'Название магазина', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId'
-            },
-            { Name: 'IsDeleted', Label: 'Удален', Type: 'checkbox', Width: 70, Editable: true, Sortable: false },
-            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 120 },
-            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Hidden: true, EditHidden: true }
-        ],
-        OnSelectRow: id => {
-            ui.userPostTable.jqGrid('setGridParam', { postData: { StoreId: id } }).trigger('reloadGrid');
-        }
-    });
-
-    createTable({
-        Title: 'Должности пользователей',
-        Element: '#user-post-table',
-        Pager: '#user-post-table-pagination',
-        IsViewable: true,
-        IsEditable: true,
-        IsCreatable: true,
-        IsDeletable: true,
-        IsFilterable: true,
-        DataUrl: '/Administration/UserPosts/GetList',
-        CreateUrl: '/Administration/UserPosts/Create',
-        UpdateUrl: '/Administration/UserPosts/Update',
-        DeleteUrl: '/Administration/UserPosts/Delete',
-        Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 70 },
-            { Name: 'UserId', Type: 'number', Hidden: true, Editable: true },
-            {
-                Name: 'UserLogin', Label: 'Логин пользователя', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/Users/GetForAutocompleteByLoginPattern', AutocompleteHidden: 'UserId'
-            },
-            { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
-            {
-                Name: 'StoreName', Label: 'Название магазина', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId'
-            },
-            { Name: 'PostId', Type: 'number', Hidden: true, Editable: true },
-            {
-                Name: 'PostName', Label: 'Название должности', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/Posts/GetForAutocompleteByNamePattern', AutocompleteHidden: 'PostId',
-                DependentFields: ['StoreId']
-            },
-            { Name: 'IsDeleted', Label: 'Удален', Type: 'checkbox', Width: 70, Editable: true, Sortable: false },
-            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 120 },
-            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Hidden: true, EditHidden: true }
         ]
     });
 });
@@ -132,8 +59,10 @@ function generateApiSecret(event, id) {
     event.preventDefault();
     event.stopPropagation();
 
-    postJson('/Administration/Stores/GenerateApiSecret', { id: id }, result => {
-        if (result) {
+    postText('/Administration/Stores/GenerateApiSecret', { id: id }, result => {
+        if (result !== null && result !== undefined && result.length > 0) {
+            const formField = $('#ViewGrid_stores-table td#v_ApiSecret span');
+            formField.html(result);
             ui.storesTable.trigger('reloadGrid');
         }
     });

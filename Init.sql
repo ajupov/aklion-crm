@@ -70,15 +70,15 @@ create table dbo.UserPost
 go
 
 -- Права пользователей внутри магазина. Права берутся из Enum.
-create table dbo.UserRule
+create table dbo.UserPermission
 (
-    Id         int          not null identity(1, 1) constraint PK_UserRule_Id primary key,
-    UserId     int          not null constraint FK_UserRule_User_Id foreign key (UserId) references dbo.[User] (Id),
-    StoreId    int          not null constraint FK_UserRule_Store_Id foreign key (StoreId) references dbo.Store (Id),
+    Id         int          not null identity(1, 1) constraint PK_UserPermission_Id primary key,
+    UserId     int          not null constraint FK_UserPermission_User_Id foreign key (UserId) references dbo.[User] (Id),
+    StoreId    int          not null constraint FK_UserPermission_Store_Id foreign key (StoreId) references dbo.Store (Id),
     Permission tinyint      not null,
     CreateDate datetime2(7) not null,
     ModifyDate datetime2(7) null,
-    constraint UQ_UserRule_UserId_StoreId_Rule unique (UserId, StoreId, Permission)
+    constraint UQ_UserPermission_UserId_StoreId_Permission unique (UserId, StoreId, Permission)
 );
 go
 
@@ -93,19 +93,6 @@ create table dbo.UserToken
     IsUsed         bit          not null,
     CreateDate     datetime2(7) not null,
     ModifyDate     datetime2(7) null
-);
-go
-
--- Категории продуктов
-create table dbo.Category
-(
-    Id         int          not null identity(1, 1) constraint PK_Category_Id primary key,
-    StoreId    int          not null constraint FK_Category_Store_Id foreign key (StoreId) references dbo.Store (Id),
-    [Name]     varchar(256) not null,
-    IsDeleted  bit          not null,
-    CreateDate datetime2(7) not null,
-    ModifyDate datetime2(7) null,
-    constraint UQ_Category_StoreId_Name unique (StoreId, [Name])
 );
 go
 
@@ -125,6 +112,32 @@ create table dbo.Product
     CreateDate    datetime2(7)   not null,
     ModifyDate    datetime2(7)   null,
     constraint UQ_Product_StoreId_Name_VendorCode unique (StoreId, [Name], VendorCode)
+);
+go
+
+-- Категории
+create table dbo.Category
+(
+    Id         int          not null identity(1, 1) constraint PK_Category_Id primary key,
+    StoreId    int          not null constraint FK_Category_Store_Id foreign key (StoreId) references dbo.Store (Id),
+    [Name]     varchar(256) not null,
+    IsDeleted  bit          not null,
+    CreateDate datetime2(7) not null,
+    ModifyDate datetime2(7) null,
+    constraint UQ_Category_StoreId_Name unique (StoreId, [Name])
+);
+go
+
+-- Категория продукта
+create table dbo.ProductCategory
+(
+    Id          int           not null identity(1, 1) constraint PK_ProductCategory_Id primary key,
+    StoreId     int           not null constraint FK_ProductCategory_Store_Id foreign key (StoreId) references dbo.Store (Id),
+    ProductId   int           not null constraint FK_ProductCategory_Product_Id foreign key (ProductId) references dbo.Product (Id),
+    CategoryId int            not null constraint FK_ProductCategory_Category_Id foreign key (CategoryId) references dbo.Category (Id),
+    CreateDate  datetime2(7)  not null,
+    ModifyDate  datetime2(7)  null,
+    constraint UQ_ProductCategory_StoreId_ProductId_CategoryId_Value unique (StoreId, ProductId, CategoryId)
 );
 go
 

@@ -4,4 +4,9 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Aklion.Crm.Enums\Aklion.Crm.Enums.csproj" />
+    <ProjectReference Include="..\Aklion.Infrastructure.Utils\Aklion.Infrastructure.Utils.csproj" />
+  </ItemGroup>
+
 </Project>

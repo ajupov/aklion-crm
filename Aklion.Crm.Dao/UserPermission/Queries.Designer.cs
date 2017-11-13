@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Aklion.Crm.Dao.UserPost {
+namespace Aklion.Crm.Dao.UserPermission {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Aklion.Crm.Dao.UserPost {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Aklion.Crm.Dao.UserPost.Queries", typeof(Queries).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Aklion.Crm.Dao.UserPermission.Queries", typeof(Queries).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,12 +61,11 @@ namespace Aklion.Crm.Dao.UserPost {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на insert dbo.UserPost
+        ///   Ищет локализованную строку, похожую на insert dbo.UserPermission
         ///(
         ///	UserId,
         ///	StoreId,
-        ///	PostId,
-        ///	IsDeleted,
+        ///	Permission,
         ///	CreateDate,
         ///	ModifyDate
         ///)
@@ -74,8 +73,7 @@ namespace Aklion.Crm.Dao.UserPost {
         ///(
         ///	@UserId,
         ///	@StoreId,
-        ///	@PostId,
-        ///	@IsDeleted,
+        ///	@Permission,
         ///    getdate(),
         ///    null
         ///);
@@ -91,7 +89,7 @@ namespace Aklion.Crm.Dao.UserPost {
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на delete
-        ///	from dbo.UserPost
+        ///	from dbo.UserPermission
         ///	where Id = @id;.
         /// </summary>
         internal static string Delete {
@@ -107,18 +105,14 @@ namespace Aklion.Crm.Dao.UserPost {
         ///	u.[Login]	as UserLogin,
         ///	up.StoreId,
         ///	s.[Name]	as StoreName,
-        ///	up.PostId,
-        ///    p.[Name]	as PostName,
-        ///    up.IsDeleted,
-        ///    p.CreateDate,
-        ///    p.ModifyDate
-        ///	from dbo.UserPost as up
+        ///	up.Permission,
+        ///    up.CreateDate,
+        ///    up.ModifyDate
+        ///	from dbo.UserPermission as up
         ///		inner join dbo.[User] as u on
         ///			up.UserId = u.Id
         ///		inner join dbo.Store as s on
         ///			up.StoreId = s.Id
-        ///		inner join dbo.Post as p on
-        ///			up.PostId = p.Id
         ///	where up.Id = @id;.
         /// </summary>
         internal static string Get {
@@ -130,19 +124,18 @@ namespace Aklion.Crm.Dao.UserPost {
         /// <summary>
         ///   Ищет локализованную строку, похожую на select
         ///	count(0)
-        ///	from dbo.UserPost as up
+        ///	from dbo.UserPermission as up
         ///		inner join dbo.[User] as u on
         ///			up.UserId = u.Id
         ///		inner join dbo.Store as s on
         ///			up.StoreId = s.Id
-        ///		inner join dbo.Post as p on
-        ///			up.PostId = p.Id
         ///	where @IsSearch = 0 or
         ///		((coalesce(@Id, 0) = 0 or s.Id = @Id)
         ///			and (coalesce(@UserId, 0) = 0 or up.UserId = @StoreId)
         ///			and (coalesce(@UserLogin, &apos;&apos;) = &apos;&apos; or u.[Login] like @UserLogin + &apos;%&apos;)
         ///			and (coalesce(@StoreId, 0) = 0 or up.StoreId = @StoreId)
-        ///			and (coalesce(@StoreName, &apos;&apos;) = &apos;&apos; or s.[Na [остаток строки не уместился]&quot;;.
+        ///			and (coalesce(@StoreName, &apos;&apos;) = &apos;&apos; or s.[Name] like @StoreName + &apos;%&apos;)
+        ///			and (coalesce(@ [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string GetPagedList {
             get {
@@ -154,8 +147,7 @@ namespace Aklion.Crm.Dao.UserPost {
         ///   Ищет локализованную строку, похожую на update dbo.UserPost
         ///    set UserId = @UserId,
         ///		StoreId = @StoreId,
-        ///		PostId = @PostId,
-        ///		IsDeleted = @IsDeleted,
+        ///		Permission = @Permission,
         ///		ModifyDate = getdate()
         ///    where Id = @Id;.
         /// </summary>

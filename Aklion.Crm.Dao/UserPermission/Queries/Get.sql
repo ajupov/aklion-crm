@@ -4,16 +4,12 @@
 	u.[Login]	as UserLogin,
 	up.StoreId,
 	s.[Name]	as StoreName,
-	up.PostId,
-    p.[Name]	as PostName,
-    up.IsDeleted,
+	up.Permission,
     up.CreateDate,
     up.ModifyDate
-	from dbo.UserPost as up
+	from dbo.UserPermission as up
 		inner join dbo.[User] as u on
 			up.UserId = u.Id
 		inner join dbo.Store as s on
 			up.StoreId = s.Id
-		inner join dbo.Post as p on
-			up.PostId = p.Id
 	where up.Id = @id;

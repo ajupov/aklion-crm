@@ -64,7 +64,25 @@ function getFilters() {
     return params;
 }
 
+function getText(url, parameters, callback) {
+    $.get(url,
+        parameters,
+        result => {
+            callback(result);
+        },
+        'text');
+}
+
 function getJson(url, parameters, callback) {
+    $.get(url,
+        parameters,
+        result => {
+            callback(result);
+        },
+        'json');
+}
+
+function getJsonSync(url, parameters, callback) {
     $.get(url,
         parameters,
         result => {
@@ -82,10 +100,33 @@ function postJson(url, parameters, callback) {
         'json');
 }
 
-function beforeShowJqGridForm(form) {
-    //form.closest('.ui-jqdialog').position({
-    //    my: 'center',
-    //    at: 'center',
-    //    of: $('body')
-    //});
+function postText(url, parameters, callback) {
+    $.post(url,
+        parameters,
+        result => {
+            callback(result);
+        },
+        'text');
+}
+
+function getSelectValues(url) {
+    let values = '';
+
+    $.get({
+        url: url,
+        async: false,
+        dataType: 'json',
+        success: result => {
+            $.each(result,
+                (key, value) => {
+                    values += `${value}:${key};`;
+                });
+        }
+    });
+
+    if (values.charAt(values.length - 1) === ';') {
+        values = values.substr(0, values.length - 1);
+    }
+
+    return values;
 }
