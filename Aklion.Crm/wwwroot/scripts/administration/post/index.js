@@ -25,7 +25,8 @@ $(document).ready(() => {
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Название магазина', Type: 'autocomplete', Editable: true, Width: 125,
-                AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId'
+                AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
+                Formatter: storeLinkFormatter, Unformatter: storeLinkUnFormatter
             },
             { Name: 'IsDeleted', Label: 'Удален', Type: 'checkbox', Width: 70, Editable: true, Sortable: false },
             { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 120 },
@@ -54,12 +55,14 @@ $(document).ready(() => {
             { Name: 'UserId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'UserLogin', Label: 'Логин пользователя', Type: 'autocomplete', Editable: true, Width: 130,
-                AutocompleteUrl: '/Administration/Users/GetForAutocompleteByLoginPattern', AutocompleteHidden: 'UserId'
+                AutocompleteUrl: '/Administration/Users/GetForAutocompleteByLoginPattern', AutocompleteHidden: 'UserId',
+                Formatter: userLinkFormatter, Unformatter: userLinkUnFormatter
             },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Название магазина', Type: 'autocomplete', Editable: true, Width: 125,
-                AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId'
+                AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
+                Formatter: storeLinkFormatter, Unformatter: storeLinkUnFormatter
             },
             { Name: 'PostId', Type: 'number', Hidden: true, Editable: true },
             {
@@ -73,3 +76,19 @@ $(document).ready(() => {
         ]
     });
 });
+
+function storeLinkFormatter(value, options, data) {
+    return `<a href="/Administration/Stores?Id=${data.StoreId}">${data.StoreName}</a>`;
+}
+
+function storeLinkUnFormatter(value, options, cell) {
+    return $('a', cell).text();
+}
+
+function userLinkFormatter(value, options, data) {
+    return `<a href="/Administration/Users?Id=${data.UserId}">${data.UserLogin}</a>`;
+}
+
+function userLinkUnFormatter(value, options, cell) {
+    return $('a', cell).text();
+}

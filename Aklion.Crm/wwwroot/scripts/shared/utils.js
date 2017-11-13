@@ -1,8 +1,10 @@
 ﻿function initDatePicker(element, table) {
-    $(element).datepicker({
+    const $element = $(element);
+    $element.datepicker({
         changeMonth: true,
         changeYear: true,
-        onSelect: () => {
+        onSelect: (e, d) => {
+            var t = $element;
             if (table !== null && table !== undefined) {
                 table[0].triggerToolbar();
             }

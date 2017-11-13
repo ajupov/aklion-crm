@@ -1,4 +1,4 @@
-﻿update dbo.UserPost
+﻿update dbo.UserPermission
     set UserId = @UserId,
 		StoreId = @StoreId,
 		Permission = @Permission,
