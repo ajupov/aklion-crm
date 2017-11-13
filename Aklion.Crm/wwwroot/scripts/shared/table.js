@@ -69,7 +69,7 @@ function createTable(options) {
                             initDatePicker(e, $table);
                         }
                         if (column.Type === 'autocomplete') {
-                            initAutocomplete(e, column.AutocompleteUrl, column.AutocompleteHidden);
+                            initAutocomplete(e, column.AutocompleteUrl, column.AutocompleteHidden, column.DependentFields);
                         }
                     }
                 },

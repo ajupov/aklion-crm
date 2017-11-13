@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Aklion.Crm.Domain;
 using Aklion.Crm.Domain.Post;
 using Aklion.Infrastructure.Storage.DataBaseExecutor;
 using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
@@ -17,6 +19,12 @@ namespace Aklion.Crm.Dao.Post
         public Task<Paging<PostModel>> GetPagedList(PostParameterModel parameterModel)
         {
             return _dataBaseExecutor.SelectListWithTotalCount<PostModel>(Queries.GetPagedList, parameterModel);
+        }
+
+        public Task<List<AutocompleteModel>> GetForAutocompleteByNamePattern(string pattern, int storeId)
+        {
+            return _dataBaseExecutor.SelectList<AutocompleteModel>(Queries.GetForAutocompleteByNamePattern,
+                new {pattern, storeId });
         }
 
         public Task<PostModel> Get(int id)

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Aklion.Crm.Dao.Post {
+namespace Aklion.Crm.Dao.UserPost {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Aklion.Crm.Dao.Post {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Aklion.Crm.Dao.Post.Queries", typeof(Queries).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Aklion.Crm.Dao.UserPost.Queries", typeof(Queries).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,18 +61,20 @@ namespace Aklion.Crm.Dao.Post {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на insert dbo.Post
+        ///   Ищет локализованную строку, похожую на insert dbo.UserPost
         ///(
+        ///	UserId,
         ///	StoreId,
-        ///	[Name],
+        ///	PostId,
         ///	IsDeleted,
         ///	CreateDate,
         ///	ModifyDate
         ///)
         ///values
         ///(
+        ///	@UserId,
         ///	@StoreId,
-        ///	@Name,
+        ///	@PostId,
         ///	@IsDeleted,
         ///    getdate(),
         ///    null
@@ -89,7 +91,7 @@ namespace Aklion.Crm.Dao.Post {
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на delete
-        ///	from dbo.Post
+        ///	from dbo.UserPost
         ///	where Id = @id;.
         /// </summary>
         internal static string Delete {
@@ -100,17 +102,24 @@ namespace Aklion.Crm.Dao.Post {
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на select top 1
-        ///	p.Id,
-        ///	p.StoreId,
+        ///	up.Id,
+        ///	up.UserId,
+        ///	u.[Login]	as UserLogin,
+        ///	up.StoreId,
         ///	s.[Name]	as StoreName,
-        ///    p.[Name],
+        ///	up.PostId,
+        ///    p.[Name]	as PostName,
         ///    p.IsDeleted,
         ///    p.CreateDate,
         ///    p.ModifyDate
-        ///	from dbo.Post as p
+        ///	from dbo.UserPost as up
+        ///		inner join dbo.[User] as u on
+        ///			up.UserId = u.Id
         ///		inner join dbo.Store as s on
-        ///			p.StoreId = s.Id
-        ///	where p.Id = @id;.
+        ///			up.StoreId = s.Id
+        ///		inner join dbo.Post as p on
+        ///			up.PostId = p.Id
+        ///	where up.Id = @id;.
         /// </summary>
         internal static string Get {
             get {
@@ -120,32 +129,20 @@ namespace Aklion.Crm.Dao.Post {
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на select
-        ///	Id,
-        ///    [Name]	as [Value]
-        ///	from dbo.Post
-        ///	where IsDeleted = 0
-        ///		and [Name] like @pattern + &apos;%&apos;;.
-        /// </summary>
-        internal static string GetForAutocompleteByNamePattern {
-            get {
-                return ResourceManager.GetString("GetForAutocompleteByNamePattern", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на select
         ///	count(0)
-        ///	from dbo.Post as p
+        ///	from dbo.UserPost as up
+        ///		inner join dbo.[User] as u on
+        ///			up.UserId = u.Id
         ///		inner join dbo.Store as s on
-        ///			p.StoreId = s.Id
+        ///			up.StoreId = s.Id
+        ///		inner join dbo.Post as p on
+        ///			up.PostId = p.Id
         ///	where @IsSearch = 0 or
         ///		((coalesce(@Id, 0) = 0 or s.Id = @Id)
-        ///			and (coalesce(@StoreId, 0) = 0 or p.StoreId = @StoreId)
-        ///			and (coalesce(@StoreName, &apos;&apos;) = &apos;&apos; or s.[Name] like @StoreName + &apos;%&apos;)
-        ///			and (coalesce(@Name, &apos;&apos;) = &apos;&apos; or p.[Name] like @Name + &apos;%&apos;)
-        ///			and (@IsDeleted is null or s.IsDeleted = @IsDeleted)
-        ///			and (@CreateDate is null or convert(date, s.CreateDate) = convert(date, @CreateDate))
-        ///			and ( [остаток строки не уместился]&quot;;.
+        ///			and (coalesce(@UserId, 0) = 0 or up.UserId = @StoreId)
+        ///			and (coalesce(@UserLogin, &apos;&apos;) = &apos;&apos; or u.[Login] like @UserLogin + &apos;%&apos;)
+        ///			and (coalesce(@StoreId, 0) = 0 or up.StoreId = @StoreId)
+        ///			and (coalesce(@StoreName, &apos;&apos;) = &apos;&apos; or s.[Na [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string GetPagedList {
             get {
@@ -154,9 +151,10 @@ namespace Aklion.Crm.Dao.Post {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на update dbo.Post
-        ///    set StoreId = @StoreId,
-        ///		[Name] = @Name,
+        ///   Ищет локализованную строку, похожую на update dbo.UserPost
+        ///    set UserId = @UserId,
+        ///		StoreId = @StoreId,
+        ///		PostId = @PostId,
         ///		IsLocked = @IsLocked,
         ///		IsDeleted = @IsDeleted,
         ///		ModifyDate = getdate()

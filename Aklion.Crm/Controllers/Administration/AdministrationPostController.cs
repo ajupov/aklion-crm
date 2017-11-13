@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
 using Aklion.Crm.Dao.Post;
+using Aklion.Crm.Mappers;
 using Aklion.Crm.Mappers.Post;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.Post;
@@ -27,6 +29,15 @@ namespace Aklion.Crm.Controllers.Administration
             return result.Map(model.Page, model.Size);
         }
 
+        [HttpGet]
+        [Route("GetForAutocompleteByNamePattern")]
+        public async Task<List<AutocompleteModel>> GetForAutocompleteByNamePattern(string pattern, int storeId = 0)
+        {
+            var result = await _postDao.GetForAutocompleteByNamePattern(pattern, storeId).ConfigureAwait(false);
+
+            return result.Map();
+        }
+
         [HttpPost]
         [Route("Create")]
         [AjaxErrorHandle]
@@ -46,7 +57,9 @@ namespace Aklion.Crm.Controllers.Administration
         {
             var post = await _postDao.Get(model.Id).ConfigureAwait(false);
             if (post == null)
+            {
                 return false;
+            }
 
             model.Map(post);
 

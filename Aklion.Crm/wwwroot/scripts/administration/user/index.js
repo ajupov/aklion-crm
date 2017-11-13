@@ -1,5 +1,9 @@
 ﻿'use strict';
 
+const ui = {
+    usersTable: $('#users-table')
+}
+
 $(document).ready(() => {
     createTable({
         Title: 'Пользователи',

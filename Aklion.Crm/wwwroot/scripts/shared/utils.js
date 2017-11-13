@@ -10,14 +10,26 @@
     });
 }
 
-function initAutocomplete(element, url, hiddenId) {
-    $(element).autocomplete({
+function initAutocomplete(element, url, hiddenId, dependentFields) {
+    const $input = $(element);
+
+    $input.autocomplete({
         delay: 200,
         minLength: 1,
         autoFocus: true,
         source: (request, response) => {
+            const $form = $input.closest('table.EditTable');
+
+            let parameters = {};
+            $.each(dependentFields,
+                (index, field) => {
+                    const $field = $form.find(`#${field}`);
+                    parameters[field] = $field.val();
+                });
+            parameters = Object.assign(parameters, { pattern: request.term });
+
             getJson(url,
-                { pattern: request.term },
+                parameters,
                 result =>
                 response($.map(result,
                     item => {
@@ -31,7 +43,6 @@ function initAutocomplete(element, url, hiddenId) {
             event.preventDefault();
             event.stopPropagation();
 
-            const $input = $(event.target);
             const $form = $input.closest('table.EditTable');
             const $hidden = $form.find(`#${hiddenId}`);
 
@@ -69,4 +80,12 @@ function postJson(url, parameters, callback) {
             callback(result);
         },
         'json');
+}
+
+function beforeShowJqGridForm(form) {
+    //form.closest('.ui-jqdialog').position({
+    //    my: 'center',
+    //    at: 'center',
+    //    of: $('body')
+    //});
 }
