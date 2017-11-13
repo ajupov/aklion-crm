@@ -4,6 +4,7 @@ using Aklion.Crm.Dao.Store;
 using Aklion.Crm.Dao.User;
 using Aklion.Crm.Dao.UserPermission;
 using Aklion.Crm.Dao.UserPost;
+using Aklion.Crm.Dao.UserToken;
 using Aklion.Infrastructure.Storage.ConnectionFactory;
 using Aklion.Infrastructure.Storage.DataBaseExecutor;
 using Microsoft.AspNetCore.Builder;
@@ -40,6 +41,7 @@ namespace Aklion.Crm
                 .AddSingleton<IPostDao, PostDao>()
                 .AddSingleton<IUserPostDao, UserPostDao>()
                 .AddSingleton<IUserPermissionDao, UserPermissionDao>()
+                .AddSingleton<IUserTokenDao, UserTokenDao>()
                 .AddMvc()
                 .AddJsonOptions(o =>
                 {
