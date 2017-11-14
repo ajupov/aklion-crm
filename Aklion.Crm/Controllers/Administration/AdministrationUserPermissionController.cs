@@ -2,7 +2,7 @@
 using Aklion.Crm.Attributes;
 using Aklion.Crm.Dao.UserPermission;
 using Aklion.Crm.Enums;
-using Aklion.Crm.Mappers.UserPermission;
+using Aklion.Crm.Mappers.Administration.UserPermission;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.UserPermission;
 using Microsoft.AspNetCore.Mvc;

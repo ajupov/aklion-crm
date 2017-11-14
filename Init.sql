@@ -104,10 +104,10 @@ create table dbo.Product
     [Type]        tinyint        not null, -- Enum (Товар, услуга)
     [Name]        varchar(256)   not null,
     [Description] varchar(4000)  null,
-    Price         decimal(18, 2) null,
+    Price         decimal(18, 2) not null,
     [Status]      tinyint        not null, -- Enum (Отсутствует, имеется в наличии, имеется на складе)
     VendorCode    varchar(16)    null,     -- Артикул
-    ParrentId     int            null,     -- Родитель, для вариативных
+    ParentId      int            null,     -- Родитель, для вариативных
     IsDeleted     bit            not null,
     CreateDate    datetime2(7)   not null,
     ModifyDate    datetime2(7)   null,

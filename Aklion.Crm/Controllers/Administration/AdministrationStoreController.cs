@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
 using Aklion.Crm.Dao.Store;
 using Aklion.Crm.Mappers;
-using Aklion.Crm.Mappers.Store;
+using Aklion.Crm.Mappers.Administration.Store;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.Store;
 using Aklion.Infrastructure.Utils.RandomGenerator;

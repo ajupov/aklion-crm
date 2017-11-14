@@ -1,5 +1,6 @@
 ﻿using Aklion.Crm.Business.Permission;
 using Aklion.Crm.Dao.Post;
+using Aklion.Crm.Dao.Product;
 using Aklion.Crm.Dao.Store;
 using Aklion.Crm.Dao.User;
 using Aklion.Crm.Dao.UserPermission;
@@ -42,6 +43,7 @@ namespace Aklion.Crm
                 .AddSingleton<IUserPostDao, UserPostDao>()
                 .AddSingleton<IUserPermissionDao, UserPermissionDao>()
                 .AddSingleton<IUserTokenDao, UserTokenDao>()
+                .AddSingleton<IProductDao, ProductDao>()
                 .AddMvc()
                 .AddJsonOptions(o =>
                 {

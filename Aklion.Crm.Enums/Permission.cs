@@ -2,7 +2,7 @@
 
 namespace Aklion.Crm.Enums
 {
-    public enum Permission
+    public enum Permission : byte
     {
         [Display(Name = "")]
         None = 0,

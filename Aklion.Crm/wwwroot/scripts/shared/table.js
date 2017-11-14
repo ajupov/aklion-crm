@@ -40,6 +40,8 @@ function createTable(options) {
                     ? 'integer'
                     : column.Type === 'email'
                     ? 'email'
+                    : column.Type === 'money'
+                    ? 'currency'
                     : e => e === undefined || e === null
                     ? ''
                     : e,
@@ -50,12 +52,16 @@ function createTable(options) {
                     ? { srcformat: 'Y-m-d h:i:s', newformat: 'd.m.Y H:i:s' }
                     : column.Type === 'date'
                     ? { srcformat: 'Y-m-d', newformat: 'd.m.Y' }
+                    : column.Type === 'money'
+                    ? { suffix: ' ₽' }
                     : undefined,
                 editable: column.Editable === true,
                 edittype: column.Type === 'checkbox'
                     ? 'checkbox'
                     : column.Type === 'select'
                     ? 'select'
+                    : column.Type === 'textarea'
+                    ? 'textarea'
                     : 'text',
                 editoptions: {
                     value: column.Type === 'checkbox'
@@ -71,6 +77,9 @@ function createTable(options) {
                         if (column.Type === 'autocomplete') {
                             initAutocomplete(e, column.AutocompleteUrl, column.AutocompleteHidden, column.DependentFields);
                         }
+                        if (column.Type === 'money') {
+                            initMoney(e);
+                        }
                     }
                 },
                 editrules: {
@@ -84,6 +93,9 @@ function createTable(options) {
                     dataInit: e => {
                         if (column.Type === 'date' || column.Type === 'datetime') {
                             initDatePicker(e, $table);
+                        }
+                        if (column.Type === 'money') {
+                            initMoney(e);
                         }
                     },
                     value: column.Type === 'select'
@@ -117,7 +129,7 @@ function createTable(options) {
         viewrecords: true,
         colModel: colModel,
         sortable: true,
-        search: filters != null,
+        search: filters !== null,
         postData: filters,
         multiselect: options.Multiselect === true,
         onSelectRow: options.OnSelectRow !== null && options.OnSelectRow !== undefined ? options.OnSelectRow : undefined,

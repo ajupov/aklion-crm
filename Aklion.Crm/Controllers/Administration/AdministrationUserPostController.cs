@@ -2,7 +2,7 @@
 using Aklion.Crm.Attributes;
 using Aklion.Crm.Dao.Post;
 using Aklion.Crm.Dao.UserPost;
-using Aklion.Crm.Mappers.UserPost;
+using Aklion.Crm.Mappers.Administration.UserPost;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.UserPost;
 using Microsoft.AspNetCore.Mvc;

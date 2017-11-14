@@ -1,14 +1,14 @@
 ﻿'use strict';
 
 const ui = {
-    storesTable: $('#stores-table')
+    storeTable: $('#store-table')
 }
 
 $(document).ready(() => {
     createTable({
         Title: 'Магазины',
-        Element: '#stores-table',
-        Pager: '#stores-table-pagination',
+        Element: '#store-table',
+        Pager: '#store-table-pagination',
         IsViewable: true,
         IsEditable: true,
         IsCreatable: true,

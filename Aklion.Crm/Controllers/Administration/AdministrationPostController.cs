@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
 using Aklion.Crm.Dao.Post;
 using Aklion.Crm.Mappers;
-using Aklion.Crm.Mappers.Post;
+using Aklion.Crm.Mappers.Administration.Post;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.Post;
 using Microsoft.AspNetCore.Mvc;

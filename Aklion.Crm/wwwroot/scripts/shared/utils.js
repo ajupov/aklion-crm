@@ -54,6 +54,13 @@ function initAutocomplete(element, url, hiddenId, dependentFields) {
     });
 }
 
+function initMoney(element) {
+    const $input = $(element);
+    $input.attr('type', 'number');
+    $input.attr('min', '0');
+    $input.attr('step', '0.01');
+}
+
 function getFilters() {
     var params = {};
 

@@ -1,0 +1,31 @@
+﻿insert dbo.Product
+(
+    StoreId,
+    [Type],
+    [Name],
+    [Description],
+    Price,
+    [Status],
+    VendorCode,
+    ParentId,
+    IsDeleted,
+    CreateDate,
+    ModifyDate
+)
+values
+(
+    @StoreId,
+    @Type,
+    @Name,
+    @Description,
+    @Price,
+    @Status,
+    @VendorCode,
+    @ParentId,
+    @IsDeleted,
+    getdate(),
+    null
+);
+
+select
+	scope_identity();
