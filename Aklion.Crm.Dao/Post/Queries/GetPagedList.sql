@@ -4,7 +4,7 @@
 		inner join dbo.Store as s on
 			p.StoreId = s.Id
 	where @IsSearch = 0 or
-		((coalesce(@Id, 0) = 0 or s.Id = @Id)
+		((coalesce(@Id, 0) = 0 or p.Id = @Id)
 			and (coalesce(@StoreId, 0) = 0 or p.StoreId = @StoreId)
 			and (coalesce(@StoreName, '') = '' or s.[Name] like @StoreName + '%')
 			and (coalesce(@Name, '') = '' or p.[Name] like @Name + '%')
@@ -24,7 +24,7 @@ select
 		inner join dbo.Store as s on
 			p.StoreId = s.Id
 	where @IsSearch = 0 or
-		((coalesce(@Id, 0) = 0 or s.Id = @Id)
+		((coalesce(@Id, 0) = 0 or p.Id = @Id)
 			and (coalesce(@StoreId, 0) = 0 or p.StoreId = @StoreId)
 			and (coalesce(@StoreName, '') = '' or s.[Name] like @StoreName + '%')
 			and (coalesce(@Name, '') = '' or p.[Name] like @Name + '%')
