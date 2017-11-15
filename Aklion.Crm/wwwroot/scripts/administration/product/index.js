@@ -84,6 +84,11 @@ function initCategoriesTable() {
                 Formatter: storeLinkFormatter, Unformatter: storeLinkUnFormatter
             },
             { Name: 'IsDeleted', Label: 'Удален', Type: 'checkbox', Width: 70, Editable: true, Sortable: false },
+            { Name: 'ParentId', Type: 'number', Hidden: true, Editable: true },
+            {
+                Name: 'ParentName', Label: 'Название родителя', Type: 'autocomplete', Editable: true, Width: 125,
+                AutocompleteUrl: '/Administration/Categories/GetForAutocompleteByNamePattern', AutocompleteHidden: 'ParentId'
+            },
             { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 120 },
             { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Hidden: true, EditHidden: true }
         ],

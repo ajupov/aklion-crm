@@ -1,8 +1,8 @@
 ﻿select
 	count(0)
-	from dbo.Category as с
+	from dbo.Category as c
 		inner join dbo.Store as s on
-			с.StoreId = s.Id
+			c.StoreId = s.Id
 		left outer join dbo.Category as pc on
 			c.ParentId = pc.Id
 	where @IsSearch = 0 or
@@ -15,18 +15,18 @@
 			and (@ModifyDate is null or convert(date, c.ModifyDate) = convert(date, @ModifyDate)));
 
 select
-	с.Id,
-	с.StoreId,
+	c.Id,
+	c.StoreId,
 	s.[Name]	as StoreName,
-    с.[Name],
+    c.[Name],
 	c.ParentId,
 	pc.[Name]	as ParentName,
-    с.IsDeleted,
-    с.CreateDate,
-    с.ModifyDate
-	from dbo.Category as с
+    c.IsDeleted,
+    c.CreateDate,
+    c.ModifyDate
+	from dbo.Category as c
 		inner join dbo.Store as s on
-			с.StoreId = s.Id
+			c.StoreId = s.Id
 		left outer join dbo.Category as pc on
 			c.ParentId = pc.Id
 	where @IsSearch = 0 or
