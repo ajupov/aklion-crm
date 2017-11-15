@@ -96,6 +96,45 @@ function initCategoriesTable() {
             ui.productCategoryTable.jqGrid('setGridParam', { postData: { StoreId: id } }).trigger('reloadGrid');
         }
     });
+
+    createTable({
+        Title: 'Категории продуктов',
+        Element: '#product-category-table',
+        Pager: '#product-category-table-pagination',
+        IsViewable: true,
+        IsEditable: true,
+        IsCreatable: true,
+        IsDeletable: true,
+        IsFilterable: true,
+        DataUrl: '/Administration/ProductCategories/GetList',
+        CreateUrl: '/Administration/ProductCategories/Create',
+        UpdateUrl: '/Administration/ProductCategories/Update',
+        DeleteUrl: '/Administration/ProductCategories/Delete',
+        Columns: [
+            { Name: 'Id', Label: '№', Type: 'number', Width: 70 },
+            { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
+            {
+                Name: 'StoreName', Label: 'Название магазина', Type: 'autocomplete', Editable: true, Width: 125,
+                AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
+                Formatter: storeLinkFormatter, Unformatter: storeLinkUnFormatter
+            },
+            { Name: 'ProductId', Type: 'number', Hidden: true, Editable: true },
+            {
+                Name: 'ProductName', Label: 'Название продукта', Type: 'autocomplete', Editable: true, Width: 130,
+                AutocompleteUrl: '/Administration/Products/GetForAutocompleteByNamePattern', AutocompleteHidden: 'ProductId',
+                DependentFields: ['StoreId']
+            },
+            { Name: 'CategoryId', Type: 'number', Hidden: true, Editable: true },
+            {
+                Name: 'CategoryName', Label: 'Название категории', Type: 'autocomplete', Editable: true, Width: 120,
+                AutocompleteUrl: '/Administration/Categories/GetForAutocompleteByNamePattern', AutocompleteHidden: 'CategoryId',
+                DependentFields: ['StoreId']
+            },
+            { Name: 'IsDeleted', Label: 'Удален', Type: 'checkbox', Width: 70, Editable: true, Sortable: false },
+            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 120 },
+            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Hidden: true, EditHidden: true }
+        ]
+    });
 }
 
 function storeLinkFormatter(value, options, data) {

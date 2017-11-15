@@ -135,7 +135,8 @@ create table dbo.ProductCategory
     Id          int           not null identity(1, 1) constraint PK_ProductCategory_Id primary key,
     StoreId     int           not null constraint FK_ProductCategory_Store_Id foreign key (StoreId) references dbo.Store (Id),
     ProductId   int           not null constraint FK_ProductCategory_Product_Id foreign key (ProductId) references dbo.Product (Id),
-    CategoryId int            not null constraint FK_ProductCategory_Category_Id foreign key (CategoryId) references dbo.Category (Id),
+    CategoryId  int           not null constraint FK_ProductCategory_Category_Id foreign key (CategoryId) references dbo.Category (Id),
+	IsDeleted   bit           not null,
     CreateDate  datetime2(7)  not null,
     ModifyDate  datetime2(7)  null,
     constraint UQ_ProductCategory_StoreId_ProductId_CategoryId_Value unique (StoreId, ProductId, CategoryId)
@@ -163,6 +164,7 @@ create table dbo.ProductAttribute
     ProductId   int           not null constraint FK_ProductAttribute_Product_Id foreign key (ProductId) references dbo.Product (Id),
     AttributeId int           not null constraint FK_ProductAttribute_Attribute_Id foreign key (AttributeId) references dbo.Attribute (Id),
     [Value]     varchar(4000) not null,
+	IsDeleted   bit           not null,
     CreateDate  datetime2(7)  not null,
     ModifyDate  datetime2(7)  null,
     constraint UQ_ProductAttribute_StoreId_ProductId_AttributeId_Value unique (StoreId, ProductId, AttributeId, [Value])
@@ -189,6 +191,7 @@ create table dbo.ProductTag
     StoreId    int          not null constraint FK_ProductTag_Store_Id foreign key (StoreId) references dbo.Store (Id),
     ProductId  int          not null constraint FK_ProductTag_Product_Id foreign key (ProductId) references dbo.Product (Id),
     TagId      int          not null constraint FK_ProductTag_Tag_Id foreign key (TagId) references dbo.Tag (Id),
+	IsDeleted  bit          not null,
     CreateDate datetime2(7) not null,
     ModifyDate datetime2(7) null,
     constraint UQ_ProductTag_StoreId_ProductId_TagId unique (StoreId, ProductId, TagId)

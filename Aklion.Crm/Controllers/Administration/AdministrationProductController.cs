@@ -39,9 +39,9 @@ namespace Aklion.Crm.Controllers.Administration
 
         [HttpGet]
         [Route("GetForAutocompleteByNamePattern")]
-        public async Task<List<AutocompleteModel>> GetForAutocompleteByNamePattern(string pattern)
+        public async Task<List<AutocompleteModel>> GetForAutocompleteByNamePattern(string pattern, int storeId = 0)
         {
-            var result = await _productDao.GetForAutocompleteByNamePattern(pattern).ConfigureAwait(false);
+            var result = await _productDao.GetForAutocompleteByNamePattern(pattern, storeId).ConfigureAwait(false);
 
             return result.Map();
         }

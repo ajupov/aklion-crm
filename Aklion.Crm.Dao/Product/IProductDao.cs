@@ -10,7 +10,7 @@ namespace Aklion.Crm.Dao.Product
     {
         Task<Paging<ProductModel>> GetPagedList(ProductParameterModel parameterModel);
 
-        Task<List<AutocompleteModel>> GetForAutocompleteByNamePattern(string pattern);
+        Task<List<AutocompleteModel>> GetForAutocompleteByNamePattern(string pattern, int storeId);
 
         Task<ProductModel> Get(int id);
 

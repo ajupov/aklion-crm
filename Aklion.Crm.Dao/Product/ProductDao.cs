@@ -21,10 +21,10 @@ namespace Aklion.Crm.Dao.Product
             return _dataBaseExecutor.SelectListWithTotalCount<ProductModel>(Queries.GetPagedList, parameterModel);
         }
 
-        public Task<List<AutocompleteModel>> GetForAutocompleteByNamePattern(string pattern)
+        public Task<List<AutocompleteModel>> GetForAutocompleteByNamePattern(string pattern, int storeId)
         {
             return _dataBaseExecutor.SelectList<AutocompleteModel>(Queries.GetForAutocompleteByNamePattern,
-                new {pattern});
+                new {pattern, storeId});
         }
 
         public Task<ProductModel> Get(int id)
