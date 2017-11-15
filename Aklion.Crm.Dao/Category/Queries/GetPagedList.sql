@@ -3,6 +3,8 @@
 	from dbo.Category as с
 		inner join dbo.Store as s on
 			с.StoreId = s.Id
+		left outer join dbo.Category as pc on
+			c.ParentId = pc.Id
 	where @IsSearch = 0 or
 		((coalesce(@Id, 0) = 0 or c.Id = @Id)
 			and (coalesce(@StoreId, 0) = 0 or c.StoreId = @StoreId)
@@ -17,17 +19,23 @@ select
 	с.StoreId,
 	s.[Name]	as StoreName,
     с.[Name],
+	c.ParentId,
+	pc.[Name]	as ParentName,
     с.IsDeleted,
     с.CreateDate,
     с.ModifyDate
 	from dbo.Category as с
 		inner join dbo.Store as s on
 			с.StoreId = s.Id
+		left outer join dbo.Category as pc on
+			c.ParentId = pc.Id
 	where @IsSearch = 0 or
 		((coalesce(@Id, 0) = 0 or c.Id = @Id)
 			and (coalesce(@StoreId, 0) = 0 or c.StoreId = @StoreId)
 			and (coalesce(@StoreName, '') = '' or s.[Name] like @StoreName + '%')
 			and (coalesce(@Name, '') = '' or c.[Name] like @Name + '%')
+			and (coalesce(@ParentId, 0) = 0 or c.ParentId = @ParentId)
+			and (coalesce(@ParentName, '') = '' or pc.[Name] like @ParentName + '%')
 			and (@IsDeleted is null or c.IsDeleted = @IsDeleted)
 			and (@CreateDate is null or convert(date, c.CreateDate) = convert(date, @CreateDate))
 			and (@ModifyDate is null or convert(date, c.ModifyDate) = convert(date, @ModifyDate)))
@@ -40,6 +48,10 @@ select
 		case when @SortingColumn = 'StoreName' and @SortingOrder = 'desc' then s.[Name] end desc,
 		case when @SortingColumn = 'Name' and @SortingOrder = 'asc' then c.[Name] end,
 		case when @SortingColumn = 'Name' and @SortingOrder = 'desc' then c.[Name] end desc,
+		case when @SortingColumn = 'ParentId' and @SortingOrder = 'asc' then c.ParentId end,
+		case when @SortingColumn = 'ParentId' and @SortingOrder = 'desc' then c.ParentId end desc,
+		case when @SortingColumn = 'ParentName' and @SortingOrder = 'asc' then pc.[Name] end,
+		case when @SortingColumn = 'ParentName' and @SortingOrder = 'desc' then pc.[Name] end desc,
 		case when @SortingColumn = 'IsDeleted' and @SortingOrder = 'asc' then c.IsDeleted end,
 		case when @SortingColumn = 'IsDeleted' and @SortingOrder = 'desc' then c.IsDeleted end desc,
 		case when @SortingColumn = 'CreateDate' and @SortingOrder = 'asc' then c.CreateDate end,

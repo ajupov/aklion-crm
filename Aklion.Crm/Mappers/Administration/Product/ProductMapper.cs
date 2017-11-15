@@ -38,6 +38,7 @@ namespace Aklion.Crm.Mappers.Administration.Product
                     Status = model.Status,
                     VendorCode = model.VendorCode,
                     ParentId = model.ParentId,
+                    ParentName = model.ParentName,
                     IsDeleted = model.IsDeleted,
                     CreateDate = model.CreateDate,
                     ModifyDate = model.ModifyDate
@@ -60,6 +61,7 @@ namespace Aklion.Crm.Mappers.Administration.Product
                     Status = model.Status,
                     VendorCode = model.VendorCode,
                     ParentId = model.ParentId,
+                    ParentName = model.ParentName,
                     IsDeleted = model.IsDeleted,
                     CreateDate = model.CreateDate,
                     ModifyDate = model.ModifyDate
@@ -82,6 +84,7 @@ namespace Aklion.Crm.Mappers.Administration.Product
                     Status = model.Status,
                     VendorCode = model.VendorCode,
                     ParentId = model.ParentId,
+                    ParentName = model.ParentName,
                     IsDeleted = model.IsDeleted,
                     CreateDate = model.CreateDate.ToNullableDate(),
                     ModifyDate = model.ModifyDate.ToNullableDate(),
@@ -107,6 +110,7 @@ namespace Aklion.Crm.Mappers.Administration.Product
             domainModel.Status = viewModel.Status;
             domainModel.VendorCode = viewModel.VendorCode;
             domainModel.ParentId = viewModel.ParentId;
+            domainModel.ParentName = viewModel.ParentName;
             domainModel.IsDeleted = viewModel.IsDeleted;
             domainModel.IsDeleted = viewModel.IsDeleted;
             domainModel.CreateDate = viewModel.CreateDate;

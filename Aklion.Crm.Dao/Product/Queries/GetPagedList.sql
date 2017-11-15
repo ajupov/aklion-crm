@@ -3,6 +3,8 @@
 	from dbo.Product as p
 		inner join dbo.Store as s on
 			p.StoreId = s.Id
+		left outer join dbo.Product as pp on
+			p.ParentId = pp.id
 	where @IsSearch = 0 or
 		((coalesce(@Id, 0) = 0 or p.Id = @Id)
 			and (coalesce(@StoreId, 0) = 0 or p.StoreId = @StoreId)
@@ -14,6 +16,7 @@
 			and (coalesce(@Status, 0) = 0 or p.[Status] = @Status)
 			and (coalesce(@VendorCode, '') = '' or p.VendorCode like @VendorCode + '%')
 			and (coalesce(@ParentId, 0) = 0 or p.ParentId = @ParentId)
+			and (coalesce(@ParentName, '') = '' or pp.[Name] like @ParentName + '%')
 			and (@IsDeleted is null or p.IsDeleted = @IsDeleted)
 			and (@CreateDate is null or convert(date, p.CreateDate) = convert(date, @CreateDate))
 			and (@ModifyDate is null or convert(date, p.ModifyDate) = convert(date, @ModifyDate)));
@@ -29,12 +32,15 @@ select
     p.[Status],
     p.VendorCode,
     p.ParentId,
+	pp.[Name]	as ParentName,
     p.IsDeleted,
     p.CreateDate,
     p.ModifyDate
 	from dbo.Product as p
 		inner join dbo.Store as s on
 			p.StoreId = s.Id
+		left outer join dbo.Product as pp on
+			p.ParentId = pp.id
 	where @IsSearch = 0 or
 		((coalesce(@Id, 0) = 0 or p.Id = @Id)
 			and (coalesce(@StoreId, 0) = 0 or p.StoreId = @StoreId)
@@ -46,6 +52,7 @@ select
 			and (coalesce(@Status, 0) = 0 or p.[Status] = @Status)
 			and (coalesce(@VendorCode, '') = '' or p.VendorCode like @VendorCode + '%')
 			and (coalesce(@ParentId, 0) = 0 or p.ParentId = @ParentId)
+			and (coalesce(@ParentName, '') = '' or pp.[Name] like @ParentName + '%')
 			and (@IsDeleted is null or p.IsDeleted = @IsDeleted)
 			and (@CreateDate is null or convert(date, p.CreateDate) = convert(date, @CreateDate))
 			and (@ModifyDate is null or convert(date, p.ModifyDate) = convert(date, @ModifyDate)))
@@ -70,6 +77,8 @@ select
 		case when @SortingColumn = 'VendorCode' and @SortingOrder = 'desc' then p.VendorCode end desc,
 		case when @SortingColumn = 'ParentId' and @SortingOrder = 'asc' then p.ParentId end,
 		case when @SortingColumn = 'ParentId' and @SortingOrder = 'desc' then p.ParentId end desc,
+		case when @SortingColumn = 'ParentName' and @SortingOrder = 'asc' then pp.[Name] end,
+		case when @SortingColumn = 'ParentName' and @SortingOrder = 'desc' then pp.[Name] end desc,
 		case when @SortingColumn = 'IsDeleted' and @SortingOrder = 'asc' then p.IsDeleted end,
 		case when @SortingColumn = 'IsDeleted' and @SortingOrder = 'desc' then p.IsDeleted end desc,
 		case when @SortingColumn = 'CreateDate' and @SortingOrder = 'asc' then p.CreateDate end,

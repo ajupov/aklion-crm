@@ -32,6 +32,8 @@ namespace Aklion.Crm.Mappers.Administration.Category
                     StoreId = model.StoreId,
                     StoreName = model.StoreName,
                     Name = model.Name,
+                    ParentId = model.ParentId,
+                    ParentName = model.ParentName,
                     IsDeleted = model.IsDeleted,
                     CreateDate = model.CreateDate,
                     ModifyDate = model.ModifyDate
@@ -48,6 +50,8 @@ namespace Aklion.Crm.Mappers.Administration.Category
                     StoreId = model.StoreId,
                     StoreName = model.StoreName,
                     Name = model.Name,
+                    ParentId = model.ParentId,
+                    ParentName = model.ParentName,
                     IsDeleted = model.IsDeleted,
                     CreateDate = model.CreateDate,
                     ModifyDate = model.ModifyDate
@@ -64,6 +68,8 @@ namespace Aklion.Crm.Mappers.Administration.Category
                     Name = model.Name,
                     StoreId = model.StoreId,
                     StoreName = model.StoreName,
+                    ParentId = model.ParentId,
+                    ParentName = model.ParentName,
                     IsDeleted = model.IsDeleted,
                     CreateDate = model.CreateDate.ToNullableDate(),
                     ModifyDate = model.ModifyDate.ToNullableDate(),
@@ -81,6 +87,8 @@ namespace Aklion.Crm.Mappers.Administration.Category
             domainModel.Id = viewModel.Id;
             domainModel.Name = viewModel.Name;
             domainModel.StoreId = viewModel.StoreId;
+            domainModel.ParentId = viewModel.ParentId;
+            domainModel.ParentName = viewModel.ParentName;
             domainModel.IsDeleted = viewModel.IsDeleted;
             domainModel.CreateDate = viewModel.CreateDate;
             domainModel.ModifyDate = viewModel.ModifyDate;

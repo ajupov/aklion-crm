@@ -121,6 +121,7 @@ create table dbo.Category
     Id         int          not null identity(1, 1) constraint PK_Category_Id primary key,
     StoreId    int          not null constraint FK_Category_Store_Id foreign key (StoreId) references dbo.Store (Id),
     [Name]     varchar(256) not null,
+	ParentId   int          null,     -- Родитель
     IsDeleted  bit          not null,
     CreateDate datetime2(7) not null,
     ModifyDate datetime2(7) null,

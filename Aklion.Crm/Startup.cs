@@ -45,7 +45,7 @@ namespace Aklion.Crm
                 .AddSingleton<IUserPermissionDao, UserPermissionDao>()
                 .AddSingleton<IUserTokenDao, UserTokenDao>()
                 .AddSingleton<IProductDao, ProductDao>()
-                .AddSingleton<ICategoryDao, ICategoryDao>()
+                .AddSingleton<ICategoryDao, CategoryDao>()
                 .AddMvc()
                 .AddJsonOptions(o =>
                 {

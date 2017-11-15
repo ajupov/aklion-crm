@@ -25,6 +25,8 @@ namespace Aklion.Crm.Models.Administration.Product
 
         public int? ParentId { get; set; }
 
+        public string ParentName { get; set; }
+
         public bool IsDeleted { get; set; }
 
         public DateTime CreateDate { get; set; }
