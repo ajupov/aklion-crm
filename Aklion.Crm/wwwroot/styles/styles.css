@@ -81,13 +81,16 @@ nav { background-color: #507299; }
 
 /*Common*/
 
+.hidden {
+    display: none;
+}
+
 .left { float: left; }
 
 .right { float: right; }
 
 .card {
     background: #ffffff;
-    padding: 15px 20px;
     border-radius: 2px;
     box-shadow: 0 1px 0 0 #d7d8db, 0 0 0 1px #e3e4e8;
     margin-top: 10px;
@@ -119,6 +122,23 @@ input, select {
 
 a:focus, button:focus {
     outline: none; 
+}
+
+button.tab-button {
+    color: #2a5885;
+    background: transparent;
+    cursor: pointer;
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid transparent;
+}
+
+button.tab-button:hover {
+    border-bottom: 2px solid #cad2db;
+}
+
+button.tab-button.active {
+    border-bottom: 2px solid #6387ac;
 }
 
 input[type=checkbox]:after {
@@ -276,7 +296,7 @@ button.cell-button {
         width: 8.33%;
     }
 
-    .col.s1 {
+    .col.s2 {
         width: 16.67%;
     }
 
@@ -327,7 +347,7 @@ button.cell-button {
         width: 8.33%;
     }
 
-    .col.m1 {
+    .col.m2 {
         width: 16.67%;
     }
 
@@ -378,7 +398,7 @@ button.cell-button {
         width: 8.33%;
     }
 
-    .col.l1 {
+    .col.l2 {
         width: 16.67%;
     }
 

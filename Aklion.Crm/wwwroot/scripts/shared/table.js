@@ -127,6 +127,7 @@ function createTable(options) {
         sortorder: 'desc',
         caption: options.Title,
         viewrecords: true,
+        hidegrid: false,
         colModel: colModel,
         sortable: true,
         search: filters !== null,

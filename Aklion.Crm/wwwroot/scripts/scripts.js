@@ -24,3 +24,11 @@ $(document).ready(() => {
 $(document).click(() => {
     commonUi.dropdownMenuContent.hide();
 });
+
+function openTab(event, tabName) {
+    $('.tab-button').removeClass('active');
+    $(event).addClass('active');
+
+    $('.tab').hide();
+    $(`#${tabName}`).show();
+}

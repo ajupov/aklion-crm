@@ -1,10 +1,16 @@
 ﻿'use strict';
 
 const ui = {
-    storeTable: $('#product-table')
+    storeTable: $('#product-table'),
+    categoryTable: $('#category-table'),
+    productCategoryTable: $('#product-category-table')
 }
 
 $(document).ready(() => {
+    $('.tab-button').first().click();
+});
+
+function initProductsTable() {
     createTable({
         Title: 'Продукты',
         Element: '#product-table',
@@ -52,7 +58,40 @@ $(document).ready(() => {
             { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Hidden: true, EditHidden: true }
         ]
     });
-});
+}
+
+function initCategoriesTable() {
+    createTable({
+        Title: 'Категории',
+        Element: '#category-table',
+        Pager: '#category-table-pagination',
+        IsViewable: true,
+        IsEditable: true,
+        IsCreatable: true,
+        IsDeletable: true,
+        IsFilterable: true,
+        DataUrl: '/Administration/Categories/GetList',
+        CreateUrl: '/Administration/Categories/Create',
+        UpdateUrl: '/Administration/Categories/Update',
+        DeleteUrl: '/Administration/Categories/Delete',
+        Columns: [
+            { Name: 'Id', Label: '№', Type: 'number', Width: 70 },
+            { Name: 'Name', Label: 'Имя', Type: 'text', Width: 130, Editable: true, MaxLength: 256 },
+            { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
+            {
+                Name: 'StoreName', Label: 'Название магазина', Type: 'autocomplete', Editable: true, Width: 125,
+                AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
+                Formatter: storeLinkFormatter, Unformatter: storeLinkUnFormatter
+            },
+            { Name: 'IsDeleted', Label: 'Удален', Type: 'checkbox', Width: 70, Editable: true, Sortable: false },
+            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 120 },
+            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Hidden: true, EditHidden: true }
+        ],
+        OnSelectRow: id => {
+            ui.productCategoryTable.jqGrid('setGridParam', { postData: { StoreId: id } }).trigger('reloadGrid');
+        }
+    });
+}
 
 function storeLinkFormatter(value, options, data) {
     return `<a href="/Administration/Stores?Id=${data.StoreId}">${data.StoreName}</a>`;

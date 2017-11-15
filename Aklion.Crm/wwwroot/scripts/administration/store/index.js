@@ -5,6 +5,10 @@ const ui = {
 }
 
 $(document).ready(() => {
+    $('.tab-button').first().click();
+});
+
+function initStoresTable() {
     createTable({
         Title: 'Магазины',
         Element: '#store-table',
@@ -38,7 +42,7 @@ $(document).ready(() => {
             { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Hidden: true, EditHidden: true }
         ]
     });
-});
+}
 
 function userLinkFormatter(value, options, data) {
     return `<a href="/Administration/Users?Id=${data.CreateUserId}">${data.CreateUserLogin}</a>`;

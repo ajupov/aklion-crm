@@ -21,14 +21,6 @@ namespace Aklion.Crm.Controllers.Administration
         }
 
         [HttpGet]
-        [Route("")]
-        [Route("Index")]
-        public IActionResult Index()
-        {
-            return View("~/Views/Administration/Post/Index.cshtml");
-        }
-
-        [HttpGet]
         [Route("GetList")]
         public async Task<PagingModel<PostModel>> GetList(PostParameterModel model)
         {

@@ -2,26 +2,17 @@
     ViewBag.Title = "Магазины";
 }
 
-<div class="row">
-    <div class="col s12 m12 l12">
-        <div class="horisontal-scrollable pading-10">
-            <table id="store-table"></table>
-            <div id="store-table-pagination"></div>
-        </div>
-    </div>
+<div class="row card">
+    <button class="tab-button" onclick="openTab(this, 'stores-tab'); initStoresTable();">Магазины</button>
 </div>
 
-<div class="row">
-    <div class="col s12 m12 l5">
-        <div class="horisontal-scrollable pading-10">
-            <table id="post-table"></table>
-            <div id="post-table-pagination"></div>
-        </div>
-    </div>
-    <div class="col s12 m12 l7">
-        <div class="horisontal-scrollable pading-10">
-            <table id="user-post-table"></table>
-            <div id="user-post-table-pagination"></div>
+<div id="stores-tab" class="hidden tab card">
+    <div class="row">
+        <div class="col s12 m12 l12">
+            <div class="horisontal-scrollable pading-10">
+                <table id="store-table"></table>
+                <div id="store-table-pagination"></div>
+            </div>
         </div>
     </div>
 </div>

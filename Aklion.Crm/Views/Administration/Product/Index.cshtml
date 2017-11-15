@@ -2,11 +2,25 @@
     ViewBag.Title = "Продукты";
 }
 
-<div class="row">
+<div class="row card">
+    <button class="tab-button" onclick="openTab(this, 'products-tab'); initProductsTable();">Продукты</button>
+    <button class="tab-button" onclick="openTab(this, 'categories-tab'); initCategoriesTable();">Категории</button>
+</div>
+
+<div id="products-tab" class="hidden tab card">
     <div class="col s12 m12 l12">
         <div class="horisontal-scrollable pading-10">
             <table id="product-table"></table>
             <div id="product-table-pagination"></div>
+        </div>
+    </div>
+</div>
+
+<div id="categories-tab" class="hidden tab card">
+    <div class="col s12 m12 l12">
+        <div class="horisontal-scrollable pading-10">
+            <table id="category-table"></table>
+            <div id="category-table-pagination"></div>
         </div>
     </div>
 </div>
