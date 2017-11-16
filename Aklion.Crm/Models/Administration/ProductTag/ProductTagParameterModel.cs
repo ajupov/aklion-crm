@@ -1,6 +1,6 @@
-﻿namespace Aklion.Crm.Models.Administration.ProductCategory
+﻿namespace Aklion.Crm.Models.Administration.ProductTag
 {
-    public class ProductCategoryParameterModel : ParameterModel
+    public class ProductTagParameterModel : ParameterModel
     {
         public int? Id { get; set; }
 
@@ -12,9 +12,9 @@
 
         public string ProductName { get; set; }
 
-        public int? CategoryId { get; set; }
+        public int? TagId { get; set; }
 
-        public string CategoryName { get; set; }
+        public string TagName { get; set; }
 
         public bool? IsDeleted { get; set; }
 

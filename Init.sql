@@ -171,7 +171,7 @@ create table dbo.ProductAttribute
 );
 go
 
--- Тэг
+-- Тег
 create table dbo.Tag
 (
     Id         int          not null identity(1, 1) constraint PK_Tag_Id primary key,
@@ -184,7 +184,7 @@ create table dbo.Tag
 );
 go
 
--- Тэг продукта
+-- Тег продукта
 create table dbo.ProductTag
 (
     Id         int          not null identity(1, 1) constraint PK_ProductTag_Id primary key,

@@ -44,10 +44,10 @@ namespace Aklion.Crm.Enums
         [Display(Name = "Управление атрибутами продукта")]
         ProductAttributeManagement = 11,
 
-        [Display(Name = "Управление тэгами")]
+        [Display(Name = "Управление тегами")]
         TagManagement = 12,
 
-        [Display(Name = "Управление тэгами продукта")]
+        [Display(Name = "Управление тегами продукта")]
         ProductTagManagement = 13,
 
         //Менеджер по клиентам

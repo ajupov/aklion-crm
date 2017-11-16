@@ -65,9 +65,9 @@ function generateApiSecret(event, id) {
 
     postText('/Administration/Stores/GenerateApiSecret', { id: id }, result => {
         if (result !== null && result !== undefined && result.length > 0) {
-            const formField = $('#ViewGrid_stores-table td#v_ApiSecret span');
+            const formField = $('#ViewGrid_store-table td#v_ApiSecret span');
             formField.html(result);
-            ui.storesTable.trigger('reloadGrid');
+            ui.storeTable.trigger('reloadGrid');
         }
     });
 }

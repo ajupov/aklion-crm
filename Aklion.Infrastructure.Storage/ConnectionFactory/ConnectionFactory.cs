@@ -6,16 +6,16 @@ namespace Aklion.Infrastructure.Storage.ConnectionFactory
 {
     public sealed class ConnectionFactory : IConnectionFactory
     {
-        private readonly string _msSqlServerConnectionString;
+        private readonly string _connectionString;
 
         public ConnectionFactory(IConfiguration configuration)
         {
-            _msSqlServerConnectionString = configuration.GetConnectionString("ConnectionString");
+            _connectionString = configuration.GetConnectionString("ConnectionString");
         }
 
         public IDbConnection GetConnection()
         {
-            return new SqlConnection(_msSqlServerConnectionString);
+            return new SqlConnection(_connectionString);
         }
     }
 }

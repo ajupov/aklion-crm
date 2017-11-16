@@ -128,7 +128,7 @@ button.tab-button {
     color: #2a5885;
     background: transparent;
     cursor: pointer;
-    padding: 10px;
+    padding: 5px;
     border: none;
     border-bottom: 2px solid transparent;
 }
@@ -441,4 +441,8 @@ button.cell-button {
     .col.l12 {
         width: 100%;
     }
+}
+
+td[id$="table-pagination_center"] {
+    width: auto !important;
 }
