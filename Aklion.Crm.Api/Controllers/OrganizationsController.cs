@@ -18,7 +18,7 @@
 //        }
         
 //        [HttpGet]
-//        public async Task<List<Organization>> Get(int page, int size)
+//        public async Task<List<Organization>> GetByLogin(int page, int size)
 //        {
 //            if (page < 0 || size < 0)
 //            {
@@ -30,14 +30,14 @@
 //        }
         
 //        [HttpGet("{id}")]
-//        public async Task<Organization> Get(int id)
+//        public async Task<Organization> GetByLogin(int id)
 //        {
 //            if (id <= 0)
 //            {
 //                return null;
 //            }
 
-//            var result = await _organizationDao.Get(id).ConfigureAwait(false);
+//            var result = await _organizationDao.GetByLogin(id).ConfigureAwait(false);
 //            return result.Map();
 //        }
         

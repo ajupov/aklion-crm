@@ -1,4 +1,10 @@
-﻿using Aklion.Crm.Business.Permission;
+﻿using Aklion.Crm.Business.ImageLoad;
+using Aklion.Crm.Business.Mail;
+using Aklion.Crm.Business.Mail.Models;
+using Aklion.Crm.Business.Permission;
+using Aklion.Crm.Business.Sms;
+using Aklion.Crm.Business.Sms.Models;
+using Aklion.Crm.Business.UserToken;
 using Aklion.Crm.Dao.Attribute;
 using Aklion.Crm.Dao.Category;
 using Aklion.Crm.Dao.Post;
@@ -12,10 +18,16 @@ using Aklion.Crm.Dao.User;
 using Aklion.Crm.Dao.UserPermission;
 using Aklion.Crm.Dao.UserPost;
 using Aklion.Crm.Dao.UserToken;
+using Aklion.Crm.Filters;
+using Aklion.Crm.Models;
 using Aklion.Infrastructure.Storage.ConnectionFactory;
 using Aklion.Infrastructure.Storage.DataBaseExecutor;
+using Aklion.Infrastructure.Utils.Logger;
+using Aklion.Infrastructure.Utils.UserContext;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
@@ -42,6 +54,7 @@ namespace Aklion.Crm
             services.AddSingleton(Configuration)
                 .AddSingleton<IConnectionFactory, ConnectionFactory>()
                 .AddSingleton<IDataBaseExecutor, DataBaseExecutor>()
+                .AddSingleton<ILogger, Logger>()
                 .AddSingleton<IPermissionService, PermissionService>()
                 .AddSingleton<IUserDao, UserDao>()
                 .AddSingleton<IStoreDao, StoreDao>()
@@ -56,7 +69,25 @@ namespace Aklion.Crm
                 .AddSingleton<IProductCategoryDao, ProductCategoryDao>()
                 .AddSingleton<IProductAttributeDao, ProductAttributeDao>()
                 .AddSingleton<IProductTagDao, ProductTagDao>()
-                .AddMvc()
+                .AddSingleton<IMailService, MailService>()
+                .AddSingleton<ISmsService, SmsService>()
+                .AddSingleton<IImageLoadService, ImageLoadService>()
+                .AddSingleton<IUserTokenService, UserTokenService>()
+                .AddScoped<IUserContext, UserContext>()
+
+                .Configure<MailServiceConfiguration>(Configuration.GetSection("MailServiceConfiguration"))
+                .Configure<SmsServiceConfiguration>(Configuration.GetSection("SmsServiceConfiguration"));
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(o => 
+                {
+                    o.LoginPath = new PathString("/Account/Login");
+                });
+
+            services.AddMvc(o =>
+                {
+                    o.Filters.Add(typeof(UserContextInitializeFilter));
+                })
                 .AddJsonOptions(o =>
                 {
                     o.SerializerSettings.ContractResolver = new DefaultContractResolver
@@ -78,6 +109,7 @@ namespace Aklion.Crm
             }
 
             app.UseStaticFiles();
+            app.UseAuthentication();
 
             app.UseMvc(r => r.MapRoute("default", "{controller=Home}/{action=Index}/{id?}"));
         }

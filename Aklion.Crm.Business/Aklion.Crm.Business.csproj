@@ -5,6 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MailKit" Version="1.20.0" />
+    <PackageReference Include="MainSMS" Version="1.4.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.0.0" />
+    <PackageReference Include="MimeKit" Version="1.20.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Aklion.Crm.Dao\Aklion.Crm.Dao.csproj" />
+    <ProjectReference Include="..\Aklion.Crm.Domain\Aklion.Crm.Domain.csproj" />
     <ProjectReference Include="..\Aklion.Crm.Enums\Aklion.Crm.Enums.csproj" />
     <ProjectReference Include="..\Aklion.Infrastructure.Utils\Aklion.Infrastructure.Utils.csproj" />
   </ItemGroup>

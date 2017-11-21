@@ -5,7 +5,9 @@
     "jQuery": "3.2.1",
     "font-awesome": "Font-Awesome#v4.7.0",
     "inputmask": "3.3.10",
-    "jqGrid": "v5.2.1"
+    "jqGrid": "v5.2.1",
+    "jquery-validation": "1.16.0",
+    "jquery-validation-unobtrusive": "v3.2.6"
   },
   "resolutions": {
     "inputmask": "3.3.10"

@@ -1,0 +1,27 @@
+﻿@using GameSite.Models.View.AccountViewModels
+@model VerifySmsCodeViewModel
+@{
+    ViewData["Title"] = "Подтверждение номера телефона";
+}
+
+<div class="row">
+    <div class="col s12">
+        <div class="card">
+            <h5>@ViewData["Title"]</h5>
+            <form asp-controller="Account" asp-action="VerifySmsCode" method="post">
+                <div class="input-field">
+                    <input asp-for="Code"/>
+                    <label asp-for="Code" class="validate"></label>
+                    <span asp-validation-for="Code" class="error-text"></span>
+                </div>
+                <div class="input-field">
+                    <button type="submit" class="btn">Подтвердить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial").ConfigureAwait(false); }
+}

@@ -14,6 +14,16 @@ namespace Aklion.Crm.Dao.User
 
         Task<UserModel> Get(int id);
 
+        Task<UserModel> GetByLogin(string login);
+
+        Task<UserModel> GetByEmail(string email);
+
+        Task<bool> IsExistByLogin(string login);
+
+        Task<bool> IsExistByEmail(string email);
+
+        Task<bool> IsExistByPhone(string email);
+
         Task<int> Create(UserModel model);
 
         Task Update(UserModel model);

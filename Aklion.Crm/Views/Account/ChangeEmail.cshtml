@@ -1,0 +1,22 @@
+﻿@model Aklion.Crm.Models.Account.ChangeEmailModel
+@{
+    ViewData["Title"] = "Изменение Email";
+}
+
+<div class="row">
+    <div class="col s12">
+        <div class="card">
+            <h5>@ViewData["Title"]</h5>
+            <form asp-controller="Account" asp-action="ChangeEmail" method="post">
+                <div class="input-field">
+                    <input asp-for="Email"/>
+                    <label asp-for="Email" class="validate"></label>
+                    <span asp-validation-for="Email" class="error-text"></span>
+                </div>
+                <div class="input-field">
+                    <button type="submit" class="btn">Изменить Email</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

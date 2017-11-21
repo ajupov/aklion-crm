@@ -1,0 +1,85 @@
+﻿@using GameSite.Enums.GamerAndServer
+@using GameSite.Enums.Gamer
+@model GameSite.Models.View.AccountViewModels.ChangePersonalInfoViewModel
+@{
+    ViewData["Title"] = "Изменение данных аккаунта";
+}
+@section Styles {
+    @{
+        await Html.RenderPartialAsync("_DatePickerStylesPartial").ConfigureAwait(false);
+    }
+}
+
+<div class="row">
+    <div class="col s12">
+        <div class="card">
+            <h5>@ViewData["Title"]</h5>
+            <form asp-controller="Account" asp-action="ChangePersonalInfo" method="post">
+                <div class="input-field">
+                    <input asp-for="Nik" />
+                    <label asp-for="Nik" class="validate"></label>
+                    <span asp-validation-for="Nik" class="error-text"></span>
+                </div>
+                <div class="input-field">
+                    <input asp-for="Name" />
+                    <label asp-for="Name" class="validate"></label>
+                    <span asp-validation-for="Name" class="error-text"></span>
+                </div>
+                <div class="input-field">
+                    <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Gender>()"></select>
+                    <label asp-for="Gender"></label>
+                </div>
+                <div class="input-field">
+                    <input asp-for="BirthDateString" class="datepicker" />
+                    <label asp-for="BirthDateString" class="active"></label>
+                    <span asp-validation-for="BirthDateString" class="error-text"></span>
+                </div>
+                <div class="input-field">
+                    <input asp-for="CityId" type="hidden">
+                    <input type="text" name="CityName" data-activates="CityName" data-beloworigin="true" id="CityNameText" value="@Model.CityName">
+                    <ul id="CityName" class="dropdown-content"></ul>
+                    <label asp-for="CityId" for="CityNameText"></label>
+                    <span asp-validation-for="CityId" class="error-text"></span>
+                </div>
+                <div class="input-field">
+                    <select asp-for="Chronicle" asp-items="Html.GetEnumSelectList<Chronicle>()"></select>
+                    <label asp-for="Chronicle"></label>
+                </div>
+                <div class="input-field">
+                    <select asp-for="Reith" asp-items="Html.GetEnumSelectList<Reith>()"></select>
+                    <label asp-for="Reith"></label>
+                </div>
+                <div class="input-field">
+                    <select asp-for="Style" asp-items="Html.GetEnumSelectList<Style>()"></select>
+                    <label asp-for="Style"></label>
+                </div>
+                <div class="input-field">
+                    <select asp-for="GameRole" asp-items="Html.GetEnumSelectList<GameRole>()"></select>
+                    <label asp-for="GameRole"></label>
+                </div>
+                <div class="input-field">
+                    <input asp-for="GameStartHour" min="0" max="23" />
+                    <label asp-for="GameStartHour"></label>
+                    <span asp-validation-for="GameStartHour" class="error-text"></span>
+                </div>
+                <div class="input-field">
+                    <input asp-for="GameEndHour" min="0" max="23" />
+                    <label asp-for="GameEndHour"></label>
+                    <span asp-validation-for="GameEndHour" class="error-text"></span>
+                </div>
+                <div class="input-field">
+                    <button type="submit" class="btn">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_MaterialSelectScriptsPartial").ConfigureAwait(false);
+        await Html.RenderPartialAsync("_ValidationScriptsPartial").ConfigureAwait(false);
+        await Html.RenderPartialAsync("_AutocompleteScriptsPartial").ConfigureAwait(false);
+        await Html.RenderPartialAsync("_DatePickerScriptsPartial").ConfigureAwait(false);
+    }
+}

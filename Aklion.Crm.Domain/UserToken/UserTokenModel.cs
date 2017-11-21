@@ -7,7 +7,7 @@ namespace Aklion.Crm.Domain.UserToken
     {
         public int Id { get; set; }
 
-        public int IdentityId { get; set; }
+        public int UserId { get; set; }
 
         public TokenType TokenType { get; set; }
 

@@ -24,9 +24,9 @@ namespace Aklion.Crm.Controllers
 
       //  public async Task<IActionResult> GetList()
        // {
-            //var result1 = await _apiClient.Get<List<OrganizationModel>>("organizations").ConfigureAwait(false);
+            //var result1 = await _apiClient.GetByLogin<List<OrganizationModel>>("organizations").ConfigureAwait(false);
 
-            //var result2 = await _apiClient.Get<OrganizationModel>("organizations", new {id = 5}).ConfigureAwait(false);
+            //var result2 = await _apiClient.GetByLogin<OrganizationModel>("organizations", new {id = 5}).ConfigureAwait(false);
 
             //var model1 = new OrganizationModel
             //{

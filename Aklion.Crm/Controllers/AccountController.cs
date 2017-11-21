@@ -1,822 +1,1020 @@
-﻿//using System;
-//using System.Threading.Tasks;
-//using Aklion.Crm.Attributes;
-//using Aklion.Crm.Enums;
-//using Aklion.Infrastructure.Utils.DateTime;
-//using Aklion.Infrastructure.Utils.Password;
-//using Aklion.Infrastructure.Utils.Token;
-//using Dapper;
-//using Microsoft.AspNetCore.Authorization;
-//using Microsoft.AspNetCore.Http;
-//using Microsoft.AspNetCore.Mvc;
-
-//namespace Aklion.Crm.Controllers
-//{
-//    public class AccountController : BaseController
-//    {
-//        private readonly IMailService _mailService;
-//        private readonly ISmsService _smsService;
-//        private readonly IImageLoadService _imageLoadService;
-//        private readonly IIdentityTokenRepository _identityTokenRepository;
-//        private readonly IAdministratorRepository _administratorRepository;
-//        private readonly IGamerActionRepository _gamerActionRepository;
-
-//        public AccountController(
-//            IIdentityRepository identityRepository,
-//            IIdentityRoleRepository identityRoleRepository,
-//            IAdministratorRepository administratorRepository,
-//            IGamerRepository gamerRepository,
-//            IServerRepository serverRepository,
-//            IMailService mailService,
-//            ISmsService smsService,
-//            IImageLoadService imageLoadService,
-//            IIdentityTokenRepository identityTokenRepository,
-//            IGamerActionRepository gamerActionRepository,
-//            IContextRepository contextRepository)
-//            : base(
-//                identityRepository,
-//                identityRoleRepository,
-//                administratorRepository,
-//                gamerRepository,
-//                serverRepository,
-//                contextRepository)
-//        {
-//            _mailService = mailService;
-//            _smsService = smsService;
-//            _imageLoadService = imageLoadService;
-//            _identityTokenRepository = identityTokenRepository;
-//            _gamerActionRepository = gamerActionRepository;
-//            _administratorRepository = administratorRepository;
-//        }
-
-//        [Auth]
-//        [HttpGet]
-//        public IActionResult Index()
-//        {
-//            return View(CurrentGamer);
-//        }
-
-//        [HttpGet]
-//        [AllowAnonymous]
-//        public IActionResult Login(string returnUrl = null)
-//        {
-//            ViewData["ReturnUrl"] = returnUrl;
-
-//            if (ViewBag.IsAuthenticated)
-//            {
-//                return RedirectToLocal(returnUrl);
-//            }
-
-//            return View();
-//        }
-
-//        [HttpPost]
-//        [AllowAnonymous]
-//        [ValidateAntiForgeryToken]
-//        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
-//        {
-//            ViewData["ReturnUrl"] = returnUrl;
-
-//            if (!ModelState.IsValid)
-//                return View(model);
-
-//            var identity = await IdentityRepository.SelectByLoginAsync(model.Login).ConfigureAwait(false);
-//            if (identity == null)
-//            {
-//                ModelState.AddModelError(string.Empty, "Неправильный логин или пароль");
-//                return View(model);
-//            }
-
-//            if (!PasswordHelper.Verify(model.Password, identity.PasswordHash))
-//            {
-//                ModelState.AddModelError(string.Empty, "Неправильный логин или пароль");
-//                return View(model);
-//            }
-
-//            await SignInAsync(identity, model.RememberMe).ConfigureAwait(false);
-
-//            if (CurrentGamer != null)
-//            {
-//                var gamerAction = new GamerAction
-//                {
-//                    GamerId = CurrentGamer.Id,
-//                    ActionType = GamerActionType.LogIn
-//                };
-
-//                _gamerActionRepository.InsertAsync(gamerAction);
-//            }
-
-//            return RedirectToLocal(returnUrl);
-//        }
-
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        [Authorize(Roles = RoleExtension.All)]
-//        public async Task<IActionResult> LogOff()
-//        {
-//            if (CurrentGamer != null)
-//            {
-//                var gamerAction = new GamerAction
-//                {
-//                    GamerId = CurrentGamer.Id,
-//                    ActionType = GamerActionType.LogOff
-//                };
-
-//                _gamerActionRepository.InsertAsync(gamerAction);
-//            }
-//            await SignOutAsync().ConfigureAwait(false);
-
-//            return RedirectToAction("Index", "Home");
-//        }
-
-//        [HttpGet]
-//        [AllowAnonymous]
-//        public IActionResult Register(string returnUrl = null)
-//        {
-//            ViewData["ReturnUrl"] = returnUrl;
-
-//            var model = new RegisterViewModel
-//            {
-//                Gender = Gender.Male,
-//                BirthDateString = GetDefaultRegistrationBirthDateString()
-//            };
-
-//            return View(model);
-//        }
-
-//        [HttpPost]
-//        [AllowAnonymous]
-//        [ValidateAntiForgeryToken]
-//        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
-//        {
-//            ViewData["ReturnUrl"] = returnUrl;
-
-//            if (!ModelState.IsValid)
-//                return View(model);
-
-//            if (model.GameStartHour >= model.GameEndHour)
-//            {
-//                ModelState.AddModelError("GameStartHour", "Время игры указано неверно");
-//                ModelState.AddModelError("GameEndHour", "Время игры указано неверно");
-//                return View(model);
-//            }
-
-//            var isExistByLogin = await IdentityRepository.IsExistByLoginAsync(model.Login).ConfigureAwait(false);
-//            if (isExistByLogin)
-//            {
-//                ModelState.AddModelError("Login", "Логин уже занят");
-//                return View(model);
-//            }
-
-//            var isExistByNik = await GamerRepository.IsExistByNikAsync(model.Nik).ConfigureAwait(false);
-//            if (isExistByNik)
-//            {
-//                ModelState.AddModelError("Nik", "Ник уже занят");
-//                return View(model);
-//            }
-
-//            var isExistByEmail = await GamerRepository.IsExistByEmailAsync(model.Email).ConfigureAwait(false) ||
-//                                 await _administratorRepository.IsExistByEmailAsync(model.Email).ConfigureAwait(false);
-//            if (isExistByEmail)
-//            {
-//                ModelState.AddModelError("Email", "Email уже занят");
-//                return View(model);
-//            }
-
-//            var isExistByPhone = await GamerRepository.IsExistByPhoneAsync(model.Phone).ConfigureAwait(false) ||
-//                                 await _administratorRepository.IsExistByPhoneAsync(model.Phone).ConfigureAwait(false);
-//            if (isExistByPhone)
-//            {
-//                ModelState.AddModelError("Phone", "Телефон уже занят");
-//                return View(model);
-//            }
-
-//            var identity = new SqlMapper.Identity
-//            {
-//                Login = model.Login,
-//                PasswordHash = PasswordHelper.GenerateAlphaNumbericString(model.Password)
-//            };
-
-//            await IdentityRepository.InsertAsync(identity).ConfigureAwait(false);
-
-//            var gamer = new Gamer
-//            {
-//                IdentityId = identity.Id,
-//                Nik = model.Nik,
-//                Name = model.Name,
-//                Email = model.Email,
-//                Phone = model.Phone,
-//                Gender = model.Gender,
-//                BirthDate = model.BirthDateString.ToDate(),
-//                CityId = model.CityId,
-//                Chronicle = model.Chronicle,
-//                Reith = model.Reith,
-//                Style = model.Style,
-//                GameRole = model.GameRole,
-//                GameStartHour = model.GameStartHour,
-//                GameEndHour = model.GameEndHour,
-//                Rating = 0,
-//                IsEmailConfirmed = false,
-//                IsPhoneConfirmed = false,
-//                IsDeleted = false,
-//                HasVote = true
-//            };
-
-//            await GamerRepository.InsertAsync(gamer).ConfigureAwait(false);
-
-//            var identityRole = new IdentityRole
-//            {
-//                IdentityId = identity.Id,
-//                Role = Role.Gamer
-//            };
-
-//            await IdentityRoleRepository.InsertAsync(identityRole).ConfigureAwait(false);
-
-//            var token = await CreateIdentityTokenForEmailConfirmation(identity.Id).ConfigureAwait(false);
-
-//            var emailConfirmUrl = CreateEmailConfirmUrl(token);
-
-//            await SendConfirmationEmailUrlAsync(gamer.Email, emailConfirmUrl).ConfigureAwait(false);
-
-//            await SignInAsync(identity, true).ConfigureAwait(false);
-
-//            var gamerAction = new GamerAction
-//            {
-//                GamerId = CurrentGamer.Id,
-//                ActionType = GamerActionType.Register
-//            };
-
-//            _gamerActionRepository.InsertAsync(gamerAction);
-
-//            return RedirectToAction("Index", "Home",
-//                new {message = "На Вашу электронную почту отправлено письмо с подтверждением"});
-//        }
-
-//        [HttpGet]
-//        [Authorize(Roles = RoleExtension.GamerName)]
-//        public async Task<IActionResult> SendConfirmEmail()
-//        {
-//            var token = await CreateIdentityTokenForEmailConfirmation(CurrentIdentity.Id).ConfigureAwait(false);
-
-//            var emailConfirmUrl = CreateEmailConfirmUrl(token);
-
-//            await SendConfirmationEmailUrlAsync(CurrentGamer.Email, emailConfirmUrl).ConfigureAwait(false);
-
-//            return RedirectToAction("Index",
-//                new {message = "На Вашу электронную почту отправлено письмо с подтверждением"});
-//        }
-
-//        [HttpGet]
-//        [Authorize(Roles = RoleExtension.GamerName)]
-//        public async Task<IActionResult> SendSmsCode()
-//        {
-//            var token = await CreateIdentityTokenForPhoneConfirmation(CurrentIdentity.Id).ConfigureAwait(false);
-
-//            var phoneConfirmCode = CreatePhoneConfirmCode(token);
-
-//            await SendConfirmationSmsCode(CurrentGamer.Phone, phoneConfirmCode).ConfigureAwait(false);
-
-//            return RedirectToAction("VerifySmsCode",
-//                new {message = "На Ваш номер телефона отправлен SMS с кодом подтверждения"});
-//        }
-
-//        [HttpGet]
-//        [AllowAnonymous]
-//        public async Task<IActionResult> ConfirmEmail(int identityId, string code)
-//        {
-//            if (identityId == 0 || string.IsNullOrEmpty(code))
-//                return View("Error");
-
-//            var identity = await IdentityRepository.SelectAsync(identityId).ConfigureAwait(false);
-//            if (identity == null)
-//                return View("Error");
-
-//            var identityToken = await _identityTokenRepository.SelectAsync(identityId, code,
-//                TokenType.EmailConfirmation).ConfigureAwait(false);
-//            if (identityToken == null)
-//                return View("Error");
-
-//            if (identityToken.ExpirationDate < DateTime.Now || identityToken.IsUsed)
-//                return View("Error");
-
-//            await _identityTokenRepository.SetUsedAsync(identityToken.Id).ConfigureAwait(false);
-
-//            var gamer = await GamerRepository.SelectByIdentityIdAsync(identityId).ConfigureAwait(false);
-
-//            gamer.IsEmailConfirmed = true;
-
-//            await GamerRepository.UpdateAsync(gamer).ConfigureAwait(false);
-
-//            var gamerAction = new GamerAction
-//            {
-//                GamerId = CurrentGamer.Id,
-//                ActionType = GamerActionType.ConfirmEmail
-//            };
-
-//            _gamerActionRepository.InsertAsync(gamerAction);
-
-//            return RedirectToAction("Index", "Home", new {message = "Ваш Email подтвержден"});
-//        }
-
-//        [HttpGet]
-//        [Authorize(Roles = RoleExtension.GamerName)]
-//        public IActionResult ChangePassword()
-//        {
-//            return View();
-//        }
-
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        [Authorize(Roles = RoleExtension.GamerName)]
-//        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
-//        {
-//            if (!ModelState.IsValid)
-//                return View(model);
-
-//            var isOldPasswordVerified = PasswordHelper.Verify(model.OldPassword, CurrentIdentity.PasswordHash);
-//            if (!isOldPasswordVerified)
-//            {
-//                ModelState.AddModelError("OldPassword", "Старый пароль введен неверно");
-//                return View(model);
-//            }
-
-//            CurrentIdentity.PasswordHash = PasswordHelper.GenerateAlphaNumbericString(model.Password);
-//            await IdentityRepository.UpdateAsync(CurrentIdentity).ConfigureAwait(false);
-
-//            await SignInAsync().ConfigureAwait(false);
-
-//            var gamerAction = new GamerAction
-//            {
-//                GamerId = CurrentGamer.Id,
-//                ActionType = GamerActionType.ChangePassword
-//            };
-
-//            _gamerActionRepository.InsertAsync(gamerAction);
-
-//            return RedirectToAction("Index", new {message = "Ваш пароль успешно изменен"});
-//        }
-
-//        [HttpGet]
-//        [Authorize(Roles = RoleExtension.GamerName)]
-//        public IActionResult ChangeEmail()
-//        {
-//            return View();
-//        }
-
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        [Authorize(Roles = RoleExtension.GamerName)]
-//        public async Task<IActionResult> ChangeEmail(ChangeEmailViewModel model)
-//        {
-//            if (!ModelState.IsValid)
-//                return View(model);
-
-//            var isExistByEmail = await GamerRepository.IsExistByEmailAsync(model.Email).ConfigureAwait(false);
-//            if (isExistByEmail)
-//            {
-//                ModelState.AddModelError("Email", "Email уже занят");
-//                return View(model);
-//            }
-
-//            CurrentGamer.Email = model.Email;
-//            CurrentGamer.IsEmailConfirmed = false;
-
-//            await GamerRepository.UpdateAsync(CurrentGamer).ConfigureAwait(false);
-
-//            var token = await CreateIdentityTokenForEmailConfirmation(CurrentIdentity.Id).ConfigureAwait(false);
-
-//            var emailConfirmUrl = CreateEmailConfirmUrl(token);
-
-//            await SendConfirmationEmailUrlAsync(CurrentGamer.Email, emailConfirmUrl).ConfigureAwait(false);
-
-//            var gamerAction = new GamerAction
-//            {
-//                GamerId = CurrentGamer.Id,
-//                ActionType = GamerActionType.ChangeEmail
-//            };
-
-//            _gamerActionRepository.InsertAsync(gamerAction);
-
-//            return RedirectToAction("Index",
-//                new
-//                {
-//                    message = "Ваш Email успешно изменен. На Вашу электронную почту отправлено письмо с подтверждением"
-//                });
-//        }
-
-//        [HttpGet]
-//        [Authorize(Roles = RoleExtension.GamerName)]
-//        public IActionResult ChangePhone()
-//        {
-//            return View();
-//        }
-
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        [Authorize(Roles = RoleExtension.GamerName)]
-//        public async Task<IActionResult> ChangePhone(ChangePhoneViewModel model)
-//        {
-//            if (!ModelState.IsValid)
-//                return View(model);
-
-//            var isExistByPhone = await GamerRepository.IsExistByPhoneAsync(model.Phone).ConfigureAwait(false);
-//            if (isExistByPhone)
-//            {
-//                ModelState.AddModelError("Phone", "Номер телефона уже занят");
-//                return View(model);
-//            }
-
-//            CurrentGamer.Phone = model.Phone;
-//            CurrentGamer.IsPhoneConfirmed = false;
-
-//            await GamerRepository.UpdateAsync(CurrentGamer).ConfigureAwait(false);
-
-//            var token = await CreateIdentityTokenForPhoneConfirmation(CurrentIdentity.Id).ConfigureAwait(false);
-
-//            var phoneConfirmCode = CreatePhoneConfirmCode(token);
-
-//            await SendConfirmationSmsCode(CurrentGamer.Phone, phoneConfirmCode).ConfigureAwait(false);
-
-//            var gamerAction = new GamerAction
-//            {
-//                GamerId = CurrentGamer.Id,
-//                ActionType = GamerActionType.ChangePhone
-//            };
-
-//            _gamerActionRepository.InsertAsync(gamerAction);
-
-//            return RedirectToAction("VerifySmsCode",
-//                new
-//                {
-//                    message =
-//                    "Ваш номер телефона успешно изменен. На Ваш номер телефона отправлен SMS с кодом подтверждения"
-//                });
-//        }
-
-//        [HttpGet]
-//        [Authorize(Roles = RoleExtension.GamerName)]
-//        public IActionResult VerifySmsCode(string message = null)
-//        {
-//            ViewData["StatusMessage"] = message;
-
-//            return View();
-//        }
-
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        [Authorize(Roles = RoleExtension.GamerName)]
-//        public async Task<IActionResult> VerifySmsCode(VerifySmsCodeViewModel model)
-//        {
-//            if (!ModelState.IsValid)
-//                return View(model);
-
-//            var identityToken = await _identityTokenRepository.SelectAsync(
-//                CurrentIdentity.Id, model.Code,
-//                TokenType.PhoneConfirmation).ConfigureAwait(false);
-//            if (identityToken == null)
-//                return View("Error");
-
-//            if (identityToken.ExpirationDate < DateTime.Now || identityToken.IsUsed)
-//                return View("Error");
-
-//            await _identityTokenRepository.SetUsedAsync(identityToken.Id).ConfigureAwait(false);
-
-//            CurrentGamer.IsPhoneConfirmed = true;
-
-//            await GamerRepository.UpdateAsync(CurrentGamer).ConfigureAwait(false);
-
-//            var gamerAction = new GamerAction
-//            {
-//                GamerId = CurrentGamer.Id,
-//                ActionType = GamerActionType.ConfirmPhone
-//            };
-
-//            _gamerActionRepository.InsertAsync(gamerAction);
-
-//            return RedirectToAction("Index", new {message = "Ваш номер телефона подтвержден"});
-//        }
-
-//        [HttpGet]
-//        [Authorize(Roles = RoleExtension.GamerName)]
-//        public IActionResult ChangePersonalInfo()
-//        {
-//            var model = new ChangePersonalInfoViewModel
-//            {
-//                Nik = CurrentGamer.Nik,
-//                Name = CurrentGamer.Name,
-//                Gender = CurrentGamer.Gender,
-//                BirthDateString = CurrentGamer.BirthDate?.ToDateString(),
-//                CityId = CurrentGamer.CityId,
-//                CityName = CurrentGamer.CityName,
-//                Chronicle = CurrentGamer.Chronicle,
-//                Reith = CurrentGamer.Reith,
-//                Style = CurrentGamer.Style,
-//                GameRole = CurrentGamer.GameRole,
-//                GameStartHour = CurrentGamer.GameStartHour ?? 0,
-//                GameEndHour = CurrentGamer.GameEndHour ?? 0
-//            };
-
-//            return View(model);
-//        }
-
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        [Authorize(Roles = RoleExtension.GamerName)]
-//        public async Task<IActionResult> ChangePersonalInfo(ChangePersonalInfoViewModel model)
-//        {
-//            if (!ModelState.IsValid)
-//                return View(model);
-
-//            if (model.GameStartHour >= model.GameEndHour)
-//            {
-//                ModelState.AddModelError("GameStartHour", "Время игры указано неверно");
-//                ModelState.AddModelError("GameEndHour", "Время игры указано неверно");
-//                return View(model);
-//            }
-
-//            var isExistByNik = CurrentGamer.Nik != model.Nik &&
-//                               await GamerRepository.IsExistByNikAsync(model.Nik).ConfigureAwait(false);
-//            if (isExistByNik)
-//            {
-//                ModelState.AddModelError("Nik", "Ник уже занят");
-//                return View(model);
-//            }
-
-//            CurrentGamer.Nik = model.Nik;
-//            CurrentGamer.Name = model.Name;
-//            CurrentGamer.Gender = model.Gender;
-//            CurrentGamer.BirthDate = model.BirthDateString.ToDate();
-//            CurrentGamer.CityId = model.CityId;
-//            CurrentGamer.Chronicle = model.Chronicle;
-//            CurrentGamer.Reith = model.Reith;
-//            CurrentGamer.Style = model.Style;
-//            CurrentGamer.GameRole = model.GameRole;
-//            CurrentGamer.GameStartHour = model.GameStartHour;
-//            CurrentGamer.GameEndHour = model.GameEndHour;
-
-//            await GamerRepository.UpdateAsync(CurrentGamer).ConfigureAwait(false);
-
-//            var gamerAction = new GamerAction
-//            {
-//                GamerId = CurrentGamer.Id,
-//                ActionType = GamerActionType.ChangePersonalInfo
-//            };
-
-//            _gamerActionRepository.InsertAsync(gamerAction);
-
-//            return RedirectToAction("Index", new {message = "Ваши изменения сохранены"});
-//        }
-
-//        [HttpGet]
-//        [AllowAnonymous]
-//        public IActionResult ForgotPassword()
-//        {
-//            return View();
-//        }
-
-//        [HttpPost]
-//        [AllowAnonymous]
-//        [ValidateAntiForgeryToken]
-//        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
-//        {
-//            if (!ModelState.IsValid)
-//                return View(model);
-
-//            var gamer = await GamerRepository.SelectByEmailAsync(model.Email).ConfigureAwait(false);
-//            if (gamer == null)
-//            {
-//                ModelState.AddModelError("Email", "Пользователь с указанным Email не найден");
-//                return View(model);
-//            }
-
-//            var token = await CreateIdentityTokenForPasswordReset(gamer.IdentityId).ConfigureAwait(false);
-
-//            var passwordResetUrl = CreatePasswordResetUrl(token);
-
-//            await SendPasswordResetUrlAsync(gamer.Email, passwordResetUrl).ConfigureAwait(false);
-
-//            return RedirectToAction("ForgotPasswordConfirmation",
-//                new {message = "На Вашу электронную почту отправлено письмо со ссылкой на форму сброса пароля"});
-//        }
-
-//        [HttpGet]
-//        [AllowAnonymous]
-//        public IActionResult ForgotPasswordConfirmation()
-//        {
-//            return View();
-//        }
-
-//        [HttpGet]
-//        [AllowAnonymous]
-//        public async Task<IActionResult> ResetPassword(int identityId, string code)
-//        {
-//            if (identityId == 0 || string.IsNullOrEmpty(code))
-//                return View("Error");
-
-//            var identity = await IdentityRepository.SelectAsync(identityId).ConfigureAwait(false);
-//            if (identity == null)
-//                return View("Error");
-
-//            var model = new ResetPasswordViewModel
-//            {
-//                Code = code
-//            };
-
-//            return View(model);
-//        }
-
-//        [HttpPost]
-//        [AllowAnonymous]
-//        [ValidateAntiForgeryToken]
-//        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
-//        {
-//            if (!ModelState.IsValid)
-//                return View(model);
-
-//            var gamer = await GamerRepository.SelectByEmailAsync(model.Email).ConfigureAwait(false);
-//            if (gamer == null)
-//            {
-//                ModelState.AddModelError("Email", "Пользователь с указанным Email не найден");
-//                return View(model);
-//            }
-
-//            var identityToken = await _identityTokenRepository.SelectAsync(
-//                gamer.IdentityId, model.Code,
-//                TokenType.PasswordReset).ConfigureAwait(false);
-//            if (identityToken == null)
-//                return View("Error");
-
-//            if (identityToken.ExpirationDate < DateTime.Now || identityToken.IsUsed)
-//                return View("Error");
-
-//            await _identityTokenRepository.SetUsedAsync(identityToken.Id).ConfigureAwait(false);
-
-//            var identity = await IdentityRepository.SelectAsync(gamer.IdentityId).ConfigureAwait(false);
-
-//            identity.PasswordHash = PasswordHelper.GenerateAlphaNumbericString(model.Password);
-
-//            await IdentityRepository.UpdateAsync(identity).ConfigureAwait(false);
-
-//            var gamerAction = new GamerAction
-//            {
-//                GamerId = CurrentGamer.Id,
-//                ActionType = GamerActionType.ResetPassword
-//            };
-
-//            _gamerActionRepository.InsertAsync(gamerAction);
-
-//            return RedirectToAction("ResetPasswordConfirmation");
-//        }
-
-//        [HttpGet]
-//        [AllowAnonymous]
-//        public IActionResult ResetPasswordConfirmation()
-//        {
-//            return View();
-//        }
-
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        [Authorize(Roles = RoleExtension.GamerName)]
-//        public async Task<IActionResult> LoadAvatar(LoadAvatarViewModel model)
-//        {
-//            if (!model.AvatarFile.IsImage())
-//                return View("Error");
-
-//            CurrentGamer.AvatarUrl = await _imageLoadService.LoadAvatarAsync(model.AvatarFile).ConfigureAwait(false);
-
-//            await GamerRepository.UpdateAsync(CurrentGamer).ConfigureAwait(false);
-
-//            var gamerAction = new GamerAction
-//            {
-//                GamerId = CurrentGamer.Id,
-//                ActionType = GamerActionType.LoadAvatar
-//            };
-
-//            _gamerActionRepository.InsertAsync(gamerAction);
-
-//            return RedirectToAction("Index", "Account");
-//        }
-
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        [Authorize(Roles = RoleExtension.GamerName)]
-//        public async Task<object> LoadBackground(LoadBackgroundViewModel model)
-//        {
-//            if (!model.BackgroundFile.IsImage())
-//                return View("Error");
-
-//            CurrentGamer.BackgroundUrl =
-//                await _imageLoadService.LoadBackgroundAsync(model.BackgroundFile).ConfigureAwait(false);
-
-//            await GamerRepository.UpdateAsync(CurrentGamer).ConfigureAwait(false);
-
-//            var gamerAction = new GamerAction
-//            {
-//                GamerId = CurrentGamer.Id,
-//                ActionType = GamerActionType.LoadBackground
-//            };
-
-//            _gamerActionRepository.InsertAsync(gamerAction);
-
-//            return RedirectToAction("Index", "Account");
-//        }
-
-//        private IActionResult RedirectToLocal(string returnUrl)
-//        {
-//            if (Url.IsLocalUrl(returnUrl))
-//                return Redirect(returnUrl);
-
-//            return RedirectToAction("Index", "Home");
-//        }
-
-//        private async Task<IdentityToken> CreateIdentityTokenForEmailConfirmation(int identityId)
-//        {
-//            var token = new IdentityToken
-//            {
-//                IdentityId = identityId,
-//                TokenType = TokenType.EmailConfirmation,
-//                Token = TokenHelper.GenerateToken(TokenType.EmailConfirmation),
-//                ExpirationDate = TokenHelper.GetExpirationDate(TokenType.EmailConfirmation),
-//                IsUsed = false
-//            };
-
-//            await _identityTokenRepository.InsertAsync(token).ConfigureAwait(false);
-
-//            return token;
-//        }
-
-//        private async Task<IdentityToken> CreateIdentityTokenForPasswordReset(int identityId)
-//        {
-//            var token = new IdentityToken
-//            {
-//                IdentityId = identityId,
-//                TokenType = TokenType.PasswordReset,
-//                Token = TokenHelper.GenerateToken(TokenType.PasswordReset),
-//                ExpirationDate = TokenHelper.GetExpirationDate(TokenType.PasswordReset),
-//                IsUsed = false
-//            };
-
-//            await _identityTokenRepository.InsertAsync(token).ConfigureAwait(false);
-
-//            return token;
-//        }
-
-//        private async Task<IdentityToken> CreateIdentityTokenForPhoneConfirmation(int identityId)
-//        {
-//            var token = new IdentityToken
-//            {
-//                IdentityId = identityId,
-//                TokenType = TokenType.PhoneConfirmation,
-//                Token = TokenHelper.GenerateToken(TokenType.PhoneConfirmation),
-//                ExpirationDate = TokenHelper.GetExpirationDate(TokenType.PhoneConfirmation),
-//                IsUsed = false
-//            };
-
-//            await _identityTokenRepository.InsertAsync(token).ConfigureAwait(false);
-
-//            return token;
-//        }
-
-//        private string CreateEmailConfirmUrl(IdentityToken token)
-//        {
-//            return Url.Action("ConfirmEmail", "Account",
-//                new {identityId = token.IdentityId, code = token.Token}, HttpContext.Request.Scheme);
-//        }
-
-//        private string CreatePasswordResetUrl(IdentityToken token)
-//        {
-//            return Url.Action("ResetPassword", "Account",
-//                new {identityId = token.IdentityId, code = token.Token}, HttpContext.Request.Scheme);
-//        }
-
-//        private static string CreatePhoneConfirmCode(IdentityToken token)
-//        {
-//            return token.Token;
-//        }
-
-//        private async Task SendConfirmationEmailUrlAsync(string email, string emailConfirmUrl)
-//        {
-//            await _mailService.SendAsync("Администрация игрового сайта", email, "Подтверждение почты",
-//                    $"Пожалуйста, подтвердите свою почту, нажав на <a href='{emailConfirmUrl}'>ссылку</a>.")
-//                .ConfigureAwait(false);
-//        }
-
-//        private async Task SendPasswordResetUrlAsync(string email, string passwordResetUrl)
-//        {
-//            await _mailService.SendAsync("Администрация игрового сайта", email, "Сброс пароля",
-//                    $"Для сброса пароля нажмите на <a href='{passwordResetUrl}'>ссылку</a>.")
-//                .ConfigureAwait(false);
-//        }
-
-//        private Task SendConfirmationSmsCode(string phoneNumber, string code)
-//        {
-//            return _smsService.SendAsync(phoneNumber, code);
-//        }
-
-//        public static string GetDefaultRegistrationBirthDateString()
-//        {
-//            return DateTime.Today.AddYears(-18).FirstDayOfYear().ToDateString();
-//        }
-//    }
-//}
+﻿using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Aklion.Crm.Business.ImageLoad;
+using Aklion.Crm.Business.Mail;
+using Aklion.Crm.Business.Sms;
+using Aklion.Crm.Business.UserToken;
+using Aklion.Crm.Dao.User;
+using Aklion.Crm.Domain.User;
+using Aklion.Crm.Enums;
+using Aklion.Crm.Mappers.Account;
+using Aklion.Crm.Models.Account;
+using Aklion.Infrastructure.Utils.DateTime;
+using Aklion.Infrastructure.Utils.File;
+using Aklion.Infrastructure.Utils.Logger;
+using Aklion.Infrastructure.Utils.Password;
+using Aklion.Infrastructure.Utils.UserContext;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Aklion.Crm.Controllers
+{
+    public class AccountController : BaseController
+    {
+        private readonly ILogger _logger;
+        private readonly IMailService _mailService;
+        private readonly ISmsService _smsService;
+        private readonly IImageLoadService _imageLoadService;
+        private readonly IUserTokenService _userTokenService;
+        private readonly IUserDao _userDao;
+
+        public AccountController(
+            ILogger logger,
+            IUserContext userContext,
+            IMailService mailService,
+            ISmsService smsService,
+            IImageLoadService imageLoadService,
+            IUserTokenService userTokenService,
+            IUserDao userDao) 
+            : base(userContext)
+        {
+            _logger = logger;
+            _mailService = mailService;
+            _smsService = smsService;
+            _imageLoadService = imageLoadService;
+            _userTokenService = userTokenService;
+            _userDao = userDao;
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Index()
+        {
+            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            if (user == null)
+            {
+                _logger.LogWarning("AccountController.Index(). User not found.", UserContext.UserId, new
+                {
+                    UserContext.UserId
+                });
+
+                return View("Error");
+            }
+
+            return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult LogIn(string returnUrl = null)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+
+            if (IsUserContextInitialized)
+            {
+                return RedirectToLocal(returnUrl);
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LogIn(LoginModel model, string returnUrl = null)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("AccountController.LogIn(). ModelState is invalid.", 0, new
+                {
+                    model.Login,
+                    model.RememberMe,
+                    ReturnUrl = returnUrl
+                });
+
+                return View(model);
+            }
+
+            var user = await _userDao.GetByLogin(model.Login).ConfigureAwait(false);
+            if (user == null)
+            {
+                ModelState.AddModelError(string.Empty, "Неправильный логин или пароль");
+
+                _logger.LogWarning("AccountController.LogIn(). User not found.", 0, new
+                {
+                    model.Login,
+                    model.RememberMe,
+                    ReturnUrl = returnUrl
+                });
+
+                return View(model);
+            }
+
+            if (!PasswordHelper.Verify(model.Password, user.PasswordHash))
+            {
+                ModelState.AddModelError(string.Empty, "Неправильный логин или пароль");
+
+                _logger.LogWarning("AccountController.LogIn(). Invalid login or password.", 0, new
+                {
+                    model.Login,
+                    model.RememberMe,
+                    ReturnUrl = returnUrl
+                });
+
+                return View(model);
+            }
+
+            await SignInAsync(user, model.RememberMe).ConfigureAwait(false);
+
+            _logger.LogInfo("AccountController.LogIn(). Signed in.", user.Id, new
+            {
+                model.Login,
+                model.RememberMe,
+                ReturnUrl = returnUrl
+            });
+
+            return RedirectToLocal(returnUrl);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LogOff()
+        {
+            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            if (user == null)
+            {
+                _logger.LogWarning("AccountController.LogOff(). User not found.", UserContext.UserId, new
+                {
+                    UserContext.UserId
+                });
+
+                return View("Error");
+            }
+
+            await SignOutAsync().ConfigureAwait(false);
+
+            _logger.LogInfo("AccountController.LogOff(). Signed out.", UserContext.UserId);
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Register(string returnUrl = null)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+
+            if (ViewBag.IsAuthenticated)
+            {
+                return Redirect(returnUrl);
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterModel model, string returnUrl = null)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("AccountController.Register(). ModelState is invalid.", 0, new
+                {
+                    model.Login,
+                    model.Email,
+                    model.Phone,
+                    model.Surname,
+                    model.Name,
+                    model.Patronymic,
+                    model.Gender,
+                    model.BirthDateString,
+                    ReturnUrl = returnUrl
+                });
+
+                return View(model);
+            }
+
+            var isExistByLogin = await _userDao.IsExistByLogin(model.Login).ConfigureAwait(false);
+            if (isExistByLogin)
+            {
+                ModelState.AddModelError("Login", "Логин уже занят");
+
+                _logger.LogWarning("AccountController.Register(). Login is exist.", 0, new
+                {
+                    model.Login,
+                    model.Email,
+                    model.Phone,
+                    model.Surname,
+                    model.Name,
+                    model.Patronymic,
+                    model.Gender,
+                    model.BirthDateString,
+                    ReturnUrl = returnUrl
+                });
+
+                return View(model);
+            }
+
+            var isExistByEmail = await _userDao.IsExistByEmail(model.Email).ConfigureAwait(false);
+            if (isExistByEmail)
+            {
+                ModelState.AddModelError("Email", "Email уже занят");
+
+                _logger.LogWarning("AccountController.Register(). Email is exist.", 0, new
+                {
+                    model.Login,
+                    model.Email,
+                    model.Phone,
+                    model.Surname,
+                    model.Name,
+                    model.Patronymic,
+                    model.Gender,
+                    model.BirthDateString,
+                    ReturnUrl = returnUrl
+                });
+
+                return View(model);
+            }
+
+            var isExistByPhone = await _userDao.IsExistByPhone(model.Phone).ConfigureAwait(false);
+            if (isExistByPhone)
+            {
+                ModelState.AddModelError("Phone", "Телефон уже занят");
+
+                _logger.LogWarning("AccountController.Register(). Phone is exist.", 0, new
+                {
+                    model.Login,
+                    model.Email,
+                    model.Phone,
+                    model.Surname,
+                    model.Name,
+                    model.Patronymic,
+                    model.Gender,
+                    model.BirthDateString,
+                    ReturnUrl = returnUrl
+                });
+
+                return View(model);
+            }
+
+            var user = model.Map();
+
+            user.Id = await _userDao.Create(user).ConfigureAwait(false);
+
+            _logger.LogInfo("AccountController.Register(). Registered.", 0,
+                new
+                {
+                    model.Login,
+                    model.Email,
+                    model.Phone,
+                    model.Surname,
+                    model.Name,
+                    model.Patronymic,
+                    model.Gender,
+                    model.BirthDateString,
+                    ReturnUrl = returnUrl
+                });
+
+            await EmailConfirmationProcess(user.Id).ConfigureAwait(false);
+
+            _logger.LogInfo("AccountController.Register(). Email confirmation link sended.", 0, new
+            {
+                model.Login,
+                model.Email,
+                model.Phone,
+                model.Surname,
+                model.Name,
+                model.Patronymic,
+                model.Gender,
+                model.BirthDateString,
+                ReturnUrl = returnUrl
+            });
+
+            await SignInAsync(user, true).ConfigureAwait(false);
+
+            _logger.LogInfo("AccountController.Register(). Signed in.", UserContext.UserId, new
+            {
+                model.Login,
+                model.Email,
+                model.Phone,
+                model.Surname,
+                model.Name,
+                model.Patronymic,
+                model.Gender,
+                model.BirthDateString,
+                ReturnUrl = returnUrl
+            });
+
+            return RedirectToAction("Index",
+                new {message = "На Вашу электронную почту отправлено письмо с подтверждением"});
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> SendConfirmEmail()
+        {
+            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            if (user == null)
+            {
+                _logger.LogWarning("AccountController.SendConfirmEmail(). User not found.", UserContext.UserId, new
+                {
+                    UserContext.UserId
+                });
+
+                return View("Error");
+            }
+
+            await EmailConfirmationProcess(UserContext.UserId).ConfigureAwait(false);
+
+            _logger.LogInfo("AccountController.SendConfirmEmail(). Email confirmation link sended.",
+                UserContext.UserId);
+
+            return RedirectToAction("Index",
+                new {message = "На Вашу электронную почту отправлено письмо с подтверждением"});
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> SendSmsCode()
+        {
+            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            if (user == null)
+            {
+                _logger.LogWarning("AccountController.SendSmsCode(). User not found.", UserContext.UserId, new
+                {
+                    UserContext.UserId
+                });
+
+                return View("Error");
+            }
+
+            await PhoneConfirmationProcess(UserContext.UserId).ConfigureAwait(false);
+
+            _logger.LogInfo("AccountController.SendSmsCode(). Phone confirmation code sended.", UserContext.UserId);
+
+            return RedirectToAction("VerifySmsCode",
+                new {message = "На Ваш номер телефона отправлен SMS с кодом подтверждения"});
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmEmail(int userId, string code)
+        {
+            if (userId == 0 || string.IsNullOrEmpty(code))
+            {
+                _logger.LogWarning("AccountController.ConfirmEmail(). Empty data.", 0, new
+                {
+                    UserId = userId,
+                    Code = code
+                });
+
+                return View("Error");
+            }
+
+            var user = await _userDao.Get(userId).ConfigureAwait(false);
+            if (user == null)
+            {
+                _logger.LogWarning("AccountController.ConfirmEmail(). User not found.", 0, new
+                {
+                    UserId = userId,
+                    Code = code
+                });
+
+                return View("Error");
+            }
+
+            var isTokenConfirm = await _userTokenService.Confirm(userId, TokenType.EmailConfirmation, code)
+                .ConfigureAwait(false);
+
+            if (!isTokenConfirm)
+            {
+                _logger.LogWarning("AccountController.ConfirmEmail(). Token not confirmed.", 0, new
+                {
+                    UserId = userId,
+                    Code = code
+                });
+
+                return View("Error");
+            }
+
+            _logger.LogInfo("AccountController.ConfirmEmail(). Token confirmed.", 0, new
+            {
+                UserId = userId,
+                Code = code
+            });
+
+            user.IsEmailConfirmed = true;
+
+            await _userDao.Update(user).ConfigureAwait(false);
+
+            _logger.LogInfo("AccountController.ConfirmEmail(). User.IsEmailConfirmed = true.", 0, new
+            {
+                UserId = userId,
+                Code = code
+            });
+
+            return RedirectToAction("Index", new {message = "Ваш Email подтвержден"});
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> ChangePassword()
+        {
+            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            if (user == null)
+            {
+                _logger.LogWarning("AccountController.ChangePassword(). User not found.", UserContext.UserId, new
+                {
+                    UserContext.UserId
+                });
+
+                return View("Error");
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("AccountController.ChangePassword(). ModelState is invalid.", UserContext.UserId);
+
+                return View(model);
+            }
+
+            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            if(user == null)
+            {
+                _logger.LogWarning("AccountController.ChangePassword(). User not found.", UserContext.UserId);
+
+                return View(model);
+            }
+
+            var isOldPasswordVerified = PasswordHelper.Verify(model.OldPassword, user.PasswordHash);
+            if (!isOldPasswordVerified)
+            {
+                ModelState.AddModelError("OldPassword", "Старый пароль введен неверно");
+
+                _logger.LogWarning("AccountController.ChangePassword(). Old password is incorrect.", UserContext.UserId);
+
+                return View(model);
+            }
+
+            user.PasswordHash = PasswordHelper.Generate(model.Password);
+
+            await _userDao.Update(user).ConfigureAwait(false);
+
+            _logger.LogInfo("AccountController.ChangePassword(). Password changed.", UserContext.UserId);
+
+            await SignInAsync(user, true).ConfigureAwait(false);
+
+            _logger.LogInfo("AccountController.ChangePassword(). Signed in.", UserContext.UserId);
+
+            return RedirectToAction("Index", new {message = "Ваш пароль успешно изменен"});
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> ChangeEmail()
+        {
+            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            if (user == null)
+            {
+                _logger.LogWarning("AccountController.ChangeEmail(). User not found.", UserContext.UserId, new
+                {
+                    UserContext.UserId
+                });
+
+                return View("Error");
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeEmail(ChangeEmailModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("AccountController.ChangeEmail(). ModelState is invalid.", UserContext.UserId, new
+                {
+                    model.Email
+                });
+
+                return View(model);
+            }
+
+            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            if (user == null)
+            {
+                _logger.LogWarning("AccountController.ChangeEmail(). User not found.", UserContext.UserId);
+
+                return View(model);
+            }
+
+            var isExistByEmail = await _userDao.IsExistByEmail(model.Email).ConfigureAwait(false);
+            if (isExistByEmail)
+            {
+                ModelState.AddModelError("Email", "Email уже занят");
+
+                _logger.LogWarning("AccountController.ChangeEmail(). Email is exist.", UserContext.UserId, new
+                {
+                    model.Email
+                });
+
+                return View(model);
+            }
+
+            user.Email = model.Email;
+            user.IsEmailConfirmed = false;
+
+            await _userDao.Update(user).ConfigureAwait(false);
+
+            _logger.LogInfo("AccountController.ChangeEmail(). Email changed.", UserContext.UserId, new
+            {
+                model.Email
+            });
+
+            await EmailConfirmationProcess(user.Id).ConfigureAwait(false);
+
+            _logger.LogInfo("AccountController.ChangeEmail(). Email confirmation link sended.", UserContext.UserId, new
+            {
+                model.Email
+            });
+
+            return RedirectToAction("Index", new
+            {
+                message = "Ваш Email успешно изменен. На Вашу электронную почту отправлено письмо с подтверждением"
+            });
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> ChangePhone()
+        {
+            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            if (user == null)
+            {
+                _logger.LogWarning("AccountController.ChangePhone(). User not found.", UserContext.UserId, new
+                {
+                    UserContext.UserId
+                });
+
+                return View("Error");
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePhone(ChangePhoneModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("AccountController.ChangePhone(). ModelState is invalid.", UserContext.UserId, new
+                {
+                    model.Phone
+                });
+
+                return View(model);
+            }
+
+            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            if (user == null)
+            {
+                _logger.LogWarning("AccountController.ChangePhone(). User not found.", UserContext.UserId);
+
+                return View(model);
+            }
+
+            var isExistByPhone = await _userDao.IsExistByPhone(model.Phone).ConfigureAwait(false);
+            if (isExistByPhone)
+            {
+                ModelState.AddModelError("Phone", "Номер телефона уже занят");
+
+                _logger.LogWarning("AccountController.ChangePhone(). Phone is exist.", UserContext.UserId, new
+                {
+                    model.Phone
+                });
+
+                return View(model);
+            }
+
+            user.Phone = model.Phone;
+            user.IsPhoneConfirmed = false;
+
+            await _userDao.Update(user).ConfigureAwait(false);
+
+            _logger.LogInfo("AccountController.ChangePhone(). Phone changed.", UserContext.UserId, new
+            {
+                model.Phone
+            });
+
+            await PhoneConfirmationProcess(user.Id).ConfigureAwait(false);
+
+            _logger.LogInfo("AccountController.ChangePhone(). Phone confirmation code sended.", UserContext.UserId, new
+            {
+                model.Phone
+            });
+
+            return RedirectToAction("VerifySmsCode", new
+            {
+                message =
+                "Ваш номер телефона успешно изменен. На Ваш номер телефона отправлен SMS с кодом подтверждения"
+            });
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> VerifySmsCode(string message = null)
+        {
+            ViewBag.StatusMessage = message;
+
+            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            if (user == null)
+            {
+                _logger.LogWarning("AccountController.VerifySmsCode(). User not found.", UserContext.UserId, new
+                {
+                    UserContext.UserId
+                });
+
+                return View("Error");
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> VerifySmsCode(VerifySmsCodeModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("AccountController.VerifySmsCode(). ModelState is invalid.", UserContext.UserId, new
+                {
+                    model.Code
+                });
+
+                return View(model);
+            }
+
+            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            if (user == null)
+            {
+                _logger.LogWarning("AccountController.VerifySmsCode(). User not found.", 0, new
+                {
+                    UserContext.UserId,
+                    model.Code
+                });
+
+                return View("Error");
+            }
+
+            var isTokenConfirm = await _userTokenService
+                .Confirm(UserContext.UserId, TokenType.PhoneConfirmation, model.Code).ConfigureAwait(false);
+
+            if (!isTokenConfirm)
+            {
+                _logger.LogWarning("AccountController.VerifySmsCode(). Token not confirmed.", 0, new
+                {
+                    UserContext.UserId,
+                    model.Code
+                });
+
+                return View("Error");
+            }
+
+            _logger.LogInfo("AccountController.VerifySmsCode(). Token confirmed.", 0, new
+            {
+                UserContext.UserId,
+                model.Code
+            });
+
+            user.IsPhoneConfirmed = true;
+
+            await _userDao.Update(user).ConfigureAwait(false);
+
+            _logger.LogInfo("AccountController.VerifySmsCode(). User.IsPhoneConfirmed = true.", UserContext.UserId, new
+            {
+                UserContext.UserId,
+                model.Code
+            });
+
+            return RedirectToAction("Index", new {message = "Ваш номер телефона подтвержден"});
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> ChangePersonalInfo()
+        {
+            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            if (user == null)
+            {
+                _logger.LogWarning("AccountController.ChangePersonalInfo(). User not found.", 0, new
+                {
+                    UserContext.UserId
+                });
+
+                return View("Error");
+            }
+
+            var model = user.Map();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePersonalInfo(ChangePersonalInfoModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("AccountController.ChangePersonalInfo(). ModelState is invalid.", UserContext.UserId,
+                    model);
+
+                return View(model);
+            }
+
+            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            if (user == null)
+            {
+                _logger.LogWarning("AccountController.ChangePersonalInfo(). User not found.", 0, new
+                {
+                    UserContext.UserId
+                });
+
+                return View("Error");
+            }
+
+            model.Map(user);
+
+            user.Surname = model.Surname;
+            user.Name = model.Name;
+            user.Patronymic = model.Patronymic;
+            user.Gender = model.Gender;
+            user.BirthDate = model.BirthDateString.ToDate();
+
+            await _userDao.Update(user).ConfigureAwait(false);
+
+            _logger.LogInfo("AccountController.ChangePersonalInfo(). Personal info changed.", UserContext.UserId,
+                model);
+
+            return RedirectToAction("Index", new {message = "Ваши изменения сохранены"});
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("AccountController.ForgotPassword(). ModelState is invalid.", UserContext.UserId,
+                    model);
+
+                return View(model);
+            }
+
+            var user = await _userDao.GetByLogin(model.Email).ConfigureAwait(false);
+            if (user == null)
+            {
+                ModelState.AddModelError("Email", "Пользователь с указанным Email не найден");
+
+                _logger.LogWarning("AccountController.ForgotPassword(). User not found.", 0, model);
+
+                return View(model);
+            }
+
+            await PasswordResetProcess(user.Id).ConfigureAwait(false);
+
+            _logger.LogInfo("AccountController.ForgotPassword(). Password reset code sended.");
+
+            return RedirectToAction("ForgotPasswordConfirmation",
+                new {message = "На Вашу электронную почту отправлено письмо со ссылкой на форму сброса пароля"});
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ForgotPasswordConfirmation()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword(int userId, string code)
+        {
+            if (userId == 0 || string.IsNullOrEmpty(code))
+            {
+                _logger.LogWarning("AccountController.ResetPassword(). Empty data.", 0, new
+                {
+                    UserId = userId,
+                    Code = code
+                });
+
+                return View("Error");
+            }
+
+            var user = await _userDao.Get(userId).ConfigureAwait(false);
+            if (user == null)
+            {
+                _logger.LogWarning("AccountController.ResetPassword(). User not found.", 0, new
+                {
+                    UserId = userId,
+                    Code = code
+                });
+
+                return View("Error");
+            }
+
+            var model = new ResetPasswordModel
+            {
+                Code = code
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("AccountController.ResetPassword(). ModelState is invalid.", UserContext.UserId, new
+                {
+                    model.Email,
+                    model.Code
+                });
+
+                return View(model);
+            }
+
+            var user = await _userDao.GetByEmail(model.Email).ConfigureAwait(false);
+            if (user == null)
+            {
+                ModelState.AddModelError("Email", "Пользователь с указанным Email не найден");
+
+                _logger.LogWarning("AccountController.ResetPassword(). User not found.", 0, model);
+
+                return View(model);
+            }
+
+            var isTokenConfirm = await _userTokenService.Confirm(user.Id, TokenType.PasswordReset, model.Code)
+                .ConfigureAwait(false);
+
+            if (!isTokenConfirm)
+            {
+                _logger.LogWarning("AccountController.ResetPassword(). Token not confirmed.", 0, new
+                {
+                    UserId = user.Id,
+                    model.Code
+                });
+
+                return View("Error");
+            }
+
+            _logger.LogInfo("AccountController.ResetPassword(). Token confirmed.", 0, new
+            {
+                UserId = user.Id,
+                model.Code
+            });
+
+            user.PasswordHash = PasswordHelper.Generate(model.Password);
+
+            await _userDao.Update(user).ConfigureAwait(false);
+
+            _logger.LogInfo("AccountController.ResetPassword(). User.PasswordHash updated.", 0, new
+            {
+                UserId = user.Id,
+                model.Code
+            });
+
+            return RedirectToAction("ResetPasswordConfirmation");
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResetPasswordConfirmation()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LoadAvatar(LoadAvatarModel model)
+        {
+            if (!model.AvatarFile.Name.IsImage())
+            {
+                return View("Error");
+            }
+
+            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            if (user == null)
+            {
+                _logger.LogWarning("AccountController.LoadAvatar(). User not found.", UserContext.UserId);
+
+                return View("Error");
+            }
+
+            user.AvatarUrl = await _imageLoadService.LoadAvatarImage(model.AvatarFile).ConfigureAwait(false);
+
+            await _userDao.Update(user).ConfigureAwait(false);
+
+            _logger.LogInfo("AccountController.ResetPassword(). User.AvatarUrl updated.", UserContext.UserId);
+
+            return RedirectToAction("Index", "Account");
+        }
+
+        private async Task SignInAsync(UserModel user, bool rememberMe)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login)
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType,
+                ClaimsIdentity.DefaultRoleClaimType);
+
+            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+            var properties = new AuthenticationProperties
+            {
+                IsPersistent = rememberMe,
+                AllowRefresh = false
+            };
+
+            await HttpContext
+                .SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, properties)
+                .ConfigureAwait(false);
+        }
+
+        private Task SignOutAsync()
+        {
+            return HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        }
+
+        private async Task EmailConfirmationProcess(int userId)
+        {
+            var user = await _userDao.Get(userId).ConfigureAwait(false);
+
+            var code = await _userTokenService.Create(userId, TokenType.EmailConfirmation).ConfigureAwait(false);
+
+            var emailConfirmUrl = Url.Action("ConfirmEmail", "Account", new {userId, code});
+
+            await _mailService.SendFromAdmin(user.Email, "Подтверждение почты",
+                    $"Пожалуйста, подтвердите свою почту, нажав на <a href='{emailConfirmUrl}'>ссылку</a>.")
+                .ConfigureAwait(false);
+        }
+
+        private async Task PhoneConfirmationProcess(int userId)
+        {
+            var user = await _userDao.Get(userId).ConfigureAwait(false);
+
+            var code = await _userTokenService.Create(userId, TokenType.PhoneConfirmation).ConfigureAwait(false);
+
+            await _smsService.Send(user.Phone, code).ConfigureAwait(false);
+        }
+
+        private async Task PasswordResetProcess(int userId)
+        {
+            var user = await _userDao.Get(userId).ConfigureAwait(false);
+
+            var code = await _userTokenService.Create(user.Id, TokenType.PasswordReset).ConfigureAwait(false);
+
+            var passwordResetUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code });
+
+            await _mailService.SendFromAdmin(user.Email, "Сброс пароля",
+                    $"Для сброса пароля нажмите на <a href='{passwordResetUrl}'>ссылку</a>.")
+                .ConfigureAwait(false);
+        }
+    }
+}

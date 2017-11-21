@@ -1,0 +1,122 @@
+﻿@using GameSite.Extensions
+@using GameSite.Models.Domain
+@model Gamer
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="col">
+    <div class="collection white pading-10">
+        <h5>
+            @Model.Name
+            @if (Model.IsLocked)
+            {
+                <sup class="red-text">(Заблокирован)</sup>
+            }
+        </h5>
+        <hr>
+        <div class="row">
+            <div class="col m5 s12">
+                <div class="pading-10">
+                    <img src="@(!string.IsNullOrWhiteSpace(Model.AvatarUrl) ? Model.AvatarUrl : "/images/avatars/no-avatar.png")" class="responsive-img materialboxed" alt="Аватар" />
+                </div>
+                <form asp-controller="Account" asp-action="LoadAvatar" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="Id" value="@Model.Id" />
+                    <div class="row no-margin">
+                        <div class="file-field input-field col s9 no-margin">
+                            <input type="file" name="avatarFile" id="avatarFile" accept="image/*" required="required" aria-required="true">
+                            <div class="file-path-wrapper">
+                                <div class="row valign-wrapper">
+                                    <input class="file-path validate" type="text" placeholder="Новый аватар">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col s3">
+                            <button type="submit" class="btn pading-horisontal-10">
+                                <i class="fa fa-upload"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <form asp-controller="Account" asp-action="LoadBackground" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="Id" value="@Model.Id" />
+                    <div class="row no-margin">
+                        <div class="file-field input-field col s9 no-margin">
+                            <input type="file" name="backgroundFile" id="backgroundFile" accept="image/*" required="required" aria-required="true">
+                            <div class="file-path-wrapper">
+                                <div class="row valign-wrapper">
+                                    <input class="file-path validate" type="text" placeholder="Новый фон">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col s3">
+                            <button type="submit" class="btn pading-horisontal-10">
+                                <i class="fa fa-upload"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="pading-10">
+                    <a asp-controller="Account" asp-action="ChangePassword" class="btn-link">Сменить пароль</a>
+                    <br>
+                    <a asp-controller="Account" asp-action="ChangePersonalInfo" class="btn-link">Изменить личные данные</a>
+                </div>
+            </div>
+            <div class="col m7 s12">
+                <div class="pading-10">
+                    <blockquote>
+                        <b>Ник:</b> @Model.Nik
+                        <br>                   
+                        <b>Email:</b> @Model.Email <a asp-controller="Account" asp-action="ChangeEmail" class="btn-link">Изменить</a>
+                        @if (!Model.IsEmailConfirmed)
+                        {
+                            <a asp-controller="Account" asp-action="SendConfirmEmail" class="btn-link">Отправить письмо со ссылкой на подтверждение</a>
+                        }
+                        <br>
+                        <b>Телефон:</b> @Model.Phone <a asp-controller="Account" asp-action="ChangePhone" class="btn-link">Изменить</a>
+                        @if (!Model.IsPhoneConfirmed)
+                        {
+                            <a asp-controller="Account" asp-action="SendSmsCode" class="btn-link">Отправить SMS с кодом подтверждения</a>
+                        }
+                        <br>
+                        <b>Город:</b> @Model.CityName
+                        <br>
+                        <b>Пол:</b> @Model.Gender.GetName()
+                        <br>
+                        <b>Дата рождения:</b> @Model.BirthDate?.ToDateString()
+                        <br>
+                        <b>Тип:</b> @(Model.IsPaid ? "Премиум" : "Простой")
+                        <br>
+                        @if (Model.IsPaid)
+                        {
+                            <b>Оплачен до:</b> @Model.CurrentTariffEndDate?.ToDateString()
+                            <br>
+                        }
+                        <b>Хроника:</b> @Model.Chronicle.ToString()
+                        <br>
+                        <b>Рейт:</b> @Model.Reith.ToString()
+                        <br>
+                        <b>Стиль:</b> @Model.Style.ToString()
+                        <br>
+                        <b>Роль:</b> @Model.GameRole.ToString()
+                        <br>
+                        <b>Время игры:</b> с @Model.GameStartHour?.ToTime().ToTimeString() по @Model.GameEndHour?.ToTime().ToTimeString()
+                        <br>
+                        <b>Рейтинг:</b> @Model.Rating
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        <environment names="Development">
+            <script src="~/js/pages/account/index.js"></script>
+        </environment>
+        <environment names="Staging,Production">
+            <script src="~/js/pages/account/index.min.js"></script>
+        </environment>
+    }
+}
