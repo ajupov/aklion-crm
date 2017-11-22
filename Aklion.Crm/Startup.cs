@@ -7,6 +7,7 @@ using Aklion.Crm.Business.Sms.Models;
 using Aklion.Crm.Business.UserToken;
 using Aklion.Crm.Dao.Attribute;
 using Aklion.Crm.Dao.Category;
+using Aklion.Crm.Dao.CrmUserContext;
 using Aklion.Crm.Dao.Post;
 using Aklion.Crm.Dao.Product;
 using Aklion.Crm.Dao.ProductAttribute;
@@ -22,6 +23,7 @@ using Aklion.Crm.Filters;
 using Aklion.Crm.Models;
 using Aklion.Infrastructure.Storage.ConnectionFactory;
 using Aklion.Infrastructure.Storage.DataBaseExecutor;
+using Aklion.Infrastructure.Storage.DataBaseExecutor.Readers;
 using Aklion.Infrastructure.Utils.Logger;
 using Aklion.Infrastructure.Utils.UserContext;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -54,9 +56,11 @@ namespace Aklion.Crm
             services.AddSingleton(Configuration)
                 .AddSingleton<IConnectionFactory, ConnectionFactory>()
                 .AddSingleton<IDataBaseExecutor, DataBaseExecutor>()
+                .AddSingleton<IReader, Reader>()
                 .AddSingleton<ILogger, Logger>()
                 .AddSingleton<IPermissionService, PermissionService>()
                 .AddSingleton<IUserDao, UserDao>()
+                .AddSingleton<ICrmUserContextDao, CrmUserContextDao>()
                 .AddSingleton<IStoreDao, StoreDao>()
                 .AddSingleton<IPostDao, PostDao>()
                 .AddSingleton<IUserPostDao, UserPostDao>()
@@ -73,7 +77,7 @@ namespace Aklion.Crm
                 .AddSingleton<ISmsService, SmsService>()
                 .AddSingleton<IImageLoadService, ImageLoadService>()
                 .AddSingleton<IUserTokenService, UserTokenService>()
-                .AddScoped<IUserContext, UserContext>()
+                .AddScoped<IUserContext, UserContext.UserContext>()
 
                 .Configure<MailServiceConfiguration>(Configuration.GetSection("MailServiceConfiguration"))
                 .Configure<SmsServiceConfiguration>(Configuration.GetSection("SmsServiceConfiguration"));

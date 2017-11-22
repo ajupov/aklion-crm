@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Aklion.Infrastructure.Storage.ConnectionFactory;
 using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
+using Aklion.Infrastructure.Storage.DataBaseExecutor.Readers;
 using Dapper;
 
 namespace Aklion.Infrastructure.Storage.DataBaseExecutor
@@ -51,6 +53,26 @@ namespace Aklion.Infrastructure.Storage.DataBaseExecutor
                     TotalCount = await reader.ReadFirstOrDefaultAsync<int>().ConfigureAwait(false),
                     List = (await reader.ReadAsync<T>().ConfigureAwait(false)).ToList()
                 };
+            }
+        }
+
+        public async Task SelectMultiple(string query, Func<IReader, Task> reader, object parameters = null)
+        {
+            using (var connection = _connectionFactory.GetConnection())
+            {
+                var  gridReader = await connection.QueryMultipleAsync(query, parameters).ConfigureAwait(false);
+
+                await reader(new Reader(gridReader)).ConfigureAwait(false);
+            }
+        }
+
+        public async Task<T> SelectMultiple<T>(string query, Func<IReader, Task<T>> reader, object parameters = null)
+        {
+            using (var connection = _connectionFactory.GetConnection())
+            {
+                var gridReader = await connection.QueryMultipleAsync(query, parameters).ConfigureAwait(false);
+
+                return await reader(new Reader(gridReader)).ConfigureAwait(false);
             }
         }
     }

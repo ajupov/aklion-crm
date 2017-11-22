@@ -1,20 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Aklion.Crm.Controllers;
-using Aklion.Crm.Dao.User;
-using Aklion.Crm.Enums;
-using Aklion.Crm.Models;
+using Aklion.Crm.Dao.CrmUserContext;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Aklion.Crm.Filters
 {
     public class UserContextInitializeFilter : IActionFilter, IAsyncActionFilter
     {
-        private readonly IUserDao _userDao;
+        private readonly ICrmUserContextDao _userContextDao;
 
-        public UserContextInitializeFilter(IUserDao userDao)
+        public UserContextInitializeFilter(ICrmUserContextDao userContextDao)
         {
-            _userDao = userDao;
+            _userContextDao = userContextDao;
         }
 
         public void OnActionExecuting(ActionExecutingContext context)
@@ -30,6 +27,7 @@ namespace Aklion.Crm.Filters
         {
             var isAuthenticated = context.HttpContext?.User?.Identity?.IsAuthenticated ?? false;
             var login = context.HttpContext?.User?.Identity?.Name;
+            const int selectedStoreId = 2;
 
             if (!isAuthenticated || string.IsNullOrWhiteSpace(login))
             {
@@ -45,21 +43,28 @@ namespace Aklion.Crm.Filters
 
             if (context.Controller is BaseController baseController)
             {
-                var user = await _userDao.GetByLogin(login).ConfigureAwait(false);
-                if (user == null)
+                var userContextDomain = await _userContextDao.Get(login, selectedStoreId).ConfigureAwait(false);
+                if (userContextDomain == null)
                 {
                     await next().ConfigureAwait(false);
                     return;
                 }
 
-                baseController.UserContext = new UserContext
+                baseController.UserContext = new UserContext.UserContext
                 {
-                    UserId = user.Id,
-                    StoreId = 1,
-                    Permissions = new List<Permission>
-                    {
-                        Permission.Admin
-                    }
+                    UserId = userContextDomain.UserId,
+                    UserLogin = userContextDomain.UserLogin,
+                    IsEmailConfirmed = userContextDomain.IsEmailConfirmed,
+                    IsPhoneConfirmed = userContextDomain.IsPhoneConfirmed,
+                    IsLocked = userContextDomain.IsLocked,
+                    IsDeleted = userContextDomain.IsDeleted,
+                    AvatarUrl = userContextDomain.AvatarUrl,
+                    StoreId = userContextDomain.StoreId,
+                    StoreName = userContextDomain.StoreName,
+                    StoreIsLocked = userContextDomain.StoreIsLocked,
+                    StoreIsDeleted = userContextDomain.StoreIsDeleted,
+                    Permissions = userContextDomain.Permissions,
+                    AvialableStores = userContextDomain.AvialableStores
                 };
             }
 
