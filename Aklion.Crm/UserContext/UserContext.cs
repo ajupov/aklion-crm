@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using Aklion.Crm.Enums;
-using Aklion.Infrastructure.Utils.UserContext;
 
 namespace Aklion.Crm.UserContext
 {
-    public class UserContext : IUserContext
+    public class UserContext
     {
         public int UserId { get; set; }
 
@@ -22,7 +21,7 @@ namespace Aklion.Crm.UserContext
 
         public int StoreId { get; set; }
 
-        public int StoreName { get; set; }
+        public string StoreName { get; set; }
 
         public bool StoreIsLocked { get; set; }
 

@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Aklion.Crm.Domain.CrmUserContext;
-using Aklion.Crm.Enums;
+﻿using System.Threading.Tasks;
+using Aklion.Crm.Domain.Store;
+using Aklion.Crm.Domain.User;
+using Aklion.Crm.Domain.UserContext;
+using Aklion.Crm.Domain.UserPermission;
 using Aklion.Infrastructure.Storage.DataBaseExecutor;
 
 namespace Aklion.Crm.Dao.CrmUserContext
@@ -16,17 +16,14 @@ namespace Aklion.Crm.Dao.CrmUserContext
             _dataBaseExecutor = dataBaseExecutor;
         }
 
-        public Task<CrmUserContextModel> Get(string login, int selectedStoreId)
+        public Task<UserContextModel> Get(string login, int selectedStoreId)
         {
-            return _dataBaseExecutor.SelectMultiple(Queries.Get, async r =>
+            return _dataBaseExecutor.SelectMultiple(Queries.Get, async r => new UserContextModel
             {
-                var crmUserContextModel = await r.SelectOne<CrmUserContextModel>().ConfigureAwait(false);
-                crmUserContextModel.Permissions = await r.SelectList<Permission>().ConfigureAwait(false);
-                crmUserContextModel.AvialableStores =
-                    (await r.SelectList<KeyValuePair<int, string>>().ConfigureAwait(false)).ToDictionary(k => k.Key,
-                        v => v.Value);
-
-                return crmUserContextModel;
+                CurrentUser = await r.SelectOne<UserModel>().ConfigureAwait(false),
+                CurrentStore = await r.SelectOne<StoreModel>().ConfigureAwait(false),
+                CurrentStorePermissions = await r.SelectList<UserPermissionModel>().ConfigureAwait(false),
+                Stores = await r.SelectList<StoreModel>().ConfigureAwait(false)
             }, new {login, selectedStoreId});
         }
     }

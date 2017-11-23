@@ -14,7 +14,6 @@ using Aklion.Infrastructure.Utils.DateTime;
 using Aklion.Infrastructure.Utils.File;
 using Aklion.Infrastructure.Utils.Logger;
 using Aklion.Infrastructure.Utils.Password;
-using Aklion.Infrastructure.Utils.UserContext;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -33,13 +32,11 @@ namespace Aklion.Crm.Controllers
 
         public AccountController(
             ILogger logger,
-            IUserContext userContext,
             IMailService mailService,
             ISmsService smsService,
             IImageLoadService imageLoadService,
             IUserTokenService userTokenService,
-            IUserDao userDao) 
-            : base(userContext)
+            IUserDao userDao)
         {
             _logger = logger;
             _mailService = mailService;
@@ -51,19 +48,8 @@ namespace Aklion.Crm.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
-            if (user == null)
-            {
-                _logger.LogWarning("AccountController.Index(). User not found.", UserContext.UserId, new
-                {
-                    UserContext.UserId
-                });
-
-                return View("Error");
-            }
-
             return View();
         }
 

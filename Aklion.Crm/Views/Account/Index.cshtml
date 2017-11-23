@@ -1,27 +1,33 @@
-﻿@using GameSite.Extensions
-@using GameSite.Models.Domain
-@model Gamer
-@{
-    ViewData["Title"] = Model.Name;
+﻿@{
+    ViewData["Title"] = "Мой аккаунт";
 }
+
+<div class="row">
+    <div class="col s12 m12 l12">
+        <div class="card">
+            @ViewBag.UserContext.UserLogin
+        </div>
+    </div>
+</div>
+
 
 <div class="col">
     <div class="collection white pading-10">
         <h5>
-            @Model.Name
+            @*@ViewBag.UserContext.UserLogin
             @if (Model.IsLocked)
             {
                 <sup class="red-text">(Заблокирован)</sup>
-            }
+            }*@
         </h5>
         <hr>
         <div class="row">
             <div class="col m5 s12">
                 <div class="pading-10">
-                    <img src="@(!string.IsNullOrWhiteSpace(Model.AvatarUrl) ? Model.AvatarUrl : "/images/avatars/no-avatar.png")" class="responsive-img materialboxed" alt="Аватар" />
+                    @*<img src="@(!string.IsNullOrWhiteSpace(Model.AvatarUrl) ? Model.AvatarUrl : "/images/avatars/no-avatar.png")" class="responsive-img materialboxed" alt="Аватар" />*@
                 </div>
                 <form asp-controller="Account" asp-action="LoadAvatar" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="Id" value="@Model.Id" />
+                    @*<input type="hidden" name="Id" value="@Model.Id" />*@
                     <div class="row no-margin">
                         <div class="file-field input-field col s9 no-margin">
                             <input type="file" name="avatarFile" id="avatarFile" accept="image/*" required="required" aria-required="true">
@@ -38,24 +44,7 @@
                         </div>
                     </div>
                 </form>
-                <form asp-controller="Account" asp-action="LoadBackground" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="Id" value="@Model.Id" />
-                    <div class="row no-margin">
-                        <div class="file-field input-field col s9 no-margin">
-                            <input type="file" name="backgroundFile" id="backgroundFile" accept="image/*" required="required" aria-required="true">
-                            <div class="file-path-wrapper">
-                                <div class="row valign-wrapper">
-                                    <input class="file-path validate" type="text" placeholder="Новый фон">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col s3">
-                            <button type="submit" class="btn pading-horisontal-10">
-                                <i class="fa fa-upload"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
+               
                 <div class="pading-10">
                     <a asp-controller="Account" asp-action="ChangePassword" class="btn-link">Сменить пароль</a>
                     <br>
@@ -64,7 +53,7 @@
             </div>
             <div class="col m7 s12">
                 <div class="pading-10">
-                    <blockquote>
+                    @*<blockquote>
                         <b>Ник:</b> @Model.Nik
                         <br>                   
                         <b>Email:</b> @Model.Email <a asp-controller="Account" asp-action="ChangeEmail" class="btn-link">Изменить</a>
@@ -103,20 +92,9 @@
                         <b>Время игры:</b> с @Model.GameStartHour?.ToTime().ToTimeString() по @Model.GameEndHour?.ToTime().ToTimeString()
                         <br>
                         <b>Рейтинг:</b> @Model.Rating
-                    </blockquote>
+                    </blockquote>*@
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-@section Scripts {
-    @{
-        <environment names="Development">
-            <script src="~/js/pages/account/index.js"></script>
-        </environment>
-        <environment names="Staging,Production">
-            <script src="~/js/pages/account/index.min.js"></script>
-        </environment>
-    }
-}

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Aklion.Crm.Controllers;
 using Aklion.Crm.Dao.CrmUserContext;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -16,7 +17,6 @@ namespace Aklion.Crm.Filters
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-
         }
 
         public void OnActionExecuted(ActionExecutedContext context)
@@ -27,7 +27,7 @@ namespace Aklion.Crm.Filters
         {
             var isAuthenticated = context.HttpContext?.User?.Identity?.IsAuthenticated ?? false;
             var login = context.HttpContext?.User?.Identity?.Name;
-            const int selectedStoreId = 2;
+            var selectedStoreId = 2;
 
             if (!isAuthenticated || string.IsNullOrWhiteSpace(login))
             {
@@ -52,20 +52,23 @@ namespace Aklion.Crm.Filters
 
                 baseController.UserContext = new UserContext.UserContext
                 {
-                    UserId = userContextDomain.UserId,
-                    UserLogin = userContextDomain.UserLogin,
-                    IsEmailConfirmed = userContextDomain.IsEmailConfirmed,
-                    IsPhoneConfirmed = userContextDomain.IsPhoneConfirmed,
-                    IsLocked = userContextDomain.IsLocked,
-                    IsDeleted = userContextDomain.IsDeleted,
-                    AvatarUrl = userContextDomain.AvatarUrl,
-                    StoreId = userContextDomain.StoreId,
-                    StoreName = userContextDomain.StoreName,
-                    StoreIsLocked = userContextDomain.StoreIsLocked,
-                    StoreIsDeleted = userContextDomain.StoreIsDeleted,
-                    Permissions = userContextDomain.Permissions,
-                    AvialableStores = userContextDomain.AvialableStores
+                    UserId = userContextDomain.CurrentUser.Id,
+                    UserLogin = userContextDomain.CurrentUser.Login,
+                    IsEmailConfirmed = userContextDomain.CurrentUser.IsEmailConfirmed,
+                    IsPhoneConfirmed = userContextDomain.CurrentUser.IsPhoneConfirmed,
+                    IsLocked = userContextDomain.CurrentUser.IsLocked,
+                    IsDeleted = userContextDomain.CurrentUser.IsDeleted,
+                    AvatarUrl = userContextDomain.CurrentUser.AvatarUrl,
+                    StoreId = userContextDomain.CurrentStore.Id,
+                    StoreName = userContextDomain.CurrentStore.Name,
+                    StoreIsLocked = userContextDomain.CurrentStore.IsLocked,
+                    StoreIsDeleted = userContextDomain.CurrentStore.IsDeleted,
+                    Permissions = userContextDomain.CurrentStorePermissions.Select(s => s.Permission).ToList(),
+                    AvialableStores = userContextDomain.Stores.ToDictionary(k => k.Id, v => v.Name)
                 };
+
+                baseController.ViewBag.UserContext = baseController.UserContext;
+                baseController.ViewBag.IsUserContextInitialized = baseController.IsUserContextInitialized;
             }
 
             await next().ConfigureAwait(false);

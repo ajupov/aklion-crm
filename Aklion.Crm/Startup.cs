@@ -20,12 +20,10 @@ using Aklion.Crm.Dao.UserPermission;
 using Aklion.Crm.Dao.UserPost;
 using Aklion.Crm.Dao.UserToken;
 using Aklion.Crm.Filters;
-using Aklion.Crm.Models;
 using Aklion.Infrastructure.Storage.ConnectionFactory;
 using Aklion.Infrastructure.Storage.DataBaseExecutor;
 using Aklion.Infrastructure.Storage.DataBaseExecutor.Readers;
 using Aklion.Infrastructure.Utils.Logger;
-using Aklion.Infrastructure.Utils.UserContext;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -77,8 +75,6 @@ namespace Aklion.Crm
                 .AddSingleton<ISmsService, SmsService>()
                 .AddSingleton<IImageLoadService, ImageLoadService>()
                 .AddSingleton<IUserTokenService, UserTokenService>()
-                .AddScoped<IUserContext, UserContext.UserContext>()
-
                 .Configure<MailServiceConfiguration>(Configuration.GetSection("MailServiceConfiguration"))
                 .Configure<SmsServiceConfiguration>(Configuration.GetSection("SmsServiceConfiguration"));
 
