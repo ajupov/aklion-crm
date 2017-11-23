@@ -1,16 +1,16 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Aklion.Crm.Controllers;
-using Aklion.Crm.Dao.CrmUserContext;
+using Aklion.Crm.Dao.UserContext;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Aklion.Crm.Filters
 {
     public class UserContextInitializeFilter : IActionFilter, IAsyncActionFilter
     {
-        private readonly ICrmUserContextDao _userContextDao;
+        private readonly IUserContextDao _userContextDao;
 
-        public UserContextInitializeFilter(ICrmUserContextDao userContextDao)
+        public UserContextInitializeFilter(IUserContextDao userContextDao)
         {
             _userContextDao = userContextDao;
         }

@@ -7,7 +7,6 @@ using Aklion.Crm.Business.Sms.Models;
 using Aklion.Crm.Business.UserToken;
 using Aklion.Crm.Dao.Attribute;
 using Aklion.Crm.Dao.Category;
-using Aklion.Crm.Dao.CrmUserContext;
 using Aklion.Crm.Dao.Post;
 using Aklion.Crm.Dao.Product;
 using Aklion.Crm.Dao.ProductAttribute;
@@ -16,6 +15,7 @@ using Aklion.Crm.Dao.ProductTag;
 using Aklion.Crm.Dao.Store;
 using Aklion.Crm.Dao.Tag;
 using Aklion.Crm.Dao.User;
+using Aklion.Crm.Dao.UserContext;
 using Aklion.Crm.Dao.UserPermission;
 using Aklion.Crm.Dao.UserPost;
 using Aklion.Crm.Dao.UserToken;
@@ -58,7 +58,7 @@ namespace Aklion.Crm
                 .AddSingleton<ILogger, Logger>()
                 .AddSingleton<IPermissionService, PermissionService>()
                 .AddSingleton<IUserDao, UserDao>()
-                .AddSingleton<ICrmUserContextDao, CrmUserContextDao>()
+                .AddSingleton<IUserContextDao, UserContextDao>()
                 .AddSingleton<IStoreDao, StoreDao>()
                 .AddSingleton<IPostDao, PostDao>()
                 .AddSingleton<IUserPostDao, UserPostDao>()

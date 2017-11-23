@@ -20,7 +20,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Queries.resx</DependentUpon>
     </Compile>
-    <Compile Update="CrmUserContext\Queries.Designer.cs">
+    <Compile Update="UserContext\Queries.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Queries.resx</DependentUpon>
@@ -91,7 +91,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Queries.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="CrmUserContext\Queries.resx">
+    <EmbeddedResource Update="UserContext\Queries.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Queries.Designer.cs</LastGenOutput>
     </EmbeddedResource>

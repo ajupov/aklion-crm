@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Aklion.Crm.Dao.CrmUserContext {
+namespace Aklion.Crm.Dao.UserContext {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Aklion.Crm.Dao.CrmUserContext {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Aklion.Crm.Dao.CrmUserContext.Queries", typeof(Queries).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Aklion.Crm.Dao.UserContext.Queries", typeof(Queries).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,27 +61,35 @@ namespace Aklion.Crm.Dao.CrmUserContext {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на declare @login varchar(max) = &apos;admin&apos;;
-        ///declare @selectedStoreId int = 2;
-        ///
-        ///declare @UserId				int,
-        ///		@UserLogin			varchar(256),
-        ///		@IsEmailConfirmed	bit,
-        ///		@IsPhoneConfirmed	bit,
-        ///		@IsLocked			bit,
-        ///		@IsDeleted			bit,
-        ///		@AvatarUrl			varchar(2048),
-        ///		@StoreId			int,
-        ///		@StoreName			varchar(256),
-        ///		@StoreIsLocked		bit,
-        ///		@StoreIsDeleted		bit;
+        ///   Ищет локализованную строку, похожую на declare @userId int = (
+        ///	select top 1
+        ///		Id
+        ///		from dbo.[User]
+        ///		where [Login] = @login);
         ///
         ///select top 1
-        ///	@UserId = Id,
-        ///    @UserLogin = [Login],
-        ///    @IsEmailConfirmed = IsEmailConfirmed,
-        ///    @IsPhoneConfirmed = IsPhoneConfirmed,
-        ///    @IsLocked [остаток строки не уместился]&quot;;.
+        ///	Id,
+        ///    [Login],
+        ///    IsEmailConfirmed,
+        ///    IsPhoneConfirmed,
+        ///    IsLocked,
+        ///    IsDeleted,
+        ///    AvatarUrl
+        ///	from dbo.[User]
+        ///	where Id = @userId;
+        ///
+        ///declare @storeId int = (
+        ///	select top 1
+        ///		iif(
+        ///			exists (
+        ///				select
+        ///					1
+        ///					from dbo.UserPermission
+        ///					where UserId = @userId 
+        ///						and StoreId = @selectedStoreId 
+        ///						and coalesce(Permission, 0) != 0),
+        ///			@selectedStoreId,
+        ///			0 [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string Get {
             get {

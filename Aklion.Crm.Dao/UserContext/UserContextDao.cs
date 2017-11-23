@@ -5,13 +5,13 @@ using Aklion.Crm.Domain.UserContext;
 using Aklion.Crm.Domain.UserPermission;
 using Aklion.Infrastructure.Storage.DataBaseExecutor;
 
-namespace Aklion.Crm.Dao.CrmUserContext
+namespace Aklion.Crm.Dao.UserContext
 {
-    public class CrmUserContextDao : ICrmUserContextDao
+    public class UserContextDao : IUserContextDao
     {
         private readonly IDataBaseExecutor _dataBaseExecutor;
 
-        public CrmUserContextDao(IDataBaseExecutor dataBaseExecutor)
+        public UserContextDao(IDataBaseExecutor dataBaseExecutor)
         {
             _dataBaseExecutor = dataBaseExecutor;
         }
