@@ -9,7 +9,7 @@ namespace Aklion.Infrastructure.Utils.PhoneNumber
             return $"+7{shortPhoneNumber}";
         }
 
-        public static string ExtractPhoneNumber(string phoneNumber)
+        public static string ExtractPhoneNumber(this string phoneNumber)
         {
             var result = new string(phoneNumber.ToCharArray().Where(char.IsDigit).ToArray());
 

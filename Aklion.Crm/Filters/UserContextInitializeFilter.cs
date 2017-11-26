@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Aklion.Crm.Controllers;
 using Aklion.Crm.Dao.UserContext;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -50,25 +49,7 @@ namespace Aklion.Crm.Filters
                     return;
                 }
 
-                baseController.UserContext = new UserContext.UserContext
-                {
-                    UserId = userContextDomain.CurrentUser.Id,
-                    UserLogin = userContextDomain.CurrentUser.Login,
-                    IsEmailConfirmed = userContextDomain.CurrentUser.IsEmailConfirmed,
-                    IsPhoneConfirmed = userContextDomain.CurrentUser.IsPhoneConfirmed,
-                    IsLocked = userContextDomain.CurrentUser.IsLocked,
-                    IsDeleted = userContextDomain.CurrentUser.IsDeleted,
-                    AvatarUrl = userContextDomain.CurrentUser.AvatarUrl,
-                    StoreId = userContextDomain.CurrentStore.Id,
-                    StoreName = userContextDomain.CurrentStore.Name,
-                    StoreIsLocked = userContextDomain.CurrentStore.IsLocked,
-                    StoreIsDeleted = userContextDomain.CurrentStore.IsDeleted,
-                    Permissions = userContextDomain.CurrentStorePermissions.Select(s => s.Permission).ToList(),
-                    AvialableStores = userContextDomain.Stores.ToDictionary(k => k.Id, v => v.Name)
-                };
-
-                baseController.ViewBag.UserContext = baseController.UserContext;
-                baseController.ViewBag.IsUserContextInitialized = baseController.IsUserContextInitialized;
+                baseController.InitializeUserContext(userContextDomain);
             }
 
             await next().ConfigureAwait(false);

@@ -51,7 +51,7 @@ namespace Aklion.Crm.Models.Account
         [DataType(DataType.PhoneNumber)]
         [Display(Name = "Телефон")]
         [Phone(ErrorMessage = "Некорректный номер телефона")]
-        [StringLength(10, ErrorMessage = "Номер телефона не должен превышать 10 символов")]
+        [StringLength(12, ErrorMessage = "Номер телефона не должен превышать 10 символов")]
         public string Phone { get; set; }
 
         [Required(ErrorMessage = "Пол должен быть указан")]

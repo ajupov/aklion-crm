@@ -2,6 +2,7 @@
 using Aklion.Crm.Models.Account;
 using Aklion.Infrastructure.Utils.DateTime;
 using Aklion.Infrastructure.Utils.Password;
+using Aklion.Infrastructure.Utils.PhoneNumber;
 
 namespace Aklion.Crm.Mappers.Account
 {
@@ -16,7 +17,7 @@ namespace Aklion.Crm.Mappers.Account
                     Login = model.Login,
                     PasswordHash = PasswordHelper.Generate(model.Password),
                     Email = model.Email,
-                    Phone = model.Phone,
+                    Phone = model.Phone.ExtractPhoneNumber(),
                     Surname = model.Surname,
                     Name = model.Name,
                     Patronymic = model.Patronymic,

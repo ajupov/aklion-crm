@@ -4,7 +4,9 @@ const commonUi = {
     navbar: $('#navbar'),
     mobileMenuLink: $('#mobile-menu-link'),
     dropdownMenuLink: $('#dropdown-menu-link'),
-    dropdownMenuContent: $('#dropdown-menu-content')
+    dropdownMenuContent: $('#dropdown-menu-content'),
+    tel: $('[type="tel"]'),
+    datepicker: $('.datepicker')
 };
 
 $(document).ready(() => {
@@ -19,6 +21,10 @@ $(document).ready(() => {
 
             commonUi.dropdownMenuContent.toggle();
         });
+
+    new Inputmask('+79999999999', { greedy: false }).mask(commonUi.tel);
+
+    initDatePicker(commonUi.datepicker);
 });
 
 $(document).click(() => {

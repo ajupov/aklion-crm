@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Aklion.Crm.Business.ImageLoad;
 using Aklion.Crm.Business.Mail;
 using Aklion.Crm.Business.Sms;
 using Aklion.Crm.Business.UserToken;
 using Aklion.Crm.Dao.User;
-using Aklion.Crm.Domain.User;
+using Aklion.Crm.Dao.UserContext;
 using Aklion.Crm.Enums;
 using Aklion.Crm.Mappers.Account;
 using Aklion.Crm.Models.Account;
@@ -14,8 +12,7 @@ using Aklion.Infrastructure.Utils.DateTime;
 using Aklion.Infrastructure.Utils.File;
 using Aklion.Infrastructure.Utils.Logger;
 using Aklion.Infrastructure.Utils.Password;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Aklion.Infrastructure.Utils.PhoneNumber;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,6 +26,7 @@ namespace Aklion.Crm.Controllers
         private readonly IImageLoadService _imageLoadService;
         private readonly IUserTokenService _userTokenService;
         private readonly IUserDao _userDao;
+        private readonly IUserContextDao _userContextDao;
 
         public AccountController(
             ILogger logger,
@@ -36,7 +34,8 @@ namespace Aklion.Crm.Controllers
             ISmsService smsService,
             IImageLoadService imageLoadService,
             IUserTokenService userTokenService,
-            IUserDao userDao)
+            IUserDao userDao,
+            IUserContextDao userContextDao)
         {
             _logger = logger;
             _mailService = mailService;
@@ -44,13 +43,22 @@ namespace Aklion.Crm.Controllers
             _imageLoadService = imageLoadService;
             _userTokenService = userTokenService;
             _userDao = userDao;
+            _userContextDao = userContextDao;
         }
 
         [HttpGet]
         [Authorize]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            if (user == null)
+            {
+                _logger.LogWarning("AccountController.Index(). User not found.", UserContext.UserId);
+
+                return View("Error");
+            }
+
+            return View(user);
         }
 
         [HttpGet]
@@ -115,7 +123,20 @@ namespace Aklion.Crm.Controllers
                 return View(model);
             }
 
-            await SignInAsync(user, model.RememberMe).ConfigureAwait(false);
+            await SignInAsync(user.Login, model.RememberMe).ConfigureAwait(false);
+
+            var userContextDomain = await _userContextDao.Get(user.Login, 0).ConfigureAwait(false);
+            if (userContextDomain == null)
+            {
+                _logger.LogWarning("AccountController.LogIn(). User context not found.", 0, new
+                {
+                    model.Login,
+                    model.RememberMe,
+                    ReturnUrl = returnUrl
+                });
+            }
+
+            InitializeUserContext(userContextDomain);
 
             _logger.LogInfo("AccountController.LogIn(). Signed in.", user.Id, new
             {
@@ -156,7 +177,7 @@ namespace Aklion.Crm.Controllers
         {
             ViewBag.ReturnUrl = returnUrl;
 
-            if (ViewBag.IsAuthenticated)
+            if (IsUserContextInitialized)
             {
                 return Redirect(returnUrl);
             }
@@ -285,7 +306,26 @@ namespace Aklion.Crm.Controllers
                 ReturnUrl = returnUrl
             });
 
-            await SignInAsync(user, true).ConfigureAwait(false);
+            await SignInAsync(user.Login, true).ConfigureAwait(false);
+
+            var userContextDomain = await _userContextDao.Get(user.Login, 0).ConfigureAwait(false);
+            if (userContextDomain == null)
+            {
+                _logger.LogWarning("AccountController.Register(). User context not found.", 0, new
+                {
+                    model.Login,
+                    model.Email,
+                    model.Phone,
+                    model.Surname,
+                    model.Name,
+                    model.Patronymic,
+                    model.Gender,
+                    model.BirthDateString,
+                    ReturnUrl = returnUrl
+                });
+            }
+
+            InitializeUserContext(userContextDomain);
 
             _logger.LogInfo("AccountController.Register(). Signed in.", UserContext.UserId, new
             {
@@ -465,7 +505,7 @@ namespace Aklion.Crm.Controllers
 
             _logger.LogInfo("AccountController.ChangePassword(). Password changed.", UserContext.UserId);
 
-            await SignInAsync(user, true).ConfigureAwait(false);
+            await SignInAsync(user.Login, true).ConfigureAwait(false);
 
             _logger.LogInfo("AccountController.ChangePassword(). Signed in.", UserContext.UserId);
 
@@ -509,6 +549,15 @@ namespace Aklion.Crm.Controllers
             if (user == null)
             {
                 _logger.LogWarning("AccountController.ChangeEmail(). User not found.", UserContext.UserId);
+
+                return View(model);
+            }
+
+            if (user.Email == model.Email)
+            {
+                ModelState.AddModelError("Email", "Введен текущий Email");
+
+                _logger.LogWarning("AccountController.ChangeEmail(). Current Email entered.", UserContext.UserId);
 
                 return View(model);
             }
@@ -603,7 +652,7 @@ namespace Aklion.Crm.Controllers
                 return View(model);
             }
 
-            user.Phone = model.Phone;
+            user.Phone = model.Phone.ExtractPhoneNumber();
             user.IsPhoneConfirmed = false;
 
             await _userDao.Update(user).ConfigureAwait(false);
@@ -940,33 +989,7 @@ namespace Aklion.Crm.Controllers
             return RedirectToAction("Index", "Account");
         }
 
-        private async Task SignInAsync(UserModel user, bool rememberMe)
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login)
-            };
 
-            var claimsIdentity = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType,
-                ClaimsIdentity.DefaultRoleClaimType);
-
-            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-
-            var properties = new AuthenticationProperties
-            {
-                IsPersistent = rememberMe,
-                AllowRefresh = false
-            };
-
-            await HttpContext
-                .SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, properties)
-                .ConfigureAwait(false);
-        }
-
-        private Task SignOutAsync()
-        {
-            return HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        }
 
         private async Task EmailConfirmationProcess(int userId)
         {

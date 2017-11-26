@@ -39,22 +39,22 @@ namespace Aklion.Crm.Dao.User
 
         public Task<UserModel> GetByEmail(string email)
         {
-            throw new System.NotImplementedException();
+            return _dataBaseExecutor.SelectOne<UserModel>(Queries.GetByEmail, new {email});
         }
 
         public Task<bool> IsExistByLogin(string login)
         {
-            throw new System.NotImplementedException();
+            return _dataBaseExecutor.SelectOne<bool>(Queries.IsExistByLogin, new {login});
         }
 
         public Task<bool> IsExistByEmail(string email)
         {
-            throw new System.NotImplementedException();
+            return _dataBaseExecutor.SelectOne<bool>(Queries.IsExistByEmail, new {email});
         }
 
-        public Task<bool> IsExistByPhone(string email)
+        public Task<bool> IsExistByPhone(string phone)
         {
-            throw new System.NotImplementedException();
+            return _dataBaseExecutor.SelectOne<bool>(Queries.IsExistByPhone, new {phone});
         }
 
         public Task<int> Create(UserModel model)

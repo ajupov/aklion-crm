@@ -1,99 +1,56 @@
-﻿@{
-    ViewData["Title"] = "Мой аккаунт";
+﻿@using Aklion.Infrastructure.Utils.DateTime
+@using Aklion.Infrastructure.Utils.DisplayName
+@using Aklion.Infrastructure.Utils.PhoneNumber
+@model Aklion.Crm.Domain.User.UserModel
+@{
+    ViewBag.Title = "Мой аккаунт";
 }
 
-<div class="row">
-    <div class="col s12 m12 l12">
-        <div class="card">
-            @ViewBag.UserContext.UserLogin
-        </div>
-    </div>
-</div>
-
-
-<div class="col">
-    <div class="collection white pading-10">
-        <h5>
-            @*@ViewBag.UserContext.UserLogin
-            @if (Model.IsLocked)
-            {
-                <sup class="red-text">(Заблокирован)</sup>
-            }*@
-        </h5>
-        <hr>
-        <div class="row">
-            <div class="col m5 s12">
-                <div class="pading-10">
-                    @*<img src="@(!string.IsNullOrWhiteSpace(Model.AvatarUrl) ? Model.AvatarUrl : "/images/avatars/no-avatar.png")" class="responsive-img materialboxed" alt="Аватар" />*@
-                </div>
-                <form asp-controller="Account" asp-action="LoadAvatar" method="post" enctype="multipart/form-data">
-                    @*<input type="hidden" name="Id" value="@Model.Id" />*@
-                    <div class="row no-margin">
-                        <div class="file-field input-field col s9 no-margin">
-                            <input type="file" name="avatarFile" id="avatarFile" accept="image/*" required="required" aria-required="true">
-                            <div class="file-path-wrapper">
-                                <div class="row valign-wrapper">
-                                    <input class="file-path validate" type="text" placeholder="Новый аватар">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col s3">
-                            <button type="submit" class="btn pading-horisontal-10">
-                                <i class="fa fa-upload"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-               
-                <div class="pading-10">
-                    <a asp-controller="Account" asp-action="ChangePassword" class="btn-link">Сменить пароль</a>
-                    <br>
-                    <a asp-controller="Account" asp-action="ChangePersonalInfo" class="btn-link">Изменить личные данные</a>
-                </div>
+<div class="inner-container">
+    <div class="row">
+        <div class="col s12 m4 l3">
+            <div class="card pading-10 margin-10">
+                <img src="@(
+    !string.IsNullOrWhiteSpace(Model.AvatarUrl)
+        ? Model.AvatarUrl
+        : "https://pp.userapi.com/c615719/v615719487/1992f/WZh60KWF5F8.jpg"
+                                /*"/images/avatars/no-avatar.png"*/)"
+                     class="responsible-image" alt="Аватар"/>
+                <div class="separator"></div>
+                <a href="#" class="text-link">Изменить фотографию</a>
+                <br>
+                <a asp-controller="Account" asp-action="ChangePersonalInfo" class="text-link">Изменить личные данные</a>
+                <br>
+                <a asp-controller="Account" asp-action="ChangePassword" class="text-link">Сменить пароль</a>
+                @*<form asp-controller="Account" asp-action="LoadAvatar" method="post" enctype="multipart/form-data">
+                <input type="file" name="AvatarFile" accept="image/*" required="required" aria-required="true">
+                <button type="submit" class="btn pading-horisontal-10">
+                    <i class="fa fa-upload"></i>
+                </button>
+            </form>*@
             </div>
-            <div class="col m7 s12">
-                <div class="pading-10">
-                    @*<blockquote>
-                        <b>Ник:</b> @Model.Nik
-                        <br>                   
-                        <b>Email:</b> @Model.Email <a asp-controller="Account" asp-action="ChangeEmail" class="btn-link">Изменить</a>
-                        @if (!Model.IsEmailConfirmed)
-                        {
-                            <a asp-controller="Account" asp-action="SendConfirmEmail" class="btn-link">Отправить письмо со ссылкой на подтверждение</a>
-                        }
-                        <br>
-                        <b>Телефон:</b> @Model.Phone <a asp-controller="Account" asp-action="ChangePhone" class="btn-link">Изменить</a>
-                        @if (!Model.IsPhoneConfirmed)
-                        {
-                            <a asp-controller="Account" asp-action="SendSmsCode" class="btn-link">Отправить SMS с кодом подтверждения</a>
-                        }
-                        <br>
-                        <b>Город:</b> @Model.CityName
-                        <br>
-                        <b>Пол:</b> @Model.Gender.GetName()
-                        <br>
-                        <b>Дата рождения:</b> @Model.BirthDate?.ToDateString()
-                        <br>
-                        <b>Тип:</b> @(Model.IsPaid ? "Премиум" : "Простой")
-                        <br>
-                        @if (Model.IsPaid)
-                        {
-                            <b>Оплачен до:</b> @Model.CurrentTariffEndDate?.ToDateString()
-                            <br>
-                        }
-                        <b>Хроника:</b> @Model.Chronicle.ToString()
-                        <br>
-                        <b>Рейт:</b> @Model.Reith.ToString()
-                        <br>
-                        <b>Стиль:</b> @Model.Style.ToString()
-                        <br>
-                        <b>Роль:</b> @Model.GameRole.ToString()
-                        <br>
-                        <b>Время игры:</b> с @Model.GameStartHour?.ToTime().ToTimeString() по @Model.GameEndHour?.ToTime().ToTimeString()
-                        <br>
-                        <b>Рейтинг:</b> @Model.Rating
-                    </blockquote>*@
-                </div>
+        </div>
+        <div class="col s12 m8 l9">
+            <div class="card pading-10 margin-10">
+                <h3 class="margin-0">@Model.Login</h3>
+                <div class="separator"></div>
+                <blockquote>
+                    <span class="label">Email:</span> @Model.Email <a asp-controller="Account" asp-action="ChangeEmail" class="text-link">Изменить</a>
+                    @if (!Model.IsEmailConfirmed)
+                    {
+                        <a asp-controller="Account" asp-action="SendConfirmEmail" class="text-link">Подтвердить</a>
+                    }
+                    <br>
+                    <span class="label">Телефон:</span> @Model.Phone.ToFullPhoneNumber() <a asp-controller="Account" asp-action="ChangePhone" class="text-link">Изменить</a>
+                    @if (!Model.IsPhoneConfirmed)
+                    {
+                        <a asp-controller="Account" asp-action="SendSmsCode" class="text-link">Подтвердить</a>
+                    }
+                    <br>
+                    <span class="label">Пол:</span> @Model.Gender.GetDisplayName()
+                    <br>
+                    <span class="label">Дата рождения:</span> @Model.BirthDate.ToDateString()
+                </blockquote>
             </div>
         </div>
     </div>

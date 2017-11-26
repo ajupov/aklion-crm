@@ -127,6 +127,9 @@
   <data name="Get" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>queries\get.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="GetByEmail" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>queries\getbyemail.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="GetByLogin" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>queries\getbylogin.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
@@ -135,6 +138,15 @@
   </data>
   <data name="GetPagedList" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>queries\getpagedlist.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="IsExistByEmail" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>queries\isexistbyemail.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="IsExistByLogin" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>queries\isexistbylogin.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="IsExistByPhone" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>queries\isexistbyphone.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="Update" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>queries\update.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>

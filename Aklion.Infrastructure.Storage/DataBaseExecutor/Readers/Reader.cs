@@ -16,7 +16,7 @@ namespace Aklion.Infrastructure.Storage.DataBaseExecutor.Readers
 
         public async Task<T> SelectOne<T>()
         {
-            return await _reader.ReadFirstAsync<T>().ConfigureAwait(false);
+            return await _reader.ReadFirstOrDefaultAsync<T>().ConfigureAwait(false);
         }
 
         public async Task<List<T>> SelectList<T>()

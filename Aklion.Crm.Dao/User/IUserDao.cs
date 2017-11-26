@@ -22,7 +22,7 @@ namespace Aklion.Crm.Dao.User
 
         Task<bool> IsExistByEmail(string email);
 
-        Task<bool> IsExistByPhone(string email);
+        Task<bool> IsExistByPhone(string phone);
 
         Task<int> Create(UserModel model);
 

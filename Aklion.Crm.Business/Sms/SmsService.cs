@@ -20,7 +20,7 @@ namespace Aklion.Crm.Business.Sms
         {
             try
             {
-                phoneNumber = PhoneNumberHelper.ExtractPhoneNumber(phoneNumber);
+                phoneNumber = phoneNumber.ExtractPhoneNumber();
                 
                 var client = new MainSmsClient(_configuration.ProjectName, _configuration.ApiKey);
                 await client.SendAsync(phoneNumber.ToFullPhoneNumber(), message).ConfigureAwait(false);

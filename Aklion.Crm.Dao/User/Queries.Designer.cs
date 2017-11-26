@@ -168,6 +168,34 @@ namespace Aklion.Crm.Dao.User {
         ///    CreateDate,
         ///    ModifyDate
         ///	from dbo.[User]
+        ///	where Email = @email;.
+        /// </summary>
+        internal static string GetByEmail {
+            get {
+                return ResourceManager.GetString("GetByEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на select top 1
+        ///	Id,
+        ///    [Login],
+        ///    PasswordHash,
+        ///    Email,
+        ///    Phone,
+        ///    Surname,
+        ///    [Name],
+        ///    Patronymic,
+        ///    Gender,
+        ///    BirthDate,
+        ///    IsEmailConfirmed,
+        ///    IsPhoneConfirmed,
+        ///    IsLocked,
+        ///    IsDeleted,
+        ///    AvatarUrl,
+        ///    CreateDate,
+        ///    ModifyDate
+        ///	from dbo.[User]
         ///	where [Login] = @login;.
         /// </summary>
         internal static string GetByLogin {
@@ -208,6 +236,42 @@ namespace Aklion.Crm.Dao.User {
         internal static string GetPagedList {
             get {
                 return ResourceManager.GetString("GetPagedList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на if(exists(select 1 from dbo.[User] where [Email] = @email))
+        ///	select convert(bit, 1);
+        ///else
+        ///	select convert(bit, 0);.
+        /// </summary>
+        internal static string IsExistByEmail {
+            get {
+                return ResourceManager.GetString("IsExistByEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на if(exists(select 1 from dbo.[User] where [Login] = @login))
+        ///	select convert(bit, 1);
+        ///else
+        ///	select convert(bit, 0);.
+        /// </summary>
+        internal static string IsExistByLogin {
+            get {
+                return ResourceManager.GetString("IsExistByLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на if(exists(select 1 from dbo.[User] where [Phone] = @phone))
+        ///	select convert(bit, 1);
+        ///else
+        ///	select convert(bit, 0);.
+        /// </summary>
+        internal static string IsExistByPhone {
+            get {
+                return ResourceManager.GetString("IsExistByPhone", resourceCulture);
             }
         }
         

@@ -1,9 +1,44 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Aklion.Crm.Domain.UserContext;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Aklion.Crm.Controllers
 {
     public class BaseController : Controller
     {
+        public async Task SignInAsync(string login, bool rememberMe)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, login)
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType,
+                ClaimsIdentity.DefaultRoleClaimType);
+
+            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+            var properties = new AuthenticationProperties
+            {
+                IsPersistent = rememberMe,
+                AllowRefresh = false
+            };
+
+            await HttpContext
+                .SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, properties)
+                .ConfigureAwait(false);
+        }
+
+        public Task SignOutAsync()
+        {
+            return HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        }
+
         public IActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))
@@ -12,6 +47,29 @@ namespace Aklion.Crm.Controllers
             }
 
             return RedirectToAction("Index", "Home");
+        }
+
+        public void InitializeUserContext(UserContextModel userContextDomain)
+        {
+            UserContext = new UserContext.UserContext
+            {
+                UserId = userContextDomain.CurrentUser.Id,
+                UserLogin = userContextDomain.CurrentUser.Login,
+                IsEmailConfirmed = userContextDomain.CurrentUser.IsEmailConfirmed,
+                IsPhoneConfirmed = userContextDomain.CurrentUser.IsPhoneConfirmed,
+                IsLocked = userContextDomain.CurrentUser.IsLocked,
+                IsDeleted = userContextDomain.CurrentUser.IsDeleted,
+                AvatarUrl = userContextDomain.CurrentUser.AvatarUrl,
+                StoreId = userContextDomain.CurrentStore?.Id,
+                StoreName = userContextDomain.CurrentStore?.Name,
+                StoreIsLocked = userContextDomain.CurrentStore?.IsLocked,
+                StoreIsDeleted = userContextDomain.CurrentStore?.IsDeleted,
+                Permissions = userContextDomain.CurrentStorePermissions?.Select(s => s.Permission).ToList(),
+                AvialableStores = userContextDomain.Stores?.ToDictionary(k => k.Id, v => v.Name)
+            };
+
+            ViewBag.UserContext = UserContext;
+            ViewBag.IsUserContextInitialized = IsUserContextInitialized;
         }
 
         public UserContext.UserContext UserContext { get; set; }
