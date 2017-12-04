@@ -166,7 +166,10 @@ namespace Aklion.Crm.Controllers
 
             await SignOutAsync().ConfigureAwait(false);
 
-            _logger.LogInfo("AccountController.LogOff(). Signed out.", UserContext.UserId);
+            _logger.LogInfo("AccountController.LogOff(). Signed out.", 0, new
+            {
+                UserId = user.Id
+            });
 
             return RedirectToAction("Index", "Home");
         }
@@ -179,7 +182,7 @@ namespace Aklion.Crm.Controllers
 
             if (IsUserContextInitialized)
             {
-                return Redirect(returnUrl);
+                return RedirectToLocal(returnUrl);
             }
 
             return View();
@@ -836,7 +839,7 @@ namespace Aklion.Crm.Controllers
                 return View(model);
             }
 
-            var user = await _userDao.GetByLogin(model.Email).ConfigureAwait(false);
+            var user = await _userDao.GetByEmail(model.Email).ConfigureAwait(false);
             if (user == null)
             {
                 ModelState.AddModelError("Email", "Пользователь с указанным Email не найден");
@@ -989,15 +992,13 @@ namespace Aklion.Crm.Controllers
             return RedirectToAction("Index", "Account");
         }
 
-
-
         private async Task EmailConfirmationProcess(int userId)
         {
             var user = await _userDao.Get(userId).ConfigureAwait(false);
 
             var code = await _userTokenService.Create(userId, TokenType.EmailConfirmation).ConfigureAwait(false);
 
-            var emailConfirmUrl = Url.Action("ConfirmEmail", "Account", new {userId, code});
+            var emailConfirmUrl = Url.Action("ConfirmEmail", "Account", new {userId, code}, HttpContext.Request.Scheme);
 
             await _mailService.SendFromAdmin(user.Email, "Подтверждение почты",
                     $"Пожалуйста, подтвердите свою почту, нажав на <a href='{emailConfirmUrl}'>ссылку</a>.")
@@ -1019,7 +1020,7 @@ namespace Aklion.Crm.Controllers
 
             var code = await _userTokenService.Create(user.Id, TokenType.PasswordReset).ConfigureAwait(false);
 
-            var passwordResetUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code });
+            var passwordResetUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code }, HttpContext.Request.Scheme);
 
             await _mailService.SendFromAdmin(user.Email, "Сброс пароля",
                     $"Для сброса пароля нажмите на <a href='{passwordResetUrl}'>ссылку</a>.")

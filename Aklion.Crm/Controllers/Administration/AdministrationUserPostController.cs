@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Aklion.Crm.Controllers.Administration
 {
     [Route("Administration/UserPosts")]
-    public class AdministrationUserPostController : Controller
+    public class AdministrationUserPostController : BaseController
     {
         private readonly IUserPostDao _userPostDao;
         private readonly IPostDao _postDao;

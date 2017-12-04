@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Aklion.Crm.Controllers.Administration
 {
     [Route("Administration/Posts")]
-    public class AdministrationPostController : Controller
+    public class AdministrationPostController : BaseController
     {
         private readonly IPostDao _postDao;
 

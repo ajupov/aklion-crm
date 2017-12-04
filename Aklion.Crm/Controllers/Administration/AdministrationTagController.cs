@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Aklion.Crm.Controllers.Administration
 {
     [Route("Administration/Tags")]
-    public class AdministrationTagController : Controller
+    public class AdministrationTagController : BaseController
     {
         private readonly ITagDao _tagDao;
 

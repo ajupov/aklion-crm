@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Aklion.Crm.Controllers.Administration
 {
     [Route("Administration/Permissions")]
-    public class AdministrationPermissionController : Controller
+    public class AdministrationPermissionController : BaseController
     {
         private readonly IPermissionService _permissionService;
 

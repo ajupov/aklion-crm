@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Aklion.Crm.Controllers.Administration
 {
     [Route("Administration/Users")]
-    public class AdministrationUserController : Controller
+    public class AdministrationUserController : BaseController
     {
         private readonly IUserDao _userDao;
 

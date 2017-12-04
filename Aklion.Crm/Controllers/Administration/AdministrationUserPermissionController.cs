@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Aklion.Crm.Controllers.Administration
 {
     [Route("Administration/UserPermissions")]
-    public class AdministrationUserPermissionController : Controller
+    public class AdministrationUserPermissionController : BaseController
     {
         private readonly IUserPermissionDao _userPermissionDao;
 

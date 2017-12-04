@@ -6,23 +6,23 @@
 
 <div class="inner-container-small">
     <div class="row">
-        <div class="col s12 m12 12">
+        <div class="col s12 m12 l12">
             <div class="card pading-10 margin-10">
                 <h3>@ViewBag.Title</h3>
                 <div class="separator"></div>
                 <form asp-controller="Account" asp-action="ChangePersonalInfo" method="post">
                     <div class="form-group">
-                        <input asp-for="Surname" required="required" />
+                        <input asp-for="Surname" />
                         <label asp-for="Surname" class="control-label"></label><i class="bar"></i>
                         <span asp-validation-for="Surname" class="control-error-text"></span>
                     </div>
                     <div class="form-group">
-                        <input asp-for="Name" required="required" />
+                        <input asp-for="Name" />
                         <label asp-for="Name" class="control-label"></label><i class="bar"></i>
                         <span asp-validation-for="Name" class="control-error-text"></span>
                     </div>
                     <div class="form-group">
-                        <input asp-for="Patronymic" required="required" />
+                        <input asp-for="Patronymic" />
                         <label asp-for="Patronymic" class="control-label"></label><i class="bar"></i>
                         <span asp-validation-for="Patronymic" class="control-error-text"></span>
                     </div>
@@ -31,11 +31,11 @@
                         <label asp-for="Gender" class="control-label"></label><i class="bar"></i>
                     </div>
                     <div class="form-group">
-                        <input asp-for="BirthDateString" class="datepicker" required="required" />
+                        <input asp-for="BirthDateString" class="datepicker" />
                         <label asp-for="BirthDateString" class="control-label"></label><i class="bar"></i>
                         <span asp-validation-for="BirthDateString" class="control-error-text"></span>
                     </div>
-                    <div class="right-align">
+                    <div class="right-align form-group">
                         <button class="button" type="submit">Сохранить</button>
                     </div>
                 </form>

@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Aklion.Crm.Controllers;
 using Aklion.Crm.Dao.UserContext;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Aklion.Crm.Filters
@@ -24,6 +25,16 @@ namespace Aklion.Crm.Filters
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
+            var controller = context.Controller as Controller;
+            if (controller == null)
+            {
+                await next().ConfigureAwait(false);
+                return;
+            }
+
+            controller.ViewBag.UserContext = null;
+            controller.ViewBag.IsUserContextInitialized = false;
+
             var isAuthenticated = context.HttpContext?.User?.Identity?.IsAuthenticated ?? false;
             var login = context.HttpContext?.User?.Identity?.Name;
             var selectedStoreId = 2;

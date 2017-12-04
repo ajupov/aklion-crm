@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Aklion.Crm.Controllers.Administration
 {
     [Route("Administration/Attributes")]
-    public class AdministrationAttributeController : Controller
+    public class AdministrationAttributeController : BaseController
     {
         private readonly IAttributeDao _attributeDao;
 

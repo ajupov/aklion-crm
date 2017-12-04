@@ -3,40 +3,47 @@
         <span>&#9776;</span>
     </a>
 
-    <a class="avatar-link right" id="dropdown-menu-link">
-        Усман
-        <img src="https://pp.userapi.com/c615719/v615719487/19933/i9HJ4ED64ZM.jpg" alt="Аватар"/>
-        <i class="fa fa-caret-down"></i>
-    </a>
+    @if (ViewBag.IsUserContextInitialized)
+    {
+        <a asp-controller="AdministrationConsole" asp-action="Index" class="link left">
+            <i class="fa fa-dashboard"></i>
+        </a>
 
-    <div class="dropdown-content shadow" id="dropdown-menu-content">
-        <a asp-controller="Account" asp-action="Index">Мой профиль</a>
-        <div class="separator"></div>
-        <a asp-controller="Account" asp-action="LogIn">Войти</a>
-        <a>Выйти</a>
-    </div>
+        <a asp-controller="AdministrationUser" asp-action="Index" class="link left">
+            Пользователи
+        </a>
+
+        <a asp-controller="AdministrationStore" asp-action="Index" class="link left">
+            Магазины
+        </a>
     
-    <a asp-controller="AdministrationConsole" asp-action="Index" class="link left">
-        <i class="fa fa-dashboard"></i>
-    </a>
+        <a asp-controller="AdministrationProduct" asp-action="Index" class="link left">
+            Продукты
+        </a>
 
-    <a asp-controller="AdministrationUser" asp-action="Index" class="link left">
-        Пользователи
-    </a>
+        <a asp-controller="AdministrationUser" asp-action="Index" class="link left">
+            Клиенты
+        </a>
 
-    <a asp-controller="AdministrationStore" asp-action="Index" class="link left">
-        Магазины
-    </a>
-    
-    <a asp-controller="AdministrationProduct" asp-action="Index" class="link left">
-        Продукты
-    </a>
+        <a asp-controller="AdministrationUser" asp-action="Index" class="link left">
+            Заказы
+        </a>
+        <a class="avatar-link right" id="dropdown-menu-link">
+            Усман
+            <img src="https://pp.userapi.com/c615719/v615719487/19933/i9HJ4ED64ZM.jpg" alt="Аватар"/>
+            <i class="fa fa-caret-down"></i>
+        </a>
 
-    <a asp-controller="AdministrationUser" asp-action="Index" class="link left">
-        Клиенты
-    </a>
-
-    <a asp-controller="AdministrationUser" asp-action="Index" class="link left">
-        Заказы
-    </a>
+        <div class="dropdown-content shadow" id="dropdown-menu-content">
+            <a asp-controller="Account" asp-action="Index">Мой профиль</a>
+            <div class="separator"></div>
+            <form asp-controller="Account" asp-action="LogOff" method="post">
+                <button type="submit">Выйти</button>
+            </form>
+        </div>
+    }
+    else
+    {
+        <a class="link right" asp-controller="Account" asp-action="LogIn">Войти</a>
+    }
 </div>

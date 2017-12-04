@@ -36,6 +36,9 @@ namespace Aklion.Crm.Controllers
 
         public Task SignOutAsync()
         {
+            UserContext = null;
+            ViewBag.UserContext = null;
+            ViewBag.IsUserContextInitialized = false;
             return HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
 

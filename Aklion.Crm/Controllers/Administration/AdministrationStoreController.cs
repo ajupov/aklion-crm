@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Aklion.Crm.Controllers.Administration
 {
     [Route("Administration/Stores")]
-    public class AdministrationStoreController : Controller
+    public class AdministrationStoreController : BaseController
     {
         private readonly IStoreDao _storeDao;
 

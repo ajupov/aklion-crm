@@ -26,9 +26,9 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .inner-container-small {
-        width: 33%;
-        margin-left: 33%;
-        margin-right: 33%;
+        width: 24%;
+        margin-left: 38%;
+        margin-right: 38%;
     }
 }
 
@@ -51,6 +51,7 @@ h1, h2, h3, h4, h5, h6 {
 /*Nav*/
 nav {
     background-color: #507299;
+    height: 42px;
 }
 
 .navbar {
@@ -107,14 +108,21 @@ nav {
     border-bottom-right-radius: 2px;
 }
 
-.dropdown-content a {
-    color: #2a5885;
-    display: block;
-    float: none;
-    padding: 12px;
-}
+    .dropdown-content a, .dropdown-content button {
+        color: #2a5885;
+        display: block;
+        float: none;
+        padding: 12px;
+        background: transparent;
+        border: none;
+        width: 100%;
+        text-align: left;
+    }
 
-.dropdown-content a:hover { background-color: #e4eaf0; }
+        .dropdown-content a:hover, .dropdown-content button:hover {
+            background-color: #e4eaf0;
+            cursor: pointer;
+        }
 
 /*Common*/
 
@@ -126,9 +134,18 @@ nav {
 
 .right { float: right; }
 
+.left-align {
+    text-align: left;
+}
+
 .right-align {
     text-align: right; 
 }
+
+.center-align {
+    text-align: center;
+}
+
 .card {
     background: #ffffff;
     border-radius: 2px;
@@ -234,6 +251,17 @@ input[type="file"] {
 
 .label {
     color: #828282;
+}
+
+.message {
+    display: inline;
+    background: #507245;
+    padding: 6px;
+    position: absolute;
+    font-size: 0.8em;
+    color: white;
+    z-index: 999;
+    border-radius: 12px;
 }
 
 /*Jqgrid*/
@@ -535,7 +563,6 @@ td[id$="table-pagination_center"] {
 .form-group {
     position: relative;
     margin-top: 2.25rem;
-    margin-bottom: 2.25rem;
 }
 
 .form-inline > .form-group,
@@ -760,7 +787,7 @@ td[id$="table-pagination_center"] {
     }
 
 .checkbox {
-    margin-top: 3rem;
+    margin-top: 1rem;
     margin-bottom: 1rem;
 }
 
@@ -861,6 +888,7 @@ td[id$="table-pagination_center"] {
 
 .button {
     background: #507299;
+    min-width: 100px;
     border: none;
     color: #fff;
     padding: 10px;
@@ -871,7 +899,6 @@ td[id$="table-pagination_center"] {
 .button span {
     color: #fff;
 }
-
 
 .button:hover {
     background: #486991;

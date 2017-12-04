@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Aklion.Crm.Controllers.Administration
 {
     [Route("Administration/Categories")]
-    public class AdministrationCategoryController : Controller
+    public class AdministrationCategoryController : BaseController
     {
         private readonly ICategoryDao _categoryDao;
 

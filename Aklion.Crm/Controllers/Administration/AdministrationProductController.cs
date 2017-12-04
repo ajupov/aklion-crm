@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Aklion.Crm.Controllers.Administration
 {
     [Route("Administration/Products")]
-    public class AdministrationProductController : Controller
+    public class AdministrationProductController : BaseController
     {
         private readonly IProductDao _productDao;
 

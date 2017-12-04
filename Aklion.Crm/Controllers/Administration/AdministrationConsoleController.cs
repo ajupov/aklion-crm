@@ -3,7 +3,7 @@
 namespace Aklion.Crm.Controllers.Administration
 {
     [Route("Administration/Console")]
-    public class AdministrationConsoleController : Controller
+    public class AdministrationConsoleController : BaseController
     {
         public IActionResult Index()
         {
