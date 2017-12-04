@@ -11,6 +11,7 @@ namespace Aklion.Crm.Controllers
 {
     public class BaseController : Controller
     {
+        [NonAction]
         public async Task SignInAsync(string login, bool rememberMe)
         {
             var claims = new List<Claim>
@@ -34,6 +35,7 @@ namespace Aklion.Crm.Controllers
                 .ConfigureAwait(false);
         }
 
+        [NonAction]
         public Task SignOutAsync()
         {
             UserContext = null;
@@ -42,6 +44,7 @@ namespace Aklion.Crm.Controllers
             return HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
+        [NonAction]
         public IActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))
@@ -52,6 +55,7 @@ namespace Aklion.Crm.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [NonAction]
         public void InitializeUserContext(UserContextModel userContextDomain)
         {
             UserContext = new UserContext.UserContext
@@ -63,10 +67,10 @@ namespace Aklion.Crm.Controllers
                 IsLocked = userContextDomain.CurrentUser.IsLocked,
                 IsDeleted = userContextDomain.CurrentUser.IsDeleted,
                 AvatarUrl = userContextDomain.CurrentUser.AvatarUrl,
-                StoreId = userContextDomain.CurrentStore?.Id,
+                StoreId = userContextDomain.CurrentStore?.Id ?? 0,
                 StoreName = userContextDomain.CurrentStore?.Name,
-                StoreIsLocked = userContextDomain.CurrentStore?.IsLocked,
-                StoreIsDeleted = userContextDomain.CurrentStore?.IsDeleted,
+                StoreIsLocked = userContextDomain.CurrentStore?.IsLocked ?? false,
+                StoreIsDeleted = userContextDomain.CurrentStore?.IsDeleted ?? false,
                 Permissions = userContextDomain.CurrentStorePermissions?.Select(s => s.Permission).ToList(),
                 AvialableStores = userContextDomain.Stores?.ToDictionary(k => k.Id, v => v.Name)
             };

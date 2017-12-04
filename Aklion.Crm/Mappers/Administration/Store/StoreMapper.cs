@@ -86,6 +86,8 @@ namespace Aklion.Crm.Mappers.Administration.Store
         {
             domainModel.Id = viewModel.Id;
             domainModel.Name = viewModel.Name;
+            domainModel.CreateUserId = viewModel.CreateUserId;
+            domainModel.CreateUserLogin = viewModel.CreateUserLogin;
             domainModel.ApiSecret = viewModel.ApiSecret;
             domainModel.IsLocked = viewModel.IsLocked;
             domainModel.IsDeleted = viewModel.IsDeleted;

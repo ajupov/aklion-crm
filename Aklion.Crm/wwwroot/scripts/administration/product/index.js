@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 const ui = {
-    storeTable: $('#product-table'),
+    productTable: $('#product-table'),
     categoryTable: $('#category-table'),
     productCategoryTable: $('#product-category-table'),
     tagTable: $('#tag-table'),

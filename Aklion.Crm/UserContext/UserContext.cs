@@ -19,13 +19,13 @@ namespace Aklion.Crm.UserContext
 
         public string AvatarUrl { get; set; }
 
-        public int? StoreId { get; set; }
+        public int StoreId { get; set; }
 
         public string StoreName { get; set; }
 
-        public bool? StoreIsLocked { get; set; }
+        public bool StoreIsLocked { get; set; }
 
-        public bool? StoreIsDeleted { get; set; }
+        public bool StoreIsDeleted { get; set; }
 
         public List<Permission> Permissions { get; set; }
 

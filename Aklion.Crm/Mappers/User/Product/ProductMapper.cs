@@ -1,36 +1,34 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Aklion.Crm.Models;
-using Aklion.Crm.Models.Administration.Product;
+using Aklion.Crm.Models.User.Product;
 using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
 using Aklion.Infrastructure.Utils.DateTime;
 using ProductParameterModel = Aklion.Crm.Domain.Product.ProductParameterModel;
 
-namespace Aklion.Crm.Mappers.Administration.Product
+namespace Aklion.Crm.Mappers.User.Product
 {
     public static class ProductMapper
     {
-        public static PagingModel<ProductModel> Map(this Paging<Domain.Product.ProductModel> model, int page, int size)
+        public static PagingModel<ProductModel> Map(this Paging<Domain.Product.ProductModel> model, int storeId, int page, int size)
         {
             return model == null
                 ? null
-                : new PagingModel<ProductModel>(model.List.Map(), model.TotalCount, page, size);
+                : new PagingModel<ProductModel>(model.List.Map(storeId), model.TotalCount, page, size);
         }
 
-        private static List<ProductModel> Map(this IEnumerable<Domain.Product.ProductModel> models)
+        private static List<ProductModel> Map(this IEnumerable<Domain.Product.ProductModel> models, int storeId)
         {
-            return models?.Select(Map).ToList();
+            return models?.Select(x => x.Map(storeId)).ToList();
         }
 
-        public static ProductModel Map(this Domain.Product.ProductModel model)
+        public static ProductModel Map(this Domain.Product.ProductModel model, int storeId)
         {
             return model == null
                 ? null
                 : new ProductModel
                 {
                     Id = model.Id,
-                    StoreId = model.StoreId,
-                    StoreName = model.StoreName,
                     Type = model.Type,
                     Name = model.Name,
                     Description = model.Description,
@@ -39,21 +37,19 @@ namespace Aklion.Crm.Mappers.Administration.Product
                     VendorCode = model.VendorCode,
                     ParentId = model.ParentId,
                     ParentName = model.ParentName,
-                    IsDeleted = model.IsDeleted,
-                    CreateDate = model.CreateDate,
-                    ModifyDate = model.ModifyDate
+                    CreateDate = model.CreateDate
                 };
         }
 
-        public static Domain.Product.ProductModel Map(this ProductModel model)
+        public static Domain.Product.ProductModel Map(this ProductModel model, int storeId)
         {
             return model == null
                 ? null
                 : new Domain.Product.ProductModel
                 {
                     Id = model.Id,
-                    StoreId = model.StoreId,
-                    StoreName = model.StoreName,
+                    StoreId = storeId,
+                    StoreName = null,
                     Type = model.Type,
                     Name = model.Name,
                     Description = model.Description,
@@ -62,21 +58,21 @@ namespace Aklion.Crm.Mappers.Administration.Product
                     VendorCode = model.VendorCode,
                     ParentId = model.ParentId,
                     ParentName = model.ParentName,
-                    IsDeleted = model.IsDeleted,
+                    IsDeleted = false,
                     CreateDate = model.CreateDate,
-                    ModifyDate = model.ModifyDate
+                    ModifyDate = null
                 };
         }
 
-        public static ProductParameterModel Map(this Models.Administration.Product.ProductParameterModel model)
+        public static ProductParameterModel Map(this Models.User.Product.ProductParameterModel model, int storeId)
         {
             return model == null
                 ? null
                 : new ProductParameterModel
                 {
                     Id = model.Id,
-                    StoreId = model.StoreId,
-                    StoreName = model.StoreName,
+                    StoreId = storeId,
+                    StoreName = null,
                     Type = model.Type,
                     Name = model.Name,
                     Description = model.Description,
@@ -85,9 +81,9 @@ namespace Aklion.Crm.Mappers.Administration.Product
                     VendorCode = model.VendorCode,
                     ParentId = model.ParentId,
                     ParentName = model.ParentName,
-                    IsDeleted = model.IsDeleted,
+                    IsDeleted = false,
                     CreateDate = model.CreateDate.ToNullableDate(),
-                    ModifyDate = model.ModifyDate.ToNullableDate(),
+                    ModifyDate = null,
                     IsSearch = model.IsSearch,
                     Timestamp = model.Timestamp,
                     SortingColumn = model.SortingColumn,
@@ -97,12 +93,12 @@ namespace Aklion.Crm.Mappers.Administration.Product
                 };
         }
 
-        public static void Map(this ProductModel viewModel, Domain.Product.ProductModel domainModel)
+        public static void Map(this ProductModel viewModel, Domain.Product.ProductModel domainModel, int storeId)
         {
             domainModel.Id = viewModel.Id;
             domainModel.Name = viewModel.Name;
-            domainModel.StoreId = viewModel.StoreId;
-            domainModel.StoreName = viewModel.StoreName;
+            domainModel.StoreId = storeId;
+            domainModel.StoreName = null;
             domainModel.Type = viewModel.Type;
             domainModel.Name = viewModel.Name;
             domainModel.Description = viewModel.Description;
@@ -111,9 +107,7 @@ namespace Aklion.Crm.Mappers.Administration.Product
             domainModel.VendorCode = viewModel.VendorCode;
             domainModel.ParentId = viewModel.ParentId;
             domainModel.ParentName = viewModel.ParentName;
-            domainModel.IsDeleted = viewModel.IsDeleted;
             domainModel.CreateDate = viewModel.CreateDate;
-            domainModel.ModifyDate = viewModel.ModifyDate;
         }
     }
 }

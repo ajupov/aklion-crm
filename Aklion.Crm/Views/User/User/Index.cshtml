@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "Пользователи";
+}
+
+<div class="row card">
+    <button class="tab-button" onclick="openTab(this, 'users-tab'); initUsersTable();">Пользователи</button>
+    <button class="tab-button" onclick="openTab(this, 'posts-tab'); initPostsTable();">Должности</button>
+    <button class="tab-button" onclick="openTab(this, 'permissions-tab'); initPermissionsTable();">Права</button>
+</div>
+
+<div id="users-tab" class="hidden tab card">
+    <div class="row">
+        <div class="col s12 m12 l12">
+            <div class="horisontal-scrollable pading-10">
+                <table id="users-table"></table>
+                <div id="users-table-pagination"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="posts-tab" class="hidden tab card">
+    <div class="row">
+        <div class="col s12 m12 l5">
+            <div class="horisontal-scrollable pading-10">
+                <table id="post-table"></table>
+                <div id="post-table-pagination"></div>
+            </div>
+        </div>
+        <div class="col s12 m12 l7">
+            <div class="horisontal-scrollable pading-10">
+                <table id="user-post-table"></table>
+                <div id="user-post-table-pagination"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="permissions-tab" class="hidden tab card">
+    <div class="row">
+        <div class="col s12 m12 l12">
+            <div class="horisontal-scrollable pading-10">
+                <table id="user-permission-table"></table>
+                <div id="user-permission-table-pagination"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        <environment names="Development">
+            <script src="~/scripts/user/user/index.js"></script>
+        </environment>
+        <environment names="Staging,Production">
+            <script src="~/scripts/user/user/index.min.js"></script>
+        </environment>
+    }
+}

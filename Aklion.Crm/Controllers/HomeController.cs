@@ -9,13 +9,13 @@ namespace Aklion.Crm.Controllers
         {
             if (IsUserContextInitialized)
             {
-                if (UserContext.Permissions.Exists(p => p == Permission.Admin))
+                if (UserContext.Permissions.Contains(Permission.Admin))
                 {
                     return RedirectToAction("Index", "AdministrationConsole");
                 }
                 else
                 {
-                    return RedirectToAction("Index", "Account");
+                    return RedirectToAction("Index", "Console");
                 }
             }
 
