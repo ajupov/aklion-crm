@@ -2,8 +2,8 @@
 using System.Linq;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.User.UserPermission;
-using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
-using Aklion.Infrastructure.Utils.DateTime;
+using Aklion.Infrastructure.DateTime;
+using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
 using UserPermissionParameterModel = Aklion.Crm.Domain.UserPermission.UserPermissionParameterModel;
 
 namespace Aklion.Crm.Mappers.User.UserPermission

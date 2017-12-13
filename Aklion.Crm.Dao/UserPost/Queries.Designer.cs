@@ -117,7 +117,7 @@ namespace Aklion.Crm.Dao.UserPost {
         ///			up.UserId = u.Id
         ///		inner join dbo.Store as s on
         ///			up.StoreId = s.Id
-        ///		inner join dbo.Post as p on
+        ///		inner join dbo.PostAsync as p on
         ///			up.PostId = p.Id
         ///	where up.Id = @id;.
         /// </summary>
@@ -135,7 +135,7 @@ namespace Aklion.Crm.Dao.UserPost {
         ///			up.UserId = u.Id
         ///		inner join dbo.Store as s on
         ///			up.StoreId = s.Id
-        ///		inner join dbo.Post as p on
+        ///		inner join dbo.PostAsync as p on
         ///			up.PostId = p.Id
         ///	where @IsSearch = 0 or
         ///		((coalesce(@Id, 0) = 0 or s.Id = @Id)

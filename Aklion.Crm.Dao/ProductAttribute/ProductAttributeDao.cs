@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Aklion.Crm.Domain.ProductAttribute;
-using Aklion.Infrastructure.Storage.DataBaseExecutor;
-using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
+using Aklion.Infrastructure.DataBaseExecutor;
+using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
 
 namespace Aklion.Crm.Dao.ProductAttribute
 {
@@ -21,22 +21,22 @@ namespace Aklion.Crm.Dao.ProductAttribute
 
         public Task<ProductAttributeModel> Get(int id)
         {
-            return _dataBaseExecutor.SelectOne<ProductAttributeModel>(Queries.Get, new {id});
+            return _dataBaseExecutor.SelectOneAsync<ProductAttributeModel>(Queries.Get, new {id});
         }
 
         public Task<int> Create(ProductAttributeModel model)
         {
-            return _dataBaseExecutor.SelectOne<int>(Queries.Create, model);
+            return _dataBaseExecutor.SelectOneAsync<int>(Queries.Create, model);
         }
 
         public Task Update(ProductAttributeModel model)
         {
-            return _dataBaseExecutor.Execute(Queries.Update, model);
+            return _dataBaseExecutor.ExecuteAsync(Queries.Update, model);
         }
 
         public Task Delete(int id)
         {
-            return _dataBaseExecutor.Execute(Queries.Delete, new {id});
+            return _dataBaseExecutor.ExecuteAsync(Queries.Delete, new {id});
         }
     }
 }

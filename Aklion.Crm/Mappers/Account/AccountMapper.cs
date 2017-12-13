@@ -1,8 +1,8 @@
 ﻿using Aklion.Crm.Domain.User;
 using Aklion.Crm.Models.Account;
-using Aklion.Infrastructure.Utils.DateTime;
-using Aklion.Infrastructure.Utils.Password;
-using Aklion.Infrastructure.Utils.PhoneNumber;
+using Aklion.Infrastructure.DateTime;
+using Aklion.Infrastructure.Password;
+using Aklion.Infrastructure.PhoneNumber;
 
 namespace Aklion.Crm.Mappers.Account
 {

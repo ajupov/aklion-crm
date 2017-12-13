@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Aklion.Infrastructure.Storage.ConnectionFactory;
-using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
-using Aklion.Infrastructure.Storage.DataBaseExecutor.Readers;
+using Aklion.Infrastructure.ConnectionFactory;
+using Aklion.Infrastructure.Reader;
 using Dapper;
 
-namespace Aklion.Infrastructure.Storage.DataBaseExecutor
+namespace Aklion.Infrastructure.DataBaseExecutor
 {
     public sealed class DataBaseExecutor : IDataBaseExecutor
     {
@@ -18,7 +17,7 @@ namespace Aklion.Infrastructure.Storage.DataBaseExecutor
             _connectionFactory = connectionFactory;
         }
 
-        public async Task Execute(string query, object parameters = null)
+        public async Task ExecuteAsync(string query, object parameters = null)
         {
             using (var connection = _connectionFactory.GetConnection())
             {
@@ -26,7 +25,7 @@ namespace Aklion.Infrastructure.Storage.DataBaseExecutor
             }
         }
 
-        public async Task<TModel> SelectOne<TModel>(string query, object parameters = null)
+        public async Task<TModel> SelectOneAsync<TModel>(string query, object parameters = null)
         {
             using (var connection = _connectionFactory.GetConnection())
             {
@@ -34,7 +33,7 @@ namespace Aklion.Infrastructure.Storage.DataBaseExecutor
             }
         }
 
-        public async Task<List<TModel>> SelectList<TModel>(string query, object parameters = null)
+        public async Task<List<TModel>> SelectListAsync<TModel>(string query, object parameters = null)
         {
             using (var connection = _connectionFactory.GetConnection())
             {
@@ -42,37 +41,13 @@ namespace Aklion.Infrastructure.Storage.DataBaseExecutor
             }
         }
 
-        public async Task<Paging<T>> SelectListWithTotalCount<T>(string query, object parameters = null)
-        {
-            using (var connection = _connectionFactory.GetConnection())
-            {
-                var reader = await connection.QueryMultipleAsync(query, parameters).ConfigureAwait(false);
-
-                return new Paging<T>
-                {
-                    TotalCount = await reader.ReadFirstOrDefaultAsync<int>().ConfigureAwait(false),
-                    List = (await reader.ReadAsync<T>().ConfigureAwait(false)).ToList()
-                };
-            }
-        }
-
-        public async Task SelectMultiple(string query, Func<IReader, Task> reader, object parameters = null)
-        {
-            using (var connection = _connectionFactory.GetConnection())
-            {
-                var  gridReader = await connection.QueryMultipleAsync(query, parameters).ConfigureAwait(false);
-
-                await reader(new Reader(gridReader)).ConfigureAwait(false);
-            }
-        }
-
-        public async Task<T> SelectMultiple<T>(string query, Func<IReader, Task<T>> reader, object parameters = null)
+        public async Task<T> SelectMultipleAsync<T>(string query, Func<IReader, Task<T>> reader, object parameters = null)
         {
             using (var connection = _connectionFactory.GetConnection())
             {
                 var gridReader = await connection.QueryMultipleAsync(query, parameters).ConfigureAwait(false);
 
-                return await reader(new Reader(gridReader)).ConfigureAwait(false);
+                return await reader(new Reader.Reader(gridReader)).ConfigureAwait(false);
             }
         }
     }

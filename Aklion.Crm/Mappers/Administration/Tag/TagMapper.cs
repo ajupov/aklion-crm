@@ -2,8 +2,8 @@
 using System.Linq;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.Tag;
-using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
-using Aklion.Infrastructure.Utils.DateTime;
+using Aklion.Infrastructure.DateTime;
+using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
 using TagParameterModel = Aklion.Crm.Domain.Tag.TagParameterModel;
 
 namespace Aklion.Crm.Mappers.Administration.Tag

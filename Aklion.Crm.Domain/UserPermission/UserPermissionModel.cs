@@ -1,24 +1,17 @@
-﻿using System;
-using Aklion.Crm.Enums;
+﻿using Aklion.Crm.Enums;
 
 namespace Aklion.Crm.Domain.UserPermission
 {
-    public class UserPermissionModel
+    public class UserPermissionModel : BaseModel
     {
-        public int Id { get; set; }
-
         public int UserId { get; set; }
 
-        public string UserLogin { get; set; }
+        public string UserLogin { get; }
 
         public int StoreId { get; set; }
 
-        public string StoreName { get; set; }
+        public string StoreName { get; }
 
         public Permission Permission { get; set; }
-
-        public DateTime CreateDate { get; set; }
-
-        public DateTime? ModifyDate { get; set; }
     }
 }

@@ -2,8 +2,8 @@
 using System.Linq;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.UserPost;
-using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
-using Aklion.Infrastructure.Utils.DateTime;
+using Aklion.Infrastructure.DateTime;
+using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
 using UserPostParameterModel = Aklion.Crm.Domain.UserPost.UserPostParameterModel;
 
 namespace Aklion.Crm.Mappers.Administration.UserPost

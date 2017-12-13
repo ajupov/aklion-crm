@@ -1,13 +1,10 @@
 ﻿using System;
 using Aklion.Crm.Enums;
-using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
 
 namespace Aklion.Crm.Domain.User
 {
-    public class UserParameterModel : ParameterModel
+    public class UserParameterModel : BaseParameterModel
     {
-        public int? Id { get; set; }
-
         public string Login { get; set; }
 
         public string Email { get; set; }
@@ -31,9 +28,5 @@ namespace Aklion.Crm.Domain.User
         public bool? IsLocked { get; set; }
 
         public bool? IsDeleted { get; set; }
-
-        public DateTime? CreateDate { get; set; }
-
-        public DateTime? ModifyDate { get; set; }
     }
 }

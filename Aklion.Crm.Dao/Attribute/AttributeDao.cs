@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Domain;
-using Aklion.Crm.Domain.Attribute;
-using Aklion.Infrastructure.Storage.DataBaseExecutor;
-using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
+using Aklion.Infrastructure.DataBaseExecutor;
+using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
 
 namespace Aklion.Crm.Dao.Attribute
 {
@@ -23,28 +22,28 @@ namespace Aklion.Crm.Dao.Attribute
 
         public Task<List<AutocompleteModel>> GetForAutocompleteByNamePattern(string pattern, int storeId)
         {
-            return _dataBaseExecutor.SelectList<AutocompleteModel>(Queries.GetForAutocompleteByNamePattern,
+            return _dataBaseExecutor.SelectListAsync<AutocompleteModel>(Queries.GetForAutocompleteByNamePattern,
                 new {pattern, storeId });
         }
 
         public Task<AttributeModel> Get(int id)
         {
-            return _dataBaseExecutor.SelectOne<AttributeModel>(Queries.Get, new {id});
+            return _dataBaseExecutor.SelectOneAsync<AttributeModel>(Queries.Get, new {id});
         }
 
         public Task<int> Create(AttributeModel model)
         {
-            return _dataBaseExecutor.SelectOne<int>(Queries.Create, model);
+            return _dataBaseExecutor.SelectOneAsync<int>(Queries.Create, model);
         }
 
         public Task Update(AttributeModel model)
         {
-            return _dataBaseExecutor.Execute(Queries.Update, model);
+            return _dataBaseExecutor.ExecuteAsync(Queries.Update, model);
         }
 
         public Task Delete(int id)
         {
-            return _dataBaseExecutor.Execute(Queries.Delete, new {id});
+            return _dataBaseExecutor.ExecuteAsync(Queries.Delete, new {id});
         }
     }
 }

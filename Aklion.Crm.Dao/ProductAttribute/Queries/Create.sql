@@ -1,20 +1,28 @@
-﻿insert dbo.ProductAttribute
+﻿insert dbo.Product
 (
-	StoreId,
-	ProductId,
-	AttributeId,
-	[Value],
-	IsDeleted,
-	CreateDate,
-	ModifyDate
+    StoreId,
+    [Type],
+    [Name],
+    [Description],
+    Price,
+    [Status],
+    VendorCode,
+    ParentId,
+    IsDeleted,
+    CreateDate,
+    ModifyDate
 )
 values
 (
-	@StoreId,
-	@ProductId,
-	@AttributeId,
-	@Value,
-	@IsDeleted,
+    @StoreId,
+    @Type,
+    @Name,
+    @Description,
+    @Price,
+    @Status,
+    @VendorCode,
+    @ParentId,
+    @IsDeleted,
     getdate(),
     null
 );

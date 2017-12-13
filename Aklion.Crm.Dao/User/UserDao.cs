@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using Aklion.Crm.Domain;
 using Aklion.Crm.Domain.User;
-using Aklion.Infrastructure.Storage.DataBaseExecutor;
-using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
+using Aklion.Infrastructure.DataBaseExecutor;
+using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
 
 namespace Aklion.Crm.Dao.User
 {
@@ -23,53 +23,53 @@ namespace Aklion.Crm.Dao.User
 
         public Task<List<AutocompleteModel>> GetForAutocompleteByLoginPattern(string pattern)
         {
-            return _dataBaseExecutor.SelectList<AutocompleteModel>(Queries.GetForAutocompleteByLoginPattern,
+            return _dataBaseExecutor.SelectListAsync<AutocompleteModel>(Queries.GetForAutocompleteByLoginPattern,
                 new {pattern});
         }
 
         public Task<UserModel> Get(int id)
         {
-            return _dataBaseExecutor.SelectOne<UserModel>(Queries.Get, new {id});
+            return _dataBaseExecutor.SelectOneAsync<UserModel>(Queries.Get, new {id});
         }
 
         public Task<UserModel> GetByLogin(string login)
         {
-            return _dataBaseExecutor.SelectOne<UserModel>(Queries.GetByLogin, new {login});
+            return _dataBaseExecutor.SelectOneAsync<UserModel>(Queries.GetByLogin, new {login});
         }
 
         public Task<UserModel> GetByEmail(string email)
         {
-            return _dataBaseExecutor.SelectOne<UserModel>(Queries.GetByEmail, new {email});
+            return _dataBaseExecutor.SelectOneAsync<UserModel>(Queries.GetByEmail, new {email});
         }
 
         public Task<bool> IsExistByLogin(string login)
         {
-            return _dataBaseExecutor.SelectOne<bool>(Queries.IsExistByLogin, new {login});
+            return _dataBaseExecutor.SelectOneAsync<bool>(Queries.IsExistByLogin, new {login});
         }
 
         public Task<bool> IsExistByEmail(string email)
         {
-            return _dataBaseExecutor.SelectOne<bool>(Queries.IsExistByEmail, new {email});
+            return _dataBaseExecutor.SelectOneAsync<bool>(Queries.IsExistByEmail, new {email});
         }
 
         public Task<bool> IsExistByPhone(string phone)
         {
-            return _dataBaseExecutor.SelectOne<bool>(Queries.IsExistByPhone, new {phone});
+            return _dataBaseExecutor.SelectOneAsync<bool>(Queries.IsExistByPhone, new {phone});
         }
 
         public Task<int> Create(UserModel model)
         {
-            return _dataBaseExecutor.SelectOne<int>(Queries.Create, model);
+            return _dataBaseExecutor.SelectOneAsync<int>(Queries.Create, model);
         }
 
         public Task Update(UserModel model)
         {
-            return _dataBaseExecutor.Execute(Queries.Update, model);
+            return _dataBaseExecutor.ExecuteAsync(Queries.Update, model);
         }
 
         public Task Delete(int id)
         {
-            return _dataBaseExecutor.Execute(Queries.Delete, new {id});
+            return _dataBaseExecutor.ExecuteAsync(Queries.Delete, new {id});
         }
     }
 }

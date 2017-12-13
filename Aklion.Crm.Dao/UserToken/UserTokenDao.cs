@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Aklion.Crm.Domain.UserToken;
-using Aklion.Infrastructure.Storage.DataBaseExecutor;
+using Aklion.Infrastructure.DataBaseExecutor;
 
 namespace Aklion.Crm.Dao.UserToken
 {
@@ -15,17 +15,17 @@ namespace Aklion.Crm.Dao.UserToken
 
         public Task<UserTokenModel> Get(UserTokenParameterModel parameterModel)
         {
-            return _dataBaseExecutor.SelectOne<UserTokenModel>(Queries.Get, parameterModel);
+            return _dataBaseExecutor.SelectOneAsync<UserTokenModel>(Queries.Get, parameterModel);
         }
 
         public Task<int> Create(UserTokenModel model)
         {
-            return _dataBaseExecutor.SelectOne<int>(Queries.Create, model);
+            return _dataBaseExecutor.SelectOneAsync<int>(Queries.Create, model);
         }
 
         public Task SetUsed(int id)
         {
-            return _dataBaseExecutor.Execute(Queries.SetUsed, new {id});
+            return _dataBaseExecutor.ExecuteAsync(Queries.SetUsed, new {id});
         }
     }
 }

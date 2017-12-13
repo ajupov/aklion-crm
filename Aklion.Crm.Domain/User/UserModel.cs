@@ -3,10 +3,8 @@ using Aklion.Crm.Enums;
 
 namespace Aklion.Crm.Domain.User
 {
-    public class UserModel
+    public class UserModel : BaseModel
     {
-        public int Id { get; set; }
-
         public string Login { get; set; }
 
         public string PasswordHash { get; set; }
@@ -34,9 +32,5 @@ namespace Aklion.Crm.Domain.User
         public bool IsDeleted { get; set; }
 
         public string AvatarUrl { get; set; }
-
-        public DateTime CreateDate { get; set; }
-
-        public DateTime? ModifyDate { get; set; }
     }
 }

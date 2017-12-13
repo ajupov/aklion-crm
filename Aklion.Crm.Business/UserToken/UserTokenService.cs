@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Aklion.Crm.Dao.UserToken;
 using Aklion.Crm.Domain.UserToken;
 using Aklion.Crm.Enums;
-using Aklion.Infrastructure.Utils.Token;
+using Aklion.Infrastructure.Random;
 
 namespace Aklion.Crm.Business.UserToken
 {
@@ -21,9 +21,9 @@ namespace Aklion.Crm.Business.UserToken
             var token = new UserTokenModel
             {
                 UserId = userId,
-                TokenType = TokenType.EmailConfirmation,
-                Token = TokenHelper.GenerateToken(type),
-                ExpirationDate = TokenHelper.GetExpirationDate(type),
+                TokenType = type,
+                Token = GenerateToken(type),
+                ExpirationDate = GetExpirationDate(type),
                 IsUsed = false
             };
 
@@ -54,6 +54,36 @@ namespace Aklion.Crm.Business.UserToken
             await _userTokenDao.SetUsed(identityToken.Id).ConfigureAwait(false);
 
             return true;
+        }
+
+        private static string GenerateToken(TokenType tokenType)
+        {
+            switch (tokenType)
+            {
+                case TokenType.EmailConfirmation:
+                    return RandomGenerator.GenerateRandomCharacters(127);
+                case TokenType.PhoneConfirmation:
+                    return RandomGenerator.GenerateRandomInt(4);
+                case TokenType.PasswordReset:
+                    return RandomGenerator.GenerateRandomCharacters(127);
+                default:
+                    return null;
+            }
+        }
+
+        private static DateTime GetExpirationDate(TokenType tokenType)
+        {
+            switch (tokenType)
+            {
+                case TokenType.EmailConfirmation:
+                    return DateTime.Now.AddDays(1);
+                case TokenType.PhoneConfirmation:
+                    return DateTime.Now.AddMinutes(10);
+                case TokenType.PasswordReset:
+                    return DateTime.Now.AddDays(1);
+                default:
+                    return DateTime.Now;
+            }
         }
     }
 }

@@ -2,8 +2,8 @@
 using System.Linq;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.User.ProductTag;
-using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
-using Aklion.Infrastructure.Utils.DateTime;
+using Aklion.Infrastructure.DateTime;
+using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
 using ProductTagParameterModel = Aklion.Crm.Domain.ProductTag.ProductTagParameterModel;
 
 namespace Aklion.Crm.Mappers.User.ProductTag

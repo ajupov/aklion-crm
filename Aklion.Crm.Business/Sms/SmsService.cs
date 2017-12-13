@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Aklion.Crm.Business.Sms.Models;
-using Aklion.Infrastructure.Utils.PhoneNumber;
+using Aklion.Infrastructure.PhoneNumber;
 using MainSMS;
 using Microsoft.Extensions.Options;
 

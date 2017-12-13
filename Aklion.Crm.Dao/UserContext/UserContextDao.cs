@@ -3,7 +3,7 @@ using Aklion.Crm.Domain.Store;
 using Aklion.Crm.Domain.User;
 using Aklion.Crm.Domain.UserContext;
 using Aklion.Crm.Domain.UserPermission;
-using Aklion.Infrastructure.Storage.DataBaseExecutor;
+using Aklion.Infrastructure.DataBaseExecutor;
 
 namespace Aklion.Crm.Dao.UserContext
 {
@@ -18,12 +18,12 @@ namespace Aklion.Crm.Dao.UserContext
 
         public Task<UserContextModel> Get(string login, int selectedStoreId)
         {
-            return _dataBaseExecutor.SelectMultiple(Queries.Get, async r => new UserContextModel
+            return _dataBaseExecutor.SelectMultipleAsync(Queries.Get, async r => new UserContextModel
             {
-                CurrentUser = await r.SelectOne<UserModel>().ConfigureAwait(false),
-                CurrentStore = await r.SelectOne<StoreModel>().ConfigureAwait(false),
-                CurrentStorePermissions = await r.SelectList<UserPermissionModel>().ConfigureAwait(false),
-                Stores = await r.SelectList<StoreModel>().ConfigureAwait(false)
+                CurrentUser = await r.SelectOneAsync<UserModel>().ConfigureAwait(false),
+                CurrentStore = await r.SelectOneAsync<StoreModel>().ConfigureAwait(false),
+                CurrentStorePermissions = await r.SelectListAsync<UserPermissionModel>().ConfigureAwait(false),
+                Stores = await r.SelectListAsync<StoreModel>().ConfigureAwait(false)
             }, new {login, selectedStoreId});
         }
     }

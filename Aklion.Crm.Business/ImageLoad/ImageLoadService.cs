@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using Aklion.Infrastructure.Utils.File;
+using Aklion.Infrastructure.FileFormat;
 using Microsoft.AspNetCore.Http;
 
 namespace Aklion.Crm.Business.ImageLoad

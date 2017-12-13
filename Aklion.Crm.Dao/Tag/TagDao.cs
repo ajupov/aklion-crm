@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using Aklion.Crm.Domain;
 using Aklion.Crm.Domain.Tag;
-using Aklion.Infrastructure.Storage.DataBaseExecutor;
-using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
+using Aklion.Infrastructure.DataBaseExecutor;
+using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
 
 namespace Aklion.Crm.Dao.Tag
 {
@@ -23,28 +23,28 @@ namespace Aklion.Crm.Dao.Tag
 
         public Task<List<AutocompleteModel>> GetForAutocompleteByNamePattern(string pattern, int storeId)
         {
-            return _dataBaseExecutor.SelectList<AutocompleteModel>(Queries.GetForAutocompleteByNamePattern,
+            return _dataBaseExecutor.SelectListAsync<AutocompleteModel>(Queries.GetForAutocompleteByNamePattern,
                 new {pattern, storeId });
         }
 
         public Task<TagModel> Get(int id)
         {
-            return _dataBaseExecutor.SelectOne<TagModel>(Queries.Get, new {id});
+            return _dataBaseExecutor.SelectOneAsync<TagModel>(Queries.Get, new {id});
         }
 
         public Task<int> Create(TagModel model)
         {
-            return _dataBaseExecutor.SelectOne<int>(Queries.Create, model);
+            return _dataBaseExecutor.SelectOneAsync<int>(Queries.Create, model);
         }
 
         public Task Update(TagModel model)
         {
-            return _dataBaseExecutor.Execute(Queries.Update, model);
+            return _dataBaseExecutor.ExecuteAsync(Queries.Update, model);
         }
 
         public Task Delete(int id)
         {
-            return _dataBaseExecutor.Execute(Queries.Delete, new {id});
+            return _dataBaseExecutor.ExecuteAsync(Queries.Delete, new {id});
         }
     }
 }

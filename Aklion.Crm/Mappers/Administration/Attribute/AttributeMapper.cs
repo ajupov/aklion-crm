@@ -2,8 +2,8 @@
 using System.Linq;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.Attribute;
-using Aklion.Infrastructure.Storage.DataBaseExecutor.Models;
-using Aklion.Infrastructure.Utils.DateTime;
+using Aklion.Infrastructure.DateTime;
+using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
 using AttributeParameterModel = Aklion.Crm.Domain.Attribute.AttributeParameterModel;
 
 namespace Aklion.Crm.Mappers.Administration.Attribute

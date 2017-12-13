@@ -1,36 +1,25 @@
-﻿using System;
-using Aklion.Crm.Enums;
-
-namespace Aklion.Crm.Domain.Product
+﻿namespace Aklion.Crm.Domain.Product
 {
-    public class ProductModel
+    public class ProductModel : BaseModel
     {
-        public int Id { get; set; }
-
         public int StoreId { get; set; }
 
-        public string StoreName { get; set; }
-
-        public ProductType Type { get; set; }
-
-        public string Name { get; set; }
-
-        public string Description { get; set; }
-
-        public decimal Price { get; set; }
-
-        public ProductStatus Status { get; set; }
-
-        public string VendorCode { get; set; }
+        public string StoreName { get; }
 
         public int? ParentId { get; set; }
 
-        public string ParentName { get; set; }
+        public string ParentName { get; }
+
+        public string Name { get; set; }
+
+        public decimal Price { get; set; }
+
+        public int StatusId { get; set; }
+
+        public string StatusName { get; }
+
+        public string VendorCode { get; set; }
 
         public bool IsDeleted { get; set; }
-
-        public DateTime CreateDate { get; set; }
-
-        public DateTime? ModifyDate { get; set; }
     }
 }

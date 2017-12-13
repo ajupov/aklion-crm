@@ -33,13 +33,13 @@ namespace Aklion.Crm.Controllers
             //    Name = "Горбатая гора",
             //    IsDeleted = false
             //};
-            //model1.Id = await _apiClient.Post<OrganizationModel, int>("organizations", model1).ConfigureAwait(false);
+            //model1.Id = await _apiClient.PostAsync<OrganizationModel, int>("organizations", model1).ConfigureAwait(false);
 
             //model1.Name = $"Рога и копыта {DateTime.Now.ToString(CultureInfo.InvariantCulture)}";
-            //await _apiClient.Put("organizations", model1).ConfigureAwait(false);
+            //await _apiClient.PutAsync("organizations", model1).ConfigureAwait(false);
 
             //model1.Name = $"Рога и копыта 2 {DateTime.Now.ToString(CultureInfo.InvariantCulture)}";
-            //await _apiClient.Patch("organizations", model1).ConfigureAwait(false);
+            //await _apiClient.PatchAsync("organizations", model1).ConfigureAwait(false);
 
             //await _apiClient.Delete("organizations", new {id = 3}).ConfigureAwait(false);
 

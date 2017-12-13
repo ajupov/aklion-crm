@@ -6,7 +6,7 @@ using Aklion.Crm.Mappers;
 using Aklion.Crm.Mappers.Administration.Store;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.Store;
-using Aklion.Infrastructure.Utils.RandomGenerator;
+using Aklion.Infrastructure.Random;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aklion.Crm.Controllers.Administration

@@ -3,10 +3,8 @@ using Aklion.Crm.Enums;
 
 namespace Aklion.Crm.Domain.UserToken
 {
-    public class UserTokenModel
+    public class UserTokenModel : BaseModel
     {
-        public int Id { get; set; }
-
         public int UserId { get; set; }
 
         public TokenType TokenType { get; set; }
@@ -16,9 +14,5 @@ namespace Aklion.Crm.Domain.UserToken
         public DateTime ExpirationDate { get; set; }
 
         public bool IsUsed { get; set; }
-
-        public DateTime CreateDate { get; set; }
-
-        public DateTime? ModifyDate { get; set; }
     }
 }

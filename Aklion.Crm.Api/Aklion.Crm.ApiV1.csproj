@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Aklion.Crm.Dao\Aklion.Crm.Dao.csproj" />
-    <ProjectReference Include="..\Aklion.Infrastructure.Storage\Aklion.Infrastructure.Storage.csproj" />
+    <ProjectReference Include="..\Aklion.Infrastructure.Storage\Aklion.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

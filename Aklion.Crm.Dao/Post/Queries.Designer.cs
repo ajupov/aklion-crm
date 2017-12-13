@@ -39,7 +39,7 @@ namespace Aklion.Crm.Dao.Post {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Aklion.Crm.Dao.Post.Queries", typeof(Queries).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Aklion.Crm.Dao.PostAsync.Queries", typeof(Queries).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,7 +61,7 @@ namespace Aklion.Crm.Dao.Post {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на insert dbo.Post
+        ///   Ищет локализованную строку, похожую на insert dbo.PostAsync
         ///(
         ///	StoreId,
         ///	[Name],
@@ -89,7 +89,7 @@ namespace Aklion.Crm.Dao.Post {
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на delete
-        ///	from dbo.Post
+        ///	from dbo.PostAsync
         ///	where Id = @id;.
         /// </summary>
         internal static string Delete {
@@ -107,7 +107,7 @@ namespace Aklion.Crm.Dao.Post {
         ///    p.IsDeleted,
         ///    p.CreateDate,
         ///    p.ModifyDate
-        ///	from dbo.Post as p
+        ///	from dbo.PostAsync as p
         ///		inner join dbo.Store as s on
         ///			p.StoreId = s.Id
         ///	where p.Id = @id;.
@@ -122,7 +122,7 @@ namespace Aklion.Crm.Dao.Post {
         ///   Ищет локализованную строку, похожую на select
         ///	Id,
         ///    [Name]	as [Value]
-        ///	from dbo.Post
+        ///	from dbo.PostAsync
         ///	where IsDeleted = 0
         ///		and [Name] like @pattern + &apos;%&apos;;.
         /// </summary>
@@ -135,7 +135,7 @@ namespace Aklion.Crm.Dao.Post {
         /// <summary>
         ///   Ищет локализованную строку, похожую на select
         ///	count(0)
-        ///	from dbo.Post as p
+        ///	from dbo.PostAsync as p
         ///		inner join dbo.Store as s on
         ///			p.StoreId = s.Id
         ///	where @IsSearch = 0 or
@@ -154,7 +154,7 @@ namespace Aklion.Crm.Dao.Post {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на update dbo.Post
+        ///   Ищет локализованную строку, похожую на update dbo.PostAsync
         ///    set StoreId = @StoreId,
         ///		[Name] = @Name,
         ///		IsLocked = @IsLocked,

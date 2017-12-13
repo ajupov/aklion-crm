@@ -2,7 +2,7 @@
 using Aklion.Crm.Attributes;
 using Aklion.Crm.Dao.Attribute;
 using Aklion.Crm.Dao.Product;
-using Aklion.Crm.Dao.ProductAttribute;
+using Aklion.Crm.Dao.ProductAttributeLink;
 using Aklion.Crm.Mappers.Administration.ProductAttribute;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.ProductAttribute;

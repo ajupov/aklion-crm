@@ -16,7 +16,6 @@
     <ProjectReference Include="..\Aklion.Crm.Dao\Aklion.Crm.Dao.csproj" />
     <ProjectReference Include="..\Aklion.Crm.Domain\Aklion.Crm.Domain.csproj" />
     <ProjectReference Include="..\Aklion.Crm.Enums\Aklion.Crm.Enums.csproj" />
-    <ProjectReference Include="..\Aklion.Infrastructure.Utils\Aklion.Infrastructure.Utils.csproj" />
   </ItemGroup>
 
 </Project>

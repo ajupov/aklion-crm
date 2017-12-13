@@ -1,3 +1,3 @@
 ﻿delete
-	from dbo.ProductAttribute
+	from dbo.Product
 	where Id = @id;

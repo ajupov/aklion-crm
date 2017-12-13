@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Aklion.Infrastructure.Utils.DisplayName;
+using Aklion.Infrastructure.DisplayName;
 
 namespace Aklion.Crm.Business.Permission
 {
