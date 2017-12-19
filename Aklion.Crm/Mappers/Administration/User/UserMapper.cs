@@ -4,25 +4,25 @@ using Aklion.Crm.Models;
 using Aklion.Infrastructure.DateTime;
 using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
 using UserModel = Aklion.Crm.Models.Administration.User.UserModel;
-using UserParameterModel = Aklion.Crm.Domain.User.UserParameterModel;
+using UserParameterModel = Aklion.Crm.Models.Administration.User.UserParameterModel;
 
 namespace Aklion.Crm.Mappers.Administration.User
 {
     public static class UserMapper
     {
-        public static PagingModel<UserModel> Map(this Paging<Domain.User.UserModel> model, int page, int size)
+        public static PagingModel<UserModel> Map(this Paging<UserModel> model, int page, int size)
         {
             return model == null
                 ? null
                 : new PagingModel<UserModel>(model.List.Map(), model.TotalCount, page, size);
         }
 
-        private static List<UserModel> Map(this IEnumerable<Domain.User.UserModel> models)
+        private static List<UserModel> Map(this IEnumerable<UserModel> models)
         {
             return models?.Select(Map).ToList();
         }
 
-        public static UserModel Map(this Domain.User.UserModel model)
+        public static UserModel Map(this UserModel model)
         {
             return model == null
                 ? null
@@ -76,7 +76,7 @@ namespace Aklion.Crm.Mappers.Administration.User
                 };
         }
 
-        public static void Map(this UserModel viewModel, Domain.User.UserModel domainModel)
+        public static void Map(this UserModel viewModel, UserModel domainModel)
         {
             domainModel.Id = viewModel.Id;
             domainModel.Login = viewModel.Login;

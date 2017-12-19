@@ -4,25 +4,25 @@ using Aklion.Crm.Models;
 using Aklion.Infrastructure.DateTime;
 using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
 using UserModel = Aklion.Crm.Models.User.User.UserModel;
-using UserParameterModel = Aklion.Crm.Domain.User.UserParameterModel;
+using UserParameterModel = Aklion.Crm.Models.Administration.User.UserParameterModel;
 
 namespace Aklion.Crm.Mappers.User.User
 {
     public static class UserMapper
     {
-        public static PagingModel<UserModel> Map(this Paging<Domain.User.UserModel> model, int storeId, int page, int size)
+        public static PagingModel<UserModel> Map(this Paging<Models.Administration.User.UserModel> model, int storeId, int page, int size)
         {
             return model == null
                 ? null
                 : new PagingModel<UserModel>(model.List.Map(storeId), model.TotalCount, page, size);
         }
 
-        private static List<UserModel> Map(this IEnumerable<Domain.User.UserModel> models, int storeId)
+        private static List<UserModel> Map(this IEnumerable<Models.Administration.User.UserModel> models, int storeId)
         {
             return models?.Select(x => x.Map(storeId)).ToList();
         }
 
-        public static UserModel Map(this Domain.User.UserModel model, int storeId)
+        public static UserModel Map(this Models.Administration.User.UserModel model, int storeId)
         {
             return model == null
                 ? null
@@ -71,7 +71,7 @@ namespace Aklion.Crm.Mappers.User.User
                 };
         }
 
-        public static void Map(this UserModel viewModel, Domain.User.UserModel domainModel, int storeId)
+        public static void Map(this UserModel viewModel, Models.Administration.User.UserModel domainModel, int storeId)
         {
             domainModel.Id = viewModel.Id;
             domainModel.Login = viewModel.Login;

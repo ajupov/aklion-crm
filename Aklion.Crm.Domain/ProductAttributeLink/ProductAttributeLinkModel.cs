@@ -11,7 +11,7 @@ namespace Aklion.Crm.Domain.ProductAttributeLink
     {
         [Column("pal.Id")]
         [Identificator]
-        public int Id { get; }
+        public int Id { get; set; }
 
         [Column("pal.StoreId")]
         public int StoreId { get; set; }
@@ -42,10 +42,10 @@ namespace Aklion.Crm.Domain.ProductAttributeLink
 
         [Column("pal.CreateDate")]
         [CreateDate]
-        public DateTime CreateDate { get; }
+        public DateTime CreateDate { get; set; }
 
         [Column("pal.ModifyDate")]
         [ModifyDate]
-        public DateTime? ModifyDate { get; }
+        public DateTime? ModifyDate { get; set; }
     }
 }

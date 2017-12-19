@@ -5,13 +5,13 @@ namespace Aklion.Crm.Domain.Product
     [WhereCombination("and")]
     public class ProductAutocompleteParameterModel
     {
-        [Where("@StoreId is null or p.StoreId = @StoreId")]
-        public int? StoreId { get; set; }
+        [Where("p.StoreId = @StoreId")]
+        public int StoreId { get; set; }
 
-        [Where("@Name is null or p.Name like @Name + '%'")]
+        [Where("p.Name like @Name + '%'")]
         public string Name { get; set; }
 
-        [Where("@IsDeleted is null or p.IsDeleted = @IsDeleted")]
-        public bool? IsDeleted { get; set; }
+        [Where("p.IsDeleted = 0")]
+        public bool IsDeleted { get; set; }
     }
 }

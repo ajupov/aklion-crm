@@ -4,25 +4,25 @@ using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.UserPermission;
 using Aklion.Infrastructure.DateTime;
 using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
-using UserPermissionParameterModel = Aklion.Crm.Domain.UserPermission.UserPermissionParameterModel;
+using UserPermissionParameterModel = Aklion.Crm.Models.Administration.UserPermission.UserPermissionParameterModel;
 
 namespace Aklion.Crm.Mappers.Administration.UserPermission
 {
     public static class UserPermissionMapper
     {
-        public static PagingModel<UserPermissionModel> Map(this Paging<Domain.UserPermission.UserPermissionModel> model, int page, int size)
+        public static PagingModel<UserPermissionModel> Map(this Paging<UserPermissionModel> model, int page, int size)
         {
             return model == null
                 ? null
                 : new PagingModel<UserPermissionModel>(model.List.Map(), model.TotalCount, page, size);
         }
 
-        private static List<UserPermissionModel> Map(this IEnumerable<Domain.UserPermission.UserPermissionModel> models)
+        private static List<UserPermissionModel> Map(this IEnumerable<UserPermissionModel> models)
         {
             return models?.Select(Map).ToList();
         }
 
-        public static UserPermissionModel Map(this Domain.UserPermission.UserPermissionModel model)
+        public static UserPermissionModel Map(this UserPermissionModel model)
         {
             return model == null
                 ? null
@@ -39,11 +39,11 @@ namespace Aklion.Crm.Mappers.Administration.UserPermission
                 };
         }
 
-        public static Domain.UserPermission.UserPermissionModel Map(this UserPermissionModel model)
+        public static UserPermissionModel Map(this UserPermissionModel model)
         {
             return model == null
                 ? null
-                : new Domain.UserPermission.UserPermissionModel
+                : new UserPermissionModel
                 {
                     Id = model.Id,
                     UserId = model.UserId,
@@ -79,7 +79,7 @@ namespace Aklion.Crm.Mappers.Administration.UserPermission
                 };
         }
 
-        public static void Map(this UserPermissionModel viewModel, Domain.UserPermission.UserPermissionModel domainModel)
+        public static void Map(this UserPermissionModel viewModel, UserPermissionModel domainModel)
         {
             domainModel.Id = viewModel.Id;
             domainModel.UserId = viewModel.UserId;

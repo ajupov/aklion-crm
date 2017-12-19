@@ -4,25 +4,25 @@ using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.Store;
 using Aklion.Infrastructure.DateTime;
 using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
-using StoreParameterModel = Aklion.Crm.Domain.Store.StoreParameterModel;
+using StoreParameterModel = Aklion.Crm.Models.Administration.Store.StoreParameterModel;
 
 namespace Aklion.Crm.Mappers.Administration.Store
 {
     public static class StoreMapper
     {
-        public static PagingModel<StoreModel> Map(this Paging<Domain.Store.StoreModel> model, int page, int size)
+        public static PagingModel<StoreModel> Map(this Paging<StoreModel> model, int page, int size)
         {
             return model == null
                 ? null
                 : new PagingModel<StoreModel>(model.List.Map(), model.TotalCount, page, size);
         }
 
-        private static List<StoreModel> Map(this IEnumerable<Domain.Store.StoreModel> models)
+        private static List<StoreModel> Map(this IEnumerable<StoreModel> models)
         {
             return models?.Select(Map).ToList();
         }
 
-        public static StoreModel Map(this Domain.Store.StoreModel model)
+        public static StoreModel Map(this StoreModel model)
         {
             return model == null
                 ? null
@@ -40,11 +40,11 @@ namespace Aklion.Crm.Mappers.Administration.Store
                 };
         }
 
-        public static Domain.Store.StoreModel Map(this StoreModel model)
+        public static StoreModel Map(this StoreModel model)
         {
             return model == null
                 ? null
-                : new Domain.Store.StoreModel
+                : new StoreModel
                 {
                     Id = model.Id,
                     CreateUserId = model.CreateUserId,
@@ -82,7 +82,7 @@ namespace Aklion.Crm.Mappers.Administration.Store
                 };
         }
 
-        public static void Map(this StoreModel viewModel, Domain.Store.StoreModel domainModel)
+        public static void Map(this StoreModel viewModel, StoreModel domainModel)
         {
             domainModel.Id = viewModel.Id;
             domainModel.Name = viewModel.Name;

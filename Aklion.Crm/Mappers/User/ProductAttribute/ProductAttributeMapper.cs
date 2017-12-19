@@ -4,25 +4,25 @@ using Aklion.Crm.Models;
 using Aklion.Crm.Models.User.ProductAttribute;
 using Aklion.Infrastructure.DateTime;
 using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
-using ProductAttributeParameterModel = Aklion.Crm.Domain.ProductAttribute.ProductAttributeParameterModel;
+using ProductAttributeParameterModel = Aklion.Crm.Models.Administration.ProductAttribute.ProductAttributeParameterModel;
 
 namespace Aklion.Crm.Mappers.User.ProductAttribute
 {
     public static class ProductAttributeMapper
     {
-        public static PagingModel<ProductAttributeModel> Map(this Paging<Domain.ProductAttribute.ProductAttributeModel> model, int storeId, int page, int size)
+        public static PagingModel<ProductAttributeModel> Map(this Paging<Models.Administration.ProductAttribute.ProductAttributeModel> model, int storeId, int page, int size)
         {
             return model == null
                 ? null
                 : new PagingModel<ProductAttributeModel>(model.List.Map(storeId), model.TotalCount, page, size);
         }
 
-        private static List<ProductAttributeModel> Map(this IEnumerable<Domain.ProductAttribute.ProductAttributeModel> models, int storeId)
+        private static List<ProductAttributeModel> Map(this IEnumerable<Models.Administration.ProductAttribute.ProductAttributeModel> models, int storeId)
         {
             return models?.Select(x => x.Map(storeId)).ToList();
         }
 
-        public static ProductAttributeModel Map(this Domain.ProductAttribute.ProductAttributeModel model, int storeId)
+        public static ProductAttributeModel Map(this Models.Administration.ProductAttribute.ProductAttributeModel model, int storeId)
         {
             return model == null
                 ? null
@@ -38,11 +38,11 @@ namespace Aklion.Crm.Mappers.User.ProductAttribute
                 };
         }
 
-        public static Domain.ProductAttribute.ProductAttributeModel Map(this ProductAttributeModel model, int storeId)
+        public static Models.Administration.ProductAttribute.ProductAttributeModel Map(this ProductAttributeModel model, int storeId)
         {
             return model == null
                 ? null
-                : new Domain.ProductAttribute.ProductAttributeModel
+                : new Models.Administration.ProductAttribute.ProductAttributeModel
                 {
                     Id = model.Id,
                     StoreId = storeId,
@@ -84,7 +84,7 @@ namespace Aklion.Crm.Mappers.User.ProductAttribute
                 };
         }
 
-        public static void Map(this ProductAttributeModel viewModel, Domain.ProductAttribute.ProductAttributeModel domainModel, int storeId)
+        public static void Map(this ProductAttributeModel viewModel, Models.Administration.ProductAttribute.ProductAttributeModel domainModel, int storeId)
         {
             domainModel.Id = viewModel.Id;
             domainModel.StoreId = storeId;

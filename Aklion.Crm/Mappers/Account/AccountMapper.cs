@@ -3,6 +3,7 @@ using Aklion.Crm.Models.Account;
 using Aklion.Infrastructure.DateTime;
 using Aklion.Infrastructure.Password;
 using Aklion.Infrastructure.PhoneNumber;
+using UserModel = Aklion.Crm.Models.Administration.User.UserModel;
 
 namespace Aklion.Crm.Mappers.Account
 {

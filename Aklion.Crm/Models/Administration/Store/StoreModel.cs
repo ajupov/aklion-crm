@@ -1,14 +1,8 @@
-﻿using System;
-
-namespace Aklion.Crm.Models.Administration.Store
+﻿namespace Aklion.Crm.Models.Administration.Store
 {
     public class StoreModel
     {
         public int Id { get; set; }
-
-        public int CreateUserId { get; set; }
-
-        public string CreateUserLogin { get; set; }
 
         public string Name { get; set; }
 
@@ -18,8 +12,8 @@ namespace Aklion.Crm.Models.Administration.Store
 
         public bool IsDeleted { get; set; }
 
-        public DateTime CreateDate { get; set; }
+        public string CreateDate { get; set; }
 
-        public DateTime? ModifyDate { get; set; }
+        public string ModifyDate { get; set; }
     }
 }

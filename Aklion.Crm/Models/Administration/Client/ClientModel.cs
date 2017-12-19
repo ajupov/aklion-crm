@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Aklion.Crm.Models.Administration.Attribute
+﻿namespace Aklion.Crm.Models.Administration.Client
 {
-    public class AttributeModel
+    public class ClientModel
     {
         public int Id { get; set; }
 
@@ -14,8 +12,8 @@ namespace Aklion.Crm.Models.Administration.Attribute
 
         public bool IsDeleted { get; set; }
 
-        public DateTime CreateDate { get; set; }
+        public string CreateDate { get; set; }
 
-        public DateTime? ModifyDate { get; set; }
+        public string ModifyDate { get; set; }
     }
 }

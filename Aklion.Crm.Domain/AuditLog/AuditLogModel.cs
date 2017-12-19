@@ -11,10 +11,10 @@ namespace Aklion.Crm.Domain.AuditLog
     {
         [Column("al.Id")]
         [Identificator]
-        public int Id { get; }
+        public int Id { get; set; }
 
         [Column("al.UserId")]
-        public int UserId { get; }
+        public int UserId { get; set; }
 
         [Column("u.Login")]
         public string UserLogin { get; }
@@ -26,15 +26,15 @@ namespace Aklion.Crm.Domain.AuditLog
         public string StoreName { get; }
 
         [Column("al.ActionType")]
-        public AuditLogActionType ActionType { get; }
+        public AuditLogActionType ActionType { get; set; }
 
         [Column("al.OldValue")]
-        public string OldValue { get; }
+        public string OldValue { get; set; }
 
         [Column("al.NewValue")]
-        public string NewValue { get; }
+        public string NewValue { get; set; }
 
         [Column("al.TimeStamp")]
-        public DateTime TimeStamp { get; }
+        public DateTime TimeStamp { get; set; }
     }
 }

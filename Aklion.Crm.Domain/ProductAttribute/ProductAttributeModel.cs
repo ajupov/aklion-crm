@@ -9,7 +9,7 @@ namespace Aklion.Crm.Domain.ProductAttribute
     {
         [Column("pa.Id")]
         [Identificator]
-        public int Id { get; }
+        public int Id { get; set; }
 
         [Column("pa.StoreId")]
         public int StoreId { get; set; }
@@ -28,10 +28,10 @@ namespace Aklion.Crm.Domain.ProductAttribute
 
         [Column("pa.CreateDate")]
         [CreateDate]
-        public DateTime CreateDate { get; }
+        public DateTime CreateDate { get; set; }
 
         [Column("pa.ModifyDate")]
         [ModifyDate]
-        public DateTime? ModifyDate { get; }
+        public DateTime? ModifyDate { get; set; }
     }
 }

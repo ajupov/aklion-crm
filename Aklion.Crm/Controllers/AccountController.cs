@@ -10,9 +10,9 @@ using Aklion.Crm.Mappers.Account;
 using Aklion.Crm.Models.Account;
 using Aklion.Infrastructure.DateTime;
 using Aklion.Infrastructure.FileFormat;
+using Aklion.Infrastructure.Logger;
 using Aklion.Infrastructure.Password;
 using Aklion.Infrastructure.PhoneNumber;
-using Aklion.Infrastructure.Utils.Logger;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -50,7 +50,7 @@ namespace Aklion.Crm.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            var user = await _userDao.GetAsync(UserContext.UserId).ConfigureAwait(false);
             if (user == null)
             {
                 _logger.LogWarning("AccountController.Index(). User not found.", UserContext.UserId);
@@ -153,7 +153,7 @@ namespace Aklion.Crm.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogOff()
         {
-            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            var user = await _userDao.GetAsync(UserContext.UserId).ConfigureAwait(false);
             if (user == null)
             {
                 _logger.LogWarning("AccountController.LogOff(). User not found.", UserContext.UserId, new
@@ -278,7 +278,7 @@ namespace Aklion.Crm.Controllers
 
             var user = model.Map();
 
-            user.Id = await _userDao.Create(user).ConfigureAwait(false);
+            user.Id = await _userDao.CreateAsync(user).ConfigureAwait(false);
 
             _logger.LogInfo("AccountController.Register(). Registered.", 0,
                 new
@@ -351,7 +351,7 @@ namespace Aklion.Crm.Controllers
         [Authorize]
         public async Task<IActionResult> SendConfirmEmail()
         {
-            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            var user = await _userDao.GetAsync(UserContext.UserId).ConfigureAwait(false);
             if (user == null)
             {
                 _logger.LogWarning("AccountController.SendConfirmEmail(). User not found.", UserContext.UserId, new
@@ -375,7 +375,7 @@ namespace Aklion.Crm.Controllers
         [Authorize]
         public async Task<IActionResult> SendSmsCode()
         {
-            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            var user = await _userDao.GetAsync(UserContext.UserId).ConfigureAwait(false);
             if (user == null)
             {
                 _logger.LogWarning("AccountController.SendSmsCode(). User not found.", UserContext.UserId, new
@@ -409,7 +409,7 @@ namespace Aklion.Crm.Controllers
                 return View("Error");
             }
 
-            var user = await _userDao.Get(userId).ConfigureAwait(false);
+            var user = await _userDao.GetAsync(userId).ConfigureAwait(false);
             if (user == null)
             {
                 _logger.LogWarning("AccountController.ConfirmEmail(). User not found.", 0, new
@@ -443,7 +443,7 @@ namespace Aklion.Crm.Controllers
 
             user.IsEmailConfirmed = true;
 
-            await _userDao.Update(user).ConfigureAwait(false);
+            await _userDao.UpdateAsync(user).ConfigureAwait(false);
 
             _logger.LogInfo("AccountController.ConfirmEmail(). User.IsEmailConfirmed = true.", 0, new
             {
@@ -458,7 +458,7 @@ namespace Aklion.Crm.Controllers
         [Authorize]
         public async Task<IActionResult> ChangePassword()
         {
-            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            var user = await _userDao.GetAsync(UserContext.UserId).ConfigureAwait(false);
             if (user == null)
             {
                 _logger.LogWarning("AccountController.ChangePassword(). User not found.", UserContext.UserId, new
@@ -484,8 +484,8 @@ namespace Aklion.Crm.Controllers
                 return View(model);
             }
 
-            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
-            if(user == null)
+            var user = await _userDao.GetAsync(UserContext.UserId).ConfigureAwait(false);
+            if (user == null)
             {
                 _logger.LogWarning("AccountController.ChangePassword(). User not found.", UserContext.UserId);
 
@@ -497,14 +497,15 @@ namespace Aklion.Crm.Controllers
             {
                 ModelState.AddModelError("OldPassword", "Старый пароль введен неверно");
 
-                _logger.LogWarning("AccountController.ChangePassword(). Old password is incorrect.", UserContext.UserId);
+                _logger.LogWarning("AccountController.ChangePassword(). Old password is incorrect.",
+                    UserContext.UserId);
 
                 return View(model);
             }
 
             user.PasswordHash = PasswordHelper.Generate(model.Password);
 
-            await _userDao.Update(user).ConfigureAwait(false);
+            await _userDao.UpdateAsync(user).ConfigureAwait(false);
 
             _logger.LogInfo("AccountController.ChangePassword(). Password changed.", UserContext.UserId);
 
@@ -519,7 +520,7 @@ namespace Aklion.Crm.Controllers
         [Authorize]
         public async Task<IActionResult> ChangeEmail()
         {
-            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            var user = await _userDao.GetAsync(UserContext.UserId).ConfigureAwait(false);
             if (user == null)
             {
                 _logger.LogWarning("AccountController.ChangeEmail(). User not found.", UserContext.UserId, new
@@ -548,7 +549,7 @@ namespace Aklion.Crm.Controllers
                 return View(model);
             }
 
-            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            var user = await _userDao.GetAsync(UserContext.UserId).ConfigureAwait(false);
             if (user == null)
             {
                 _logger.LogWarning("AccountController.ChangeEmail(). User not found.", UserContext.UserId);
@@ -581,7 +582,7 @@ namespace Aklion.Crm.Controllers
             user.Email = model.Email;
             user.IsEmailConfirmed = false;
 
-            await _userDao.Update(user).ConfigureAwait(false);
+            await _userDao.UpdateAsync(user).ConfigureAwait(false);
 
             _logger.LogInfo("AccountController.ChangeEmail(). Email changed.", UserContext.UserId, new
             {
@@ -605,7 +606,7 @@ namespace Aklion.Crm.Controllers
         [Authorize]
         public async Task<IActionResult> ChangePhone()
         {
-            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            var user = await _userDao.GetAsync(UserContext.UserId).ConfigureAwait(false);
             if (user == null)
             {
                 _logger.LogWarning("AccountController.ChangePhone(). User not found.", UserContext.UserId, new
@@ -634,7 +635,7 @@ namespace Aklion.Crm.Controllers
                 return View(model);
             }
 
-            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            var user = await _userDao.GetAsync(UserContext.UserId).ConfigureAwait(false);
             if (user == null)
             {
                 _logger.LogWarning("AccountController.ChangePhone(). User not found.", UserContext.UserId);
@@ -658,7 +659,7 @@ namespace Aklion.Crm.Controllers
             user.Phone = model.Phone.ExtractPhoneNumber();
             user.IsPhoneConfirmed = false;
 
-            await _userDao.Update(user).ConfigureAwait(false);
+            await _userDao.UpdateAsync(user).ConfigureAwait(false);
 
             _logger.LogInfo("AccountController.ChangePhone(). Phone changed.", UserContext.UserId, new
             {
@@ -685,7 +686,7 @@ namespace Aklion.Crm.Controllers
         {
             ViewBag.StatusMessage = message;
 
-            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            var user = await _userDao.GetAsync(UserContext.UserId).ConfigureAwait(false);
             if (user == null)
             {
                 _logger.LogWarning("AccountController.VerifySmsCode(). User not found.", UserContext.UserId, new
@@ -714,7 +715,7 @@ namespace Aklion.Crm.Controllers
                 return View(model);
             }
 
-            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            var user = await _userDao.GetAsync(UserContext.UserId).ConfigureAwait(false);
             if (user == null)
             {
                 _logger.LogWarning("AccountController.VerifySmsCode(). User not found.", 0, new
@@ -748,7 +749,7 @@ namespace Aklion.Crm.Controllers
 
             user.IsPhoneConfirmed = true;
 
-            await _userDao.Update(user).ConfigureAwait(false);
+            await _userDao.UpdateAsync(user).ConfigureAwait(false);
 
             _logger.LogInfo("AccountController.VerifySmsCode(). User.IsPhoneConfirmed = true.", UserContext.UserId, new
             {
@@ -763,7 +764,7 @@ namespace Aklion.Crm.Controllers
         [Authorize]
         public async Task<IActionResult> ChangePersonalInfo()
         {
-            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            var user = await _userDao.GetAsync(UserContext.UserId).ConfigureAwait(false);
             if (user == null)
             {
                 _logger.LogWarning("AccountController.ChangePersonalInfo(). User not found.", 0, new
@@ -792,7 +793,7 @@ namespace Aklion.Crm.Controllers
                 return View(model);
             }
 
-            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            var user = await _userDao.GetAsync(UserContext.UserId).ConfigureAwait(false);
             if (user == null)
             {
                 _logger.LogWarning("AccountController.ChangePersonalInfo(). User not found.", 0, new
@@ -811,7 +812,7 @@ namespace Aklion.Crm.Controllers
             user.Gender = model.Gender;
             user.BirthDate = model.BirthDateString.ToDate();
 
-            await _userDao.Update(user).ConfigureAwait(false);
+            await _userDao.UpdateAsync(user).ConfigureAwait(false);
 
             _logger.LogInfo("AccountController.ChangePersonalInfo(). Personal info changed.", UserContext.UserId,
                 model);
@@ -879,7 +880,7 @@ namespace Aklion.Crm.Controllers
                 return View("Error");
             }
 
-            var user = await _userDao.Get(userId).ConfigureAwait(false);
+            var user = await _userDao.GetAsync(userId).ConfigureAwait(false);
             if (user == null)
             {
                 _logger.LogWarning("AccountController.ResetPassword(). User not found.", 0, new
@@ -947,7 +948,7 @@ namespace Aklion.Crm.Controllers
 
             user.PasswordHash = PasswordHelper.Generate(model.Password);
 
-            await _userDao.Update(user).ConfigureAwait(false);
+            await _userDao.UpdateAsync(user).ConfigureAwait(false);
 
             _logger.LogInfo("AccountController.ResetPassword(). User.PasswordHash updated.", 0, new
             {
@@ -975,7 +976,7 @@ namespace Aklion.Crm.Controllers
                 return View("Error");
             }
 
-            var user = await _userDao.Get(UserContext.UserId).ConfigureAwait(false);
+            var user = await _userDao.GetAsync(UserContext.UserId).ConfigureAwait(false);
             if (user == null)
             {
                 _logger.LogWarning("AccountController.LoadAvatar(). User not found.", UserContext.UserId);
@@ -985,7 +986,7 @@ namespace Aklion.Crm.Controllers
 
             user.AvatarUrl = await _imageLoadService.LoadAvatarImageAsync(model.AvatarFile).ConfigureAwait(false);
 
-            await _userDao.Update(user).ConfigureAwait(false);
+            await _userDao.UpdateAsync(user).ConfigureAwait(false);
 
             _logger.LogInfo("AccountController.ResetPassword(). User.AvatarUrl updated.", UserContext.UserId);
 
@@ -994,7 +995,7 @@ namespace Aklion.Crm.Controllers
 
         private async Task EmailConfirmationProcess(int userId)
         {
-            var user = await _userDao.Get(userId).ConfigureAwait(false);
+            var user = await _userDao.GetAsync(userId).ConfigureAwait(false);
 
             var code = await _userTokenService.CreateAsync(userId, TokenType.EmailConfirmation).ConfigureAwait(false);
 
@@ -1007,7 +1008,7 @@ namespace Aklion.Crm.Controllers
 
         private async Task PhoneConfirmationProcess(int userId)
         {
-            var user = await _userDao.Get(userId).ConfigureAwait(false);
+            var user = await _userDao.GetAsync(userId).ConfigureAwait(false);
 
             var code = await _userTokenService.CreateAsync(userId, TokenType.PhoneConfirmation).ConfigureAwait(false);
 
@@ -1016,11 +1017,12 @@ namespace Aklion.Crm.Controllers
 
         private async Task PasswordResetProcess(int userId)
         {
-            var user = await _userDao.Get(userId).ConfigureAwait(false);
+            var user = await _userDao.GetAsync(userId).ConfigureAwait(false);
 
             var code = await _userTokenService.CreateAsync(user.Id, TokenType.PasswordReset).ConfigureAwait(false);
 
-            var passwordResetUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code }, HttpContext.Request.Scheme);
+            var passwordResetUrl = Url.Action("ResetPassword", "Account", new {userId = user.Id, code},
+                HttpContext.Request.Scheme);
 
             await _mailService.SendFromAdminAsync(user.Email, "Сброс пароля",
                     $"Для сброса пароля нажмите на <a href='{passwordResetUrl}'>ссылку</a>.")

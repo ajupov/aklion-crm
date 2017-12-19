@@ -5,7 +5,7 @@ namespace Aklion.Crm.Domain.User
     [WhereCombination("and")]
     public class UserAutocompleteParameterModel
     {
-        [Where("@Login is null or u.Login like @Login + '%'")]
+        [Where("u.Login like @Login + '%'")]
         public string Login { get; set; }
     }
 }

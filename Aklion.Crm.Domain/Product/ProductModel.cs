@@ -11,7 +11,7 @@ namespace Aklion.Crm.Domain.Product
     {
         [Column("p.Id")]
         [Identificator]
-        public int Id { get; }
+        public int Id { get; set; }
 
         [Column("p.StoreId")]
         public int StoreId { get; set; }
@@ -44,9 +44,9 @@ namespace Aklion.Crm.Domain.Product
         public bool IsDeleted { get; set; }
 
         [Column("p.CreateDate")]
-        public DateTime CreateDate { get; }
+        public DateTime CreateDate { get; set; }
 
         [Column("p.ModifyDate")]
-        public DateTime? ModifyDate { get; }
+        public DateTime? ModifyDate { get; set; }
     }
 }

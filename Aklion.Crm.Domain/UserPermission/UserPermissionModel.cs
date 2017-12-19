@@ -11,7 +11,7 @@ namespace Aklion.Crm.Domain.UserPermission
     {
         [Column("up.Id")]
         [Identificator]
-        public int Id { get; }
+        public int Id { get; set; }
 
         [Column("up.UserId")]
         public int UserId { get; set; }
@@ -30,10 +30,10 @@ namespace Aklion.Crm.Domain.UserPermission
 
         [Column("up.CreateDate")]
         [CreateDate]
-        public DateTime CreateDate { get; }
+        public DateTime CreateDate { get; set; }
 
         [Column("up.ModifyDate")]
         [ModifyDate]
-        public DateTime? ModifyDate { get; }
+        public DateTime? ModifyDate { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace Aklion.Crm.Domain.ClientAttributeLink
     {
         [Column("cal.Id")]
         [Identificator]
-        public int Id { get; }
+        public int Id { get; set; }
 
         [Column("cal.StoreId")]
         public int StoreId { get; set; }
@@ -42,10 +42,10 @@ namespace Aklion.Crm.Domain.ClientAttributeLink
 
         [Column("cal.CreateDate")]
         [CreateDate]
-        public DateTime CreateDate { get; }
+        public DateTime CreateDate { get; set; }
 
         [Column("cal.ModifyDate")]
         [ModifyDate]
-        public DateTime? ModifyDate { get; }
+        public DateTime? ModifyDate { get; set; }
     }
 }

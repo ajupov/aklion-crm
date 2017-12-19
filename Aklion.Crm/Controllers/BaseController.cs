@@ -6,6 +6,7 @@ using Aklion.Crm.Domain.UserContext;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using UserContextModel = Aklion.Crm.Models.Administration.UserContext.UserContextModel;
 
 namespace Aklion.Crm.Controllers
 {

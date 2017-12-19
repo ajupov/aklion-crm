@@ -9,7 +9,7 @@ namespace Aklion.Crm.Domain.User
     {
         [Column("u.Id")]
         [Identificator]
-        public int Id { get; }
+        public int Id { get; set; }
 
         [Column("u.Login")]
         public string Login { get; set; }
@@ -54,9 +54,9 @@ namespace Aklion.Crm.Domain.User
         public string AvatarUrl { get; set; }
 
         [Column("u.CreateDate")]
-        public DateTime CreateDate { get; }
+        public DateTime CreateDate { get; set; }
 
         [Column("u.ModifyDate")]
-        public DateTime? ModifyDate { get; }
+        public DateTime? ModifyDate { get; set; }
     }
 }

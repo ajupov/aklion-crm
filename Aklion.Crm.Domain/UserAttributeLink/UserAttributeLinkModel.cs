@@ -11,7 +11,7 @@ namespace Aklion.Crm.Domain.UserAttributeLink
     {
         [Column("ual.Id")]
         [Identificator]
-        public int Id { get; }
+        public int Id { get; set; }
 
         [Column("ual.StoreId")]
         public int StoreId { get; set; }
@@ -42,10 +42,10 @@ namespace Aklion.Crm.Domain.UserAttributeLink
 
         [Column("ual.CreateDate")]
         [CreateDate]
-        public DateTime CreateDate { get; }
+        public DateTime CreateDate { get; set; }
 
         [Column("ual.ModifyDate")]
         [ModifyDate]
-        public DateTime? ModifyDate { get; }
+        public DateTime? ModifyDate { get; set; }
     }
 }

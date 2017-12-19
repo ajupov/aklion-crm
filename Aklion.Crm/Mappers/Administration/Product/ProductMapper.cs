@@ -4,25 +4,25 @@ using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.Product;
 using Aklion.Infrastructure.DateTime;
 using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
-using ProductParameterModel = Aklion.Crm.Domain.Product.ProductParameterModel;
+using ProductParameterModel = Aklion.Crm.Models.Administration.Product.ProductParameterModel;
 
 namespace Aklion.Crm.Mappers.Administration.Product
 {
     public static class ProductMapper
     {
-        public static PagingModel<ProductModel> Map(this Paging<Domain.Product.ProductModel> model, int page, int size)
+        public static PagingModel<ProductModel> Map(this Paging<ProductModel> model, int page, int size)
         {
             return model == null
                 ? null
                 : new PagingModel<ProductModel>(model.List.Map(), model.TotalCount, page, size);
         }
 
-        private static List<ProductModel> Map(this IEnumerable<Domain.Product.ProductModel> models)
+        private static List<ProductModel> Map(this IEnumerable<ProductModel> models)
         {
             return models?.Select(Map).ToList();
         }
 
-        public static ProductModel Map(this Domain.Product.ProductModel model)
+        public static ProductModel Map(this ProductModel model)
         {
             return model == null
                 ? null
@@ -45,11 +45,11 @@ namespace Aklion.Crm.Mappers.Administration.Product
                 };
         }
 
-        public static Domain.Product.ProductModel Map(this ProductModel model)
+        public static ProductModel Map(this ProductModel model)
         {
             return model == null
                 ? null
-                : new Domain.Product.ProductModel
+                : new ProductModel
                 {
                     Id = model.Id,
                     StoreId = model.StoreId,
@@ -97,7 +97,7 @@ namespace Aklion.Crm.Mappers.Administration.Product
                 };
         }
 
-        public static void Map(this ProductModel viewModel, Domain.Product.ProductModel domainModel)
+        public static void Map(this ProductModel viewModel, ProductModel domainModel)
         {
             domainModel.Id = viewModel.Id;
             domainModel.Name = viewModel.Name;

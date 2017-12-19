@@ -11,7 +11,7 @@ namespace Aklion.Crm.Domain.OrderAttributeLink
     {
         [Column("oal.Id")]
         [Identificator]
-        public int Id { get; }
+        public int Id { get; set; }
 
         [Column("oal.StoreId")]
         public int StoreId { get; set; }
@@ -39,10 +39,10 @@ namespace Aklion.Crm.Domain.OrderAttributeLink
 
         [Column("oal.CreateDate")]
         [CreateDate]
-        public DateTime CreateDate { get; }
+        public DateTime CreateDate { get; set; }
 
         [Column("oal.ModifyDate")]
         [ModifyDate]
-        public DateTime? ModifyDate { get; }
+        public DateTime? ModifyDate { get; set; }
     }
 }

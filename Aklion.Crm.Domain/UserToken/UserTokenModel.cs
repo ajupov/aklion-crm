@@ -9,7 +9,7 @@ namespace Aklion.Crm.Domain.UserToken
     {
         [Column("ut.Id")]
         [Identificator]
-        public int Id { get; }
+        public int Id { get; set; }
 
         [Column("ut.UserId")]
         public int UserId { get; set; }
@@ -28,10 +28,10 @@ namespace Aklion.Crm.Domain.UserToken
 
         [Column("ut.CreateDate")]
         [CreateDate]
-        public DateTime CreateDate { get; }
+        public DateTime CreateDate { get; set; }
 
         [Column("ut.ModifyDate")]
         [ModifyDate]
-        public DateTime? ModifyDate { get; }
+        public DateTime? ModifyDate { get; set; }
     }
 }

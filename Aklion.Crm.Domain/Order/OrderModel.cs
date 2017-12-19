@@ -11,7 +11,7 @@ namespace Aklion.Crm.Domain.Order
     public class OrderModel
     {
         [Column("o.Id")]
-        public int Id { get; }
+        public int Id { get; set; }
 
         [Column("o.StoreId")]
         public int StoreId { get; set; }
@@ -47,9 +47,9 @@ namespace Aklion.Crm.Domain.Order
         public bool IsDeleted { get; set; }
 
         [Column("o.CreateDate")]
-        public DateTime CreateDate { get; }
+        public DateTime CreateDate { get; set; }
 
         [Column("o.ModifyDate")]
-        public DateTime? ModifyDate { get; }
+        public DateTime? ModifyDate { get; set; }
     }
 }

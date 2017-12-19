@@ -41,6 +41,5 @@ namespace Aklion.Crm.Domain.OrderAttribute
 
         [Size]
         public int? Size { get; set; }
-
     }
 }

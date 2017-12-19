@@ -5,13 +5,13 @@ namespace Aklion.Crm.Domain.Client
     [WhereCombination("and")]
     public class ClientAutocompleteParameterModel
     {
-        [Where("@StoreId is null or c.StoreId = @StoreId")]
+        [Where("c.StoreId = @StoreId")]
         public int? StoreId { get; set; }
 
-        [Where("@Name is null or c.Name like @Name + '%'")]
+        [Where("c.Name like @Name + '%'")]
         public string Name { get; set; }
 
-        [Where("@IsDeleted is null or c.IsDeleted = @IsDeleted")]
-        public bool? IsDeleted { get; set; }
+        [Where("c.IsDeleted = 0")]
+        public bool IsDeleted { get; set; }
     }
 }

@@ -9,7 +9,7 @@ namespace Aklion.Crm.Domain.OrderStatus
     {
         [Column("ost.Id")]
         [Identificator]
-        public int Id { get; }
+        public int Id { get; set; }
 
         [Column("ost.StoreId")]
         public int StoreId { get; set; }
@@ -21,9 +21,9 @@ namespace Aklion.Crm.Domain.OrderStatus
         public string Name { get; set; }
 
         [Column("ost.CreateDate")]
-        public DateTime CreateDate { get; }
+        public DateTime CreateDate { get; set; }
 
         [Column("ost.ModifyDate")]
-        public DateTime? ModifyDate { get; }
+        public DateTime? ModifyDate { get; set; }
     }
 }
