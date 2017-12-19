@@ -1,42 +1,43 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Aklion.Crm.Domain.UserPermission;
-using Aklion.Infrastructure.DataBaseExecutor;
-using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
+using Aklion.Infrastructure.Dao;
 
 namespace Aklion.Crm.Dao.UserPermission
 {
     public class UserPermissionDao : IUserPermissionDao
     {
-        private readonly IDataBaseExecutor _dataBaseExecutor;
+        private readonly IDao _dao;
 
-        public UserPermissionDao(IDataBaseExecutor dataBaseExecutor)
+        public UserPermissionDao(IDao dao)
         {
-            _dataBaseExecutor = dataBaseExecutor;
+            _dao = dao;
         }
 
-        public Task<Paging<UserPermissionModel>> GetPagedList(UserPermissionParameterModel parameterModel)
+        public Task<Tuple<int, List<UserPermissionModel>>> GetPagedListAsync(UserPermissionParameterModel parameter)
         {
-            return _dataBaseExecutor.SelectListWithTotalCount<UserPermissionModel>(Queries.GetPagedList, parameterModel);
+            return _dao.GetPagedListAsync<UserPermissionModel, UserPermissionParameterModel>(parameter);
         }
 
-        public Task<UserPermissionModel> Get(int id)
+        public Task<UserPermissionModel> GetAsync(int id)
         {
-            return _dataBaseExecutor.SelectOneAsync<UserPermissionModel>(Queries.Get, new {id});
+            return _dao.GetAsync<UserPermissionModel>(id);
         }
 
-        public Task<int> Create(UserPermissionModel model)
+        public Task<int> CreateAsync(UserPermissionModel model)
         {
-            return _dataBaseExecutor.SelectOneAsync<int>(Queries.Create, model);
+            return _dao.CreateAsync(model);
         }
 
-        public Task Update(UserPermissionModel model)
+        public Task UpdateAsync(UserPermissionModel model)
         {
-            return _dataBaseExecutor.ExecuteAsync(Queries.Update, model);
+            return _dao.UpdateAsync(model);
         }
 
-        public Task Delete(int id)
+        public Task DeleteAsync(int id)
         {
-            return _dataBaseExecutor.ExecuteAsync(Queries.Delete, new {id});
+            return _dao.DeleteAsync<UserPermissionModel>(id);
         }
     }
 }

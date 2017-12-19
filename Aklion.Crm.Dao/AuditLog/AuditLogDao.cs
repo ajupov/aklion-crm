@@ -1,37 +1,33 @@
-﻿using System.Threading.Tasks;
-using Aklion.Crm.Dao.AuditLog.Resources;
-using Aklion.Crm.Domain;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Aklion.Crm.Domain.AuditLog;
-using Aklion.Infrastructure.DataBaseExecutor;
+using Aklion.Infrastructure.Dao;
 
 namespace Aklion.Crm.Dao.AuditLog
 {
     public class AuditLogDao : IAuditLogDao
     {
-        private readonly IDataBaseExecutor _dataBaseExecutor;
+        private readonly IDao _dao;
 
-        public AuditLogDao(IDataBaseExecutor dataBaseExecutor)
+        public AuditLogDao(IDao dao)
         {
-            _dataBaseExecutor = dataBaseExecutor;
+            _dao = dao;
         }
 
-        public Task<BasePagingModel<AuditLogModel>> GetPagedList(AuditLogParameterModel parameterModel)
+        public Task<Tuple<int, List<AuditLogModel>>> GetPagedListAsync(AuditLogParameterModel parameter)
         {
-            return _dataBaseExecutor.SelectMultipleAsync(Queries.GetPagedList, async r => new BasePagingModel<AuditLogModel>
-            {
-                TotalCount = await r.SelectOneAsync<int>().ConfigureAwait(false),
-                List = await r.SelectListAsync<AuditLogModel>().ConfigureAwait(false),
-            }, parameterModel);
+            return _dao.GetPagedListAsync<AuditLogModel, AuditLogParameterModel>(parameter);
         }
 
-        public Task<AuditLogModel> Get(int id)
+        public Task<AuditLogModel> GetAsync(int id)
         {
-            return _dataBaseExecutor.SelectOneAsync<AuditLogModel>(Queries.Get, new {id});
+            return _dao.GetAsync<AuditLogModel>(id);
         }
 
-        public Task<int> Create(AuditLogModel model)
+        public Task<int> CreateAsync(AuditLogModel model)
         {
-            return _dataBaseExecutor.SelectOneAsync<int>(Queries.Create, model);
+            return _dao.CreateAsync(model);
         }
     }
 }

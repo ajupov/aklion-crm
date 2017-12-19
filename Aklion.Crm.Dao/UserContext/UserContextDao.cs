@@ -16,7 +16,7 @@ namespace Aklion.Crm.Dao.UserContext
             _dataBaseExecutor = dataBaseExecutor;
         }
 
-        public Task<UserContextModel> Get(string login, int selectedStoreId)
+        public Task<UserContextModel> GetAsync(string login, int selectedStoreId)
         {
             return _dataBaseExecutor.SelectMultipleAsync(Queries.Get, async r => new UserContextModel
             {

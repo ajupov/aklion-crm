@@ -1,50 +1,48 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Aklion.Crm.Domain;
 using Aklion.Crm.Domain.Store;
-using Aklion.Infrastructure.DataBaseExecutor;
-using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
+using Aklion.Infrastructure.Dao;
 
 namespace Aklion.Crm.Dao.Store
 {
     public class StoreDao : IStoreDao
     {
-        private readonly IDataBaseExecutor _dataBaseExecutor;
+        private readonly IDao _dao;
 
-        public StoreDao(IDataBaseExecutor dataBaseExecutor)
+        public StoreDao(IDao dao)
         {
-            _dataBaseExecutor = dataBaseExecutor;
+            _dao = dao;
         }
 
-        public Task<Paging<StoreModel>> GetPagedList(StoreParameterModel parameterModel)
+        public Task<Tuple<int, List<StoreModel>>> GetPagedListAsync(StoreParameterModel parameter)
         {
-            return _dataBaseExecutor.SelectListWithTotalCount<StoreModel>(Queries.GetPagedList, parameterModel);
+            return _dao.GetPagedListAsync<StoreModel, StoreParameterModel>(parameter);
         }
 
-        public Task<List<AutocompleteModel>> GetForAutocompleteByNamePattern(string pattern)
+        public Task<Dictionary<string, int>> GetForAutocompleteAsync(StoreAutocompleteParameterModel parameter)
         {
-            return _dataBaseExecutor.SelectListAsync<AutocompleteModel>(Queries.GetForAutocompleteByNamePattern,
-                new {pattern});
+            return _dao.GetForAutoCompleteAsync(parameter);
         }
 
-        public Task<StoreModel> Get(int id)
+        public Task<StoreModel> GetAsync(int id)
         {
-            return _dataBaseExecutor.SelectOneAsync<StoreModel>(Queries.Get, new {id});
+            return _dao.GetAsync<StoreModel>(id);
         }
 
-        public Task<int> Create(StoreModel model)
+        public Task<int> CreateAsync(StoreModel model)
         {
-            return _dataBaseExecutor.SelectOneAsync<int>(Queries.Create, model);
+            return _dao.CreateAsync(model);
         }
 
-        public Task Update(StoreModel model)
+        public Task UpdateAsync(StoreModel model)
         {
-            return _dataBaseExecutor.ExecuteAsync(Queries.Update, model);
+            return _dao.UpdateAsync(model);
         }
 
-        public Task Delete(int id)
+        public Task DeleteAsync(int id)
         {
-            return _dataBaseExecutor.ExecuteAsync(Queries.Delete, new {id});
+            return _dao.DeleteAsync<StoreModel>(id);
         }
     }
 }

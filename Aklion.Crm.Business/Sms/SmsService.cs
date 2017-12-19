@@ -16,7 +16,7 @@ namespace Aklion.Crm.Business.Sms
             _configuration = options.Value;
         }
 
-        public async Task Send(string phoneNumber, string message)
+        public async Task SendAsync(string phoneNumber, string message)
         {
             try
             {

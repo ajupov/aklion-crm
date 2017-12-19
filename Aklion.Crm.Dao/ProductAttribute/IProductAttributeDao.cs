@@ -1,19 +1,22 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Aklion.Crm.Domain.ProductAttribute;
-using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
 
 namespace Aklion.Crm.Dao.ProductAttribute
 {
     public interface IProductAttributeDao
     {
-        Task<Paging<ProductAttributeModel>> GetPagedList(ProductAttributeParameterModel parameterModel);
+        Task<Tuple<int, List<ProductAttributeModel>>> GetPagedListAsync(ProductAttributeParameterModel parameter);
 
-        Task<ProductAttributeModel> Get(int id);
+        Task<Dictionary<string, int>> GetForAutocompleteAsync(ProductAttributeAutocompleteParameterModel parameter);
 
-        Task<int> Create(ProductAttributeModel model);
+        Task<ProductAttributeModel> GetAsync(int id);
 
-        Task Update(ProductAttributeModel model);
+        Task<int> CreateAsync(ProductAttributeModel model);
 
-        Task Delete(int id);
+        Task UpdateAsync(ProductAttributeModel model);
+
+        Task DeleteAsync(int id);
     }
 }

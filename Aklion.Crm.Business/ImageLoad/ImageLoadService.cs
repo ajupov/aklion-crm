@@ -11,12 +11,12 @@ namespace Aklion.Crm.Business.ImageLoad
         public const string FsAvatarsPath = @"wwwroot\images\avatars\";
         public const string DbAvatarsPath = @"/images/avatars/";
 
-        public Task<string> LoadAvatarImage(IFormFile file)
+        public Task<string> LoadAvatarImageAsync(IFormFile file)
         {
-            return Load(file, FsAvatarsPath, DbAvatarsPath);
+            return LoadAsync(file, FsAvatarsPath, DbAvatarsPath);
         }
 
-        private static async Task<string> Load(IFormFile file, string fsPath, string dbPath)
+        private static async Task<string> LoadAsync(IFormFile file, string fsPath, string dbPath)
         {
             if (!file.Name.IsImage())
             {

@@ -1,19 +1,20 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Aklion.Crm.Domain.UserPermission;
-using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
 
 namespace Aklion.Crm.Dao.UserPermission
 {
     public interface IUserPermissionDao
     {
-        Task<Paging<UserPermissionModel>> GetPagedList(UserPermissionParameterModel parameterModel);
+        Task<Tuple<int, List<UserPermissionModel>>> GetPagedListAsync(UserPermissionParameterModel parameter);
 
-        Task<UserPermissionModel> Get(int id);
+        Task<UserPermissionModel> GetAsync(int id);
 
-        Task<int> Create(UserPermissionModel model);
+        Task<int> CreateAsync(UserPermissionModel model);
 
-        Task Update(UserPermissionModel model);
+        Task UpdateAsync(UserPermissionModel model);
 
-        Task Delete(int id);
+        Task DeleteAsync(int id);
     }
 }

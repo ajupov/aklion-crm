@@ -1,42 +1,43 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Aklion.Crm.Domain.ProductAttributeLink;
-using Aklion.Infrastructure.DataBaseExecutor;
-using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
+using Aklion.Infrastructure.Dao;
 
 namespace Aklion.Crm.Dao.ProductAttributeLink
 {
     public class ProductAttributeLinkDao : IProductAttributeLinkDao
     {
-        private readonly IDataBaseExecutor _dataBaseExecutor;
+        private readonly IDao _dao;
 
-        public ProductAttributeLinkDao(IDataBaseExecutor dataBaseExecutor)
+        public ProductAttributeLinkDao(IDao dao)
         {
-            _dataBaseExecutor = dataBaseExecutor;
+            _dao = dao;
         }
 
-        public Task<Paging<ProductAttributeLinkModel>> GetPagedList(ProductAttributeLinkParameterModel parameterModel)
+        public Task<Tuple<int, List<ProductAttributeLinkModel>>> GetPagedListAsync(ProductAttributeLinkParameterModel parameter)
         {
-            return _dataBaseExecutor.SelectListWithTotalCount<ProductAttributeLinkModel>(Queries.GetPagedList, parameterModel);
+            return _dao.GetPagedListAsync<ProductAttributeLinkModel, ProductAttributeLinkParameterModel>(parameter);
         }
 
-        public Task<ProductAttributeLinkModel> Get(int id)
+        public Task<ProductAttributeLinkModel> GetAsync(int id)
         {
-            return _dataBaseExecutor.SelectOneAsync<ProductAttributeLinkModel>(Queries.Get, new {id});
+            return _dao.GetAsync<ProductAttributeLinkModel>(id);
         }
 
-        public Task<int> Create(ProductAttributeLinkModel model)
+        public Task<int> CreateAsync(ProductAttributeLinkModel model)
         {
-            return _dataBaseExecutor.SelectOneAsync<int>(Queries.Create, model);
+            return _dao.CreateAsync(model);
         }
 
-        public Task Update(ProductAttributeLinkModel model)
+        public Task UpdateAsync(ProductAttributeLinkModel model)
         {
-            return _dataBaseExecutor.ExecuteAsync(Queries.Update, model);
+            return _dao.UpdateAsync(model);
         }
 
-        public Task Delete(int id)
+        public Task DeleteAsync(int id)
         {
-            return _dataBaseExecutor.ExecuteAsync(Queries.Delete, new {id});
+            return _dao.DeleteAsync<ProductAttributeLinkModel>(id);
         }
     }
 }

@@ -1,31 +1,35 @@
 ﻿using System.Threading.Tasks;
 using Aklion.Crm.Domain.UserToken;
-using Aklion.Infrastructure.DataBaseExecutor;
+using Aklion.Infrastructure.Dao;
 
 namespace Aklion.Crm.Dao.UserToken
 {
     public class UserTokenDao : IUserTokenDao
     {
-        private readonly IDataBaseExecutor _dataBaseExecutor;
+        private readonly IDao _dao;
 
-        public UserTokenDao(IDataBaseExecutor dataBaseExecutor)
+        public UserTokenDao(IDao dao)
         {
-            _dataBaseExecutor = dataBaseExecutor;
+            _dao = dao;
         }
 
-        public Task<UserTokenModel> Get(UserTokenParameterModel parameterModel)
+        public Task<UserTokenModel> GetAsync(UserTokenParameterModel parameter)
         {
-            return _dataBaseExecutor.SelectOneAsync<UserTokenModel>(Queries.Get, parameterModel);
+            return _dao.GetAsync<UserTokenModel, UserTokenParameterModel>(parameter);
         }
 
-        public Task<int> Create(UserTokenModel model)
+        public Task<int> CreateAsync(UserTokenModel model)
         {
-            return _dataBaseExecutor.SelectOneAsync<int>(Queries.Create, model);
+            return _dao.CreateAsync(model);
         }
 
-        public Task SetUsed(int id)
+        public async Task SetUsedAsync(int id)
         {
-            return _dataBaseExecutor.ExecuteAsync(Queries.SetUsed, new {id});
+            var result =  await _dao.GetAsync<UserTokenModel>(id).ConfigureAwait(false);
+
+            result.IsUsed = true;
+
+            await _dao.UpdateAsync(result).ConfigureAwait(false);
         }
     }
 }

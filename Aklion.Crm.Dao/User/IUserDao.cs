@@ -1,33 +1,32 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Aklion.Crm.Domain;
 using Aklion.Crm.Domain.User;
-using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
 
 namespace Aklion.Crm.Dao.User
 {
     public interface IUserDao
     {
-        Task<Paging<UserModel>> GetPagedList(UserParameterModel parameterModel);
+        Task<Tuple<int, List<UserModel>>> GetPagedListAsync(UserParameterModel parameter);
 
-        Task<List<AutocompleteModel>> GetForAutocompleteByLoginPattern(string pattern);
+        Task<Dictionary<string, int>> GetForAutocompleteAsync(UserAutocompleteParameterModel parameter);
 
-        Task<UserModel> Get(int id);
+        Task<UserModel> GetAsync(int id);
 
-        Task<UserModel> GetByLogin(string login);
+        Task<int> CreateAsync(UserModel model);
 
-        Task<UserModel> GetByEmail(string email);
+        Task UpdateAsync(UserModel model);
 
-        Task<bool> IsExistByLogin(string login);
+        Task DeleteAsync(int id);
 
-        Task<bool> IsExistByEmail(string email);
+        Task<UserModel> GetByLoginAsync(string login);
 
-        Task<bool> IsExistByPhone(string phone);
+        Task<UserModel> GetByEmailAsync(string email);
 
-        Task<int> Create(UserModel model);
+        Task<bool> IsExistByLoginAsync(string login);
 
-        Task Update(UserModel model);
+        Task<bool> IsExistByEmailAsync(string email);
 
-        Task Delete(int id);
+        Task<bool> IsExistByPhoneAsync(string phone);
     }
 }

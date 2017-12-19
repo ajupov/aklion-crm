@@ -53,7 +53,7 @@ namespace Aklion.Crm.Filters
 
             if (context.Controller is BaseController baseController)
             {
-                var userContextDomain = await _userContextDao.Get(login, selectedStoreId).ConfigureAwait(false);
+                var userContextDomain = await _userContextDao.GetAsync(login, selectedStoreId).ConfigureAwait(false);
                 if (userContextDomain == null)
                 {
                     await next().ConfigureAwait(false);

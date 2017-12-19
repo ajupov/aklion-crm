@@ -1,15 +1,16 @@
-﻿using System.Threading.Tasks;
-using Aklion.Crm.Domain;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Aklion.Crm.Domain.AuditLog;
 
 namespace Aklion.Crm.Dao.AuditLog
 {
     public interface IAuditLogDao
     {
-        Task<BasePagingModel<AuditLogModel>> GetPagedList(AuditLogParameterModel parameterModel);
+        Task<Tuple<int, List<AuditLogModel>>> GetPagedListAsync(AuditLogParameterModel parameter);
 
-        Task<AuditLogModel> Get(int id);
+        Task<AuditLogModel> GetAsync(int id);
 
-        Task<int> Create(AuditLogModel model);
+        Task<int> CreateAsync(AuditLogModel model);
     }
 }

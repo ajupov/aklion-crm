@@ -16,7 +16,7 @@ namespace Aklion.Crm.Business.UserToken
             _userTokenDao = userTokenDao;
         }
 
-        public async Task<string> Create(int userId, TokenType type)
+        public async Task<string> CreateAsync(int userId, TokenType type)
         {
             var token = new UserTokenModel
             {
@@ -27,14 +27,14 @@ namespace Aklion.Crm.Business.UserToken
                 IsUsed = false
             };
 
-            await _userTokenDao.Create(token).ConfigureAwait(false);
+            await _userTokenDao.CreateAsync(token).ConfigureAwait(false);
 
             return token.Token;
         }
 
-        public async Task<bool> Confirm(int userId, TokenType type, string code)
+        public async Task<bool> ConfirmAsync(int userId, TokenType type, string code)
         {
-            var identityToken = await _userTokenDao.Get(new UserTokenParameterModel
+            var identityToken = await _userTokenDao.GetAsync(new UserTokenParameterModel
             {
                 UserId = userId,
                 TokenType = type,
@@ -51,7 +51,7 @@ namespace Aklion.Crm.Business.UserToken
                 return false;
             }
 
-            await _userTokenDao.SetUsed(identityToken.Id).ConfigureAwait(false);
+            await _userTokenDao.SetUsedAsync(identityToken.Id).ConfigureAwait(false);
 
             return true;
         }

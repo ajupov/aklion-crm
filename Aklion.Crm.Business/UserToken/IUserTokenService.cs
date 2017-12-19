@@ -5,8 +5,8 @@ namespace Aklion.Crm.Business.UserToken
 {
     public interface IUserTokenService
     {
-        Task<string> Create(int userId, TokenType type);
+        Task<string> CreateAsync(int userId, TokenType type);
 
-        Task<bool> Confirm(int userId, TokenType type, string code);
+        Task<bool> ConfirmAsync(int userId, TokenType type, string code);
     }
 }

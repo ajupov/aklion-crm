@@ -5,6 +5,6 @@ namespace Aklion.Crm.Dao.UserContext
 {
     public interface IUserContextDao
     {
-        Task<UserContextModel> Get(string login, int selectedStoreId);
+        Task<UserContextModel> GetAsync(string login, int selectedStoreId);
     }
 }

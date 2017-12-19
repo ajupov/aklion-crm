@@ -5,6 +5,6 @@ namespace Aklion.Crm.Business.ImageLoad
 {
     public interface IImageLoadService
     {
-        Task<string> LoadAvatarImage(IFormFile file);
+        Task<string> LoadAvatarImageAsync(IFormFile file);
     }
 }

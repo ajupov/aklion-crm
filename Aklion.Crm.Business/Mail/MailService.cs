@@ -18,7 +18,7 @@ namespace Aklion.Crm.Business.Mail
             _configuration = options.Value;
         }
 
-        public Task Send(string from, string to, string subject, string message)
+        public Task SendAsync(string from, string to, string subject, string message)
         {
             var mimeMessage = new MimeMessage
             {
@@ -34,7 +34,7 @@ namespace Aklion.Crm.Business.Mail
             return Send(new[] {mimeMessage});
         }
 
-        public Task SendFromAdmin(string to, string subject, string message)
+        public Task SendFromAdminAsync(string to, string subject, string message)
         {
             var mimeMessage = new MimeMessage
             {

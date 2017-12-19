@@ -5,10 +5,10 @@ namespace Aklion.Crm.Dao.UserToken
 {
     public interface IUserTokenDao
     {
-        Task<UserTokenModel> Get(UserTokenParameterModel parameterModel);
+        Task<UserTokenModel> GetAsync(UserTokenParameterModel parameter);
 
-        Task<int> Create(UserTokenModel model);
+        Task<int> CreateAsync(UserTokenModel model);
 
-        Task SetUsed(int id);
+        Task SetUsedAsync(int id);
     }
 }

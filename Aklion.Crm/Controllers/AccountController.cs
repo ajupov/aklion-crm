@@ -94,7 +94,7 @@ namespace Aklion.Crm.Controllers
                 return View(model);
             }
 
-            var user = await _userDao.GetByLogin(model.Login).ConfigureAwait(false);
+            var user = await _userDao.GetByLoginAsync(model.Login).ConfigureAwait(false);
             if (user == null)
             {
                 ModelState.AddModelError(string.Empty, "Неправильный логин или пароль");
@@ -125,7 +125,7 @@ namespace Aklion.Crm.Controllers
 
             await SignInAsync(user.Login, model.RememberMe).ConfigureAwait(false);
 
-            var userContextDomain = await _userContextDao.Get(user.Login, 0).ConfigureAwait(false);
+            var userContextDomain = await _userContextDao.GetAsync(user.Login, 0).ConfigureAwait(false);
             if (userContextDomain == null)
             {
                 _logger.LogWarning("AccountController.LogIn(). User context not found.", 0, new
@@ -213,7 +213,7 @@ namespace Aklion.Crm.Controllers
                 return View(model);
             }
 
-            var isExistByLogin = await _userDao.IsExistByLogin(model.Login).ConfigureAwait(false);
+            var isExistByLogin = await _userDao.IsExistByLoginAsync(model.Login).ConfigureAwait(false);
             if (isExistByLogin)
             {
                 ModelState.AddModelError("Login", "Логин уже занят");
@@ -234,7 +234,7 @@ namespace Aklion.Crm.Controllers
                 return View(model);
             }
 
-            var isExistByEmail = await _userDao.IsExistByEmail(model.Email).ConfigureAwait(false);
+            var isExistByEmail = await _userDao.IsExistByEmailAsync(model.Email).ConfigureAwait(false);
             if (isExistByEmail)
             {
                 ModelState.AddModelError("Email", "Email уже занят");
@@ -255,7 +255,7 @@ namespace Aklion.Crm.Controllers
                 return View(model);
             }
 
-            var isExistByPhone = await _userDao.IsExistByPhone(model.Phone).ConfigureAwait(false);
+            var isExistByPhone = await _userDao.IsExistByPhoneAsync(model.Phone).ConfigureAwait(false);
             if (isExistByPhone)
             {
                 ModelState.AddModelError("Phone", "Телефон уже занят");
@@ -311,7 +311,7 @@ namespace Aklion.Crm.Controllers
 
             await SignInAsync(user.Login, true).ConfigureAwait(false);
 
-            var userContextDomain = await _userContextDao.Get(user.Login, 0).ConfigureAwait(false);
+            var userContextDomain = await _userContextDao.GetAsync(user.Login, 0).ConfigureAwait(false);
             if (userContextDomain == null)
             {
                 _logger.LogWarning("AccountController.Register(). User context not found.", 0, new
@@ -421,7 +421,7 @@ namespace Aklion.Crm.Controllers
                 return View("Error");
             }
 
-            var isTokenConfirm = await _userTokenService.Confirm(userId, TokenType.EmailConfirmation, code)
+            var isTokenConfirm = await _userTokenService.ConfirmAsync(userId, TokenType.EmailConfirmation, code)
                 .ConfigureAwait(false);
 
             if (!isTokenConfirm)
@@ -565,7 +565,7 @@ namespace Aklion.Crm.Controllers
                 return View(model);
             }
 
-            var isExistByEmail = await _userDao.IsExistByEmail(model.Email).ConfigureAwait(false);
+            var isExistByEmail = await _userDao.IsExistByEmailAsync(model.Email).ConfigureAwait(false);
             if (isExistByEmail)
             {
                 ModelState.AddModelError("Email", "Email уже занят");
@@ -642,7 +642,7 @@ namespace Aklion.Crm.Controllers
                 return View(model);
             }
 
-            var isExistByPhone = await _userDao.IsExistByPhone(model.Phone).ConfigureAwait(false);
+            var isExistByPhone = await _userDao.IsExistByPhoneAsync(model.Phone).ConfigureAwait(false);
             if (isExistByPhone)
             {
                 ModelState.AddModelError("Phone", "Номер телефона уже занят");
@@ -727,7 +727,7 @@ namespace Aklion.Crm.Controllers
             }
 
             var isTokenConfirm = await _userTokenService
-                .Confirm(UserContext.UserId, TokenType.PhoneConfirmation, model.Code).ConfigureAwait(false);
+                .ConfirmAsync(UserContext.UserId, TokenType.PhoneConfirmation, model.Code).ConfigureAwait(false);
 
             if (!isTokenConfirm)
             {
@@ -839,7 +839,7 @@ namespace Aklion.Crm.Controllers
                 return View(model);
             }
 
-            var user = await _userDao.GetByEmail(model.Email).ConfigureAwait(false);
+            var user = await _userDao.GetByEmailAsync(model.Email).ConfigureAwait(false);
             if (user == null)
             {
                 ModelState.AddModelError("Email", "Пользователь с указанным Email не найден");
@@ -915,7 +915,7 @@ namespace Aklion.Crm.Controllers
                 return View(model);
             }
 
-            var user = await _userDao.GetByEmail(model.Email).ConfigureAwait(false);
+            var user = await _userDao.GetByEmailAsync(model.Email).ConfigureAwait(false);
             if (user == null)
             {
                 ModelState.AddModelError("Email", "Пользователь с указанным Email не найден");
@@ -925,7 +925,7 @@ namespace Aklion.Crm.Controllers
                 return View(model);
             }
 
-            var isTokenConfirm = await _userTokenService.Confirm(user.Id, TokenType.PasswordReset, model.Code)
+            var isTokenConfirm = await _userTokenService.ConfirmAsync(user.Id, TokenType.PasswordReset, model.Code)
                 .ConfigureAwait(false);
 
             if (!isTokenConfirm)
@@ -983,7 +983,7 @@ namespace Aklion.Crm.Controllers
                 return View("Error");
             }
 
-            user.AvatarUrl = await _imageLoadService.LoadAvatarImage(model.AvatarFile).ConfigureAwait(false);
+            user.AvatarUrl = await _imageLoadService.LoadAvatarImageAsync(model.AvatarFile).ConfigureAwait(false);
 
             await _userDao.Update(user).ConfigureAwait(false);
 
@@ -996,11 +996,11 @@ namespace Aklion.Crm.Controllers
         {
             var user = await _userDao.Get(userId).ConfigureAwait(false);
 
-            var code = await _userTokenService.Create(userId, TokenType.EmailConfirmation).ConfigureAwait(false);
+            var code = await _userTokenService.CreateAsync(userId, TokenType.EmailConfirmation).ConfigureAwait(false);
 
             var emailConfirmUrl = Url.Action("ConfirmEmail", "Account", new {userId, code}, HttpContext.Request.Scheme);
 
-            await _mailService.SendFromAdmin(user.Email, "Подтверждение почты",
+            await _mailService.SendFromAdminAsync(user.Email, "Подтверждение почты",
                     $"Пожалуйста, подтвердите свою почту, нажав на <a href='{emailConfirmUrl}'>ссылку</a>.")
                 .ConfigureAwait(false);
         }
@@ -1009,20 +1009,20 @@ namespace Aklion.Crm.Controllers
         {
             var user = await _userDao.Get(userId).ConfigureAwait(false);
 
-            var code = await _userTokenService.Create(userId, TokenType.PhoneConfirmation).ConfigureAwait(false);
+            var code = await _userTokenService.CreateAsync(userId, TokenType.PhoneConfirmation).ConfigureAwait(false);
 
-            await _smsService.Send(user.Phone, code).ConfigureAwait(false);
+            await _smsService.SendAsync(user.Phone, code).ConfigureAwait(false);
         }
 
         private async Task PasswordResetProcess(int userId)
         {
             var user = await _userDao.Get(userId).ConfigureAwait(false);
 
-            var code = await _userTokenService.Create(user.Id, TokenType.PasswordReset).ConfigureAwait(false);
+            var code = await _userTokenService.CreateAsync(user.Id, TokenType.PasswordReset).ConfigureAwait(false);
 
             var passwordResetUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code }, HttpContext.Request.Scheme);
 
-            await _mailService.SendFromAdmin(user.Email, "Сброс пароля",
+            await _mailService.SendFromAdminAsync(user.Email, "Сброс пароля",
                     $"Для сброса пароля нажмите на <a href='{passwordResetUrl}'>ссылку</a>.")
                 .ConfigureAwait(false);
         }

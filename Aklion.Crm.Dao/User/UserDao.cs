@@ -1,75 +1,85 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Aklion.Crm.Domain;
 using Aklion.Crm.Domain.User;
-using Aklion.Infrastructure.DataBaseExecutor;
-using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
+using Aklion.Infrastructure.Dao;
 
 namespace Aklion.Crm.Dao.User
 {
     public class UserDao : IUserDao
     {
-        private readonly IDataBaseExecutor _dataBaseExecutor;
+        private readonly IDao _dao;
 
-        public UserDao(IDataBaseExecutor dataBaseExecutor)
+        public UserDao(IDao dao)
         {
-            _dataBaseExecutor = dataBaseExecutor;
+            _dao = dao;
         }
 
-        public Task<Paging<UserModel>> GetPagedList(UserParameterModel parameterModel)
+        public Task<Tuple<int, List<UserModel>>> GetPagedListAsync(UserParameterModel parameter)
         {
-            return _dataBaseExecutor.SelectListWithTotalCount<UserModel>(Queries.GetPagedList, parameterModel);
+            return _dao.GetPagedListAsync<UserModel, UserParameterModel>(parameter);
         }
 
-        public Task<List<AutocompleteModel>> GetForAutocompleteByLoginPattern(string pattern)
+        public Task<Dictionary<string, int>> GetForAutocompleteAsync(UserAutocompleteParameterModel parameter)
         {
-            return _dataBaseExecutor.SelectListAsync<AutocompleteModel>(Queries.GetForAutocompleteByLoginPattern,
-                new {pattern});
+            return _dao.GetForAutoCompleteAsync(parameter);
         }
 
-        public Task<UserModel> Get(int id)
+        public Task<UserModel> GetAsync(int id)
         {
-            return _dataBaseExecutor.SelectOneAsync<UserModel>(Queries.Get, new {id});
+            return _dao.GetAsync<UserModel>(id);
         }
 
-        public Task<UserModel> GetByLogin(string login)
+        public Task<int> CreateAsync(UserModel model)
         {
-            return _dataBaseExecutor.SelectOneAsync<UserModel>(Queries.GetByLogin, new {login});
+            return _dao.CreateAsync(model);
         }
 
-        public Task<UserModel> GetByEmail(string email)
+        public Task UpdateAsync(UserModel model)
         {
-            return _dataBaseExecutor.SelectOneAsync<UserModel>(Queries.GetByEmail, new {email});
+            return _dao.UpdateAsync(model);
         }
 
-        public Task<bool> IsExistByLogin(string login)
+        public Task DeleteAsync(int id)
         {
-            return _dataBaseExecutor.SelectOneAsync<bool>(Queries.IsExistByLogin, new {login});
+            return _dao.DeleteAsync<UserModel>(id);
         }
 
-        public Task<bool> IsExistByEmail(string email)
+        public Task<UserModel> GetByLoginAsync(string login)
         {
-            return _dataBaseExecutor.SelectOneAsync<bool>(Queries.IsExistByEmail, new {email});
+            return _dao.GetAsync<UserModel, UserLoginParameterModel>(new UserLoginParameterModel{Login = login});
         }
 
-        public Task<bool> IsExistByPhone(string phone)
+        public Task<UserModel> GetByEmailAsync(string email)
         {
-            return _dataBaseExecutor.SelectOneAsync<bool>(Queries.IsExistByPhone, new {phone});
+            return _dao.GetAsync<UserModel, UserEmailParameterModel>(new UserEmailParameterModel {Email = email});
         }
 
-        public Task<int> Create(UserModel model)
+        public async Task<bool> IsExistByLoginAsync(string login)
         {
-            return _dataBaseExecutor.SelectOneAsync<int>(Queries.Create, model);
+            var result = await _dao
+                .GetAsync<UserModel, UserLoginParameterModel>(new UserLoginParameterModel {Login = login})
+                .ConfigureAwait(false);
+
+            return result != null;
         }
 
-        public Task Update(UserModel model)
+        public async Task<bool> IsExistByEmailAsync(string email)
         {
-            return _dataBaseExecutor.ExecuteAsync(Queries.Update, model);
+            var result = await _dao
+                .GetAsync<UserModel, UserEmailParameterModel>(new UserEmailParameterModel {Email = email})
+                .ConfigureAwait(false);
+
+            return result != null;
         }
 
-        public Task Delete(int id)
+        public async Task<bool> IsExistByPhoneAsync(string phone)
         {
-            return _dataBaseExecutor.ExecuteAsync(Queries.Delete, new {id});
+            var result = await _dao
+                .GetAsync<UserModel, UserPhoneParameterModel>(new UserPhoneParameterModel {Phone = phone})
+                .ConfigureAwait(false);
+
+            return result != null;
         }
     }
 }

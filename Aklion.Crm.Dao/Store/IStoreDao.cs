@@ -1,23 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Aklion.Crm.Domain;
 using Aklion.Crm.Domain.Store;
-using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
 
 namespace Aklion.Crm.Dao.Store
 {
     public interface IStoreDao
     {
-        Task<Paging<StoreModel>> GetPagedList(StoreParameterModel parameterModel);
+        Task<Tuple<int, List<StoreModel>>> GetPagedListAsync(StoreParameterModel parameter);
 
-        Task<List<AutocompleteModel>> GetForAutocompleteByNamePattern(string pattern);
+        Task<Dictionary<string, int>> GetForAutocompleteAsync(StoreAutocompleteParameterModel parameter);
 
-        Task<StoreModel> Get(int id);
+        Task<StoreModel> GetAsync(int id);
 
-        Task<int> Create(StoreModel model);
+        Task<int> CreateAsync(StoreModel model);
 
-        Task Update(StoreModel model);
+        Task UpdateAsync(StoreModel model);
 
-        Task Delete(int id);
+        Task DeleteAsync(int id);
     }
 }
