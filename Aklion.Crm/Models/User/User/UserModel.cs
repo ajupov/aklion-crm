@@ -1,5 +1,4 @@
-﻿using System;
-using Aklion.Crm.Enums;
+﻿using Aklion.Crm.Enums;
 
 namespace Aklion.Crm.Models.User.User
 {
@@ -10,19 +9,23 @@ namespace Aklion.Crm.Models.User.User
         public string Login { get; set; }
 
         public string Email { get; set; }
-        
+
         public string Phone { get; set; }
-        
+
         public string Surname { get; set; }
-        
+
         public string Name { get; set; }
-        
+
         public string Patronymic { get; set; }
-        
+
         public Gender Gender { get; set; }
-        
-        public DateTime BirthDate { get; set; }
-        
-        public DateTime CreateDate { get; set; }
+
+        public string BirthDate { get; set; }
+
+        public bool IsLocked { get; set; }
+
+        public string AvatarUrl { get; set; }
+
+        public string CreateDate { get; set; }
     }
 }

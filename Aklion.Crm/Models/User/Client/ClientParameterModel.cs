@@ -1,12 +1,10 @@
-﻿namespace Aklion.Crm.Models.User.ProductAttribute
+﻿namespace Aklion.Crm.Models.User.Client
 {
-    public class ProductAttributeParameterModel
+    public class ClientParameterModel
     {
         public int? Id { get; set; }
 
         public string Name { get; set; }
-
-        public string Description { get; set; }
 
         public string CreateDate { get; set; }
 

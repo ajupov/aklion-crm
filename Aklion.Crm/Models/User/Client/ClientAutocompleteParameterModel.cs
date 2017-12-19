@@ -1,9 +1,7 @@
-﻿namespace Aklion.Crm.Models.Administration.Client
+﻿namespace Aklion.Crm.Models.User.Client
 {
     public class ClientAutocompleteParameterModel
     {
-        public int StoreId { get; set; }
-
         public string Name { get; set; }
     }
 }

@@ -1,0 +1,11 @@
+﻿namespace Aklion.Crm.Models.User.OrderStatus
+{
+    public class OrderStatusModel
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public string CreateDate { get; set; }
+    }
+}

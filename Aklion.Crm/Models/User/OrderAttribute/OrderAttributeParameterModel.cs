@@ -1,6 +1,6 @@
-﻿namespace Aklion.Crm.Models.User.ProductAttribute
+﻿namespace Aklion.Crm.Models.User.OrderAttribute
 {
-    public class ProductAttributeParameterModel
+    public class OrderAttributeParameterModel
     {
         public int? Id { get; set; }
 

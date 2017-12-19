@@ -1,9 +1,7 @@
-﻿namespace Aklion.Crm.Models.Administration.ProductStatus
+﻿namespace Aklion.Crm.Models.User.ProductStatus
 {
     public class ProductStatusAutocompleteParameterModel
     {
-        public int StoreId { get; set; }
-
         public string Name { get; set; }
     }
 }

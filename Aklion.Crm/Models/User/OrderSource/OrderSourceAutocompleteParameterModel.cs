@@ -1,9 +1,7 @@
-﻿namespace Aklion.Crm.Models.Administration.OrderSource
+﻿namespace Aklion.Crm.Models.User.OrderSource
 {
     public class OrderSourceAutocompleteParameterModel
     {
-        public int StoreId { get; set; }
-
         public string Name { get; set; }
     }
 }

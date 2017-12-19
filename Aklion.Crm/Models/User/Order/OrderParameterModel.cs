@@ -1,22 +1,24 @@
-﻿namespace Aklion.Crm.Models.User.Product
+﻿namespace Aklion.Crm.Models.User.Order
 {
-    public class ProductParameterModel
+    public class OrderParameterModel
     {
         public int? Id { get; set; }
 
-        public int? ParentId { get; set; }
+        public int? ClientId { get; set; }
 
-        public string ParentName { get; set; }
+        public string ClientName { get; set; }
 
-        public string Name { get; set; }
+        public int? SourceId { get; set; }
 
-        public decimal? Price { get; set; }
+        public string SourceName { get; set; }
 
         public int? StatusId { get; set; }
 
         public string StatusName { get; set; }
 
-        public string VendorCode { get; set; }
+        public decimal? TotalSum { get; set; }
+
+        public decimal? DiscountSum { get; set; }
 
         public string CreateDate { get; set; }
 

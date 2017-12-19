@@ -1,12 +1,10 @@
-﻿namespace Aklion.Crm.Models.User.ProductAttribute
+﻿namespace Aklion.Crm.Models.User.OrderSource
 {
-    public class ProductAttributeParameterModel
+    public class OrderSourceParameterModel
     {
         public int? Id { get; set; }
 
         public string Name { get; set; }
-
-        public string Description { get; set; }
 
         public string CreateDate { get; set; }
 

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Aklion.Crm.Models.User.Store
+﻿namespace Aklion.Crm.Models.User.Store
 {
     public class StoreModel
     {
@@ -10,6 +8,8 @@ namespace Aklion.Crm.Models.User.Store
 
         public string ApiSecret { get; set; }
 
-        public DateTime CreateDate { get; set; }
+        public bool IsLocked { get; set; }
+
+        public string CreateDate { get; set; }
     }
 }

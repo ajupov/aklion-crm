@@ -1,5 +1,4 @@
-﻿using System;
-using Aklion.Crm.Enums;
+﻿using Aklion.Crm.Enums;
 
 namespace Aklion.Crm.Models.User.UserPermission
 {
@@ -13,6 +12,6 @@ namespace Aklion.Crm.Models.User.UserPermission
 
         public Permission Permission { get; set; }
 
-        public DateTime CreateDate { get; set; }
+        public string CreateDate { get; set; }
     }
 }
