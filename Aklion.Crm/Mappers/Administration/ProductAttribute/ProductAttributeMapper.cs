@@ -1,106 +1,44 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.ProductAttribute;
-using Aklion.Infrastructure.DateTime;
-using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
-using ProductAttributeParameterModel = Aklion.Crm.Models.Administration.ProductAttribute.ProductAttributeParameterModel;
+using Aklion.Infrastructure.Mapper;
+using DomainProductAttributeModel = Aklion.Crm.Domain.ProductAttribute.ProductAttributeModel;
+using DomainProductAttributeParameterModel = Aklion.Crm.Domain.ProductAttribute.ProductAttributeParameterModel;
+using DomainProductAttributeAutocompleteParameterModel = Aklion.Crm.Domain.ProductAttribute.ProductAttributeAutocompleteParameterModel;
 
 namespace Aklion.Crm.Mappers.Administration.ProductAttribute
 {
     public static class ProductAttributeMapper
     {
-        public static PagingModel<ProductAttributeModel> Map(this Paging<ProductAttributeModel> model, int page, int size)
+        public static PagingModel<ProductAttributeModel> MapNew(this Tuple<int, List<DomainProductAttributeModel>> tuple, int? page, int? size)
         {
-            return model == null
-                ? null
-                : new PagingModel<ProductAttributeModel>(model.List.Map(), model.TotalCount, page, size);
+            return new PagingModel<ProductAttributeModel>(tuple.Item2.MapListNew<ProductAttributeModel>(), tuple.Item1, page, size);
         }
 
-        private static List<ProductAttributeModel> Map(this IEnumerable<ProductAttributeModel> models)
+        public static DomainProductAttributeModel MapNew(this ProductAttributeModel model)
         {
-            return models?.Select(Map).ToList();
+            return model.MapNew<DomainProductAttributeModel>();
         }
 
-        public static ProductAttributeModel Map(this ProductAttributeModel model)
+        public static DomainProductAttributeModel MapFrom(this DomainProductAttributeModel domainModel, ProductAttributeModel model)
         {
-            return model == null
-                ? null
-                : new ProductAttributeModel
-                {
-                    Id = model.Id,
-                    StoreId = model.StoreId,
-                    StoreName = model.StoreName,
-                    ProductId = model.ProductId,
-                    ProductName = model.ProductName,
-                    AttributeId = model.AttributeId,
-                    AttributeName = model.AttributeName,
-                    Value = model.Value,
-                    IsDeleted = model.IsDeleted,
-                    CreateDate = model.CreateDate,
-                    ModifyDate = model.ModifyDate
-                };
+            return Mapper.MapFrom(domainModel, model);
         }
 
-        public static ProductAttributeModel Map(this ProductAttributeModel model)
+        public static DomainProductAttributeParameterModel MapNew(this ProductAttributeParameterModel model)
         {
-            return model == null
-                ? null
-                : new ProductAttributeModel
-                {
-                    Id = model.Id,
-                    StoreId = model.StoreId,
-                    StoreName = model.StoreName,
-                    ProductId = model.ProductId,
-                    ProductName = model.ProductName,
-                    AttributeId = model.AttributeId,
-                    AttributeName = model.AttributeName,
-                    Value = model.Value,
-                    IsDeleted = model.IsDeleted,
-                    CreateDate = model.CreateDate,
-                    ModifyDate = model.ModifyDate
-                };
+            return model.MapNew<DomainProductAttributeParameterModel>();
         }
 
-        public static ProductAttributeParameterModel Map(this Models.Administration.ProductAttribute.ProductAttributeParameterModel model)
+        public static DomainProductAttributeAutocompleteParameterModel MapNew(this string pattern, int storeId)
         {
-            return model == null
-                ? null
-                : new ProductAttributeParameterModel
-                {
-                    Id = model.Id,
-                    StoreId = model.StoreId,
-                    StoreName = model.StoreName,
-                    ProductId = model.ProductId,
-                    ProductName = model.ProductName,
-                    AttributeId = model.AttributeId,
-                    AttributeName = model.AttributeName,
-                    Value = model.Value,
-                    IsDeleted = model.IsDeleted,
-                    CreateDate = model.CreateDate.ToNullableDate(),
-                    ModifyDate = model.ModifyDate.ToNullableDate(),
-                    IsSearch = model.IsSearch,
-                    Timestamp = model.Timestamp,
-                    SortingColumn = model.SortingColumn,
-                    SortingOrder = model.SortingOrder,
-                    Page = model.Page - 1,
-                    Size = model.Size
-                };
-        }
-
-        public static void Map(this ProductAttributeModel viewModel, ProductAttributeModel domainModel)
-        {
-            domainModel.Id = viewModel.Id;
-            domainModel.StoreId = viewModel.StoreId;
-            domainModel.StoreName = viewModel.StoreName;
-            domainModel.ProductId = viewModel.ProductId;
-            domainModel.ProductName = viewModel.ProductName;
-            domainModel.AttributeId = viewModel.AttributeId;
-            domainModel.AttributeName = viewModel.AttributeName;
-            domainModel.Value = viewModel.Value;
-            domainModel.IsDeleted = viewModel.IsDeleted;
-            domainModel.CreateDate = viewModel.CreateDate;
-            domainModel.ModifyDate = viewModel.ModifyDate;
+            return new DomainProductAttributeAutocompleteParameterModel
+            {
+                Description = pattern,
+                StoreId = storeId,
+                IsDeleted = false
+            };
         }
     }
 }

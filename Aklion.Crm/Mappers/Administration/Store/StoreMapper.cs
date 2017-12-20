@@ -1,98 +1,39 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.Store;
-using Aklion.Infrastructure.DateTime;
-using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
-using StoreParameterModel = Aklion.Crm.Models.Administration.Store.StoreParameterModel;
+using Aklion.Infrastructure.Mapper;
+using DomainStoreModel = Aklion.Crm.Domain.Store.StoreModel;
+using DomainStoreParameterModel = Aklion.Crm.Domain.Store.StoreParameterModel;
+using DomainStoreAutocompleteParameterModel = Aklion.Crm.Domain.Store.StoreAutocompleteParameterModel;
 
 namespace Aklion.Crm.Mappers.Administration.Store
 {
     public static class StoreMapper
     {
-        public static PagingModel<StoreModel> Map(this Paging<StoreModel> model, int page, int size)
+        public static PagingModel<StoreModel> MapNew(this Tuple<int, List<DomainStoreModel>> tuple, int? page, int? size)
         {
-            return model == null
-                ? null
-                : new PagingModel<StoreModel>(model.List.Map(), model.TotalCount, page, size);
+            return new PagingModel<StoreModel>(tuple.Item2.MapListNew<StoreModel>(), tuple.Item1, page, size);
         }
 
-        private static List<StoreModel> Map(this IEnumerable<StoreModel> models)
+        public static DomainStoreModel MapNew(this StoreModel model)
         {
-            return models?.Select(Map).ToList();
+            return model.MapNew<DomainStoreModel>();
         }
 
-        public static StoreModel Map(this StoreModel model)
+        public static DomainStoreModel MapFrom(this DomainStoreModel domainModel, StoreModel model)
         {
-            return model == null
-                ? null
-                : new StoreModel
-                {
-                    Id = model.Id,
-                    CreateUserId = model.CreateUserId,
-                    CreateUserLogin = model.CreateUserLogin,
-                    Name = model.Name,
-                    ApiSecret = model.ApiSecret,
-                    IsLocked = model.IsLocked,
-                    IsDeleted = model.IsDeleted,
-                    CreateDate = model.CreateDate,
-                    ModifyDate = model.ModifyDate
-                };
+            return Mapper.MapFrom(domainModel, model);
         }
 
-        public static StoreModel Map(this StoreModel model)
+        public static DomainStoreParameterModel MapNew(this StoreParameterModel model)
         {
-            return model == null
-                ? null
-                : new StoreModel
-                {
-                    Id = model.Id,
-                    CreateUserId = model.CreateUserId,
-                    CreateUserLogin = model.CreateUserLogin,
-                    Name = model.Name,
-                    ApiSecret = model.ApiSecret,
-                    IsLocked = model.IsLocked,
-                    IsDeleted = model.IsDeleted,
-                    CreateDate = model.CreateDate,
-                    ModifyDate = model.ModifyDate
-                };
+            return model.MapNew<DomainStoreParameterModel>();
         }
 
-        public static StoreParameterModel Map(this Models.Administration.Store.StoreParameterModel model)
+        public static DomainStoreAutocompleteParameterModel MapNew(this string pattern)
         {
-            return model == null
-                ? null
-                : new StoreParameterModel
-                {
-                    Id = model.Id,
-                    Name = model.Name,
-                    CreateUserId = model.CreateUserId,
-                    CreateUserLogin = model.CreateUserLogin,
-                    ApiSecret = model.ApiSecret,
-                    IsLocked = model.IsLocked,
-                    IsDeleted = model.IsDeleted,
-                    CreateDate = model.CreateDate.ToNullableDate(),
-                    ModifyDate = model.ModifyDate.ToNullableDate(),
-                    IsSearch = model.IsSearch,
-                    Timestamp = model.Timestamp,
-                    SortingColumn = model.SortingColumn,
-                    SortingOrder = model.SortingOrder,
-                    Page = model.Page - 1,
-                    Size = model.Size
-                };
-        }
-
-        public static void Map(this StoreModel viewModel, StoreModel domainModel)
-        {
-            domainModel.Id = viewModel.Id;
-            domainModel.Name = viewModel.Name;
-            domainModel.CreateUserId = viewModel.CreateUserId;
-            domainModel.CreateUserLogin = viewModel.CreateUserLogin;
-            domainModel.ApiSecret = viewModel.ApiSecret;
-            domainModel.IsLocked = viewModel.IsLocked;
-            domainModel.IsDeleted = viewModel.IsDeleted;
-            domainModel.CreateDate = viewModel.CreateDate;
-            domainModel.ModifyDate = viewModel.ModifyDate;
+            return new DomainStoreAutocompleteParameterModel {Name = pattern};
         }
     }
 }

@@ -1,98 +1,43 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using Aklion.Crm.Models;
-using Aklion.Infrastructure.DateTime;
-using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
-using UserModel = Aklion.Crm.Models.Administration.User.UserModel;
-using UserParameterModel = Aklion.Crm.Models.Administration.User.UserParameterModel;
+using Aklion.Crm.Models.Administration.User;
+using Aklion.Infrastructure.Mapper;
+using DomainUserModel = Aklion.Crm.Domain.User.UserModel;
+using DomainUserParameterModel = Aklion.Crm.Domain.User.UserParameterModel;
+using DomainUserAutocompleteParameterModel = Aklion.Crm.Domain.User.UserAutocompleteParameterModel;
 
 namespace Aklion.Crm.Mappers.Administration.User
 {
     public static class UserMapper
     {
-        public static PagingModel<UserModel> Map(this Paging<UserModel> model, int page, int size)
+        public static PagingModel<UserModel> MapNew(this Tuple<int, List<DomainUserModel>> tuple, int? page, int? size)
         {
-            return model == null
-                ? null
-                : new PagingModel<UserModel>(model.List.Map(), model.TotalCount, page, size);
+            return new PagingModel<UserModel>(tuple.Item2.MapListNew<UserModel>(), tuple.Item1, page, size);
         }
 
-        private static List<UserModel> Map(this IEnumerable<UserModel> models)
+        public static DomainUserModel MapNew(this UserModel model)
         {
-            return models?.Select(Map).ToList();
+            return model.MapNew<DomainUserModel>();
         }
 
-        public static UserModel Map(this UserModel model)
+        public static DomainUserModel MapFrom(this DomainUserModel domainModel, UserModel model)
         {
-            return model == null
-                ? null
-                : new UserModel
-                {
-                    Id = model.Id,
-                    Login = model.Login,
-                    Email = model.Email,
-                    Phone = model.Phone,
-                    Surname = model.Surname,
-                    Name = model.Name,
-                    Patronymic = model.Patronymic,
-                    Gender = model.Gender,
-                    BirthDate = model.BirthDate,
-                    IsEmailConfirmed = model.IsEmailConfirmed,
-                    IsPhoneConfirmed = model.IsPhoneConfirmed,
-                    IsLocked = model.IsLocked,
-                    IsDeleted = model.IsDeleted,
-                    CreateDate = model.CreateDate,
-                    ModifyDate = model.ModifyDate
-                };
+            return Mapper.MapFrom(domainModel, model);
         }
 
-        public static UserParameterModel Map(this Models.Administration.User.UserParameterModel model)
+        public static DomainUserParameterModel MapNew(this UserParameterModel model)
         {
-            return model == null
-                ? null
-                : new UserParameterModel
-                {
-                    Id = model.Id,
-                    Login = model.Login,
-                    Email = model.Email,
-                    Phone = model.Phone,
-                    Surname = model.Surname,
-                    Name = model.Name,
-                    Patronymic = model.Patronymic,
-                    Gender = model.Gender,
-                    BirthDate = model.BirthDate.ToNullableDate(),
-                    IsEmailConfirmed = model.IsEmailConfirmed,
-                    IsPhoneConfirmed = model.IsPhoneConfirmed,
-                    IsLocked = model.IsLocked,
-                    IsDeleted = model.IsDeleted,
-                    CreateDate = model.CreateDate.ToNullableDate(),
-                    ModifyDate = model.ModifyDate.ToNullableDate(),
-                    IsSearch = model.IsSearch,
-                    Timestamp = model.Timestamp,
-                    SortingColumn = model.SortingColumn,
-                    SortingOrder = model.SortingOrder,
-                    Page = model.Page - 1,
-                    Size = model.Size
-                };
+            return model.MapNew<DomainUserParameterModel>();
         }
 
-        public static void Map(this UserModel viewModel, UserModel domainModel)
+        public static DomainUserAutocompleteParameterModel MapNew(this string pattern)
         {
-            domainModel.Id = viewModel.Id;
-            domainModel.Login = viewModel.Login;
-            domainModel.Email = viewModel.Email;
-            domainModel.Phone = viewModel.Phone;
-            domainModel.Surname = viewModel.Surname;
-            domainModel.Name = viewModel.Name;
-            domainModel.Patronymic = viewModel.Patronymic;
-            domainModel.Gender = viewModel.Gender;
-            domainModel.BirthDate = viewModel.BirthDate;
-            domainModel.IsEmailConfirmed = viewModel.IsEmailConfirmed;
-            domainModel.IsPhoneConfirmed = viewModel.IsPhoneConfirmed;
-            domainModel.IsLocked = viewModel.IsLocked;
-            domainModel.IsDeleted = viewModel.IsDeleted;
-            domainModel.CreateDate = viewModel.CreateDate;
-            domainModel.ModifyDate = viewModel.ModifyDate;
+            return new DomainUserAutocompleteParameterModel
+            {
+                Login = pattern,
+                IsDeleted = false
+            };
         }
     }
 }

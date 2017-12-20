@@ -1,57 +1,24 @@
 ﻿using Aklion.Crm.Domain.User;
 using Aklion.Crm.Models.Account;
-using Aklion.Infrastructure.DateTime;
-using Aklion.Infrastructure.Password;
-using Aklion.Infrastructure.PhoneNumber;
-using UserModel = Aklion.Crm.Models.Administration.User.UserModel;
+using Aklion.Infrastructure.Mapper;
 
 namespace Aklion.Crm.Mappers.Account
 {
     public static class AccountMapper
     {
-        public static UserModel Map(this RegisterModel model)
+        public static UserModel MapNew(this RegisterModel model)
         {
-            return model == null
-                ? null
-                : new UserModel
-                {
-                    Login = model.Login,
-                    PasswordHash = PasswordHelper.Generate(model.Password),
-                    Email = model.Email,
-                    Phone = model.Phone.ExtractPhoneNumber(),
-                    Surname = model.Surname,
-                    Name = model.Name,
-                    Patronymic = model.Patronymic,
-                    Gender = model.Gender,
-                    BirthDate = model.BirthDateString.ToDate(),
-                    IsEmailConfirmed = false,
-                    IsPhoneConfirmed = false,
-                    IsLocked = false,
-                    IsDeleted = false
-                };
+            return model.MapNew<UserModel>();
         }
 
-        public static ChangePersonalInfoModel Map(this UserModel model)
+        public static ChangePersonalInfoModel MapNew(this UserModel model)
         {
-            return model == null
-                ? null
-                : new ChangePersonalInfoModel
-                {
-                    Surname = model.Surname,
-                    Name = model.Name,
-                    Patronymic = model.Patronymic,
-                    Gender = model.Gender,
-                    BirthDateString = model.BirthDate.ToDateString()
-                };
+            return model.MapNew<ChangePersonalInfoModel>();
         }
 
-        public static void Map(this ChangePersonalInfoModel model, UserModel domainModel)
+        public static UserModel MapFrom(this UserModel domainModel, ChangePersonalInfoModel model)
         {
-            domainModel.Surname = model.Surname;
-            domainModel.Name = model.Name;
-            domainModel.Patronymic = model.Patronymic;
-            domainModel.Gender = model.Gender;
-            domainModel.BirthDate = model.BirthDateString.ToDate();
+            return Mapper.MapFrom(domainModel, model);
         }
     }
 }

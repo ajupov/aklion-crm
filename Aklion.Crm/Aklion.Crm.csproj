@@ -5,26 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\Api\**" />
     <Compile Remove="Controllers\User\**" />
-    <Compile Remove="Mappers\Account\**" />
-    <Compile Remove="Mappers\Administration\**" />
-    <Compile Remove="Mappers\User\**" />
+    <Content Remove="Controllers\Api\**" />
     <Content Remove="Controllers\User\**" />
-    <Content Remove="Mappers\Account\**" />
-    <Content Remove="Mappers\Administration\**" />
-    <Content Remove="Mappers\User\**" />
+    <EmbeddedResource Remove="Controllers\Api\**" />
     <EmbeddedResource Remove="Controllers\User\**" />
-    <EmbeddedResource Remove="Mappers\Account\**" />
-    <EmbeddedResource Remove="Mappers\Administration\**" />
-    <EmbeddedResource Remove="Mappers\User\**" />
+    <None Remove="Controllers\Api\**" />
     <None Remove="Controllers\User\**" />
-    <None Remove="Mappers\Account\**" />
-    <None Remove="Mappers\Administration\**" />
-    <None Remove="Mappers\User\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Mappers\Mapper.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -50,7 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Mappers\" />
+    <Folder Include="Mappers\User\" />
   </ItemGroup>
 
 </Project>

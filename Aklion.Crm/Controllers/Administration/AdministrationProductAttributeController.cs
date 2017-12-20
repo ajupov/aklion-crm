@@ -1,8 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
-using Aklion.Crm.Dao.Attribute;
-using Aklion.Crm.Dao.Product;
-using Aklion.Crm.Dao.ProductAttributeLink;
+using Aklion.Crm.Dao.ProductAttribute;
 using Aklion.Crm.Mappers.Administration.ProductAttribute;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.ProductAttribute;
@@ -13,91 +12,53 @@ namespace Aklion.Crm.Controllers.Administration
     [Route("Administration/ProductAttributes")]
     public class AdministrationProductAttributeController : BaseController
     {
-        private readonly IProductAttributeDao _productAttributeDao;
-        private readonly IAttributeDao _attributeDao;
-        private readonly IProductDao _productDao;
+        private readonly IProductAttributeDao _clientAttributeDao;
 
-        public AdministrationProductAttributeController(
-            IProductAttributeDao productAttributeDao,
-            IAttributeDao attributeDao,
-            IProductDao productDao)
+        public AdministrationProductAttributeController(IProductAttributeDao clientAttributeDao)
         {
-            _productAttributeDao = productAttributeDao;
-            _attributeDao = attributeDao;
-            _productDao = productDao;
+            _clientAttributeDao = clientAttributeDao;
         }
 
         [HttpGet]
         [Route("GetList")]
         public async Task<PagingModel<ProductAttributeModel>> GetList(ProductAttributeParameterModel model)
         {
-            var result = await _productAttributeDao.GetPagedList(model.Map()).ConfigureAwait(false);
+            var result = await _clientAttributeDao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
 
-            return result.Map(model.Page, model.Size);
+            return result.MapNew(model.Page, model.Size);
+        }
+
+        [HttpGet]
+        [Route("GetForAutocompleteByNamePattern")]
+        public Task<Dictionary<string, int>> GetForAutocompleteByNamePattern(string pattern, int storeId = 0)
+        {
+            return _clientAttributeDao.GetForAutocompleteAsync(pattern.MapNew(storeId));
         }
 
         [HttpPost]
         [Route("Create")]
         [AjaxErrorHandle]
-        public async Task<bool> Create(ProductAttributeModel model)
+        public Task Create(ProductAttributeModel model)
         {
-            var attribute = await _attributeDao.Get(model.AttributeId).ConfigureAwait(false);
-            if (attribute.StoreId != model.StoreId)
-            {
-                return false;
-            }
-
-            var product = await _productDao.Get(model.ProductId).ConfigureAwait(false);
-            if (product.StoreId != model.StoreId)
-            {
-                return false;
-            }
-
-            var productAttribute = model.Map();
-
-            await _productAttributeDao.Create(productAttribute).ConfigureAwait(false);
-
-            return true;
+            return _clientAttributeDao.CreateAsync(model.MapNew());
         }
 
         [HttpPost]
         [Route("Update")]
         [AjaxErrorHandle]
-        public async Task<bool> Update(ProductAttributeModel model)
+        public async Task Update(ProductAttributeModel model)
         {
-            var attribute = await _attributeDao.Get(model.AttributeId).ConfigureAwait(false);
-            if (attribute.StoreId != model.StoreId)
-            {
-                return false;
-            }
+            var result = await _clientAttributeDao.GetAsync(model.Id).ConfigureAwait(false);
 
-            var product = await _productDao.Get(model.ProductId).ConfigureAwait(false);
-            if (product.StoreId != model.StoreId)
-            {
-                return false;
-            }
-
-            var productAttribute = await _productAttributeDao.Get(model.Id).ConfigureAwait(false);
-            if (productAttribute == null)
-            {
-                return false;
-            }
-
-            model.Map(productAttribute);
-
-            await _productAttributeDao.Update(productAttribute).ConfigureAwait(false);
-
-            return true;
+            await _clientAttributeDao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);
         }
 
         [HttpPost]
         [Route("Delete")]
         [AjaxErrorHandle]
-        public async Task<bool> Delete(int id)
+        public Task Delete(int id)
         {
-            await _productAttributeDao.Delete(id).ConfigureAwait(false);
-
-            return true;
+            return _clientAttributeDao.DeleteAsync(id);
         }
     }
 }

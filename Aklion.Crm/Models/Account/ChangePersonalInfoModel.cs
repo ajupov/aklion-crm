@@ -30,6 +30,6 @@ namespace Aklion.Crm.Models.Account
         [Required(ErrorMessage = "Дата рождения должна быть указана")]
         [Display(Name = "Дата рождения")]
         [DataType(DataType.Text)]
-        public string BirthDateString { get; set; }
+        public string BirthDate { get; set; }
     }
 }

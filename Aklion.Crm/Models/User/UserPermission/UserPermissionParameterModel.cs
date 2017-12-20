@@ -1,6 +1,6 @@
 ﻿using Aklion.Crm.Enums;
 
-namespace Aklion.Crm.Models.Administration.UserPermission
+namespace Aklion.Crm.Models.User.UserPermission
 {
     public class UserPermissionParameterModel
     {

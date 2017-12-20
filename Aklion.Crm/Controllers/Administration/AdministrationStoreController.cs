@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
+using Aklion.Crm.Business.Store;
 using Aklion.Crm.Dao.Store;
-using Aklion.Crm.Mappers;
 using Aklion.Crm.Mappers.Administration.Store;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.Store;
-using Aklion.Infrastructure.Random;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aklion.Crm.Controllers.Administration
@@ -14,10 +13,12 @@ namespace Aklion.Crm.Controllers.Administration
     [Route("Administration/Stores")]
     public class AdministrationStoreController : BaseController
     {
+        private readonly IStoreService _storeService;
         private readonly IStoreDao _storeDao;
 
-        public AdministrationStoreController(IStoreDao storeDao)
+        public AdministrationStoreController(IStoreService storeService, IStoreDao storeDao)
         {
+            _storeService = storeService;
             _storeDao = storeDao;
         }
 
@@ -33,76 +34,50 @@ namespace Aklion.Crm.Controllers.Administration
         [Route("GetList")]
         public async Task<PagingModel<StoreModel>> GetList(StoreParameterModel model)
         {
-            var result = await _storeDao.GetPagedList(model.Map()).ConfigureAwait(false);
+            var result = await _storeDao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
 
-            return result.Map(model.Page, model.Size);
+            return result.MapNew(model.Page, model.Size);
         }
 
         [HttpGet]
         [Route("GetForAutocompleteByNamePattern")]
-        public async Task<List<AutocompleteModel>> GetForAutocompleteByNamePattern(string pattern)
+        public Task<Dictionary<string, int>> GetForAutocompleteByNamePattern(string pattern)
         {
-            var result = await _storeDao.GetForAutocompleteByNamePattern(pattern).ConfigureAwait(false);
-
-            return result.Map();
+            return _storeDao.GetForAutocompleteAsync(pattern.MapNew());
         }
 
         [HttpPost]
         [Route("Create")]
         [AjaxErrorHandle]
-        public async Task<bool> Create(StoreModel model)
+        public Task Create(StoreModel model)
         {
-            var store = model.Map();
-
-            await _storeDao.Create(store).ConfigureAwait(false);
-
-            return true;
+            return _storeDao.CreateAsync(model.MapNew());
         }
 
         [HttpPost]
         [Route("Update")]
         [AjaxErrorHandle]
-        public async Task<bool> Update(StoreModel model)
+        public async Task Update(StoreModel model)
         {
-            var store = await _storeDao.Get(model.Id).ConfigureAwait(false);
-            if (store == null)
-            {
-                return false;
-            }
+            var result = await _storeDao.GetAsync(model.Id).ConfigureAwait(false);
 
-            model.Map(store);
-
-            await _storeDao.Update(store).ConfigureAwait(false);
-
-            return true;
+            await _storeDao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);
         }
 
         [HttpPost]
         [Route("Delete")]
         [AjaxErrorHandle]
-        public async Task<bool> Delete(int id)
+        public Task Delete(int id)
         {
-            await _storeDao.Delete(id).ConfigureAwait(false);
-
-            return true;
+            return _storeDao.DeleteAsync(id);
         }
 
         [HttpPost]
         [Route("GenerateApiSecret")]
         [AjaxErrorHandle]
-        public async Task<string> GenerateApiSecret(int id)
+        public Task<string> GenerateApiSecret(int id)
         {
-            var store = await _storeDao.Get(id).ConfigureAwait(false);
-            if (store == null)
-            {
-                return string.Empty;
-            }
-
-            store.ApiSecret = RandomGenerator.GenerateAlphaNumbericString(16);
-
-            await _storeDao.Update(store).ConfigureAwait(false);
-
-            return store.ApiSecret;
+            return _storeService.GenerateApiSecretAsync(id);
         }
     }
 }

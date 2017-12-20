@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
 using Aklion.Crm.Dao.Product;
-using Aklion.Crm.Mappers;
 using Aklion.Crm.Mappers.Administration.Product;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.Product;
@@ -32,58 +31,42 @@ namespace Aklion.Crm.Controllers.Administration
         [Route("GetList")]
         public async Task<PagingModel<ProductModel>> GetList(ProductParameterModel model)
         {
-            var result = await _productDao.GetPagedList(model.Map()).ConfigureAwait(false);
+            var result = await _productDao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
 
-            return result.Map(model.Page, model.Size);
+            return result.MapNew(model.Page, model.Size);
         }
 
         [HttpGet]
         [Route("GetForAutocompleteByNamePattern")]
-        public async Task<List<AutocompleteModel>> GetForAutocompleteByNamePattern(string pattern, int storeId = 0)
+        public Task<Dictionary<string, int>> GetForAutocompleteByNamePattern(string pattern, int storeId = 0)
         {
-            var result = await _productDao.GetForAutocompleteByNamePattern(pattern, storeId).ConfigureAwait(false);
-
-            return result.Map();
+            return _productDao.GetForAutocompleteAsync(pattern.MapNew(storeId));
         }
 
         [HttpPost]
         [Route("Create")]
         [AjaxErrorHandle]
-        public async Task<bool> Create(ProductModel model)
+        public Task Create(ProductModel model)
         {
-            var store = model.Map();
-
-            await _productDao.Create(store).ConfigureAwait(false);
-
-            return true;
+            return _productDao.CreateAsync(model.MapNew());
         }
 
         [HttpPost]
         [Route("Update")]
         [AjaxErrorHandle]
-        public async Task<bool> Update(ProductModel model)
+        public async Task Update(ProductModel model)
         {
-            var store = await _productDao.Get(model.Id).ConfigureAwait(false);
-            if (store == null)
-            {
-                return false;
-            }
+            var result = await _productDao.GetAsync(model.Id).ConfigureAwait(false);
 
-            model.Map(store);
-
-            await _productDao.Update(store).ConfigureAwait(false);
-
-            return true;
+            await _productDao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);
         }
 
         [HttpPost]
         [Route("Delete")]
         [AjaxErrorHandle]
-        public async Task<bool> Delete(int id)
+        public Task Delete(int id)
         {
-            await _productDao.Delete(id).ConfigureAwait(false);
-
-            return true;
+            return _productDao.DeleteAsync(id);
         }
     }
 }

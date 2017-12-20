@@ -23,59 +23,45 @@ namespace Aklion.Crm.Controllers.Administration
         [Route("GetList")]
         public async Task<PagingModel<UserPermissionModel>> GetList(UserPermissionParameterModel model)
         {
-            var result = await _userPermissionDao.GetPagedList(model.Map()).ConfigureAwait(false);
+            var result = await _userPermissionDao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
 
-            return result.Map(model.Page, model.Size);
+            return result.MapNew(model.Page, model.Size);
         }
 
         [HttpPost]
         [Route("Create")]
         [AjaxErrorHandle]
-        public async Task<bool> Create(UserPermissionModel model)
+        public Task Create(UserPermissionModel model)
         {
             if (model.Permission == Permission.None)
             {
-                return false;
+                return Task.CompletedTask;
             }
 
-            var userPermission = model.Map();
-
-            await _userPermissionDao.Create(userPermission).ConfigureAwait(false);
-
-            return true;
+            return _userPermissionDao.CreateAsync(model.MapNew());
         }
 
         [HttpPost]
         [Route("Update")]
         [AjaxErrorHandle]
-        public async Task<bool> Update(UserPermissionModel model)
+        public async Task Update(UserPermissionModel model)
         {
             if (model.Permission == Permission.None)
             {
-                return false;
+                return;
             }
 
-            var userPermission = await _userPermissionDao.Get(model.Id).ConfigureAwait(false);
-            if (userPermission == null)
-            {
-                return false;
-            }
+            var userPermission = await _userPermissionDao.GetAsync(model.Id).ConfigureAwait(false);
 
-            model.Map(userPermission);
-
-            await _userPermissionDao.Update(userPermission).ConfigureAwait(false);
-
-            return true;
+            await _userPermissionDao.UpdateAsync(userPermission.MapFrom(model)).ConfigureAwait(false);
         }
 
         [HttpPost]
         [Route("Delete")]
         [AjaxErrorHandle]
-        public async Task<bool> Delete(int id)
+        public Task Delete(int id)
         {
-            await _userPermissionDao.Delete(id).ConfigureAwait(false);
-
-            return true;
+            return _userPermissionDao.DeleteAsync(id);
         }
     }
 }

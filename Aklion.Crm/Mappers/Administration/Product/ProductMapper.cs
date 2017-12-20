@@ -1,119 +1,44 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.Product;
-using Aklion.Infrastructure.DateTime;
-using Aklion.Infrastructure.Storage.DataBaseExecutor.Pagingation;
-using ProductParameterModel = Aklion.Crm.Models.Administration.Product.ProductParameterModel;
+using Aklion.Infrastructure.Mapper;
+using DomainProductModel = Aklion.Crm.Domain.Product.ProductModel;
+using DomainProductParameterModel = Aklion.Crm.Domain.Product.ProductParameterModel;
+using DomainProductAutocompleteParameterModel = Aklion.Crm.Domain.Product.ProductAutocompleteParameterModel;
 
 namespace Aklion.Crm.Mappers.Administration.Product
 {
     public static class ProductMapper
     {
-        public static PagingModel<ProductModel> Map(this Paging<ProductModel> model, int page, int size)
+        public static PagingModel<ProductModel> MapNew(this Tuple<int, List<DomainProductModel>> tuple, int? page, int? size)
         {
-            return model == null
-                ? null
-                : new PagingModel<ProductModel>(model.List.Map(), model.TotalCount, page, size);
+            return new PagingModel<ProductModel>(tuple.Item2.MapListNew<ProductModel>(), tuple.Item1, page, size);
         }
 
-        private static List<ProductModel> Map(this IEnumerable<ProductModel> models)
+        public static DomainProductModel MapNew(this ProductModel model)
         {
-            return models?.Select(Map).ToList();
+            return model.MapNew<DomainProductModel>();
         }
 
-        public static ProductModel Map(this ProductModel model)
+        public static DomainProductModel MapFrom(this DomainProductModel domainModel, ProductModel model)
         {
-            return model == null
-                ? null
-                : new ProductModel
-                {
-                    Id = model.Id,
-                    StoreId = model.StoreId,
-                    StoreName = model.StoreName,
-                    Type = model.Type,
-                    Name = model.Name,
-                    Description = model.Description,
-                    Price = model.Price,
-                    Status = model.Status,
-                    VendorCode = model.VendorCode,
-                    ParentId = model.ParentId,
-                    ParentName = model.ParentName,
-                    IsDeleted = model.IsDeleted,
-                    CreateDate = model.CreateDate,
-                    ModifyDate = model.ModifyDate
-                };
+            return Mapper.MapFrom(domainModel, model);
         }
 
-        public static ProductModel Map(this ProductModel model)
+        public static DomainProductParameterModel MapNew(this ProductParameterModel model)
         {
-            return model == null
-                ? null
-                : new ProductModel
-                {
-                    Id = model.Id,
-                    StoreId = model.StoreId,
-                    StoreName = model.StoreName,
-                    Type = model.Type,
-                    Name = model.Name,
-                    Description = model.Description,
-                    Price = model.Price,
-                    Status = model.Status,
-                    VendorCode = model.VendorCode,
-                    ParentId = model.ParentId,
-                    ParentName = model.ParentName,
-                    IsDeleted = model.IsDeleted,
-                    CreateDate = model.CreateDate,
-                    ModifyDate = model.ModifyDate
-                };
+            return model.MapNew<DomainProductParameterModel>();
         }
 
-        public static ProductParameterModel Map(this Models.Administration.Product.ProductParameterModel model)
+        public static DomainProductAutocompleteParameterModel MapNew(this string pattern, int storeId)
         {
-            return model == null
-                ? null
-                : new ProductParameterModel
-                {
-                    Id = model.Id,
-                    StoreId = model.StoreId,
-                    StoreName = model.StoreName,
-                    Type = model.Type,
-                    Name = model.Name,
-                    Description = model.Description,
-                    Price = model.Price,
-                    Status = model.Status,
-                    VendorCode = model.VendorCode,
-                    ParentId = model.ParentId,
-                    ParentName = model.ParentName,
-                    IsDeleted = model.IsDeleted,
-                    CreateDate = model.CreateDate.ToNullableDate(),
-                    ModifyDate = model.ModifyDate.ToNullableDate(),
-                    IsSearch = model.IsSearch,
-                    Timestamp = model.Timestamp,
-                    SortingColumn = model.SortingColumn,
-                    SortingOrder = model.SortingOrder,
-                    Page = model.Page - 1,
-                    Size = model.Size
-                };
-        }
-
-        public static void Map(this ProductModel viewModel, ProductModel domainModel)
-        {
-            domainModel.Id = viewModel.Id;
-            domainModel.Name = viewModel.Name;
-            domainModel.StoreId = viewModel.StoreId;
-            domainModel.StoreName = viewModel.StoreName;
-            domainModel.Type = viewModel.Type;
-            domainModel.Name = viewModel.Name;
-            domainModel.Description = viewModel.Description;
-            domainModel.Price = viewModel.Price;
-            domainModel.Status = viewModel.Status;
-            domainModel.VendorCode = viewModel.VendorCode;
-            domainModel.ParentId = viewModel.ParentId;
-            domainModel.ParentName = viewModel.ParentName;
-            domainModel.IsDeleted = viewModel.IsDeleted;
-            domainModel.CreateDate = viewModel.CreateDate;
-            domainModel.ModifyDate = viewModel.ModifyDate;
+            return new DomainProductAutocompleteParameterModel
+            {
+                Name = pattern,
+                StoreId = storeId,
+                IsDeleted = false
+            };
         }
     }
 }

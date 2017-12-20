@@ -8,7 +8,6 @@ using Aklion.Crm.Dao.UserContext;
 using Aklion.Crm.Enums;
 using Aklion.Crm.Mappers.Account;
 using Aklion.Crm.Models.Account;
-using Aklion.Infrastructure.DateTime;
 using Aklion.Infrastructure.FileFormat;
 using Aklion.Infrastructure.Logger;
 using Aklion.Infrastructure.Password;
@@ -153,22 +152,13 @@ namespace Aklion.Crm.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogOff()
         {
-            var user = await _userDao.GetAsync(UserContext.UserId).ConfigureAwait(false);
-            if (user == null)
-            {
-                _logger.LogWarning("AccountController.LogOff(). User not found.", UserContext.UserId, new
-                {
-                    UserContext.UserId
-                });
-
-                return View("Error");
-            }
+            var userId = UserContext.UserId;
 
             await SignOutAsync().ConfigureAwait(false);
 
             _logger.LogInfo("AccountController.LogOff(). Signed out.", 0, new
             {
-                UserId = user.Id
+                UserId = userId
             });
 
             return RedirectToAction("Index", "Home");
@@ -206,7 +196,7 @@ namespace Aklion.Crm.Controllers
                     model.Name,
                     model.Patronymic,
                     model.Gender,
-                    model.BirthDateString,
+                    model.BirthDate,
                     ReturnUrl = returnUrl
                 });
 
@@ -227,7 +217,7 @@ namespace Aklion.Crm.Controllers
                     model.Name,
                     model.Patronymic,
                     model.Gender,
-                    model.BirthDateString,
+                    model.BirthDate,
                     ReturnUrl = returnUrl
                 });
 
@@ -248,7 +238,7 @@ namespace Aklion.Crm.Controllers
                     model.Name,
                     model.Patronymic,
                     model.Gender,
-                    model.BirthDateString,
+                    model.BirthDate,
                     ReturnUrl = returnUrl
                 });
 
@@ -269,15 +259,16 @@ namespace Aklion.Crm.Controllers
                     model.Name,
                     model.Patronymic,
                     model.Gender,
-                    model.BirthDateString,
+                    model.BirthDate,
                     ReturnUrl = returnUrl
                 });
 
                 return View(model);
             }
 
-            var user = model.Map();
+            var user = model.MapNew();
 
+            user.PasswordHash = PasswordHelper.Generate(model.Password);
             user.Id = await _userDao.CreateAsync(user).ConfigureAwait(false);
 
             _logger.LogInfo("AccountController.Register(). Registered.", 0,
@@ -290,7 +281,7 @@ namespace Aklion.Crm.Controllers
                     model.Name,
                     model.Patronymic,
                     model.Gender,
-                    model.BirthDateString,
+                    model.BirthDate,
                     ReturnUrl = returnUrl
                 });
 
@@ -305,7 +296,7 @@ namespace Aklion.Crm.Controllers
                 model.Name,
                 model.Patronymic,
                 model.Gender,
-                model.BirthDateString,
+                model.BirthDate,
                 ReturnUrl = returnUrl
             });
 
@@ -323,7 +314,7 @@ namespace Aklion.Crm.Controllers
                     model.Name,
                     model.Patronymic,
                     model.Gender,
-                    model.BirthDateString,
+                    model.BirthDate,
                     ReturnUrl = returnUrl
                 });
             }
@@ -339,7 +330,7 @@ namespace Aklion.Crm.Controllers
                 model.Name,
                 model.Patronymic,
                 model.Gender,
-                model.BirthDateString,
+                model.BirthDate,
                 ReturnUrl = returnUrl
             });
 
@@ -351,17 +342,6 @@ namespace Aklion.Crm.Controllers
         [Authorize]
         public async Task<IActionResult> SendConfirmEmail()
         {
-            var user = await _userDao.GetAsync(UserContext.UserId).ConfigureAwait(false);
-            if (user == null)
-            {
-                _logger.LogWarning("AccountController.SendConfirmEmail(). User not found.", UserContext.UserId, new
-                {
-                    UserContext.UserId
-                });
-
-                return View("Error");
-            }
-
             await EmailConfirmationProcess(UserContext.UserId).ConfigureAwait(false);
 
             _logger.LogInfo("AccountController.SendConfirmEmail(). Email confirmation link sended.",
@@ -375,17 +355,6 @@ namespace Aklion.Crm.Controllers
         [Authorize]
         public async Task<IActionResult> SendSmsCode()
         {
-            var user = await _userDao.GetAsync(UserContext.UserId).ConfigureAwait(false);
-            if (user == null)
-            {
-                _logger.LogWarning("AccountController.SendSmsCode(). User not found.", UserContext.UserId, new
-                {
-                    UserContext.UserId
-                });
-
-                return View("Error");
-            }
-
             await PhoneConfirmationProcess(UserContext.UserId).ConfigureAwait(false);
 
             _logger.LogInfo("AccountController.SendSmsCode(). Phone confirmation code sended.", UserContext.UserId);
@@ -456,19 +425,8 @@ namespace Aklion.Crm.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> ChangePassword()
+        public IActionResult ChangePassword()
         {
-            var user = await _userDao.GetAsync(UserContext.UserId).ConfigureAwait(false);
-            if (user == null)
-            {
-                _logger.LogWarning("AccountController.ChangePassword(). User not found.", UserContext.UserId, new
-                {
-                    UserContext.UserId
-                });
-
-                return View("Error");
-            }
-
             return View();
         }
 
@@ -518,19 +476,8 @@ namespace Aklion.Crm.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> ChangeEmail()
+        public IActionResult ChangeEmail()
         {
-            var user = await _userDao.GetAsync(UserContext.UserId).ConfigureAwait(false);
-            if (user == null)
-            {
-                _logger.LogWarning("AccountController.ChangeEmail(). User not found.", UserContext.UserId, new
-                {
-                    UserContext.UserId
-                });
-
-                return View("Error");
-            }
-
             return View();
         }
 
@@ -604,19 +551,8 @@ namespace Aklion.Crm.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> ChangePhone()
+        public IActionResult ChangePhone()
         {
-            var user = await _userDao.GetAsync(UserContext.UserId).ConfigureAwait(false);
-            if (user == null)
-            {
-                _logger.LogWarning("AccountController.ChangePhone(). User not found.", UserContext.UserId, new
-                {
-                    UserContext.UserId
-                });
-
-                return View("Error");
-            }
-
             return View();
         }
 
@@ -682,20 +618,9 @@ namespace Aklion.Crm.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> VerifySmsCode(string message = null)
+        public IActionResult VerifySmsCode(string message = null)
         {
             ViewBag.StatusMessage = message;
-
-            var user = await _userDao.GetAsync(UserContext.UserId).ConfigureAwait(false);
-            if (user == null)
-            {
-                _logger.LogWarning("AccountController.VerifySmsCode(). User not found.", UserContext.UserId, new
-                {
-                    UserContext.UserId
-                });
-
-                return View("Error");
-            }
 
             return View();
         }
@@ -775,7 +700,7 @@ namespace Aklion.Crm.Controllers
                 return View("Error");
             }
 
-            var model = user.Map();
+            var model = user.MapNew();
 
             return View(model);
         }
@@ -804,13 +729,8 @@ namespace Aklion.Crm.Controllers
                 return View("Error");
             }
 
-            model.Map(user);
 
-            user.Surname = model.Surname;
-            user.Name = model.Name;
-            user.Patronymic = model.Patronymic;
-            user.Gender = model.Gender;
-            user.BirthDate = model.BirthDateString.ToDate();
+            user.MapFrom(model);
 
             await _userDao.UpdateAsync(user).ConfigureAwait(false);
 
@@ -867,23 +787,11 @@ namespace Aklion.Crm.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> ResetPassword(int userId, string code)
+        public IActionResult ResetPassword(int userId, string code)
         {
             if (userId == 0 || string.IsNullOrEmpty(code))
             {
                 _logger.LogWarning("AccountController.ResetPassword(). Empty data.", 0, new
-                {
-                    UserId = userId,
-                    Code = code
-                });
-
-                return View("Error");
-            }
-
-            var user = await _userDao.GetAsync(userId).ConfigureAwait(false);
-            if (user == null)
-            {
-                _logger.LogWarning("AccountController.ResetPassword(). User not found.", 0, new
                 {
                     UserId = userId,
                     Code = code

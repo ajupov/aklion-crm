@@ -1,0 +1,71 @@
+﻿@{
+    ViewBag.Title = "Заказы";
+}
+
+<div class="row card">
+    <button class="tab-button" onclick="openTab(this, 'orders-tab'); initProductsTable();">@ViewBag.Title</button>
+    <button class="tab-button" onclick="openTab(this, 'attributes-tab'); initAttributesTable();">Атрибуты</button>
+    <button class="tab-button" onclick="openTab(this, 'others-tab'); initOthersTable();">Прочее</button>
+</div>
+
+<div id="orders-tab" class="hidden tab card">
+    <div class="row">
+        <div class="col s12 m12 l5">
+            <div class="horisontal-scrollable pading-10">
+                <table id="orders-table"></table>
+                <div id="orders-table-pagination"></div>
+            </div>
+        </div>
+        <div class="col s12 m12 l7">
+            <div class="horisontal-scrollable pading-10">
+                <table id="orders-items-table"></table>
+                <div id="orders-items-table-pagination"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="attributes-tab" class="hidden tab card">
+    <div class="row">
+        <div class="col s12 m12 l5">
+            <div class="horisontal-scrollable pading-10">
+                <table id="attributes-table"></table>
+                <div id="attributes-table-pagination"></div>
+            </div>
+        </div>
+        <div class="col s12 m12 l7">
+            <div class="horisontal-scrollable pading-10">
+                <table id="orders-attributes-table"></table>
+                <div id="orders-attributes-table-pagination"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="others-tab" class="hidden tab card">
+    <div class="row">
+        <div class="col s12 m12 l5">
+            <div class="horisontal-scrollable pading-10">
+                <table id="orders-sources-table"></table>
+                <div id="orders-sources-table-pagination"></div>
+            </div>
+        </div>
+        <div class="col s12 m12 l7">
+            <div class="horisontal-scrollable pading-10">
+                <table id="orders-statuses-table"></table>
+                <div id="orders-statuses-table-pagination"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        <environment names="Development">
+            <script src="~/scripts/administration/order/index.js"></script>
+        </environment>
+        <environment names="Staging,Production">
+            <script src="~/scripts/administration/order/index.min.js"></script>
+        </environment>
+    }
+}

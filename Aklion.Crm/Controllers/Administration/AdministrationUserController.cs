@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
 using Aklion.Crm.Dao.User;
-using Aklion.Crm.Mappers;
 using Aklion.Crm.Mappers.Administration.User;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.User;
@@ -32,46 +31,34 @@ namespace Aklion.Crm.Controllers.Administration
         [Route("GetList")]
         public async Task<PagingModel<UserModel>> GetList(UserParameterModel model)
         {
-            var result = await _userDao.GetPagedList(model.Map()).ConfigureAwait(false);
+            var result = await _userDao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
 
-            return result.Map(model.Page, model.Size);
+            return result.MapNew(model.Page, model.Size);
         }
 
         [HttpGet]
         [Route("GetForAutocompleteByLoginPattern")]
-        public async Task<List<AutocompleteModel>> GetForAutocompleteByLoginPattern(string pattern)
+        public Task<Dictionary<string, int>> GetForAutocompleteByLoginPattern(string pattern)
         {
-            var result = await _userDao.GetForAutocompleteByLoginPattern(pattern).ConfigureAwait(false);
-
-            return result.Map();
+            return _userDao.GetForAutocompleteAsync(pattern.MapNew());
         }
 
         [HttpPost]
         [Route("Update")]
         [AjaxErrorHandle]
-        public async Task<bool> Update(UserModel model)
+        public async Task Update(UserModel model)
         {
-            var user = await _userDao.Get(model.Id).ConfigureAwait(false);
-            if (user == null)
-            {
-                return false;
-            }
+            var user = await _userDao.GetAsync(model.Id).ConfigureAwait(false);
 
-            model.Map(user);
-
-            await _userDao.Update(user).ConfigureAwait(false);
-
-            return true;
+            await _userDao.UpdateAsync(user.MapFrom(model)).ConfigureAwait(false);
         }
 
         [HttpPost]
         [Route("Delete")]
         [AjaxErrorHandle]
-        public async Task<bool> Delete(int id)
+        public Task Delete(int id)
         {
-            await _userDao.Delete(id).ConfigureAwait(false);
-
-            return true;
+            return _userDao.DeleteAsync(id);
         }
     }
 }

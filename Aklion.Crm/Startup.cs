@@ -4,6 +4,7 @@ using Aklion.Crm.Business.Mail.Models;
 using Aklion.Crm.Business.Permission;
 using Aklion.Crm.Business.Sms;
 using Aklion.Crm.Business.Sms.Models;
+using Aklion.Crm.Business.Store;
 using Aklion.Crm.Business.UserToken;
 using Aklion.Crm.Dao.AuditLog;
 using Aklion.Crm.Dao.Client;
@@ -72,6 +73,7 @@ namespace Aklion.Crm
                 .AddSingleton<IMailService, MailService>()
                 .AddSingleton<IPermissionService, PermissionService>()
                 .AddSingleton<ISmsService, SmsService>()
+                .AddSingleton<IStoreService, StoreService>()
                 .AddSingleton<IUserTokenService, UserTokenService>()
                 .AddSingleton<IAuditLogDao, AuditLogDao>()
                 .AddSingleton<IClientDao, ClientDao>()

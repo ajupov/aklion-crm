@@ -1,4 +1,4 @@
-﻿namespace Aklion.Crm.Models.Administration.ProductAttributeLink
+﻿namespace Aklion.Crm.Models.User.ProductAttributeLink
 {
     public class ProductAttributeLinkParameterModel
     {
