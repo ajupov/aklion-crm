@@ -56,7 +56,14 @@ namespace Aklion.Infrastructure.Dao
 
         public Task<Tuple<int, List<TModel>>> GetPagedListAsync<TModel, TParameter>(TParameter parameter)
         {
-            var query = QueryBuilder
+            var query1 = QueryBuilder
+                .Create<TModel>(QueryType.SelectCount)
+                .DefineTableName()
+                .ApplyJoins()
+                .ApplyFilter(parameter)
+                .Build();
+
+            var query2 = QueryBuilder
                 .Create<TModel>(QueryType.SelectList)
                 .DefineTableName()
                 .ApplyJoins()
@@ -64,7 +71,7 @@ namespace Aklion.Infrastructure.Dao
                 .ApplyFilter(parameter)
                 .Build();
 
-            return _dataBaseExecutor.SelectMultipleAsync(query, async r => new Tuple<int, List<TModel>>(
+            return _dataBaseExecutor.SelectMultipleAsync(query1 + query2, async r => new Tuple<int, List<TModel>>(
                 await r.SelectOneAsync<int>().ConfigureAwait(false),
                 await r.SelectListAsync<TModel>().ConfigureAwait(false)
             ), parameter);

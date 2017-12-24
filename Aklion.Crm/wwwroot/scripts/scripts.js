@@ -6,7 +6,9 @@ const commonUi = {
     dropdownMenuLink: $('#dropdown-menu-link'),
     dropdownMenuContent: $('#dropdown-menu-content'),
     tel: $('[type="tel"]'),
-    datepicker: $('.datepicker')
+    datepicker: $('.datepicker'),
+    tabButton: $('.tab-button'),
+    tabs: $('.tab')
 };
 
 $(document).ready(() => {
@@ -25,6 +27,8 @@ $(document).ready(() => {
     new Inputmask('+79999999999', { greedy: false }).mask(commonUi.tel);
 
     initDatePicker(commonUi.datepicker);
+
+    commonUi.tabButton.first().click();
 });
 
 $(document).click(() => {
@@ -32,9 +36,9 @@ $(document).click(() => {
 });
 
 function openTab(event, tabName) {
-    $('.tab-button').removeClass('active');
+    commonUi.tabButton.removeClass('active');
     $(event).addClass('active');
 
-    $('.tab').hide();
+    commonUi.tabs.hide();
     $(`#${tabName}`).show();
 }

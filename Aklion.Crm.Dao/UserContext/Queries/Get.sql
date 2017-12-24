@@ -40,7 +40,7 @@ select
     Permission
 	from dbo.UserPermission
 	where UserId = @userId 
-		and StoreId = @storeId
+		and (StoreId is null or StoreId = @storeId)
 		and coalesce(Permission, 0) != 0;
 
 select

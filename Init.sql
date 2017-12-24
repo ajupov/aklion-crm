@@ -74,7 +74,7 @@ create table dbo.UserPermission
 (
     Id         int          not null identity(1, 1) constraint PK_UserPermission_Id primary key,
     UserId     int          not null constraint FK_UserPermission_UserId foreign key (UserId) references dbo.[User] (Id) index IX_UserPermission_UserId nonclustered (UserId),
-    StoreId    int          not null constraint FK_UserPermission_StoreId foreign key (StoreId) references dbo.Store (Id) index IX_UserPermission_StoreId nonclustered (StoreId),
+    StoreId    int          null constraint FK_UserPermission_StoreId foreign key (StoreId) references dbo.Store (Id) index IX_UserPermission_StoreId nonclustered (StoreId),
     Permission tinyint      not null,
     CreateDate datetime2(7) not null,
     ModifyDate datetime2(7) null,

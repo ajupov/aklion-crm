@@ -48,7 +48,7 @@ function initUsersTable() {
             { Name: 'IsLocked', Label: 'Заблокирован', Type: 'checkbox', Width: 80, Editable: true, Sortable: false },
             { Name: 'IsDeleted', Label: 'Удален', Type: 'checkbox', Width: 50, Editable: true, Sortable: false },
             { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 100 },
-            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Hidden: true, EditHidden: true }
+            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 100 }
         ]
     });
 }

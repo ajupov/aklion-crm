@@ -2,14 +2,8 @@
 
 const ui = {
     usersTable: $('#users-table'),
-    postTable: $('#post-table'),
-    userPostTable: $('#user-post-table'),
-    userPermissionTable: $('#user-permission-table')
+    userPermissionTable: $('#users-permissions-table')
 }
-
-$(document).ready(() => {
-    $('.tab-button').first().click();
-});
 
 function initUsersTable() {
     createTable({
@@ -42,66 +36,11 @@ function initUsersTable() {
     });
 }
 
-function initPostsTable() {
-    createTable({
-        Title: 'Должности',
-        Element: '#post-table',
-        Pager: '#post-table-pagination',
-        IsViewable: true,
-        IsEditable: true,
-        IsCreatable: true,
-        IsDeletable: true,
-        IsFilterable: true,
-        DataUrl: '/Posts/GetList',
-        CreateUrl: '/Posts/Create',
-        UpdateUrl: '/Posts/Update',
-        DeleteUrl: '/Posts/Delete',
-        Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
-            { Name: 'Name', Label: 'Имя', Type: 'text', Width: 160, Editable: true, MaxLength: 256 },
-            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 100 }
-        ],
-        OnSelectRow: id => {
-            ui.userPostTable.jqGrid('setGridParam', { postData: { StoreId: id } }).trigger('reloadGrid');
-        }
-    });
-
-    createTable({
-        Title: 'Должности пользователей',
-        Element: '#user-post-table',
-        Pager: '#user-post-table-pagination',
-        IsViewable: true,
-        IsEditable: true,
-        IsCreatable: true,
-        IsDeletable: true,
-        IsFilterable: true,
-        DataUrl: '/UserPosts/GetList',
-        CreateUrl: '/UserPosts/Create',
-        UpdateUrl: '/UserPosts/Update',
-        DeleteUrl: '/UserPosts/Delete',
-        Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
-            { Name: 'UserId', Type: 'number', Hidden: true, Editable: true },
-            {
-                Name: 'UserLogin', Label: 'Логин пользователя', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Users/GetForAutocompleteByLoginPattern', AutocompleteHidden: 'UserId',
-                Formatter: userLinkFormatter, Unformatter: userLinkUnFormatter
-            },
-            { Name: 'PostId', Type: 'number', Hidden: true, Editable: true },
-            {
-                Name: 'PostName', Label: 'Название должности', Type: 'autocomplete', Editable: true, Width: 160,
-                AutocompleteUrl: '/Posts/GetForAutocompleteByNamePattern', AutocompleteHidden: 'PostId'
-            },
-            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 100 }
-        ]
-    });
-}
-
 function initPermissionsTable() {
     createTable({
         Title: 'Права пользователей',
-        Element: '#user-permission-table',
-        Pager: '#user-permission-table-pagination',
+        Element: '#users-permissions-table',
+        Pager: '#users-permissions-table-pagination',
         IsViewable: true,
         IsEditable: true,
         IsCreatable: true,
@@ -127,7 +66,6 @@ function initPermissionsTable() {
         ]
     });
 }
-
 
 function userLinkFormatter(value, options, data) {
     return `<a href="/Users?Id=${data.UserId}">${data.UserLogin}</a>`;

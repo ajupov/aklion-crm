@@ -49,9 +49,9 @@ function createTable(options) {
                     ? column.Unformatter
                     : null,
                 formatoptions: column.Type === 'datetime'
-                    ? { srcformat: 'Y-m-d h:i:s', newformat: 'd.m.Y H:i:s' }
+                    ? { srcformat: 'd.m.Y h:i:s', newformat: 'd.m.Y H:i:s' }
                     : column.Type === 'date'
-                    ? { srcformat: 'Y-m-d', newformat: 'd.m.Y' }
+                    ? { srcformat: 'd.m.Y', newformat: 'd.m.Y' }
                     : column.Type === 'money'
                     ? { suffix: ' ₽' }
                     : undefined,

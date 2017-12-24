@@ -5,7 +5,7 @@ namespace Aklion.Crm.Domain.UserAttributeLink
 {
     [Table("dbo.UserAttributeLink as ual")]
     [Join("inner join dbo.Store as s on ual.StoreId = s.Id " +
-          "inner join dbo.User as u on ual.UserId = u.Id " +
+          "inner join dbo.[User] as u on ual.UserId = u.Id " +
           "inner join dbo.UserAttribute as ua on ual.AttributeId = ua.Id")]
     public class UserAttributeLinkModel
     {

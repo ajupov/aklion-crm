@@ -168,9 +168,9 @@ namespace Aklion.Infrastructure.Query
             switch (queryObject.QueryType)
             {
                 case QueryType.SelectCount:
-                    return $"select top 1 {queryObject.ColumnsForSelect} from {queryObject.TableName} {queryObject.Joins} {queryObject.Filters};";
-                case QueryType.SelectOne:
                     return $"select count(0) from {queryObject.TableName} {queryObject.Joins} {queryObject.Filters};";
+                case QueryType.SelectOne:
+                    return $"select top 1 {queryObject.ColumnsForSelect} from {queryObject.TableName} {queryObject.Joins} {queryObject.Filters};";
                 case QueryType.SelectList:
                     return $"select {queryObject.ColumnsForSelect} from {queryObject.TableName} {queryObject.Joins} {queryObject.Filters};";
                 case QueryType.SelectPagedList:
