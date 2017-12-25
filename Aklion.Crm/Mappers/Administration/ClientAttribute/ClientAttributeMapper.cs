@@ -28,7 +28,7 @@ namespace Aklion.Crm.Mappers.Administration.ClientAttribute
 
         public static DomainClientAttributeParameterModel MapNew(this ClientAttributeParameterModel model)
         {
-            return model.MapNew<DomainClientAttributeParameterModel>();
+            return model.MapParameterNew<DomainClientAttributeParameterModel>();
         }
 
         public static DomainClientAttributeAutocompleteParameterModel MapNew(this string pattern, int storeId)

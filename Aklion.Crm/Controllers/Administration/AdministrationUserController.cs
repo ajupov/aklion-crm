@@ -46,17 +46,17 @@ namespace Aklion.Crm.Controllers.Administration
         [HttpPost]
         [Route("Update")]
         [AjaxErrorHandle]
-        public async Task Update(UserModel model)
+        public async Task<bool> Update(UserModel model)
         {
             var user = await _userDao.GetAsync(model.Id).ConfigureAwait(false);
 
-            await _userDao.UpdateAsync(user.MapFrom(model)).ConfigureAwait(false);
+            return await _userDao.UpdateAsync(user.MapFrom(model)).ConfigureAwait(false);
         }
 
         [HttpPost]
         [Route("Delete")]
         [AjaxErrorHandle]
-        public Task Delete(int id)
+        public Task<bool> Delete(int id)
         {
             return _userDao.DeleteAsync(id);
         }

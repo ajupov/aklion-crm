@@ -10,25 +10,25 @@ namespace Aklion.Crm.Domain.User
         [Where("@Id is null or u.Id = @Id")]
         public int? Id { get; set; }
 
-        [Where("@Login is null or u.Login = @Login")]
+        [Where("@Login is null or u.Login like @Login + '%'")]
         public string Login { get; set; }
 
-        [Where("@Email is null or u.Email = @Email")]
+        [Where("@Email is null or u.Email like @Email + '%'")]
         public string Email { get; set; }
 
-        [Where("@Phone is null or u.Phone = @Phone")]
+        [Where("@Phone is null or u.Phone like @Phone + '%'")]
         public string Phone { get; set; }
 
-        [Where("@Surname is null or u.Surname = @Surname")]
+        [Where("@Surname is null or u.Surname like @Surname + '%'")]
         public string Surname { get; set; }
 
-        [Where("@Name is null or u.Name = @Name")]
+        [Where("@Name is null or u.Name like @Name + '%'")]
         public string Name { get; set; }
 
-        [Where("@Patronymic is null or u.Patronymic = @Patronymic")]
+        [Where("@Patronymic is null or u.Patronymic like @Patronymic + '%'")]
         public string Patronymic { get; set; }
 
-        [Where("@Gender is null or u.Gender = @Gender")]
+        [Where("coalesce(@Gender, 0) = 0 or u.Gender = @Gender")]
         public Gender? Gender { get; set; }
 
         [Where("@BirthDate is null or u.BirthDate = @BirthDate")]

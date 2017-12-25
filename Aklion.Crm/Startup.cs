@@ -36,7 +36,6 @@ using Aklion.Infrastructure.Dao;
 using Aklion.Infrastructure.DataBaseExecutor;
 using Aklion.Infrastructure.Logger;
 using Aklion.Infrastructure.Reader;
-using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -119,8 +118,6 @@ namespace Aklion.Crm
                         IgnoreSerializableAttribute = false
                     };
                 });
-
-            Mapper.Initialize(e => { });
         }
         
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

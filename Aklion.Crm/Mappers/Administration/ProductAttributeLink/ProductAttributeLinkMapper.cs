@@ -27,7 +27,7 @@ namespace Aklion.Crm.Mappers.Administration.ProductAttributeLink
 
         public static DomainProductAttributeLinkParameterModel MapNew(this ProductAttributeLinkParameterModel model)
         {
-            return model.MapNew<DomainProductAttributeLinkParameterModel>();
+            return model.MapParameterNew<DomainProductAttributeLinkParameterModel>();
         }
     }
 }

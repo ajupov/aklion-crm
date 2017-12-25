@@ -27,7 +27,7 @@ namespace Aklion.Crm.Mappers.Administration.OrderItem
 
         public static DomainOrderItemParameterModel MapNew(this OrderItemParameterModel model)
         {
-            return model.MapNew<DomainOrderItemParameterModel>();
+            return model.MapParameterNew<DomainOrderItemParameterModel>();
         }
     }
 }

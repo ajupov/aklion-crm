@@ -15,9 +15,9 @@ namespace Aklion.Crm.Dao.User
 
         Task<int> CreateAsync(UserModel model);
 
-        Task UpdateAsync(UserModel model);
+        Task<bool> UpdateAsync(UserModel model);
 
-        Task DeleteAsync(int id);
+        Task<bool> DeleteAsync(int id);
 
         Task<UserModel> GetByLoginAsync(string login);
 

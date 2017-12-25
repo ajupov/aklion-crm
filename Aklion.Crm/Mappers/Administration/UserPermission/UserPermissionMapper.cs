@@ -27,7 +27,7 @@ namespace Aklion.Crm.Mappers.Administration.UserPermission
 
         public static DomainUserPermissionParameterModel MapNew(this UserPermissionParameterModel model)
         {
-            return model.MapNew<DomainUserPermissionParameterModel>();
+            return model.MapParameterNew<DomainUserPermissionParameterModel>();
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Aklion.Crm.Mappers.Administration.UserAttributeLink
 
         public static DomainUserAttributeLinkParameterModel MapNew(this UserAttributeLinkParameterModel model)
         {
-            return model.MapNew<DomainUserAttributeLinkParameterModel>();
+            return model.MapParameterNew<DomainUserAttributeLinkParameterModel>();
         }
     }
 }

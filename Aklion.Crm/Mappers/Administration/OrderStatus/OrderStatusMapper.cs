@@ -28,7 +28,7 @@ namespace Aklion.Crm.Mappers.Administration.OrderStatus
 
         public static DomainOrderStatusParameterModel MapNew(this OrderStatusParameterModel model)
         {
-            return model.MapNew<DomainOrderStatusParameterModel>();
+            return model.MapParameterNew<DomainOrderStatusParameterModel>();
         }
 
         public static DomainOrderStatusAutocompleteParameterModel MapNew(this string pattern, int storeId)

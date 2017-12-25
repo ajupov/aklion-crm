@@ -27,7 +27,7 @@ namespace Aklion.Crm.Mappers.Administration.OrderAttributeLink
 
         public static DomainOrderAttributeLinkParameterModel MapNew(this OrderAttributeLinkParameterModel model)
         {
-            return model.MapNew<DomainOrderAttributeLinkParameterModel>();
+            return model.MapParameterNew<DomainOrderAttributeLinkParameterModel>();
         }
     }
 }

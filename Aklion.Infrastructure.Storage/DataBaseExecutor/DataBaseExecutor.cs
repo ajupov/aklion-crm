@@ -17,11 +17,12 @@ namespace Aklion.Infrastructure.DataBaseExecutor
             _connectionFactory = connectionFactory;
         }
 
-        public async Task ExecuteAsync(string query, object parameters = null)
+        public async Task<bool> ExecuteAsync(string query, object parameters = null)
         {
             using (var connection = _connectionFactory.GetConnection())
             {
                 await connection.ExecuteAsync(query, parameters).ConfigureAwait(false);
+                return true;
             }
         }
 

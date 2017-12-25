@@ -28,7 +28,7 @@ namespace Aklion.Crm.Mappers.Administration.ProductStatus
 
         public static DomainProductStatusParameterModel MapNew(this ProductStatusParameterModel model)
         {
-            return model.MapNew<DomainProductStatusParameterModel>();
+            return model.MapParameterNew<DomainProductStatusParameterModel>();
         }
 
         public static DomainProductStatusAutocompleteParameterModel MapNew(this string pattern, int storeId)

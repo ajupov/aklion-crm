@@ -27,7 +27,7 @@ namespace Aklion.Crm.Mappers.Administration.ClientAttributeLink
 
         public static DomainClientAttributeLinkParameterModel MapNew(this ClientAttributeLinkParameterModel model)
         {
-            return model.MapNew<DomainClientAttributeLinkParameterModel>();
+            return model.MapParameterNew<DomainClientAttributeLinkParameterModel>();
         }
     }
 }

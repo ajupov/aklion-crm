@@ -17,7 +17,7 @@ namespace Aklion.Crm.Mappers.Administration.AuditLog
 
         public static DomainAuditLogParameterModel MapNew(this AuditLogParameterModel model)
         {
-            return model.MapNew<DomainAuditLogParameterModel>();
+            return model.MapParameterNew<DomainAuditLogParameterModel>();
         }
     }
 }

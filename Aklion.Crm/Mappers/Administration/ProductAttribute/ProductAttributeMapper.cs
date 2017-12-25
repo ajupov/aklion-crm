@@ -28,7 +28,7 @@ namespace Aklion.Crm.Mappers.Administration.ProductAttribute
 
         public static DomainProductAttributeParameterModel MapNew(this ProductAttributeParameterModel model)
         {
-            return model.MapNew<DomainProductAttributeParameterModel>();
+            return model.MapParameterNew<DomainProductAttributeParameterModel>();
         }
 
         public static DomainProductAttributeAutocompleteParameterModel MapNew(this string pattern, int storeId)

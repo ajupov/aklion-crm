@@ -28,7 +28,7 @@ namespace Aklion.Crm.Mappers.Administration.UserAttribute
 
         public static DomainUserAttributeParameterModel MapNew(this UserAttributeParameterModel model)
         {
-            return model.MapNew<DomainUserAttributeParameterModel>();
+            return model.MapParameterNew<DomainUserAttributeParameterModel>();
         }
 
         public static DomainUserAttributeAutocompleteParameterModel MapNew(this string pattern, int storeId)

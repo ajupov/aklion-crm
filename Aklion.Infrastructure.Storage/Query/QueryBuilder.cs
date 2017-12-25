@@ -178,7 +178,7 @@ namespace Aklion.Infrastructure.Query
                 case QueryType.Insert:
                     return $"insert {queryObject.TableNameWithoutAlias} ({queryObject.ColumnsForInsert.Replace("@", string.Empty)}) values ({queryObject.ColumnsForInsert}); select scope_identity();";
                 case QueryType.Update:
-                    return $"update {queryObject.TableNameWithoutAlias} set {queryObject.ColumnsForUpdate} {queryObject.Filters}";
+                    return $"update {queryObject.TableNameWithoutAlias} set {queryObject.ColumnsForUpdate} {queryObject.Filters.Replace($"{queryObject.TableAlias}.", string.Empty)}";
                 case QueryType.Delete:
                     return $"delete from {queryObject.TableNameWithoutAlias} {queryObject.Filters.Replace($"{queryObject.TableAlias}.", string.Empty)};";
             }

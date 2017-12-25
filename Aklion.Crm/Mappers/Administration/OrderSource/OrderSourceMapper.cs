@@ -28,7 +28,7 @@ namespace Aklion.Crm.Mappers.Administration.OrderSource
 
         public static DomainOrderSourceParameterModel MapNew(this OrderSourceParameterModel model)
         {
-            return model.MapNew<DomainOrderSourceParameterModel>();
+            return model.MapParameterNew<DomainOrderSourceParameterModel>();
         }
 
         public static DomainOrderSourceAutocompleteParameterModel MapNew(this string pattern, int storeId)

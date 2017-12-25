@@ -28,7 +28,7 @@ namespace Aklion.Crm.Mappers.Administration.Store
 
         public static DomainStoreParameterModel MapNew(this StoreParameterModel model)
         {
-            return model.MapNew<DomainStoreParameterModel>();
+            return model.MapParameterNew<DomainStoreParameterModel>();
         }
 
         public static DomainStoreAutocompleteParameterModel MapNew(this string pattern)
