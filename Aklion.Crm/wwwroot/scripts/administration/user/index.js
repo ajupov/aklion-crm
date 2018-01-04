@@ -1,16 +1,5 @@
 ﻿'use strict';
 
-const ui = {
-    usersTable: $('#users-table'),
-    postTable: $('#post-table'),
-    userPostTable: $('#user-post-table'),
-    userPermissionTable: $('#user-permission-table')
-}
-
-$(document).ready(() => {
-    $('.tab-button').first().click();
-});
-
 function initUsersTable() {
     createTable({
         Title: 'Пользователи',
@@ -53,74 +42,76 @@ function initUsersTable() {
     });
 }
 
-function initPostsTable() {
+function initAttributesTable() {
     createTable({
-        Title: 'Должности',
-        Element: '#post-table',
-        Pager: '#post-table-pagination',
+        Title: 'Атрибуты',
+        Element: '#attributes-table',
+        Pager: '#attributes-table-pagination',
         IsViewable: true,
         IsEditable: true,
         IsCreatable: true,
         IsDeletable: true,
         IsFilterable: true,
-        DataUrl: '/Administration/Posts/GetList',
-        CreateUrl: '/Administration/Posts/Create',
-        UpdateUrl: '/Administration/Posts/Update',
-        DeleteUrl: '/Administration/Posts/Delete',
+        DataUrl: '/Administration/UserAttributes/GetList',
+        CreateUrl: '/Administration/UserAttributes/Create',
+        UpdateUrl: '/Administration/UserAttributes/Update',
+        DeleteUrl: '/Administration/UserAttributes/Delete',
         Columns: [
             { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
-            { Name: 'Name', Label: 'Имя', Type: 'text', Width: 160, Editable: true, MaxLength: 256 },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Название магазина', Type: 'autocomplete', Editable: true, Width: 130,
                 AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
-                Formatter: storeLinkFormatter, Unformatter: storeLinkUnFormatter
+                Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
             },
+            { Name: 'Name', Label: 'Имя', Type: 'text', Width: 140, Editable: true, MaxLength: 256 },
+            { Name: 'Description', Label: 'Описание', Type: 'text', Width: 140, Editable: true, MaxLength: 256 },
             { Name: 'IsDeleted', Label: 'Удален', Type: 'checkbox', Width: 50, Editable: true, Sortable: false },
             { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 100 },
-            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Hidden: true, EditHidden: true }
+            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 100 }
         ],
         OnSelectRow: id => {
-            ui.userPostTable.jqGrid('setGridParam', { postData: { StoreId: id } }).trigger('reloadGrid');
+            $('#users-attributes-table').jqGrid('setGridParam', { postData: { AttributeId: id } }).trigger('reloadGrid');
         }
     });
 
     createTable({
-        Title: 'Должности пользователей',
-        Element: '#user-post-table',
-        Pager: '#user-post-table-pagination',
+        Title: 'Атрибуты пользователей',
+        Element: '#users-attributes-table',
+        Pager: '#users-attributes-table-pagination',
         IsViewable: true,
         IsEditable: true,
         IsCreatable: true,
         IsDeletable: true,
         IsFilterable: true,
-        DataUrl: '/Administration/UserPosts/GetList',
-        CreateUrl: '/Administration/UserPosts/Create',
-        UpdateUrl: '/Administration/UserPosts/Update',
-        DeleteUrl: '/Administration/UserPosts/Delete',
+        DataUrl: '/Administration/UserAttributeLinks/GetList',
+        CreateUrl: '/Administration/UserAttributeLinks/Create',
+        UpdateUrl: '/Administration/UserAttributeLinks/Update',
+        DeleteUrl: '/Administration/UserAttributeLinks/Delete',
         Columns: [
             { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
-            { Name: 'UserId', Type: 'number', Hidden: true, Editable: true },
-            {
-                Name: 'UserLogin', Label: 'Логин пользователя', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/Users/GetForAutocompleteByLoginPattern', AutocompleteHidden: 'UserId',
-                Formatter: userLinkFormatter, Unformatter: userLinkUnFormatter
-            },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Название магазина', Type: 'autocomplete', Editable: true, Width: 130,
                 AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
-                Formatter: storeLinkFormatter, Unformatter: storeLinkUnFormatter
+                Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
             },
-            { Name: 'PostId', Type: 'number', Hidden: true, Editable: true },
+            { Name: 'AttributeId', Type: 'number', Hidden: true, Editable: true },
             {
-                Name: 'PostName', Label: 'Название должности', Type: 'autocomplete', Editable: true, Width: 160,
-                AutocompleteUrl: '/Administration/Posts/GetForAutocompleteByNamePattern', AutocompleteHidden: 'PostId',
+                Name: 'AttributeDescription', Label: 'Описание атрибута', Type: 'autocomplete', Editable: true, Width: 160,
+                AutocompleteUrl: '/Administration/UserAttributes/GetForAutocompleteByDescriptionPattern', AutocompleteHidden: 'AttributeId',
                 DependentFields: ['StoreId']
             },
+            { Name: 'UserId', Type: 'number', Hidden: true, Editable: true },
+            {
+                Name: 'UserLogin', Label: 'Логин пользователя', Type: 'autocomplete', Editable: true, Width: 120,
+                AutocompleteUrl: '/Administration/Users/GetForAutocompleteByLoginPattern', AutocompleteHidden: 'UserId',
+                Formatter: administrationUserLinkFormatter, Unformatter: linkUnFormatter
+            },
+            { Name: 'Value', Label: 'Значение', Width: 550, Editable: true, EditHidden: true },
             { Name: 'IsDeleted', Label: 'Удален', Type: 'checkbox', Width: 50, Editable: true, Sortable: false },
             { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 100 },
-            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Hidden: true, EditHidden: true }
+            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 100 }
         ]
     });
 }
@@ -128,8 +119,8 @@ function initPostsTable() {
 function initPermissionsTable() {
     createTable({
         Title: 'Права пользователей',
-        Element: '#user-permission-table',
-        Pager: '#user-permission-table-pagination',
+        Element: '#users-permissions-table',
+        Pager: '#users-permissions-table-pagination',
         IsViewable: true,
         IsEditable: true,
         IsCreatable: true,
@@ -141,40 +132,24 @@ function initPermissionsTable() {
         DeleteUrl: '/Administration/UserPermissions/Delete',
         Columns: [
             { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
-            { Name: 'UserId', Type: 'number', Hidden: true, Editable: true },
-            {
-                Name: 'UserLogin', Label: 'Логин пользователя', Type: 'autocomplete', Editable: true, Width: 130,
-                AutocompleteUrl: '/Administration/Users/GetForAutocompleteByLoginPattern', AutocompleteHidden: 'UserId',
-                Formatter: userLinkFormatter, Unformatter: userLinkUnFormatter
-            },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Название магазина', Type: 'autocomplete', Editable: true, Width: 130,
                 AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
-                Formatter: storeLinkFormatter, Unformatter: storeLinkUnFormatter
+                Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
             },
             {
                 Name: 'Permission', Label: 'Право', Type: 'select', Editable: true, Sortable: false,
-                SelectValues: getSelectValues('/Administration/Permissions/GetList'), Width: 240
+                SelectValues: getSelectValues('/Administration/Permissions/GetForSelect'), Width: 240
+            },
+            { Name: 'UserId', Type: 'number', Hidden: true, Editable: true },
+            {
+                Name: 'UserLogin', Label: 'Логин пользователя', Type: 'autocomplete', Editable: true, Width: 130,
+                AutocompleteUrl: '/Administration/Users/GetForAutocompleteByLoginPattern', AutocompleteHidden: 'UserId',
+                Formatter: administrationUserLinkFormatter, Unformatter: linkUnFormatter
             },
             { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 100 },
             { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Hidden: true, EditHidden: true }
         ]
     });
-}
-
-function storeLinkFormatter(value, options, data) {
-    return `<a href="/Administration/Stores?Id=${data.StoreId}">${data.StoreName}</a>`;
-}
-
-function storeLinkUnFormatter(value, options, cell) {
-    return $('a', cell).text();
-}
-
-function userLinkFormatter(value, options, data) {
-    return `<a href="/Administration/Users?Id=${data.UserId}">${data.UserLogin}</a>`;
-}
-
-function userLinkUnFormatter(value, options, cell) {
-    return $('a', cell).text();
 }

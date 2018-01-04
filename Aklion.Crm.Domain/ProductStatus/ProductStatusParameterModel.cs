@@ -12,10 +12,10 @@ namespace Aklion.Crm.Domain.ProductStatus
         [Where("@StoreId is null or ps.StoreId = @StoreId")]
         public int? StoreId { get; set; }
 
-        [Where("@StoreName is null or s.Name = @StoreName")]
+        [Where("@StoreName is null or s.Name like @StoreName + '%'")]
         public string StoreName { get; set; }
 
-        [Where("@Name is null or ps.Name = @Name")]
+        [Where("@Name is null or ps.Name like @Name + '%'")]
         public string Name { get; set; }
 
         [Where("@CreateDate is null or convert(date, ps.CreateDate) = convert(date, @CreateDate)")]

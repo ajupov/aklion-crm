@@ -2,16 +2,16 @@
 {
     public class ProductStatusModel
     {
-        public int Id { get; }
+        public int Id { get; set; }
 
         public int StoreId { get; set; }
 
-        public string StoreName { get; }
+        public string StoreName { get; set; }
 
         public string Name { get; set; }
 
-        public string CreateDate { get; }
+        public string CreateDate { get; set; }
 
-        public string ModifyDate { get; }
+        public string ModifyDate { get; set; }
     }
 }

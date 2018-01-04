@@ -12,27 +12,29 @@ namespace Aklion.Crm.Controllers.Administration
     [Route("Administration/ProductStatuses")]
     public class AdministrationProductStatusController : BaseController
     {
-        private readonly IProductStatusDao _orderStatusDao;
+        private readonly IProductStatusDao _productStatusDao;
 
-        public AdministrationProductStatusController(IProductStatusDao orderStatusDao)
+        public AdministrationProductStatusController(IProductStatusDao productStatusDao)
         {
-            _orderStatusDao = orderStatusDao;
+            _productStatusDao = productStatusDao;
         }
 
         [HttpGet]
         [Route("GetList")]
         public async Task<PagingModel<ProductStatusModel>> GetList(ProductStatusParameterModel model)
         {
-            var result = await _orderStatusDao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
+            var result = await _productStatusDao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
 
             return result.MapNew(model.Page, model.Size);
         }
 
         [HttpGet]
-        [Route("GetForAutocompleteByNamePattern")]
-        public Task<Dictionary<string, int>> GetForAutocompleteByNamePattern(string pattern, int storeId = 0)
+        [Route("GetForSelect")]
+        public async Task<Dictionary<string, int>> GetList(int storeId = 0)
         {
-            return _orderStatusDao.GetForAutocompleteAsync(pattern.MapNew(storeId));
+            var result = await _productStatusDao.GetForSelectAsync(storeId.MapNew()).ConfigureAwait(false);
+
+            return result.MapNew();
         }
 
         [HttpPost]
@@ -40,7 +42,7 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public Task Create(ProductStatusModel model)
         {
-            return _orderStatusDao.CreateAsync(model.MapNew());
+            return _productStatusDao.CreateAsync(model.MapNew());
         }
 
         [HttpPost]
@@ -48,9 +50,9 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Update(ProductStatusModel model)
         {
-            var result = await _orderStatusDao.GetAsync(model.Id).ConfigureAwait(false);
+            var result = await _productStatusDao.GetAsync(model.Id).ConfigureAwait(false);
 
-            await _orderStatusDao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);
+            await _productStatusDao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);
         }
 
         [HttpPost]
@@ -58,7 +60,7 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public Task Delete(int id)
         {
-            return _orderStatusDao.DeleteAsync(id);
+            return _productStatusDao.DeleteAsync(id);
         }
     }
 }

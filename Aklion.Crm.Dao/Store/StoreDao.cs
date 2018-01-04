@@ -22,7 +22,7 @@ namespace Aklion.Crm.Dao.Store
 
         public Task<Dictionary<string, int>> GetForAutocompleteAsync(StoreAutocompleteParameterModel parameter)
         {
-            return _dao.GetForAutoCompleteAsync(parameter);
+            return _dao.GetForAutoCompleteAsync<StoreModel, StoreAutocompleteParameterModel>(parameter);
         }
 
         public Task<StoreModel> GetAsync(int id)

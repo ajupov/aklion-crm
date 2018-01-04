@@ -15,14 +15,14 @@ namespace Aklion.Crm.Dao.ProductStatus
             _dao = dao;
         }
 
+        public Task<Dictionary<string, int>> GetForSelectAsync(ProductStatusSelectParameterModel parameter)
+        {
+            return _dao.GetForSelectAsync<ProductStatusModel, ProductStatusSelectParameterModel>(parameter);
+        }
+
         public Task<Tuple<int, List<ProductStatusModel>>> GetPagedListAsync(ProductStatusParameterModel parameter)
         {
             return _dao.GetPagedListAsync<ProductStatusModel, ProductStatusParameterModel>(parameter);
-        }
-
-        public Task<Dictionary<string, int>> GetForAutocompleteAsync(ProductStatusAutocompleteParameterModel parameter)
-        {
-            return _dao.GetForAutoCompleteAsync(parameter);
         }
 
         public Task<ProductStatusModel> GetAsync(int id)

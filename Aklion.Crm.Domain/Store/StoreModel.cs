@@ -6,11 +6,12 @@ namespace Aklion.Crm.Domain.Store
     [Table("dbo.Store as s")]
     public class StoreModel
     {
-        [Column("ps.Id")]
+        [Column("s.Id")]
         [Identificator]
         public int Id { get; set; }
 
         [Column("s.Name")]
+        [AutocompleteOrSelect("s.Name")]
         public string Name { get; set; }
 
         [Column("s.ApiSecret")]

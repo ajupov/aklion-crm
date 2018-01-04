@@ -34,10 +34,10 @@ function initAutocomplete(element, url, hiddenId, dependentFields) {
                 parameters,
                 result =>
                 response($.map(result,
-                    item => {
+                        (key, value) => {
                         return {
-                            label: item.Value,
-                            value: item.Id
+                            label: value,
+                            value: key
                         };
                     })));
         },
@@ -54,11 +54,18 @@ function initAutocomplete(element, url, hiddenId, dependentFields) {
     });
 }
 
-function initMoney(element) {
+function initMoney(element, invert) {
     const $input = $(element);
-    $input.attr('type', 'number');
-    $input.attr('min', '0');
-    $input.attr('step', '0.01');
+
+    $input.val($input.val().replace('.', ','));
+
+    $input.keypress(e => {
+        const separatorKeyKode = invert ? 46 : 44;
+
+        if (e.keyCode !== separatorKeyKode && (e.keyCode < 48 || e.keyCode > 57)) {
+            e.preventDefault();
+        }
+    });
 }
 
 function getFilters() {
@@ -138,4 +145,20 @@ function getSelectValues(url) {
     }
 
     return values;
+}
+
+function administrationStoreLinkFormatter(value, options, data) {
+    return data.StoreId > 0 ? `<a href="/Administration/Stores?Id=${data.StoreId}">${data.StoreName}</a>` : '';
+}
+
+function administrationUserLinkFormatter(value, options, data) {
+    return `<a href="/Administration/Users?Id=${data.UserId}">${data.UserLogin}</a>`;
+}
+
+function administrationProductLinkFormatter(value, options, data) {
+    return `<a href="/Administration/Products?Id=${data.ProductId}">${data.ProductName}</a>`;
+}
+
+function linkUnFormatter(value, options, cell) {
+    return $('a', cell).text();
 }

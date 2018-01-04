@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Aklion.Crm.Domain\Aklion.Crm.Domain.csproj" />
-    <ProjectReference Include="..\Aklion.Infrastructure.Storage\Aklion.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

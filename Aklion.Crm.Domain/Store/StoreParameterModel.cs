@@ -9,10 +9,10 @@ namespace Aklion.Crm.Domain.Store
         [Where("@Id is null or s.Id = @Id")]
         public int? Id { get; set; }
 
-        [Where("@Name is null or s.Name = @Name")]
+        [Where("@Name is null or s.Name like @Name + '%'")]
         public string Name { get; set; }
 
-        [Where("@ApiSecret is null or s.ApiSecret = @ApiSecret")]
+        [Where("@ApiSecret is null or s.ApiSecret like @ApiSecret + '%'")]
         public string ApiSecret { get; set; }
 
         [Where("@IsLocked is null or s.IsLocked = @IsLocked")]

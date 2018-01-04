@@ -19,7 +19,7 @@ namespace Aklion.Crm.Domain.UserAttributeLink
         [Column("s.Name")]
         public string StoreName { get; }
 
-        [Column("ual.ProductId")]
+        [Column("ual.UserId")]
         public int UserId { get; set; }
 
         [Column("u.Login")]

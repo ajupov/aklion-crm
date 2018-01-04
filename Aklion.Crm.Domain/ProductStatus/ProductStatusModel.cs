@@ -18,6 +18,7 @@ namespace Aklion.Crm.Domain.ProductStatus
         public string StoreName { get; }
 
         [Column("ps.Name")]
+        [AutocompleteOrSelect("ps.Name")]
         public string Name { get; set; }
 
         [Column("ps.CreateDate")]

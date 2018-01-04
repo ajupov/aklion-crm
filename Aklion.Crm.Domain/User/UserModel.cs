@@ -12,6 +12,7 @@ namespace Aklion.Crm.Domain.User
         public int Id { get; set; }
 
         [Column("u.Login")]
+        [AutocompleteOrSelect("u.Login")]
         public string Login { get; set; }
 
         [Column("u.PasswordHash")]

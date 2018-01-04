@@ -12,27 +12,27 @@ namespace Aklion.Crm.Controllers.Administration
     [Route("Administration/UserAttributes")]
     public class AdministrationUserAttributeController : BaseController
     {
-        private readonly IUserAttributeDao _clientAttributeDao;
+        private readonly IUserAttributeDao _userAttributeDao;
 
-        public AdministrationUserAttributeController(IUserAttributeDao clientAttributeDao)
+        public AdministrationUserAttributeController(IUserAttributeDao userAttributeDao)
         {
-            _clientAttributeDao = clientAttributeDao;
+            _userAttributeDao = userAttributeDao;
         }
 
         [HttpGet]
         [Route("GetList")]
         public async Task<PagingModel<UserAttributeModel>> GetList(UserAttributeParameterModel model)
         {
-            var result = await _clientAttributeDao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
+            var result = await _userAttributeDao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
 
             return result.MapNew(model.Page, model.Size);
         }
 
         [HttpGet]
-        [Route("GetForAutocompleteByNamePattern")]
-        public Task<Dictionary<string, int>> GetForAutocompleteByNamePattern(string pattern, int storeId = 0)
+        [Route("GetForAutocompleteByDescriptionPattern")]
+        public Task<Dictionary<string, int>> GetForAutocompleteByDescriptionPattern(string pattern, int storeId = 0)
         {
-            return _clientAttributeDao.GetForAutocompleteAsync(pattern.MapNew(storeId));
+            return _userAttributeDao.GetForAutocompleteAsync(pattern.MapNew(storeId));
         }
 
         [HttpPost]
@@ -40,7 +40,7 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public Task Create(UserAttributeModel model)
         {
-            return _clientAttributeDao.CreateAsync(model.MapNew());
+            return _userAttributeDao.CreateAsync(model.MapNew());
         }
 
         [HttpPost]
@@ -48,9 +48,9 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Update(UserAttributeModel model)
         {
-            var result = await _clientAttributeDao.GetAsync(model.Id).ConfigureAwait(false);
+            var result = await _userAttributeDao.GetAsync(model.Id).ConfigureAwait(false);
 
-            await _clientAttributeDao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);
+            await _userAttributeDao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);
         }
 
         [HttpPost]
@@ -58,7 +58,7 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public Task Delete(int id)
         {
-            return _clientAttributeDao.DeleteAsync(id);
+            return _userAttributeDao.DeleteAsync(id);
         }
     }
 }

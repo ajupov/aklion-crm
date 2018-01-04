@@ -46,11 +46,63 @@ namespace Aklion.Infrastructure.Query
             return queryObject;
         }
 
+        public static QueryObject DefineColumnsForAutocompleteOrSelect(this QueryObject queryObject)
+        {
+            var identificatorColumnName = ((ColumnAttribute) queryObject.Properties.FirstOrDefault(p =>
+                    p.GetCustomAttribute(typeof(IdentificatorAttribute)) != null &&
+                    p.GetCustomAttribute(typeof(ColumnAttribute)) != null).GetCustomAttribute(typeof(ColumnAttribute)))
+                .Value;
+
+            if (string.IsNullOrWhiteSpace(identificatorColumnName))
+            {
+                return queryObject;
+            }
+
+            var autocompleteColumnName = ((AutocompleteOrSelectAttribute) queryObject.Properties.FirstOrDefault(p =>
+                    p.GetCustomAttribute(typeof(AutocompleteOrSelectAttribute)) != null)
+                .GetCustomAttribute(typeof(AutocompleteOrSelectAttribute))).Value;
+
+            if (string.IsNullOrWhiteSpace(autocompleteColumnName))
+            {
+                return queryObject;
+            }
+
+            queryObject.ColumnsForAutocomplete = $"{autocompleteColumnName} as Value, {identificatorColumnName} as [Key]";
+
+            return queryObject;
+        }
+
         public static QueryObject DefineColumnsForInsert(this QueryObject queryObject)
         {
             queryObject.ColumnsForInsert = string.Join(", ", queryObject.Properties
-                .Where(p => p.GetCustomAttribute(typeof(ColumnAttribute)) != null &&
-                            p.GetCustomAttribute(typeof(IdentificatorAttribute)) == null)
+                .Where(p =>
+                {
+                    var columnAttribute = p.GetCustomAttribute(typeof(ColumnAttribute));
+                    if (columnAttribute == null)
+                    {
+                        return false;
+                    }
+
+                    var identificatorAttribute = p.GetCustomAttribute(typeof(IdentificatorAttribute));
+                    if (identificatorAttribute != null)
+                    {
+                        return false;
+                    }
+
+                    var columnAttributeValue = ((ColumnAttribute) columnAttribute).Value;
+                    if(string.IsNullOrWhiteSpace(columnAttributeValue))
+                    {
+                        return false;
+                    }
+
+                    var columnAttributeValueAlias = columnAttributeValue.Split('.').FirstOrDefault();
+                    if (string.IsNullOrWhiteSpace(columnAttributeValueAlias))
+                    {
+                        return true;
+                    }
+
+                    return columnAttributeValueAlias == queryObject.TableAlias;
+                })
                 .Select(a => $"@{((ColumnAttribute) a.GetCustomAttribute(typeof(ColumnAttribute))).Value.Replace(queryObject.TableAlias + ".", string.Empty)}"));
 
             return queryObject;
@@ -60,9 +112,41 @@ namespace Aklion.Infrastructure.Query
         {
             queryObject.ColumnsForUpdate =
                 string.Join(", ", queryObject.Properties
-                    .Where(p => p.GetCustomAttribute(typeof(ColumnAttribute)) != null &&
-                                p.GetCustomAttribute(typeof(IdentificatorAttribute)) == null &&
-                                p.GetCustomAttribute(typeof(CreateDateAttribute)) == null)
+                .Where(p =>
+                    {
+                        var columnAttribute = p.GetCustomAttribute(typeof(ColumnAttribute));
+                        if (columnAttribute == null)
+                        {
+                            return false;
+                        }
+
+                        var identificatorAttribute = p.GetCustomAttribute(typeof(IdentificatorAttribute));
+                        if (identificatorAttribute != null)
+                        {
+                            return false;
+                        }
+
+                        var createDateAttribute = p.GetCustomAttribute(typeof(CreateDateAttribute));
+                        if (createDateAttribute != null)
+                        {
+                            return false;
+                        }
+
+                        var columnAttributeValue = ((ColumnAttribute)columnAttribute).Value;
+                        if (string.IsNullOrWhiteSpace(columnAttributeValue))
+                        {
+                            return false;
+                        }
+
+                        var columnAttributeValueAlias = columnAttributeValue.Split('.').FirstOrDefault();
+                        if (string.IsNullOrWhiteSpace(columnAttributeValueAlias))
+                        {
+                            return true;
+                        }
+
+                        return columnAttributeValueAlias == queryObject.TableAlias;
+                    })
+
                     .Select(a =>
                     {
                         var name = ((ColumnAttribute) a.GetCustomAttribute(typeof(ColumnAttribute))).Value.Replace(
@@ -112,10 +196,10 @@ namespace Aklion.Infrastructure.Query
         public static QueryObject ApplySorting<TParameterModel>(this QueryObject queryObject, TParameterModel parameter)
         {
             var propertiesWithSortingColumnAttribute =
-                queryObject.Properties.FirstOrDefault(p => p.GetCustomAttribute(typeof(SortingColumnAttribute)) != null);
+                queryObject.FilterProperties.FirstOrDefault(p => p.GetCustomAttribute(typeof(SortingColumnAttribute)) != null);
 
             var propertiesWithSortingOrderAttribute =
-                queryObject.Properties.FirstOrDefault(p => p.GetCustomAttribute(typeof(SortingOrderAttribute)) != null);
+                queryObject.FilterProperties.FirstOrDefault(p => p.GetCustomAttribute(typeof(SortingOrderAttribute)) != null);
 
             if (propertiesWithSortingColumnAttribute != null && propertiesWithSortingOrderAttribute != null)
             {
@@ -124,7 +208,27 @@ namespace Aklion.Infrastructure.Query
 
                 if (!string.IsNullOrWhiteSpace(sortingColumn))
                 {
-                    queryObject.Sorting = "order by sortingColumn" + sortingOrder == "desc" ? "desc" : "asc";
+                    var sortingColumnWithAlias = string.Empty;
+
+                    foreach (var property in queryObject.Properties)
+                    {
+                        var columnAttribute = (ColumnAttribute) property.GetCustomAttribute(typeof(ColumnAttribute));
+                        if (columnAttribute == null)
+                        {
+                            continue;
+                        }
+
+                        if (property.Name != sortingColumn)
+                        {
+                            continue;
+                        }
+
+                        sortingColumnWithAlias = columnAttribute.Value;
+                        break;
+                    }
+
+                    queryObject.Sorting = $"order by {sortingColumnWithAlias} " +
+                                          (sortingOrder == "desc" ? "desc" : "asc");
                 }
             }
 
@@ -174,7 +278,9 @@ namespace Aklion.Infrastructure.Query
                 case QueryType.SelectList:
                     return $"select {queryObject.ColumnsForSelect} from {queryObject.TableName} {queryObject.Joins} {queryObject.Filters};";
                 case QueryType.SelectPagedList:
-                    return $"select count(0) from {queryObject.TableName} {queryObject.Joins} {queryObject.Filters}; select {queryObject.ColumnsForSelect} from {queryObject.TableName} {queryObject.Joins} {queryObject.Filters} {queryObject.Sorting} {queryObject.Paging};";
+                    return $"select {queryObject.ColumnsForSelect} from {queryObject.TableName} {queryObject.Joins} {queryObject.Filters} {queryObject.Sorting} {queryObject.Paging};";
+                case QueryType.SelectForAutocompleteOrSelect:
+                    return $"select {queryObject.ColumnsForAutocomplete} from {queryObject.TableName} {queryObject.Filters};";
                 case QueryType.Insert:
                     return $"insert {queryObject.TableNameWithoutAlias} ({queryObject.ColumnsForInsert.Replace("@", string.Empty)}) values ({queryObject.ColumnsForInsert}); select scope_identity();";
                 case QueryType.Update:

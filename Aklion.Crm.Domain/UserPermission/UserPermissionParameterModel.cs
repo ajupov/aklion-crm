@@ -13,7 +13,7 @@ namespace Aklion.Crm.Domain.UserPermission
         [Where("@UserId is null or up.UserId = @UserId")]
         public int? UserId { get; set; }
 
-        [Where("@UserLogin is null or u.Login = @UserLogin")]
+        [Where("@UserLogin is null or u.Login like @UserLogin + '%'")]
         public string UserLogin { get; set; }
 
         [Where("@StoreId is null or up.StoreId = @StoreId")]
@@ -22,7 +22,7 @@ namespace Aklion.Crm.Domain.UserPermission
         [Where("@StoreName is null or s.Name like @StoreName + '%'")]
         public string StoreName { get; set; }
 
-        [Where("@Permission is null or up.Permission = @Permission")]
+        [Where("coalesce(@Permission, 0) = 0 or up.Permission = @Permission")]
         public Permission? Permission { get; set; }
 
         [Where("@CreateDate is null or convert(date, up.CreateDate) = convert(date, @CreateDate)")]

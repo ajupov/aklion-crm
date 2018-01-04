@@ -31,6 +31,8 @@ namespace Aklion.Infrastructure.Query
 
         public string ColumnsForSelect { get; set; }
 
+        public string ColumnsForAutocomplete { get; set; }
+
         public string ColumnsForInsert { get; set; }
 
         public string ColumnsForUpdate { get; set; }

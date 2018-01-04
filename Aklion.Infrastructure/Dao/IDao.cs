@@ -10,11 +10,15 @@ namespace Aklion.Infrastructure.Dao
 
         Task<TModel> GetAsync<TModel, TParameter>(TParameter parameter);
 
+        Task<List<TModel>> GetListAsync<TModel>();
+
         Task<List<TModel>> GetListAsync<TModel, TParameter>(TParameter parameter);
 
         Task<Tuple<int, List<TModel>>> GetPagedListAsync<TModel, TParameter>(TParameter parameter);
 
-        Task<Dictionary<string, int>> GetForAutoCompleteAsync<TParameter>(TParameter parameter);
+        Task<Dictionary<string, int>> GetForAutoCompleteAsync<TModel, TParameter>(TParameter parameter);
+
+        Task<Dictionary<string, int>> GetForSelectAsync<TModel, TParameter>(TParameter parameter);
 
         Task<int> CreateAsync<TModel>(TModel model);
 

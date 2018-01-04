@@ -12,7 +12,7 @@ namespace Aklion.Crm.Models.Administration.UserPermission
 
         public int StoreId { get; set; }
 
-        public string StoreName { get; }
+        public string StoreName { get; set; }
 
         public Permission Permission { get; set; }
 

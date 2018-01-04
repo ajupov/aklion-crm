@@ -42,6 +42,15 @@ namespace Aklion.Infrastructure.DataBaseExecutor
             }
         }
 
+        public async Task<Dictionary<string, int>> SelectDictonaryAsync(string query, object parameters = null)
+        {
+            using (var connection = _connectionFactory.GetConnection())
+            {
+                return (await connection.QueryAsync<KeyValuePair<int, string>>(query, parameters).ConfigureAwait(false))
+                    .ToDictionary(k => k.Value, v => v.Key);
+            }
+        }
+
         public async Task<T> SelectMultipleAsync<T>(string query, Func<IReader, Task<T>> reader, object parameters = null)
         {
             using (var connection = _connectionFactory.GetConnection())

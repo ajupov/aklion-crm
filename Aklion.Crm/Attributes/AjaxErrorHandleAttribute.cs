@@ -10,7 +10,9 @@ namespace Aklion.Crm.Attributes
             var data = new
             {
                 IsSuccess = false,
-                Error = "Произошла ошибка"
+                Error = $"Произошла ошибка: {context.Exception.Message}" +
+                        $"Метод: {context.Exception.TargetSite.Name}." +
+                        $"Трассировка стека: {context.Exception.StackTrace}"
             };
 
             context.Result = new JsonResult(data);

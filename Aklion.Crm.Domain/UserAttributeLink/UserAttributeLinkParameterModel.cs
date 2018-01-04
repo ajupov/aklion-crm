@@ -15,7 +15,7 @@ namespace Aklion.Crm.Domain.UserAttributeLink
         [Where("@StoreName is null or s.Name like @StoreName + '%'")]
         public string StoreName { get; set; }
 
-        [Where("@UserId is null or ual.UserId = @ProductId")]
+        [Where("@UserId is null or ual.UserId = @UserId")]
         public int? UserId { get; set; }
 
         [Where("@UserLogin is null or u.Login like @UserLogin + '%'")]
@@ -30,10 +30,10 @@ namespace Aklion.Crm.Domain.UserAttributeLink
         [Where("@AttributeDescription is null or ua.Description like @AttributeDescription + '%'")]
         public string AttributeDescription { get; set; }
 
-        [Where("@Value is null or ual.Name like @Value + '%'")]
+        [Where("@Value is null or ual.Value like @Value + '%'")]
         public string Value { get; set; }
 
-        [Where("@IsDeleted is null or ual.IsDeleted like @IsDeleted + '%'")]
+        [Where("@IsDeleted is null or ual.IsDeleted like @IsDeleted")]
         public bool? IsDeleted { get; set; }
 
         [Where("@CreateDate is null or convert(date, ual.CreateDate) = convert(date, @CreateDate)")]

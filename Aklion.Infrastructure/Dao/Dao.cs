@@ -41,6 +41,18 @@ namespace Aklion.Infrastructure.Dao
             return _dataBaseExecutor.SelectOneAsync<TModel>(query, parameter);
         }
 
+        public Task<List<TModel>> GetListAsync<TModel>()
+        {
+            var query = QueryBuilder
+                .Create<TModel>(QueryType.SelectList)
+                .DefineTableName()
+                .ApplyJoins()
+                .DefineColumnsForSelect()
+                .Build();
+
+            return _dataBaseExecutor.SelectListAsync<TModel>(query);
+        }
+
         public Task<List<TModel>> GetListAsync<TModel, TParameter>(TParameter parameter)
         {
             var query = QueryBuilder
@@ -64,11 +76,12 @@ namespace Aklion.Infrastructure.Dao
                 .Build();
 
             var query2 = QueryBuilder
-                .Create<TModel>(QueryType.SelectList)
+                .Create<TModel>(QueryType.SelectPagedList)
                 .DefineTableName()
                 .ApplyJoins()
                 .DefineColumnsForSelect()
                 .ApplyFilter(parameter)
+                .ApplySorting(parameter)
                 .Build();
 
             return _dataBaseExecutor.SelectMultipleAsync(query1 + query2, async r => new Tuple<int, List<TModel>>(
@@ -77,9 +90,28 @@ namespace Aklion.Infrastructure.Dao
             ), parameter);
         }
 
-        public Task<Dictionary<string, int>> GetForAutoCompleteAsync<TParameter>(TParameter parameter)
+        public Task<Dictionary<string, int>> GetForAutoCompleteAsync<TModel, TParameter>(TParameter parameter)
         {
-            throw new NotImplementedException();
+            var query = QueryBuilder
+                .Create<TModel>(QueryType.SelectForAutocompleteOrSelect)
+                .DefineTableName()
+                .DefineColumnsForAutocompleteOrSelect()
+                .ApplyFilter(parameter)
+                .Build();
+
+            return _dataBaseExecutor.SelectDictonaryAsync(query, parameter);
+        }
+
+        public Task<Dictionary<string, int>> GetForSelectAsync<TModel, TParameter>(TParameter parameter)
+        {
+            var query = QueryBuilder
+                .Create<TModel>(QueryType.SelectForAutocompleteOrSelect)
+                .DefineTableName()
+                .DefineColumnsForAutocompleteOrSelect()
+                .ApplyFilter(parameter)
+                .Build();
+
+            return _dataBaseExecutor.SelectDictonaryAsync(query, parameter);
         }
 
         public Task<int> CreateAsync<TModel>(TModel model)

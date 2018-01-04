@@ -13,6 +13,8 @@ namespace Aklion.Infrastructure.DataBaseExecutor
 
         Task<List<T>> SelectListAsync<T>(string query, object parameters = null);
 
+        Task<Dictionary<string, int>> SelectDictonaryAsync(string query, object parameters = null);
+
         Task<T> SelectMultipleAsync<T>(string query, Func<IReader, Task<T>> reader, object parameters = null);
     }
 }

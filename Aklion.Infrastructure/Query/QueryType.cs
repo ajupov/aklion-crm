@@ -7,6 +7,7 @@
         SelectOne,
         SelectList,
         SelectPagedList,
+        SelectForAutocompleteOrSelect,
         Insert,
         Update,
         Delete

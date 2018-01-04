@@ -101,6 +101,11 @@ namespace Aklion.Infrastructure.Mapper
                     continue;
                 }
 
+                if (!newModelProperty.CanWrite)
+                {
+                    continue;
+                }
+
                 if (newModelProperty.PropertyType == oldModelProperty.PropertyType)
                 {
                     var oldModelPropertyValue = oldModelProperty.GetValue(fromModel);

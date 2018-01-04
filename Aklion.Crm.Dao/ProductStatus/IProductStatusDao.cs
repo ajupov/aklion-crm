@@ -9,7 +9,7 @@ namespace Aklion.Crm.Dao.ProductStatus
     {
         Task<Tuple<int, List<ProductStatusModel>>> GetPagedListAsync(ProductStatusParameterModel parameter);
 
-        Task<Dictionary<string, int>> GetForAutocompleteAsync(ProductStatusAutocompleteParameterModel parameter);
+        Task<Dictionary<string, int>> GetForSelectAsync(ProductStatusSelectParameterModel parameter);
 
         Task<ProductStatusModel> GetAsync(int id);
 

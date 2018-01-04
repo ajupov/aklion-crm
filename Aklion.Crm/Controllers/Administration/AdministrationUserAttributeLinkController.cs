@@ -11,18 +11,18 @@ namespace Aklion.Crm.Controllers.Administration
     [Route("Administration/UserAttributeLinks")]
     public class AdministrationUserAttributeLinkController : BaseController
     {
-        private readonly IUserAttributeLinkDao _clientAttributeLinkDao;
+        private readonly IUserAttributeLinkDao _userAttributeLinkDao;
 
-        public AdministrationUserAttributeLinkController(IUserAttributeLinkDao clientAttributeLinkDao)
+        public AdministrationUserAttributeLinkController(IUserAttributeLinkDao userAttributeLinkDao)
         {
-            _clientAttributeLinkDao = clientAttributeLinkDao;
+            _userAttributeLinkDao = userAttributeLinkDao;
         }
 
         [HttpGet]
         [Route("GetList")]
         public async Task<PagingModel<UserAttributeLinkModel>> GetList(UserAttributeLinkParameterModel model)
         {
-            var result = await _clientAttributeLinkDao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
+            var result = await _userAttributeLinkDao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
 
             return result.MapNew(model.Page, model.Size);
         }
@@ -32,7 +32,7 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public Task Create(UserAttributeLinkModel model)
         {
-            return _clientAttributeLinkDao.CreateAsync(model.MapNew());
+            return _userAttributeLinkDao.CreateAsync(model.MapNew());
         }
 
         [HttpPost]
@@ -40,9 +40,9 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Update(UserAttributeLinkModel model)
         {
-            var result = await _clientAttributeLinkDao.GetAsync(model.Id).ConfigureAwait(false);
+            var result = await _userAttributeLinkDao.GetAsync(model.Id).ConfigureAwait(false);
 
-            await _clientAttributeLinkDao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);
+            await _userAttributeLinkDao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);
         }
 
         [HttpPost]
@@ -50,7 +50,7 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public Task Delete(int id)
         {
-            return _clientAttributeLinkDao.DeleteAsync(id);
+            return _userAttributeLinkDao.DeleteAsync(id);
         }
     }
 }

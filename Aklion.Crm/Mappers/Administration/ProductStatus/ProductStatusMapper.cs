@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.ProductStatus;
 using Aklion.Infrastructure.Mapper;
 using DomainProductStatusModel = Aklion.Crm.Domain.ProductStatus.ProductStatusModel;
 using DomainProductStatusParameterModel = Aklion.Crm.Domain.ProductStatus.ProductStatusParameterModel;
-using DomainProductStatusAutocompleteParameterModel = Aklion.Crm.Domain.ProductStatus.ProductStatusAutocompleteParameterModel;
+using DomainProductStatusSelectParameterModel = Aklion.Crm.Domain.ProductStatus.ProductStatusSelectParameterModel;
 
 namespace Aklion.Crm.Mappers.Administration.ProductStatus
 {
@@ -31,13 +32,19 @@ namespace Aklion.Crm.Mappers.Administration.ProductStatus
             return model.MapParameterNew<DomainProductStatusParameterModel>();
         }
 
-        public static DomainProductStatusAutocompleteParameterModel MapNew(this string pattern, int storeId)
+        public static DomainProductStatusSelectParameterModel MapNew(this int storeId)
         {
-            return new DomainProductStatusAutocompleteParameterModel
+            return new DomainProductStatusSelectParameterModel
             {
-                Name = pattern,
                 StoreId = storeId
             };
+        }
+
+        public static Dictionary<string, int> MapNew(this Dictionary<string, int> models)
+        {
+            models.TryAdd(string.Empty, 0);
+
+            return models.OrderBy(k => k.Key).ToDictionary(k => k.Key, v => v.Value);
         }
     }
 }

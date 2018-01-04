@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Aklion.Crm.Enums\Aklion.Crm.Enums.csproj" />
-    <ProjectReference Include="..\Aklion.Infrastructure.Storage\Aklion.Infrastructure.csproj" />
+    <ProjectReference Include="..\Aklion.Infrastructure\Aklion.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

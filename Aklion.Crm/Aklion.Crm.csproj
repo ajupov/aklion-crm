@@ -7,12 +7,16 @@
   <ItemGroup>
     <Compile Remove="Controllers\Api\**" />
     <Compile Remove="Controllers\User\**" />
+    <Compile Remove="wwwroot\scripts\user\**" />
     <Content Remove="Controllers\Api\**" />
     <Content Remove="Controllers\User\**" />
+    <Content Remove="wwwroot\scripts\user\**" />
     <EmbeddedResource Remove="Controllers\Api\**" />
     <EmbeddedResource Remove="Controllers\User\**" />
+    <EmbeddedResource Remove="wwwroot\scripts\user\**" />
     <None Remove="Controllers\Api\**" />
     <None Remove="Controllers\User\**" />
+    <None Remove="wwwroot\scripts\user\**" />
   </ItemGroup>
 
   <ItemGroup>

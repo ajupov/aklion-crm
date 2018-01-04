@@ -78,7 +78,7 @@ function createTable(options) {
                             initAutocomplete(e, column.AutocompleteUrl, column.AutocompleteHidden, column.DependentFields);
                         }
                         if (column.Type === 'money') {
-                            initMoney(e);
+                            initMoney(e, false);
                         }
                     }
                 },
@@ -95,7 +95,7 @@ function createTable(options) {
                             initDatePicker(e, $table);
                         }
                         if (column.Type === 'money') {
-                            initMoney(e);
+                            initMoney(e, true);
                         }
                     },
                     value: column.Type === 'select'

@@ -21,6 +21,7 @@ namespace Aklion.Crm.Domain.UserAttribute
         public string Name { get; set; }
 
         [Column("ua.Description")]
+        [AutocompleteOrSelect("ua.Description")]
         public string Description { get; set; }
 
         [Column("ua.IsDeleted")]

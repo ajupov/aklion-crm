@@ -12,28 +12,28 @@ namespace Aklion.Crm.Domain.Product
         [Where("@StoreId is null or p.StoreId = @StoreId")]
         public int? StoreId { get; set; }
 
-        [Where("@StoreName is null or s.Name = @StoreName")]
+        [Where("@StoreName is null or s.Name like @StoreName + '%'")]
         public string StoreName { get; set; }
 
         [Where("@ParentId is null or p.ParentId = @ParentId")]
         public int? ParentId { get; set; }
 
-        [Where("@ParentName is null or pp.Name = @ParentName")]
+        [Where("@ParentName is null or pp.Name like @ParentName + '%'")]
         public string ParentName { get; set; }
 
-        [Where("@Name is null or p.Name = @Name")]
+        [Where("@Name is null or p.Name like @Name + '%'")]
         public string Name { get; set; }
 
-        [Where("@Price is null or p.Price = @Price")]
+        [Where("coalesce(@Price, 0) = 0 or p.Price = @Price")]
         public decimal? Price { get; set; }
 
-        [Where("@StatusId is null or p.StatusId = @StatusId")]
+        [Where("coalesce(@StatusId, 0) = 0 or p.StatusId = @StatusId")]
         public int? StatusId { get; set; }
 
-        [Where("@StatusName is null or ps.Name = @StatusName")]
+        [Where("@StatusName is null or ps.Name like @StatusName + '%'")]
         public string StatusName { get; set; }
 
-        [Where("@VendorCode is null or p.VendorCode = @VendorCode")]
+        [Where("@VendorCode is null or p.VendorCode like @VendorCode + '%'")]
         public string VendorCode { get; set; }
 
         [Where("@IsDeleted is null or p.IsDeleted = @IsDeleted")]

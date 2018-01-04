@@ -30,10 +30,10 @@ namespace Aklion.Crm.Domain.ProductAttributeLink
         [Where("@AttributeDescription is null or pa.Description like @AttributeDescription + '%'")]
         public string AttributeDescription { get; set; }
 
-        [Where("@Value is null or pal.Name like @Value + '%'")]
+        [Where("@Value is null or pal.Value like @Value + '%'")]
         public string Value { get; set; }
 
-        [Where("@IsDeleted is null or pal.IsDeleted like @IsDeleted + '%'")]
+        [Where("@IsDeleted is null or pal.IsDeleted = @IsDeleted")]
         public bool? IsDeleted { get; set; }
 
         [Where("@CreateDate is null or convert(date, pal.CreateDate) = convert(date, @CreateDate)")]

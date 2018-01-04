@@ -16,7 +16,7 @@ namespace Aklion.Crm.Controllers.Administration
         }
 
         [HttpGet]
-        [Route("GetList")]
+        [Route("GetForSelect")]
         public Dictionary<string, Permission> GetList()
         {
             return _permissionService.GetForAdmin();
