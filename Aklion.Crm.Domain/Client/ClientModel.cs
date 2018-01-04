@@ -18,6 +18,7 @@ namespace Aklion.Crm.Domain.Client
         public string StoreName { get; }
 
         [Column("c.Name")]
+        [AutocompleteOrSelect("c.Name")]
         public string Name { get; set; }
 
         [Column("c.IsDeleted")]

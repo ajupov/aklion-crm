@@ -29,8 +29,8 @@ namespace Aklion.Crm.Controllers.Administration
         }
 
         [HttpGet]
-        [Route("GetForAutocompleteByNamePattern")]
-        public Task<Dictionary<string, int>> GetForAutocompleteByNamePattern(string pattern, int storeId = 0)
+        [Route("GetForAutocompleteByDescriptionPattern")]
+        public Task<Dictionary<string, int>> GetForAutocompleteByDescriptionPattern(string pattern, int storeId = 0)
         {
             return _clientAttributeDao.GetForAutocompleteAsync(pattern.MapNew(storeId));
         }

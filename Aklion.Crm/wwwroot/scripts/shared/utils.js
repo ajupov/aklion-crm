@@ -159,6 +159,10 @@ function administrationProductLinkFormatter(value, options, data) {
     return `<a href="/Administration/Products?Id=${data.ProductId}">${data.ProductName}</a>`;
 }
 
+function administrationClientLinkFormatter(value, options, data) {
+    return `<a href="/Administration/Clients?Id=${data.ClientId}">${data.ClientName}</a>`;
+}
+
 function linkUnFormatter(value, options, cell) {
     return $('a', cell).text();
 }
