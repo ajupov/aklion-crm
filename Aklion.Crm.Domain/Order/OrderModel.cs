@@ -11,6 +11,7 @@ namespace Aklion.Crm.Domain.Order
     public class OrderModel : ICloneable
     {
         [Column("o.Id")]
+        [Identificator]
         public int Id { get; set; }
 
         [Column("o.StoreId")]

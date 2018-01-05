@@ -26,15 +26,15 @@ function initOrdersTable() {
             {
                 Name: 'ClientName', Label: 'Клиент', Type: 'autocomplete', Editable: true, Width: 130,
                 AutocompleteUrl: '/Administration/Clients/GetForAutocompleteByNamePattern', AutocompleteHidden: 'ClientId',
-                Formatter: administrationClientLinkFormatter, Unformatter: linkUnFormatter
+                DependentFields: ['StoreId'], Formatter: administrationClientLinkFormatter, Unformatter: linkUnFormatter
             },
             {
-                Name: 'SourceId', Label: 'Источник', Type: 'select', Editable: true, Sortable: false,
-                SelectValues: getSelectValues('/Administration/OrderSources/GetForSelect'), Width: 140
+                Name: 'SourceId', Label: 'Источник', Type: 'select', Editable: true, Sortable: false, Width: 140,
+                DependentFields: ['StoreId'], SelectValues: getSelectValues('/Administration/OrderSources/GetForSelect')
             },
             {
-                Name: 'StatusId', Label: 'Статус', Type: 'select', Editable: true, Sortable: false,
-                SelectValues: getSelectValues('/Administration/OrderStatuses/GetForSelect'), Width: 140
+                Name: 'StatusId', Label: 'Статус', Type: 'select', Editable: true, Sortable: false, Width: 140,
+                DependentFields: ['StoreId'], SelectValues: getSelectValues('/Administration/OrderStatuses/GetForSelect')
             },
             { Name: 'TotalSum', Label: 'Сумма', Type: 'money', Width: 140, Editable: true },
             { Name: 'DiscountSum', Label: 'Сумма скидки', Type: 'money', Width: 140, Editable: true },
@@ -139,12 +139,7 @@ function initAttributesTable() {
                 Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
             },
             { Name: 'ProductId', Type: 'number', Hidden: true, Editable: true },
-            {
-                Name: 'ProductName', Label: 'Название продукта', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/Products/GetForAutocompleteByNamePattern', AutocompleteHidden: 'ProductId',
-                DependentFields: ['StoreId'], Formatter: administrationProductLinkFormatter, Unformatter: linkUnFormatter
-            },
-            { Name: 'AttributeId', Type: 'number', Hidden: true, Editable: true },
+            { Name: 'OrderId', Label: '№ заказа', Type: 'number', Width: 60, Editable: true },
             {
                 Name: 'AttributeDescription', Label: 'Описание атрибута', Type: 'autocomplete', Editable: true, Width: 160,
                 AutocompleteUrl: '/Administration/OrderAttributes/GetForAutocompleteByDescriptionPattern',
@@ -168,10 +163,10 @@ function initOthersTable() {
         IsCreatable: true,
         IsDeletable: true,
         IsFilterable: true,
-        DataUrl: '/Administration/OrderStatuses/GetList',
-        CreateUrl: '/Administration/OrderStatuses/Create',
-        UpdateUrl: '/Administration/OrderStatuses/Update',
-        DeleteUrl: '/Administration/OrderStatuses/Delete',
+        DataUrl: '/Administration/OrderSources/GetList',
+        CreateUrl: '/Administration/OrderSources/Create',
+        UpdateUrl: '/Administration/OrderSources/Update',
+        DeleteUrl: '/Administration/OrderSources/Delete',
         Columns: [
             { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
@@ -195,10 +190,10 @@ function initOthersTable() {
         IsCreatable: true,
         IsDeletable: true,
         IsFilterable: true,
-        DataUrl: '/Administration/OrderSources/GetList',
-        CreateUrl: '/Administration/OrderSources/Create',
-        UpdateUrl: '/Administration/OrderSources/Update',
-        DeleteUrl: '/Administration/OrderSources/Delete',
+        DataUrl: '/Administration/OrderStatuses/GetList',
+        CreateUrl: '/Administration/OrderStatuses/Create',
+        UpdateUrl: '/Administration/OrderStatuses/Update',
+        DeleteUrl: '/Administration/OrderStatuses/Delete',
         Columns: [
             { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },

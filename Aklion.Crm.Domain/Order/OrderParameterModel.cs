@@ -21,22 +21,22 @@ namespace Aklion.Crm.Domain.Order
         [Where("@ClientName is null or c.Name like @ClientName + '%'")]
         public string ClientName { get; set; }
 
-        [Where("@SourceId is null or o.SourceId = @SourceId")]
+        [Where("coalesce(@SourceId, 0) = 0 or o.SourceId = @SourceId")]
         public int? SourceId { get; set; }
 
         [Where("@SourceName is null or oso.Name like @SourceName + '%'")]
         public string SourceName { get; set; }
 
-        [Where("@StatusId is null or o.StatusId = @StatusId")]
+        [Where("coalesce(@StatusId, 0) = 0 or o.StatusId = @StatusId")]
         public int? StatusId { get; set; }
 
         [Where("@StatusName is null or ost.Name like @StatusName + '%'")]
         public string StatusName { get; set; }
 
-        [Where("@TotalSum is null or o.TotalSum = @TotalSum")]
+        [Where("coalesce(@TotalSum, 0) = 0 or o.TotalSum = @TotalSum")]
         public decimal? TotalSum { get; set; }
 
-        [Where("@DiscountSum is null or o.TotalSum = @DiscountSum")]
+        [Where("coalesce(@DiscountSum, 0) = 0 or o.DiscountSum = @DiscountSum")]
         public decimal? DiscountSum { get; set; }
 
         [Where("@IsDeleted is null or o.IsDeleted = @IsDeleted")]
