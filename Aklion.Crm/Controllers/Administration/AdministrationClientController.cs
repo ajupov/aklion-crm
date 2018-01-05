@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
+using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.Client;
 using Aklion.Crm.Mappers.Administration.Client;
 using Aklion.Crm.Models;
@@ -12,10 +13,14 @@ namespace Aklion.Crm.Controllers.Administration
     [Route("Administration/Clients")]
     public class AdministrationClientController : BaseController
     {
+        private readonly IAuditLogService _auditLogService;
         private readonly IClientDao _clientDao;
 
-        public AdministrationClientController(IClientDao clientDao)
+        public AdministrationClientController(
+            IAuditLogService auditLogService,
+            IClientDao clientDao)
         {
+            _auditLogService = auditLogService;
             _clientDao = clientDao;
         }
 
@@ -46,9 +51,13 @@ namespace Aklion.Crm.Controllers.Administration
         [HttpPost]
         [Route("Create")]
         [AjaxErrorHandle]
-        public Task Create(ClientModel model)
+        public async Task Create(ClientModel model)
         {
-            return _clientDao.CreateAsync(model.MapNew());
+            var newModel = model.MapNew();
+
+            newModel.Id = await _clientDao.CreateAsync(newModel).ConfigureAwait(false);
+
+            _auditLogService.LogInserting(UserContext.UserId, UserContext.StoreId, newModel);
         }
 
         [HttpPost]
@@ -56,17 +65,26 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Update(ClientModel model)
         {
-            var result = await _clientDao.GetAsync(model.Id).ConfigureAwait(false);
+            var oldModel = await _clientDao.GetAsync(model.Id).ConfigureAwait(false);
+            var oldModelClone = oldModel.Clone();
 
-            await _clientDao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);
+            var newModel = oldModel.MapFrom(model);
+
+            await _clientDao.UpdateAsync(newModel).ConfigureAwait(false);
+
+            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, newModel);
         }
 
         [HttpPost]
         [Route("Delete")]
         [AjaxErrorHandle]
-        public Task Delete(int id)
+        public async Task Delete(int id)
         {
-            return _clientDao.DeleteAsync(id);
+            var oldModel = await _clientDao.GetAsync(id).ConfigureAwait(false);
+
+            await _clientDao.DeleteAsync(id).ConfigureAwait(false);
+
+            _auditLogService.LogDeleting(UserContext.UserId, UserContext.StoreId, oldModel);
         }
     }
 }

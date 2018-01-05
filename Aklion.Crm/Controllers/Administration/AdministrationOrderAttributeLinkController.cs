@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
+using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.OrderAttributeLink;
 using Aklion.Crm.Mappers.Administration.OrderAttributeLink;
 using Aklion.Crm.Models;
@@ -11,10 +12,14 @@ namespace Aklion.Crm.Controllers.Administration
     [Route("Administration/OrderAttributeLinks")]
     public class AdministrationOrderAttributeLinkController : BaseController
     {
+        private readonly IAuditLogService _auditLogService;
         private readonly IOrderAttributeLinkDao _clientAttributeLinkDao;
 
-        public AdministrationOrderAttributeLinkController(IOrderAttributeLinkDao clientAttributeLinkDao)
+        public AdministrationOrderAttributeLinkController(
+            IAuditLogService auditLogService,
+            IOrderAttributeLinkDao clientAttributeLinkDao)
         {
+            _auditLogService = auditLogService;
             _clientAttributeLinkDao = clientAttributeLinkDao;
         }
 
@@ -30,9 +35,13 @@ namespace Aklion.Crm.Controllers.Administration
         [HttpPost]
         [Route("Create")]
         [AjaxErrorHandle]
-        public Task Create(OrderAttributeLinkModel model)
+        public async Task Create(OrderAttributeLinkModel model)
         {
-            return _clientAttributeLinkDao.CreateAsync(model.MapNew());
+            var newModel = model.MapNew();
+
+            newModel.Id = await _clientAttributeLinkDao.CreateAsync(newModel).ConfigureAwait(false);
+
+            _auditLogService.LogInserting(UserContext.UserId, UserContext.StoreId, newModel);
         }
 
         [HttpPost]
@@ -40,17 +49,26 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Update(OrderAttributeLinkModel model)
         {
-            var result = await _clientAttributeLinkDao.GetAsync(model.Id).ConfigureAwait(false);
+            var oldModel = await _clientAttributeLinkDao.GetAsync(model.Id).ConfigureAwait(false);
+            var oldModelClone = oldModel.Clone();
 
-            await _clientAttributeLinkDao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);
+            var newModel = oldModel.MapFrom(model);
+
+            await _clientAttributeLinkDao.UpdateAsync(newModel).ConfigureAwait(false);
+
+            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, newModel);
         }
 
         [HttpPost]
         [Route("Delete")]
         [AjaxErrorHandle]
-        public Task Delete(int id)
+        public async Task Delete(int id)
         {
-            return _clientAttributeLinkDao.DeleteAsync(id);
+            var oldModel = await _clientAttributeLinkDao.GetAsync(id).ConfigureAwait(false);
+
+            await _clientAttributeLinkDao.DeleteAsync(id).ConfigureAwait(false);
+
+            _auditLogService.LogDeleting(UserContext.UserId, UserContext.StoreId, oldModel);
         }
     }
 }

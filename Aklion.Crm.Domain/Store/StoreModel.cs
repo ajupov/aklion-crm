@@ -4,7 +4,7 @@ using Aklion.Infrastructure.Dao.Attributes;
 namespace Aklion.Crm.Domain.Store
 {
     [Table("dbo.Store as s")]
-    public class StoreModel
+    public class StoreModel : ICloneable
     {
         [Column("s.Id")]
         [Identificator]
@@ -28,5 +28,10 @@ namespace Aklion.Crm.Domain.Store
 
         [Column("s.ModifyDate")]
         public DateTime? ModifyDate { get; set; }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
     }
 }

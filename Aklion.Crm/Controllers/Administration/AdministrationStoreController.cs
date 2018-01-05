@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
+using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Business.Store;
 using Aklion.Crm.Dao.Store;
 using Aklion.Crm.Mappers.Administration.Store;
@@ -13,11 +14,16 @@ namespace Aklion.Crm.Controllers.Administration
     [Route("Administration/Stores")]
     public class AdministrationStoreController : BaseController
     {
+        private readonly IAuditLogService _auditLogService;
         private readonly IStoreService _storeService;
         private readonly IStoreDao _storeDao;
 
-        public AdministrationStoreController(IStoreService storeService, IStoreDao storeDao)
+        public AdministrationStoreController(
+            IAuditLogService auditLogService,
+            IStoreService storeService,
+            IStoreDao storeDao)
         {
+            _auditLogService = auditLogService;
             _storeService = storeService;
             _storeDao = storeDao;
         }
@@ -49,9 +55,13 @@ namespace Aklion.Crm.Controllers.Administration
         [HttpPost]
         [Route("Create")]
         [AjaxErrorHandle]
-        public Task Create(StoreModel model)
+        public async Task Create(StoreModel model)
         {
-            return _storeDao.CreateAsync(model.MapNew());
+            var newModel = model.MapNew();
+
+            newModel.Id = await _storeDao.CreateAsync(newModel).ConfigureAwait(false);
+
+            _auditLogService.LogInserting(UserContext.UserId, UserContext.StoreId, newModel);
         }
 
         [HttpPost]
@@ -59,17 +69,26 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Update(StoreModel model)
         {
-            var result = await _storeDao.GetAsync(model.Id).ConfigureAwait(false);
+            var oldModel = await _storeDao.GetAsync(model.Id).ConfigureAwait(false);
+            var oldModelClone = oldModel.Clone();
 
-            await _storeDao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);
+            var newModel = oldModel.MapFrom(model);
+
+            await _storeDao.UpdateAsync(newModel).ConfigureAwait(false);
+
+            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, newModel);
         }
 
         [HttpPost]
         [Route("Delete")]
         [AjaxErrorHandle]
-        public Task Delete(int id)
+        public async Task Delete(int id)
         {
-            return _storeDao.DeleteAsync(id);
+            var oldModel = await _storeDao.GetAsync(id).ConfigureAwait(false);
+
+            await _storeDao.DeleteAsync(id).ConfigureAwait(false);
+
+            _auditLogService.LogDeleting(UserContext.UserId, UserContext.StoreId, oldModel);
         }
 
         [HttpPost]
@@ -77,7 +96,7 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public Task<string> GenerateApiSecret(int id)
         {
-            return _storeService.GenerateApiSecretAsync(id);
+            return _storeService.GenerateApiSecretAsync(UserContext.UserId, UserContext.StoreId, id);
         }
     }
 }

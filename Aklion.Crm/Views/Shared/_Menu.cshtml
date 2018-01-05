@@ -12,10 +12,6 @@
                 <i class="fa fa-dashboard"></i>
             </a>
 
-            <a asp-controller="AdministrationAuditLog" asp-action="Index" class="link left">
-                Аудит действий
-            </a>
-
             <a asp-controller="AdministrationUser" asp-action="Index" class="link left">
                 Пользователи
             </a>
@@ -65,7 +61,7 @@
 
         <a class="avatar-link right" id="dropdown-menu-link">
             <span>@ViewBag.UserContext.UserLogin</span>
-            <img src="~/images/avatars/no-avatar.png" alt="Аватар" />
+            <img src="/images/avatars/no-avatar.png" alt="Аватар" />
             <i class="fa fa-caret-down"></i>
         </a>
 

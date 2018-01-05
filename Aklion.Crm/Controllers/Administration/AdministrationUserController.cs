@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
+using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.User;
 using Aklion.Crm.Mappers.Administration.User;
 using Aklion.Crm.Models;
@@ -12,10 +13,14 @@ namespace Aklion.Crm.Controllers.Administration
     [Route("Administration/Users")]
     public class AdministrationUserController : BaseController
     {
+        private readonly IAuditLogService _auditLogService;
         private readonly IUserDao _userDao;
 
-        public AdministrationUserController(IUserDao userDao)
+        public AdministrationUserController(
+            IAuditLogService auditLogService,
+            IUserDao userDao)
         {
+            _auditLogService = auditLogService;
             _userDao = userDao;
         }
 
@@ -46,19 +51,28 @@ namespace Aklion.Crm.Controllers.Administration
         [HttpPost]
         [Route("Update")]
         [AjaxErrorHandle]
-        public async Task<bool> Update(UserModel model)
+        public async Task Update(UserModel model)
         {
-            var user = await _userDao.GetAsync(model.Id).ConfigureAwait(false);
+            var oldModel = await _userDao.GetAsync(model.Id).ConfigureAwait(false);
+            var oldModelClone = oldModel.Clone();
 
-            return await _userDao.UpdateAsync(user.MapFrom(model)).ConfigureAwait(false);
+            var newModel = oldModel.MapFrom(model);
+
+            await _userDao.UpdateAsync(newModel).ConfigureAwait(false);
+
+            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, newModel);
         }
 
         [HttpPost]
         [Route("Delete")]
         [AjaxErrorHandle]
-        public Task<bool> Delete(int id)
+        public async Task Delete(int id)
         {
-            return _userDao.DeleteAsync(id);
+            var oldModel = await _userDao.GetAsync(id).ConfigureAwait(false);
+
+            await _userDao.DeleteAsync(id).ConfigureAwait(false);
+
+            _auditLogService.LogDeleting(UserContext.UserId, UserContext.StoreId, oldModel);
         }
     }
 }

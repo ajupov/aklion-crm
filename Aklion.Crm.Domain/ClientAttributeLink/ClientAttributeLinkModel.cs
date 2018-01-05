@@ -7,7 +7,7 @@ namespace Aklion.Crm.Domain.ClientAttributeLink
     [Join("inner join dbo.Store as s on cal.StoreId = s.Id " +
           "inner join dbo.Client as c on cal.ClientId = c.Id " +
           "inner join dbo.ClientAttribute as ca on cal.AttributeId = ca.Id")]
-    public class ClientAttributeLinkModel
+    public class ClientAttributeLinkModel : ICloneable
     {
         [Column("cal.Id")]
         [Identificator]
@@ -47,5 +47,10 @@ namespace Aklion.Crm.Domain.ClientAttributeLink
         [Column("cal.ModifyDate")]
         [ModifyDate]
         public DateTime? ModifyDate { get; set; }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
     }
 }

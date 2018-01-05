@@ -10,12 +10,7 @@
     <div class="row">
         <div class="col s12 m4 l3">
             <div class="card pading-10 margin-10">
-                <img src="@(
-    !string.IsNullOrWhiteSpace(Model.AvatarUrl)
-        ? Model.AvatarUrl
-        : "https://pp.userapi.com/c615719/v615719487/1992f/WZh60KWF5F8.jpg"
-                                /*"/images/avatars/no-avatar.png"*/)"
-                     class="responsible-image" alt="Аватар"/>
+                <img src="@(Model.AvatarUrl ?? "/images/avatars/no-avatar.png")" class="responsible-image" alt="Аватар"/>
                 <div class="separator"></div>
                 <a href="#" class="text-link">Изменить фотографию</a>
                 <br>
@@ -49,7 +44,7 @@
                     <br>
                     <span class="label">Пол:</span> @Model.Gender.GetDisplayName()
                     <br>
-                    <span class="label">Дата рождения:</span> @Model.BirthDate.ToDateString()
+                    <span class="label">Дата рождения:</span> @Model.BirthDate?.ToDateString()
                 </blockquote>
             </div>
         </div>

@@ -5,7 +5,7 @@ namespace Aklion.Crm.Domain.OrderSource
 {
     [Table("dbo.OrderSource as oso")]
     [Join("inner join dbo.Store as s on oso.StoreId = s.Id")]
-    public class OrderSourceModel
+    public class OrderSourceModel : ICloneable
     {
         [Column("oso.Id")]
         [Identificator]
@@ -26,5 +26,10 @@ namespace Aklion.Crm.Domain.OrderSource
 
         [Column("oso.ModifyDate")]
         public DateTime? ModifyDate { get; set; }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
     }
 }

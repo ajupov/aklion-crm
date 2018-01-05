@@ -2,10 +2,37 @@
     ViewBag.Title = "Консоль администратора";
 }
 
-<h3>@ViewBag.Title</h3>
-<div class="card pading-10">
-    <p>Всего пользователей: 0</p>
-    <p>Всего магазинов: 0</p>
-    <p>Всего клиентов: 0</p>
-    <p>Всего заказов: 0</p>
+<div class="row card">
+    <button class="tab-button" onclick="openTab(this, 'general-tab'); initGeneral();">@ViewBag.Title</button>
+    <button class="tab-button" onclick="openTab(this, 'audit-logs-tab'); initAuditLogsTable();">Аудит действий</button>
 </div>
+
+<div id="general-tab" class="hidden tab card">
+    <div class="row">
+        <div class="col s12 m12 l12">
+            <div id="general-div" class="pading-10"></div>
+        </div>
+    </div>
+</div>
+
+<div id="audit-logs-tab" class="hidden tab card">
+    <div class="row">
+        <div class="col s12 m12 l12">
+            <div class="horisontal-scrollable pading-10">
+                <table id="audit-logs-table"></table>
+                <div id="audit-logs-table-pagination"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        <environment names="Development">
+            <script src="~/scripts/administration/console/index.js"></script>
+        </environment>
+        <environment names="Staging,Production">
+            <script src="~/scripts/administration/console/index.min.js"></script>
+        </environment>
+    }
+}

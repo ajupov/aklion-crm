@@ -5,7 +5,7 @@ namespace Aklion.Crm.Domain.ProductStatus
 {
     [Table("dbo.ProductStatus as ps")]
     [Join("inner join dbo.Store as s on ps.StoreId = s.Id")]
-    public class ProductStatusModel
+    public class ProductStatusModel : ICloneable
     {
         [Column("ps.Id")]
         [Identificator]
@@ -26,5 +26,10 @@ namespace Aklion.Crm.Domain.ProductStatus
 
         [Column("ps.ModifyDate")]
         public DateTime? ModifyDate { get; set; }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
     }
 }

@@ -7,7 +7,7 @@ namespace Aklion.Crm.Domain.UserAttributeLink
     [Join("inner join dbo.Store as s on ual.StoreId = s.Id " +
           "inner join dbo.[User] as u on ual.UserId = u.Id " +
           "inner join dbo.UserAttribute as ua on ual.AttributeId = ua.Id")]
-    public class UserAttributeLinkModel
+    public class UserAttributeLinkModel : ICloneable
     {
         [Column("ual.Id")]
         [Identificator]
@@ -47,5 +47,10 @@ namespace Aklion.Crm.Domain.UserAttributeLink
         [Column("ual.ModifyDate")]
         [ModifyDate]
         public DateTime? ModifyDate { get; set; }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
     }
 }

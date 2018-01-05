@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.Store;
 using Aklion.Infrastructure.Random;
 
@@ -6,22 +7,29 @@ namespace Aklion.Crm.Business.Store
 {
     public class StoreService : IStoreService
     {
+        private readonly IAuditLogService _auditLogService;
         private readonly IStoreDao _storeDao;
 
-        public StoreService(IStoreDao storeDao)
+        public StoreService(
+            IAuditLogService auditLogService,
+            IStoreDao storeDao)
         {
+            _auditLogService = auditLogService;
             _storeDao = storeDao;
         }
 
-        public async Task<string> GenerateApiSecretAsync(int id)
+        public async Task<string> GenerateApiSecretAsync(int userId, int storeId, int id)
         {
-            var store = await _storeDao.GetAsync(id).ConfigureAwait(false);
+            var model = await _storeDao.GetAsync(id).ConfigureAwait(false);
+            var oldModelClone = model.Clone();
 
-            store.ApiSecret = RandomGenerator.GenerateAlphaNumbericString(16);
+            model.ApiSecret = RandomGenerator.GenerateAlphaNumbericString(16);
 
-            await _storeDao.UpdateAsync(store).ConfigureAwait(false);
+            await _storeDao.UpdateAsync(model).ConfigureAwait(false);
 
-            return store.ApiSecret;
+            _auditLogService.LogUpdating(userId, storeId, oldModelClone, model);
+
+            return model.ApiSecret;
         }
     }
 }

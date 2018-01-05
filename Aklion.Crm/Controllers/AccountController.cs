@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Business.ImageLoad;
 using Aklion.Crm.Business.Mail;
 using Aklion.Crm.Business.Sms;
@@ -20,6 +21,7 @@ namespace Aklion.Crm.Controllers
     public class AccountController : BaseController
     {
         private readonly ILogger _logger;
+        private readonly IAuditLogService _auditLogService;
         private readonly IMailService _mailService;
         private readonly ISmsService _smsService;
         private readonly IImageLoadService _imageLoadService;
@@ -29,6 +31,7 @@ namespace Aklion.Crm.Controllers
 
         public AccountController(
             ILogger logger,
+            IAuditLogService auditLogService,
             IMailService mailService,
             ISmsService smsService,
             IImageLoadService imageLoadService,
@@ -37,6 +40,7 @@ namespace Aklion.Crm.Controllers
             IUserContextDao userContextDao)
         {
             _logger = logger;
+            _auditLogService = auditLogService;
             _mailService = mailService;
             _smsService = smsService;
             _imageLoadService = imageLoadService;
@@ -271,6 +275,8 @@ namespace Aklion.Crm.Controllers
             user.PasswordHash = PasswordHelper.Generate(model.Password);
             user.Id = await _userDao.CreateAsync(user).ConfigureAwait(false);
 
+            _auditLogService.LogInserting(UserContext.UserId, UserContext.StoreId, user);
+
             _logger.LogInfo("AccountController.Register(). Registered.", 0,
                 new
                 {
@@ -410,9 +416,13 @@ namespace Aklion.Crm.Controllers
                 Code = code
             });
 
+            var oldUserClone = user.Clone();
+
             user.IsEmailConfirmed = true;
 
             await _userDao.UpdateAsync(user).ConfigureAwait(false);
+
+            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldUserClone, user);
 
             _logger.LogInfo("AccountController.ConfirmEmail(). User.IsEmailConfirmed = true.", 0, new
             {
@@ -461,9 +471,13 @@ namespace Aklion.Crm.Controllers
                 return View(model);
             }
 
+            var oldUserClone = user.Clone();
+
             user.PasswordHash = PasswordHelper.Generate(model.Password);
 
             await _userDao.UpdateAsync(user).ConfigureAwait(false);
+
+            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldUserClone, user);
 
             _logger.LogInfo("AccountController.ChangePassword(). Password changed.", UserContext.UserId);
 
@@ -526,10 +540,14 @@ namespace Aklion.Crm.Controllers
                 return View(model);
             }
 
+            var oldUserClone = user.Clone();
+
             user.Email = model.Email;
             user.IsEmailConfirmed = false;
 
             await _userDao.UpdateAsync(user).ConfigureAwait(false);
+
+            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldUserClone, user);
 
             _logger.LogInfo("AccountController.ChangeEmail(). Email changed.", UserContext.UserId, new
             {
@@ -592,10 +610,14 @@ namespace Aklion.Crm.Controllers
                 return View(model);
             }
 
+            var oldUserClone = user.Clone();
+
             user.Phone = model.Phone.ExtractPhoneNumber();
             user.IsPhoneConfirmed = false;
 
             await _userDao.UpdateAsync(user).ConfigureAwait(false);
+
+            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldUserClone, user);
 
             _logger.LogInfo("AccountController.ChangePhone(). Phone changed.", UserContext.UserId, new
             {
@@ -672,9 +694,13 @@ namespace Aklion.Crm.Controllers
                 model.Code
             });
 
+            var oldUserClone = user.Clone();
+
             user.IsPhoneConfirmed = true;
 
             await _userDao.UpdateAsync(user).ConfigureAwait(false);
+
+            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldUserClone, user);
 
             _logger.LogInfo("AccountController.VerifySmsCode(). User.IsPhoneConfirmed = true.", UserContext.UserId, new
             {
@@ -729,10 +755,13 @@ namespace Aklion.Crm.Controllers
                 return View("Error");
             }
 
+            var oldUserClone = user.Clone();
 
             user.MapFrom(model);
 
             await _userDao.UpdateAsync(user).ConfigureAwait(false);
+
+            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldUserClone, user);
 
             _logger.LogInfo("AccountController.ChangePersonalInfo(). Personal info changed.", UserContext.UserId,
                 model);
@@ -854,9 +883,13 @@ namespace Aklion.Crm.Controllers
                 model.Code
             });
 
+            var oldUserClone = user.Clone();
+
             user.PasswordHash = PasswordHelper.Generate(model.Password);
 
             await _userDao.UpdateAsync(user).ConfigureAwait(false);
+
+            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldUserClone, user);
 
             _logger.LogInfo("AccountController.ResetPassword(). User.PasswordHash updated.", 0, new
             {

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
+using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.OrderStatus;
 using Aklion.Crm.Mappers.Administration.OrderStatus;
 using Aklion.Crm.Models;
@@ -12,10 +13,14 @@ namespace Aklion.Crm.Controllers.Administration
     [Route("Administration/OrderStatuses")]
     public class AdministrationOrderStatusController : BaseController
     {
+        private readonly IAuditLogService _auditLogService;
         private readonly IOrderStatusDao _orderStatusDao;
 
-        public AdministrationOrderStatusController(IOrderStatusDao orderStatusDao)
+        public AdministrationOrderStatusController(
+            IAuditLogService auditLogService,
+            IOrderStatusDao orderStatusDao)
         {
+            _auditLogService = auditLogService;
             _orderStatusDao = orderStatusDao;
         }
 
@@ -38,9 +43,13 @@ namespace Aklion.Crm.Controllers.Administration
         [HttpPost]
         [Route("Create")]
         [AjaxErrorHandle]
-        public Task Create(OrderStatusModel model)
+        public async Task Create(OrderStatusModel model)
         {
-            return _orderStatusDao.CreateAsync(model.MapNew());
+            var newModel = model.MapNew();
+
+            newModel.Id = await _orderStatusDao.CreateAsync(newModel).ConfigureAwait(false);
+
+            _auditLogService.LogInserting(UserContext.UserId, UserContext.StoreId, newModel);
         }
 
         [HttpPost]
@@ -48,17 +57,26 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Update(OrderStatusModel model)
         {
-            var result = await _orderStatusDao.GetAsync(model.Id).ConfigureAwait(false);
+            var oldModel = await _orderStatusDao.GetAsync(model.Id).ConfigureAwait(false);
+            var oldModelClone = oldModel.Clone();
 
-            await _orderStatusDao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);
+            var newModel = oldModel.MapFrom(model);
+
+            await _orderStatusDao.UpdateAsync(newModel).ConfigureAwait(false);
+
+            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, newModel);
         }
 
         [HttpPost]
         [Route("Delete")]
         [AjaxErrorHandle]
-        public Task Delete(int id)
+        public async Task Delete(int id)
         {
-            return _orderStatusDao.DeleteAsync(id);
+            var oldModel = await _orderStatusDao.GetAsync(id).ConfigureAwait(false);
+
+            await _orderStatusDao.DeleteAsync(id).ConfigureAwait(false);
+
+            _auditLogService.LogDeleting(UserContext.UserId, UserContext.StoreId, oldModel);
         }
     }
 }

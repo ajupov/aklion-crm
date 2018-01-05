@@ -13,13 +13,15 @@ namespace Aklion.Crm.Controllers.Administration
     [Route("Administration/ClientAttributes")]
     public class AdministrationClientAttributeController : BaseController
     {
-        private readonly IClientAttributeDao _clientAttributeDao;
         private readonly IAuditLogService _auditLogService;
+        private readonly IClientAttributeDao _clientAttributeDao;
 
-        public AdministrationClientAttributeController(IClientAttributeDao clientAttributeDao, IAuditLogService auditLogService)
+        public AdministrationClientAttributeController(
+            IAuditLogService auditLogService,
+            IClientAttributeDao clientAttributeDao)
         {
-            _clientAttributeDao = clientAttributeDao;
             _auditLogService = auditLogService;
+            _clientAttributeDao = clientAttributeDao;
         }
 
         [HttpGet]

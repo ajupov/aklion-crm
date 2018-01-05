@@ -7,7 +7,7 @@ namespace Aklion.Crm.Domain.OrderAttributeLink
     [Join("inner join dbo.Store as s on oal.StoreId = s.Id " +
           "inner join dbo.Order as c on oal.OrderId = c.Id " +
           "inner join dbo.OrderAttribute as oa on oal.AttributeId = oa.Id")]
-    public class OrderAttributeLinkModel
+    public class OrderAttributeLinkModel : ICloneable
     {
         [Column("oal.Id")]
         [Identificator]
@@ -44,5 +44,10 @@ namespace Aklion.Crm.Domain.OrderAttributeLink
         [Column("oal.ModifyDate")]
         [ModifyDate]
         public DateTime? ModifyDate { get; set; }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
     }
 }

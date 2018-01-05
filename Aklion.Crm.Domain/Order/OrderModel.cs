@@ -8,7 +8,7 @@ namespace Aklion.Crm.Domain.Order
           "inner join dbo.Client as c on o.ClientId = c.Id " +
           "inner join dbo.OrderSource as oso on o.SourceId = oso.Id " +
           "inner join dbo.OrderStatus as ost on o.StatusId = ost.Id")]
-    public class OrderModel
+    public class OrderModel : ICloneable
     {
         [Column("o.Id")]
         public int Id { get; set; }
@@ -51,5 +51,10 @@ namespace Aklion.Crm.Domain.Order
 
         [Column("o.ModifyDate")]
         public DateTime? ModifyDate { get; set; }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
     }
 }

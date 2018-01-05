@@ -18,14 +18,6 @@ namespace Aklion.Crm.Controllers.Administration
         }
 
         [HttpGet]
-        [Route("")]
-        [Route("Index")]
-        public IActionResult Index()
-        {
-            return View("~/Views/Administration/AuditLog/Index.cshtml");
-        }
-
-        [HttpGet]
         [Route("GetList")]
         public async Task<PagingModel<AuditLogModel>> GetList(AuditLogParameterModel model)
         {

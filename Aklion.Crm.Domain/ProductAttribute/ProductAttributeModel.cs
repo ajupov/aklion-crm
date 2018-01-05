@@ -5,7 +5,7 @@ namespace Aklion.Crm.Domain.ProductAttribute
 {
     [Table("dbo.ProductAttribute as pa")]
     [Join("inner join dbo.Store as s on pa.StoreId = s.Id")]
-    public class ProductAttributeModel
+    public class ProductAttributeModel : ICloneable
     {
         [Column("pa.Id")]
         [Identificator]
@@ -34,5 +34,10 @@ namespace Aklion.Crm.Domain.ProductAttribute
         [Column("pa.ModifyDate")]
         [ModifyDate]
         public DateTime? ModifyDate { get; set; }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
     }
 }

@@ -7,7 +7,7 @@ namespace Aklion.Crm.Domain.UserPermission
     [Table("dbo.UserPermission as up")]
     [Join("inner join dbo.[User] as u on up.UserId = u.Id " +
           "left outer join dbo.Store as s on up.StoreId = s.Id")]
-    public class UserPermissionModel
+    public class UserPermissionModel : ICloneable
     {
         [Column("up.Id")]
         [Identificator]
@@ -35,5 +35,10 @@ namespace Aklion.Crm.Domain.UserPermission
         [Column("up.ModifyDate")]
         [ModifyDate]
         public DateTime? ModifyDate { get; set; }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
     }
 }

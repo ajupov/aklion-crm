@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
+using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.UserPermission;
 using Aklion.Crm.Enums;
 using Aklion.Crm.Mappers.Administration.UserPermission;
@@ -12,10 +13,14 @@ namespace Aklion.Crm.Controllers.Administration
     [Route("Administration/UserPermissions")]
     public class AdministrationUserPermissionController : BaseController
     {
+        private readonly IAuditLogService _auditLogService;
         private readonly IUserPermissionDao _userPermissionDao;
 
-        public AdministrationUserPermissionController(IUserPermissionDao userPermissionDao)
+        public AdministrationUserPermissionController(
+            IUserPermissionDao userPermissionDao,
+            IAuditLogService auditLogService)
         {
+            _auditLogService = auditLogService;
             _userPermissionDao = userPermissionDao;
         }
 
@@ -31,14 +36,13 @@ namespace Aklion.Crm.Controllers.Administration
         [HttpPost]
         [Route("Create")]
         [AjaxErrorHandle]
-        public Task Create(UserPermissionModel model)
+        public async Task Create(UserPermissionModel model)
         {
-            if (model.Permission == Permission.None)
-            {
-                return Task.CompletedTask;
-            }
+            var newModel = model.MapNew();
 
-            return _userPermissionDao.CreateAsync(model.MapNew());
+            newModel.Id = await _userPermissionDao.CreateAsync(newModel).ConfigureAwait(false);
+
+            _auditLogService.LogInserting(UserContext.UserId, UserContext.StoreId, newModel);
         }
 
         [HttpPost]
@@ -46,22 +50,26 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Update(UserPermissionModel model)
         {
-            if (model.Permission == Permission.None)
-            {
-                return;
-            }
+            var oldModel = await _userPermissionDao.GetAsync(model.Id).ConfigureAwait(false);
+            var oldModelClone = oldModel.Clone();
 
-            var userPermission = await _userPermissionDao.GetAsync(model.Id).ConfigureAwait(false);
+            var newModel = oldModel.MapFrom(model);
 
-            await _userPermissionDao.UpdateAsync(userPermission.MapFrom(model)).ConfigureAwait(false);
+            await _userPermissionDao.UpdateAsync(newModel).ConfigureAwait(false);
+
+            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, newModel);
         }
 
         [HttpPost]
         [Route("Delete")]
         [AjaxErrorHandle]
-        public Task Delete(int id)
+        public async Task Delete(int id)
         {
-            return _userPermissionDao.DeleteAsync(id);
+            var oldModel = await _userPermissionDao.GetAsync(id).ConfigureAwait(false);
+
+            await _userPermissionDao.DeleteAsync(id).ConfigureAwait(false);
+
+            _auditLogService.LogDeleting(UserContext.UserId, UserContext.StoreId, oldModel);
         }
     }
 }
