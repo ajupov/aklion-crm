@@ -20,9 +20,9 @@ namespace Aklion.Crm.Dao.OrderStatus
             return _dao.GetPagedListAsync<OrderStatusModel, OrderStatusParameterModel>(parameter);
         }
 
-        public Task<Dictionary<string, int>> GetForAutocompleteAsync(OrderStatusAutocompleteParameterModel parameter)
+        public Task<Dictionary<string, int>> GetForSelectAsync(OrderStatusSelectParameterModel parameter)
         {
-            return _dao.GetForAutoCompleteAsync<OrderStatusModel, OrderStatusAutocompleteParameterModel>(parameter);
+            return _dao.GetForSelectAsync<OrderStatusModel, OrderStatusSelectParameterModel>(parameter);
         }
 
         public Task<OrderStatusModel> GetAsync(int id)

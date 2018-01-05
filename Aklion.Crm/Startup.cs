@@ -1,5 +1,4 @@
-﻿using Aklion.Crm.Business.ActionType;
-using Aklion.Crm.Business.AuditLog;
+﻿using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Business.ImageLoad;
 using Aklion.Crm.Business.Mail;
 using Aklion.Crm.Business.Mail.Models;
@@ -71,7 +70,6 @@ namespace Aklion.Crm
                 .AddSingleton<IReader, Reader>()
                 .AddSingleton<ILogger, Logger>()
                 .AddSingleton<IReader, Reader>()
-                .AddSingleton<IActionTypeService, ActionTypeService>()
                 .AddSingleton<IAuditLogService, AuditLogService>()
                 .AddSingleton<IImageLoadService, ImageLoadService>()
                 .AddSingleton<IMailService, MailService>()

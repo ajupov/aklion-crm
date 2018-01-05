@@ -31,8 +31,12 @@ function initAuditLogsTable() {
                 Formatter: administrationUserLinkFormatter, Unformatter: linkUnFormatter
             },
             {
+                Name: 'ObjectType', Label: 'Тип объекта', Type: 'select', Editable: true, Sortable: false,
+                SelectValues: getSelectValues('/Administration/AuditLogs/GetObjectTypesForSelect'), Width: 120
+            },
+            {
                 Name: 'ActionType', Label: 'Действие', Type: 'select', Editable: true, Sortable: false,
-                SelectValues: getSelectValues('/Administration/ActionTypes/GetForSelect'), Width: 240
+                SelectValues: getSelectValues('/Administration/AuditLogs/GetActionTypesForSelect'), Width: 120
             },
             { Name: 'OldValue', Label: 'Старое значение', Width: 250 },
             { Name: 'NewValue', Label: 'Новое значение', Width: 250 },

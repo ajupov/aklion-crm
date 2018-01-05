@@ -3,7 +3,7 @@ using Aklion.Infrastructure.Dao.Attributes;
 
 namespace Aklion.Crm.Domain.Order
 {
-    [Table("dbo.Order as o")]
+    [Table("dbo.[Order] as o")]
     [Join("inner join dbo.Store as s on o.StoreId = s.Id " +
           "inner join dbo.Client as c on o.ClientId = c.Id " +
           "inner join dbo.OrderSource as oso on o.SourceId = oso.Id " +

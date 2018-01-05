@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.OrderSource;
 using Aklion.Infrastructure.Mapper;
 using DomainOrderSourceModel = Aklion.Crm.Domain.OrderSource.OrderSourceModel;
 using DomainOrderSourceParameterModel = Aklion.Crm.Domain.OrderSource.OrderSourceParameterModel;
-using DomainOrderSourceAutocompleteParameterModel = Aklion.Crm.Domain.OrderSource.OrderSourceAutocompleteParameterModel;
+using DomainOrderSourceSelectParameterModel = Aklion.Crm.Domain.OrderSource.OrderSourceSelectParameterModel;
 
 namespace Aklion.Crm.Mappers.Administration.OrderSource
 {
@@ -31,13 +32,19 @@ namespace Aklion.Crm.Mappers.Administration.OrderSource
             return model.MapParameterNew<DomainOrderSourceParameterModel>();
         }
 
-        public static DomainOrderSourceAutocompleteParameterModel MapNew(this string pattern, int storeId)
+        public static DomainOrderSourceSelectParameterModel MapNew(this int storeId)
         {
-            return new DomainOrderSourceAutocompleteParameterModel
+            return new DomainOrderSourceSelectParameterModel
             {
-                Name = pattern,
                 StoreId = storeId
             };
+        }
+
+        public static Dictionary<string, int> MapNew(this Dictionary<string, int> models)
+        {
+            models.TryAdd(string.Empty, 0);
+
+            return models.OrderBy(k => k.Key).ToDictionary(k => k.Key, v => v.Value);
         }
     }
 }

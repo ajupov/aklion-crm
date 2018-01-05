@@ -20,9 +20,9 @@ namespace Aklion.Crm.Dao.OrderSource
             return _dao.GetPagedListAsync<OrderSourceModel, OrderSourceParameterModel>(parameter);
         }
 
-        public Task<Dictionary<string, int>> GetForAutocompleteAsync(OrderSourceAutocompleteParameterModel parameter)
+        public Task<Dictionary<string, int>> GetForSelectAsync(OrderSourceSelectParameterModel parameter)
         {
-            return _dao.GetForAutoCompleteAsync<OrderSourceModel, OrderSourceAutocompleteParameterModel>(parameter);
+            return _dao.GetForSelectAsync<OrderSourceModel, OrderSourceSelectParameterModel>(parameter);
         }
 
         public Task<OrderSourceModel> GetAsync(int id)

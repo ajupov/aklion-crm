@@ -5,7 +5,7 @@ namespace Aklion.Crm.Domain.OrderItem
 {
     [Table("dbo.OrderItem as oi")]
     [Join("inner join dbo.Store as s on oi.StoreId = s.Id " +
-          "inner join dbo.Order as o on oi.OrderId = o.Id " +
+          "inner join dbo.[Order] as o on oi.OrderId = o.Id " +
           "inner join dbo.Product as p on oi.ProductId = p.Id")]
     public class OrderItemModel : ICloneable
     {

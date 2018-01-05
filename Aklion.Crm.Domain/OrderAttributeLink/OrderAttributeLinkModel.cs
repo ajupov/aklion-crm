@@ -5,7 +5,7 @@ namespace Aklion.Crm.Domain.OrderAttributeLink
 {
     [Table("dbo.OrderAttributeLink as oal")]
     [Join("inner join dbo.Store as s on oal.StoreId = s.Id " +
-          "inner join dbo.Order as c on oal.OrderId = c.Id " +
+          "inner join dbo.[Order] as c on oal.OrderId = c.Id " +
           "inner join dbo.OrderAttribute as oa on oal.AttributeId = oa.Id")]
     public class OrderAttributeLinkModel : ICloneable
     {

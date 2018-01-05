@@ -12,7 +12,7 @@ namespace Aklion.Crm.Domain.Order
         [Where("@StoreId is null or o.StoreId = @StoreId")]
         public int? StoreId { get; set; }
 
-        [Where("@Name is null or s.Name like @Name + '%'")]
+        [Where("@StoreName is null or s.Name like @StoreName + '%'")]
         public string StoreName { get; set; }
 
         [Where("@ClientId is null or o.ClientId = @ClientId")]

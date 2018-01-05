@@ -16,6 +16,8 @@ namespace Aklion.Crm.Models.Administration.AuditLog
 
         public AuditLogActionType? ActionType { get; set; }
 
+        public AuditLogObjectType? ObjectType { get; set; }
+
         public string OldValue { get; set; }
 
         public string NewValue { get; set; }

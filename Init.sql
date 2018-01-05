@@ -106,7 +106,6 @@ create table dbo.ProductStatus
     ModifyDate datetime2(7) null,
 );
 go
-
 -- Продукт (товар или услуга)
 create table dbo.Product
 (
@@ -274,8 +273,9 @@ create table dbo.[AuditLog]
     UserId      int          null,
     StoreId     int          null,
     ActionType  tinyint      not null,
-    [OldValue]  varchar(max) not null,
-    [NewValue]  varchar(max) not null,
+	ObjectType  tinyint      not null,
+    [OldValue]  varchar(max) null,
+    [NewValue]  varchar(max) null,
     [TimeStamp] datetime2(7) not null
 );
 go

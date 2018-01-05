@@ -28,6 +28,9 @@ namespace Aklion.Crm.Domain.AuditLog
         [Column("al.ActionType")]
         public AuditLogActionType ActionType { get; set; }
 
+        [Column("al.ObjectType")]
+        public AuditLogObjectType ObjectType { get; set; }
+
         [Column("al.OldValue")]
         public string OldValue { get; set; }
 

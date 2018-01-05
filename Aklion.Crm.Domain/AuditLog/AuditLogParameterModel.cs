@@ -25,6 +25,9 @@ namespace Aklion.Crm.Domain.AuditLog
         [Where("coalesce(@ActionType, 0) = 0 or al.ActionType = @ActionType")]
         public AuditLogActionType? ActionType { get; set; }
 
+        [Where("coalesce(@ObjectType, 0) = 0 or al.ObjectType = @ObjectType")]
+        public AuditLogObjectType? ObjectType { get; set; }
+
         [Where("@OldValue is null or al.OldValue like @OldValue + '%'")]
         public string OldValue { get; set; }
 

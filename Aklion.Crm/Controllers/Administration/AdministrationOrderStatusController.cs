@@ -34,10 +34,12 @@ namespace Aklion.Crm.Controllers.Administration
         }
 
         [HttpGet]
-        [Route("GetForAutocompleteByNamePattern")]
-        public Task<Dictionary<string, int>> GetForAutocompleteByNamePattern(string pattern, int storeId = 0)
+        [Route("GetForSelect")]
+        public async Task<Dictionary<string, int>> GetList(int storeId = 0)
         {
-            return _orderStatusDao.GetForAutocompleteAsync(pattern.MapNew(storeId));
+            var result = await _orderStatusDao.GetForSelectAsync(storeId.MapNew()).ConfigureAwait(false);
+
+            return result.MapNew();
         }
 
         [HttpPost]
