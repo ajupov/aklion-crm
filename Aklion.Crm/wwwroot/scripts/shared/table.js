@@ -123,7 +123,7 @@ function createTable(options) {
         height: 'auto',
         pager: options.Pager,
         width: '100%',
-        sortname: 'CreateDate',
+        sortname: options.SortingColumn !== null && options.SortingColumn !== undefined ? options.SortingColumn : 'CreateDate',
         sortorder: 'desc',
         caption: options.Title,
         viewrecords: true,

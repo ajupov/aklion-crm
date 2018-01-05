@@ -6,7 +6,7 @@ namespace Aklion.Crm.Domain.AuditLog
 {
     [Table("dbo.AuditLog as al")]
     [Join("inner join dbo.[User] as u on al.UserId = u.Id " +
-          "inner join dbo.Store as s on al.StoreId = s.Id")]
+          "left outer join dbo.Store as s on al.StoreId = s.Id")]
     public class AuditLogModel
     {
         [Column("al.Id")]

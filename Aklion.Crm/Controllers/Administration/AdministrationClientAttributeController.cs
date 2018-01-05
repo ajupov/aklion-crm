@@ -56,11 +56,13 @@ namespace Aklion.Crm.Controllers.Administration
         public async Task Update(ClientAttributeModel model)
         {
             var oldModel = await _clientAttributeDao.GetAsync(model.Id).ConfigureAwait(false);
+            var oldModelClone = oldModel.Clone();
+
             var newModel = oldModel.MapFrom(model);
 
             await _clientAttributeDao.UpdateAsync(newModel).ConfigureAwait(false);
 
-            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModel, newModel);
+            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, newModel);
         }
 
         [HttpPost]

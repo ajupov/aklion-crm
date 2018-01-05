@@ -22,7 +22,7 @@ namespace Aklion.Crm.Domain.AuditLog
         [Where("@StoreName is null or s.Name like @StoreName + '%'")]
         public string StoreName { get; set; }
 
-        [Where("@ActionType is null or al.ActionType = @ActionType")]
+        [Where("coalesce(@ActionType, 0) = 0 or al.ActionType = @ActionType")]
         public AuditLogActionType? ActionType { get; set; }
 
         [Where("@OldValue is null or al.OldValue like @OldValue + '%'")]

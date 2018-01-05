@@ -269,18 +269,20 @@ namespace Aklion.Infrastructure.Query
 
         public static string Build(this QueryObject queryObject)
         {
+            const string noLockSelectCommand = "set nocount on; set transaction isolation level read uncommitted;";
+
             switch (queryObject.QueryType)
             {
                 case QueryType.SelectCount:
-                    return $"select count(0) from {queryObject.TableName} {queryObject.Joins} {queryObject.Filters};";
+                    return $"{noLockSelectCommand} select count(0) from {queryObject.TableName} {queryObject.Joins} {queryObject.Filters};";
                 case QueryType.SelectOne:
-                    return $"select top 1 {queryObject.ColumnsForSelect} from {queryObject.TableName} {queryObject.Joins} {queryObject.Filters};";
+                    return $"{noLockSelectCommand} select top 1 {queryObject.ColumnsForSelect} from {queryObject.TableName} {queryObject.Joins} {queryObject.Filters};";
                 case QueryType.SelectList:
-                    return $"select {queryObject.ColumnsForSelect} from {queryObject.TableName} {queryObject.Joins} {queryObject.Filters};";
+                    return $"{noLockSelectCommand} select {queryObject.ColumnsForSelect} from {queryObject.TableName} {queryObject.Joins} {queryObject.Filters};";
                 case QueryType.SelectPagedList:
-                    return $"select {queryObject.ColumnsForSelect} from {queryObject.TableName} {queryObject.Joins} {queryObject.Filters} {queryObject.Sorting} {queryObject.Paging};";
+                    return $"{noLockSelectCommand} select {queryObject.ColumnsForSelect} from {queryObject.TableName} {queryObject.Joins} {queryObject.Filters} {queryObject.Sorting} {queryObject.Paging};";
                 case QueryType.SelectForAutocompleteOrSelect:
-                    return $"select {queryObject.ColumnsForAutocomplete} from {queryObject.TableName} {queryObject.Filters};";
+                    return $"{noLockSelectCommand} select {queryObject.ColumnsForAutocomplete} from {queryObject.TableName} {queryObject.Filters};";
                 case QueryType.Insert:
                     return $"insert {queryObject.TableNameWithoutAlias} ({queryObject.ColumnsForInsert.Replace("@", string.Empty)}) values ({queryObject.ColumnsForInsert}); select scope_identity();";
                 case QueryType.Update:

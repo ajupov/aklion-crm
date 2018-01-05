@@ -6,11 +6,9 @@ function initAuditLogsTable() {
         Element: '#audit-logs-table',
         Pager: '#audit-logs-table-pagination',
         IsViewable: true,
-        IsEditable: true,
-        IsCreatable: true,
-        IsDeletable: true,
         IsFilterable: true,
         DataUrl: '/Administration/AuditLogs/GetList',
+        SortingColumn: 'TimeStamp',
         Columns: [
             { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
@@ -31,8 +29,7 @@ function initAuditLogsTable() {
             },
             { Name: 'OldValue', Label: 'Старое значение', Width: 250 },
             { Name: 'NewValue', Label: 'Новое значение', Width: 250 },
-            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 100 },
-            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Hidden: true, EditHidden: true }
+            { Name: 'TimeStamp', Label: 'Метка времени', Type: 'datetime', Width: 100 }
         ]
     });
 }
