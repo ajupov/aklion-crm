@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
+using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.ClientAttribute;
 using Aklion.Crm.Mappers.Administration.ClientAttribute;
 using Aklion.Crm.Models;
@@ -13,10 +14,12 @@ namespace Aklion.Crm.Controllers.Administration
     public class AdministrationClientAttributeController : BaseController
     {
         private readonly IClientAttributeDao _clientAttributeDao;
+        private readonly IAuditLogService _auditLogService;
 
-        public AdministrationClientAttributeController(IClientAttributeDao clientAttributeDao)
+        public AdministrationClientAttributeController(IClientAttributeDao clientAttributeDao, IAuditLogService auditLogService)
         {
             _clientAttributeDao = clientAttributeDao;
+            _auditLogService = auditLogService;
         }
 
         [HttpGet]
@@ -38,9 +41,13 @@ namespace Aklion.Crm.Controllers.Administration
         [HttpPost]
         [Route("Create")]
         [AjaxErrorHandle]
-        public Task Create(ClientAttributeModel model)
+        public async Task Create(ClientAttributeModel model)
         {
-            return _clientAttributeDao.CreateAsync(model.MapNew());
+            var newModel = model.MapNew();
+
+            newModel.Id = await _clientAttributeDao.CreateAsync(newModel).ConfigureAwait(false);
+
+            _auditLogService.LogInserting(UserContext.UserId, UserContext.StoreId, newModel);
         }
 
         [HttpPost]
@@ -48,17 +55,24 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Update(ClientAttributeModel model)
         {
-            var result = await _clientAttributeDao.GetAsync(model.Id).ConfigureAwait(false);
+            var oldModel = await _clientAttributeDao.GetAsync(model.Id).ConfigureAwait(false);
+            var newModel = oldModel.MapFrom(model);
 
-            await _clientAttributeDao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);
+            await _clientAttributeDao.UpdateAsync(newModel).ConfigureAwait(false);
+
+            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModel, newModel);
         }
 
         [HttpPost]
         [Route("Delete")]
         [AjaxErrorHandle]
-        public Task Delete(int id)
+        public async Task Delete(int id)
         {
-            return _clientAttributeDao.DeleteAsync(id);
+            var oldModel = await _clientAttributeDao.GetAsync(id).ConfigureAwait(false);
+
+            await _clientAttributeDao.DeleteAsync(id).ConfigureAwait(false);
+
+            _auditLogService.LogDeleting(UserContext.UserId, UserContext.StoreId, oldModel);
         }
     }
 }

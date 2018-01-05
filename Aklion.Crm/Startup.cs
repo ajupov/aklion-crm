@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using Aklion.Crm.Business.ActionType;
+using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Business.ImageLoad;
 using Aklion.Crm.Business.Mail;
 using Aklion.Crm.Business.Mail.Models;
@@ -41,7 +40,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
@@ -73,6 +71,8 @@ namespace Aklion.Crm
                 .AddSingleton<IReader, Reader>()
                 .AddSingleton<ILogger, Logger>()
                 .AddSingleton<IReader, Reader>()
+                .AddSingleton<IActionTypeService, ActionTypeService>()
+                .AddSingleton<IAuditLogService, AuditLogService>()
                 .AddSingleton<IImageLoadService, ImageLoadService>()
                 .AddSingleton<IMailService, MailService>()
                 .AddSingleton<IPermissionService, PermissionService>()

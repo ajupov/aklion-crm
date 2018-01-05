@@ -138,15 +138,15 @@ function initPermissionsTable() {
                 AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
                 Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
             },
-            {
-                Name: 'Permission', Label: 'Право', Type: 'select', Editable: true, Sortable: false,
-                SelectValues: getSelectValues('/Administration/Permissions/GetForSelect'), Width: 240
-            },
             { Name: 'UserId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'UserLogin', Label: 'Логин пользователя', Type: 'autocomplete', Editable: true, Width: 130,
                 AutocompleteUrl: '/Administration/Users/GetForAutocompleteByLoginPattern', AutocompleteHidden: 'UserId',
                 Formatter: administrationUserLinkFormatter, Unformatter: linkUnFormatter
+            },
+            {
+                Name: 'Permission', Label: 'Право', Type: 'select', Editable: true, Sortable: false,
+                SelectValues: getSelectValues('/Administration/Permissions/GetForSelect'), Width: 240
             },
             { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 100 },
             { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Hidden: true, EditHidden: true }

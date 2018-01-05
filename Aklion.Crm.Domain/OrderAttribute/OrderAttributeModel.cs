@@ -21,6 +21,7 @@ namespace Aklion.Crm.Domain.OrderAttribute
         public string Name { get; set; }
 
         [Column("oa.Description")]
+        [AutocompleteOrSelect("oa.Description")]
         public string Description { get; set; }
 
         [Column("oa.IsDeleted")]

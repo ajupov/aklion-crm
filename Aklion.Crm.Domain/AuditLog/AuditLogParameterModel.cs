@@ -25,10 +25,10 @@ namespace Aklion.Crm.Domain.AuditLog
         [Where("@ActionType is null or al.ActionType = @ActionType")]
         public AuditLogActionType? ActionType { get; set; }
 
-        [Where("@OldValue is null or al.OldValue = @OldValue")]
+        [Where("@OldValue is null or al.OldValue like @OldValue + '%'")]
         public string OldValue { get; set; }
 
-        [Where("@NewValue is null or al.NewValue = @NewValue")]
+        [Where("@NewValue is null or al.NewValue like @NewValue + '%'")]
         public string NewValue { get; set; }
 
         [Where("@TimeStamp is null or convert(date, al.TimeStamp) = convert(date, @TimeStamp)")]

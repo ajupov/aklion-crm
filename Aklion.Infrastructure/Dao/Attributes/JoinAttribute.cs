@@ -11,6 +11,5 @@ namespace Aklion.Infrastructure.Dao.Attributes
         }
 
         public string Value { get; }
-
     }
 }

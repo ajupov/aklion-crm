@@ -12,10 +12,10 @@ namespace Aklion.Crm.Domain.OrderStatus
         [Where("@StoreId is null or ost.StoreId = @StoreId")]
         public int? StoreId { get; set; }
 
-        [Where("@StoreName is null or s.Name = @StoreName")]
+        [Where("@StoreName is null or s.Name like @StoreName + '%'")]
         public string StoreName { get; set; }
 
-        [Where("@Name is null or ost.Name = @Name")]
+        [Where("@Name is null or ost.Name like @Name + '%'")]
         public string Name { get; set; }
 
         [Where("@CreateDate is null or convert(date, ost.CreateDate) = convert(date, @CreateDate)")]
