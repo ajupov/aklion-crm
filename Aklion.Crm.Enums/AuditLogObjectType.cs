@@ -49,16 +49,19 @@ namespace Aklion.Crm.Enums
         [Display(Name = "Заказ")]
         Order = 14,
 
+        [Display(Name = "Позиция заказа")]
+        OrderItem = 15,
+
         [Display(Name = "Источник заказа")]
-        OrderSource = 15,
+        OrderSource = 16,
 
         [Display(Name = "Статус заказа")]
-        OrderStatus = 16,
+        OrderStatus = 17,
 
         [Display(Name = "Атрибут заказа")]
-        OrderAttribute = 17,
+        OrderAttribute = 18,
 
         [Display(Name = "Значение атрибута заказа")]
-        OrderAttributeLink = 18
+        OrderAttributeLink = 19
     }
 }

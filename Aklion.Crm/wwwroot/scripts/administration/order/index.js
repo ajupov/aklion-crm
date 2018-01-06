@@ -140,6 +140,7 @@ function initAttributesTable() {
             },
             { Name: 'ProductId', Type: 'number', Hidden: true, Editable: true },
             { Name: 'OrderId', Label: '№ заказа', Type: 'number', Width: 60, Editable: true },
+            { Name: 'AttributeId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'AttributeDescription', Label: 'Описание атрибута', Type: 'autocomplete', Editable: true, Width: 160,
                 AutocompleteUrl: '/Administration/OrderAttributes/GetForAutocompleteByDescriptionPattern',
