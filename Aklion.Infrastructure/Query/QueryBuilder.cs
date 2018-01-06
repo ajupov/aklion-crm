@@ -238,10 +238,10 @@ namespace Aklion.Infrastructure.Query
         public static QueryObject ApplyPaging<TParameterModel>(this QueryObject queryObject, TParameterModel parameter)
         {
             var propertiesWithPageAttribute =
-                queryObject.Properties.FirstOrDefault(p => p.GetCustomAttribute(typeof(PageAttribute)) != null);
+                queryObject.FilterProperties.FirstOrDefault(p => p.GetCustomAttribute(typeof(PageAttribute)) != null);
 
             var propertiesWithSizeAttribute =
-                queryObject.Properties.FirstOrDefault(p => p.GetCustomAttribute(typeof(SizeAttribute)) != null);
+                queryObject.FilterProperties.FirstOrDefault(p => p.GetCustomAttribute(typeof(SizeAttribute)) != null);
 
             if (propertiesWithPageAttribute != null && propertiesWithSizeAttribute != null)
             {
@@ -255,6 +255,8 @@ namespace Aklion.Infrastructure.Query
                 {
                     page = 0;
                 }
+
+                page--;
 
                 if (size > 0)
                 {

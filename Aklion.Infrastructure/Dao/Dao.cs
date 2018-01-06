@@ -82,6 +82,7 @@ namespace Aklion.Infrastructure.Dao
                 .DefineColumnsForSelect()
                 .ApplyFilter(parameter)
                 .ApplySorting(parameter)
+                .ApplyPaging(parameter)
                 .Build();
 
             return _dataBaseExecutor.SelectMultipleAsync(query1 + query2, async r => new Tuple<int, List<TModel>>(
