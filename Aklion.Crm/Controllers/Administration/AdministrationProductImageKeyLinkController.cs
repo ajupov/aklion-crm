@@ -1,10 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
 using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.ProductImageKeyLink;
 using Aklion.Crm.Mappers.Administration.ProductImageKeyLink;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.ProductImageKeyLink;
+using Aklion.Infrastructure.FileFormat;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aklion.Crm.Controllers.Administration
@@ -57,6 +59,23 @@ namespace Aklion.Crm.Controllers.Administration
             await _productImageKeyLinkDao.UpdateAsync(newModel).ConfigureAwait(false);
 
             _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, newModel);
+        }
+
+        [HttpPost]
+        public async Task LoadAvatar(ProductImageKeyLinkLoadImageModel model)
+        {
+            if (!model.ImageFile.Name.IsImage())
+            {
+                return;
+            }
+
+            var oldModel = await _productImageKeyLinkDao.GetAsync(model.Id).ConfigureAwait(false);
+            if(oldModel == null)
+            {
+                return;
+            }
+
+            await _productImageKeyLinkDao.SetImageAsync(model.Id, model.ImageFile.OpenReadStream()).ConfigureAwait(false);
         }
 
         [HttpPost]

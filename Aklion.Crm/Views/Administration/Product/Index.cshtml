@@ -59,15 +59,19 @@
     </div>
 </div>
 
-
-@*<div id="dialog" title="Загрузка изображения">
-    <form asp-controller="Account" asp-action="LoadAvatar" method="post" enctype="multipart/form-data">
-        <input type="file" name="AvatarFile" accept="image/*" required="required" aria-required="true">
-        <button type="submit" class="btn pading-horisontal-10">
-            <i class="fa fa-upload"></i>
-        </button>
-    </form>
-</div>*@
+<div id="load-image-dialog" class="dialog hidden" title="Загрузка изображения">
+    <div class="col s12 m12 l12">
+        <form asp-controller="Account" asp-action="LoadAvatar" method="post" enctype="multipart/form-data">
+            <input type="file" name="AvatarFile" accept="image/*" required="required" aria-required="true" class="cell-button">
+            <br />
+            <br />
+            <button type="submit" class="fm-button ui-state-default ui-corner-all pading-5 right" style="height: auto; font-size: 11px;">
+                <i class="fa fa-upload"></i>
+                Загрузить
+            </button>
+        </form>
+    </div>
+</div>
 
 @section Scripts {
     @{

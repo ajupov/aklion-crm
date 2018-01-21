@@ -119,7 +119,8 @@ function initProductsTable() {
                 SelectValues: getSelectValues('/Administration/ProductImageKeys/GetForSelect'), Width: 120
             },
             {
-                Name: 'ImageFile', Label: 'Файл', Type: 'file', Hidden: true, Editable: true, EditHidden: true
+                Name: 'SetValue', Label: 'Установить изображение', Type: 'custom', Width: 150, Align: 'center',
+                Formatter: loadImageDialogFormatter, Sortable: false, Search: false
             },
             {
                 Name: 'Value', Label: 'Изображение', Type: 'file', Width: 250, Search: false, Sortable: false,
@@ -222,8 +223,27 @@ function initOthersTable() {
 }
 
 function loadImageDialogFormatter(value, options, data) {
-    return `<button onclick="generateApiSecret(event, ${data.Id});" class="cell-button" title="Открыть окно загрузки изображения">
-                <i class="fa fa-refresh"></i>
-                Сгенерировать
+    return `<button onclick="loadImageDialogShow(event, ${data.Id});" class="cell-button" title="Открыть окно загрузки изображения">
+                Установить
             </button>`;
+}
+
+function loadImageDialogShow(event, id) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    $('#load-image-dialog').dialog('open');
+
+    //{
+    //    Name: 'ImageFile', Label: 'Файл', Type: 'file', Hidden: true, Editable: true, EditHidden: true
+    //},
+    //https://stackoverflow.com/questions/39354100/unable-to-insert-file-stream-into-sql-filetable-using-dapper-net
+
+    //postText('/Administration/Stores/GenerateApiSecret', { id: id }, result => {
+    //    if (result !== null && result !== undefined && result.length > 0) {
+    //        const formField = $('#ViewGrid_stores-table td#v_ApiSecret span');
+    //        formField.html(result);
+    //        $('#stores-table').trigger('reloadGrid');
+    //    }
+    //});
 }

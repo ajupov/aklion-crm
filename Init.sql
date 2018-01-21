@@ -171,7 +171,7 @@ create table dbo.ProductImageKeyLink
     StoreId     int            not null constraint FK_ProductImageKeyLink_StoreId foreign key (StoreId) references dbo.Store (Id) index IX_ProductImageKeyLink_StoreId nonclustered (StoreId),
     ProductId   int            not null constraint FK_ProductImageKeyLink_ProductId foreign key (ProductId) references dbo.Product (Id) index IX_ProductImageKeyLink_ProductId nonclustered (ProductId),
     KeyId		int            not null constraint FK_ProductImageKeyLink_KeyId foreign key (KeyId) references dbo.ProductImageKey (Id) index IX_ProductImageKeyLink_KeyId nonclustered (KeyId),
-    [Value]     varbinary(max) not null,
+    [Value]     varbinary(max) null,
     IsDeleted   bit            not null,
     CreateDate  datetime2(7)   not null,
     ModifyDate  datetime2(7)   null,

@@ -33,7 +33,6 @@ function initStoresTable() {
 
 function generateApiSecretFormatter(value, options, data) {
     return `<button onclick="generateApiSecret(event, ${data.Id});" class="cell-button" title="Сгенерировать">
-                <i class="fa fa-refresh"></i>
                 Сгенерировать
             </button>`;
 }

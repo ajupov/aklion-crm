@@ -8,10 +8,13 @@ const commonUi = {
     tel: $('[type="tel"]'),
     datepicker: $('.datepicker'),
     tabButton: $('.tab-button'),
-    tabs: $('.tab')
+    tabs: $('.tab'),
+    dialog: $('.dialog')
 };
 
 $(document).ready(() => {
+    commonUi.dialog.dialog({ autoOpen: false });
+
     commonUi.mobileMenuLink.click(() => {
         commonUi.navbar.toggleClass('responsive');
     });

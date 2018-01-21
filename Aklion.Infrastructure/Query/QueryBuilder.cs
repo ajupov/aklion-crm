@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using System.Reflection;
 using Aklion.Infrastructure.Dao.Attributes;
 
@@ -77,6 +78,11 @@ namespace Aklion.Infrastructure.Query
             queryObject.ColumnsForInsert = string.Join(", ", queryObject.Properties
                 .Where(p =>
                 {
+                    if (p.PropertyType == typeof(Stream) || p.PropertyType == typeof(FileStream) || p.PropertyType == typeof(MemoryStream))
+                    {
+                        return false;
+                    }
+
                     var columnAttribute = p.GetCustomAttribute(typeof(ColumnAttribute));
                     if (columnAttribute == null)
                     {
@@ -114,6 +120,11 @@ namespace Aklion.Infrastructure.Query
                 string.Join(", ", queryObject.Properties
                 .Where(p =>
                     {
+                        if (p.PropertyType == typeof(Stream) || p.PropertyType == typeof(FileStream) || p.PropertyType == typeof(MemoryStream))
+                        {
+                            return false;
+                        }
+
                         var columnAttribute = p.GetCustomAttribute(typeof(ColumnAttribute));
                         if (columnAttribute == null)
                         {

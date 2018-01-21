@@ -1,7 +1,4 @@
-﻿using System.IO;
-using Microsoft.AspNetCore.Http;
-
-namespace Aklion.Crm.Models.Administration.ProductImageKeyLink
+﻿namespace Aklion.Crm.Models.Administration.ProductImageKeyLink
 {
     public class ProductImageKeyLinkModel
     {
@@ -20,8 +17,6 @@ namespace Aklion.Crm.Models.Administration.ProductImageKeyLink
         public string KeyName { get; set; }
 
         public string KeyDescription { get; set; }
-
-        public IFormFile ImageFile { get; set; }
 
         public string Base64Value { get; set; }
 

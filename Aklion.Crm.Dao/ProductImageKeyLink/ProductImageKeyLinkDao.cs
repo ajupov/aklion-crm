@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Aklion.Crm.Domain.ProductImageKeyLink;
 using Aklion.Infrastructure.Dao;
@@ -33,6 +34,11 @@ namespace Aklion.Crm.Dao.ProductImageKeyLink
         public Task UpdateAsync(ProductImageKeyLinkModel model)
         {
             return _dao.UpdateAsync(model);
+        }
+
+        public Task SetImageAsync(int id, Stream stream)
+        {
+            throw new NotImplementedException();
         }
 
         public Task DeleteAsync(int id)

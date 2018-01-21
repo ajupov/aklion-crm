@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.ProductImageKeyLink;
 using Aklion.Infrastructure.Mapper;
@@ -18,10 +17,7 @@ namespace Aklion.Crm.Mappers.Administration.ProductImageKeyLink
 
         public static DomainProductImageKeyLinkModel MapNew(this ProductImageKeyLinkModel model)
         {
-            var result = model.MapNew<DomainProductImageKeyLinkModel>();
-            model.ImageFile.CopyTo(result.Value);
-
-            return result;
+            return model.MapNew<DomainProductImageKeyLinkModel>();
         }
 
         public static DomainProductImageKeyLinkModel MapFrom(this DomainProductImageKeyLinkModel domainModel, ProductImageKeyLinkModel model)
