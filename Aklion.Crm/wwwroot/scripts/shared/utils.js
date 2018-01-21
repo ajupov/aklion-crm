@@ -80,6 +80,10 @@ function getFilters() {
     return params;
 }
 
+function getHashFromUrl() {
+    return window.location.hash.replace('#', '');
+}
+
 function getText(url, parameters, callback) {
     $.get(url,
         parameters,

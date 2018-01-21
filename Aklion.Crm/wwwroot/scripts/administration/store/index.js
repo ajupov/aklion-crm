@@ -10,22 +10,23 @@ function initStoresTable() {
         IsCreatable: true,
         IsDeletable: true,
         IsFilterable: true,
+        CanExtractFilters: true,
         DataUrl: '/Administration/Stores/GetList',
         CreateUrl: '/Administration/Stores/Create',
         UpdateUrl: '/Administration/Stores/Update',
         DeleteUrl: '/Administration/Stores/Delete',
         Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 70 },
-            { Name: 'Name', Label: 'Имя', Type: 'text', Width: 130, Editable: true, MaxLength: 256 },
+            { Name: 'Id', Label: '№', Type: 'number', Width: 35 },
+            { Name: 'Name', Label: 'Название', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
             { Name: 'ApiSecret', Label: 'АПИ-секрет', Type: 'text', Width: 150, Editable: false, Sortable: false, Search: false },
             {
                 Name: 'GenerateApiSecret', Label: 'Сгенерировать АПИ-секрет', Type: 'custom', Width: 150, Align: 'center',
                 Formatter: generateApiSecretFormatter, Sortable: false, Search: false
             },
-            { Name: 'IsLocked', Label: 'Заблокирован', Type: 'checkbox', Width: 100, Editable: true, Sortable: false },
-            { Name: 'IsDeleted', Label: 'Удален', Type: 'checkbox', Width: 70, Editable: true, Sortable: false },
-            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 120 },
-            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 120 }
+            { Name: 'IsLocked', Label: 'Заблокирован', Type: 'checkbox', Width: 75, Editable: true, Sortable: false },
+            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 45, Editable: true, Sortable: false },
+            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
+            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }
         ]
     });
 }

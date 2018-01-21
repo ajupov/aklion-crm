@@ -17,12 +17,12 @@
                 <a asp-controller="Account" asp-action="ChangePersonalInfo" class="text-link">Изменить личные данные</a>
                 <br>
                 <a asp-controller="Account" asp-action="ChangePassword" class="text-link">Сменить пароль</a>
-                @*<form asp-controller="Account" asp-action="LoadAvatar" method="post" enctype="multipart/form-data">
-                <input type="file" name="AvatarFile" accept="image/*" required="required" aria-required="true">
-                <button type="submit" class="btn pading-horisontal-10">
-                    <i class="fa fa-upload"></i>
-                </button>
-            </form>*@
+                <form asp-controller="Account" asp-action="LoadAvatar" method="post" enctype="multipart/form-data">
+                    <input type="file" name="AvatarFile" accept="image/*" required="required" aria-required="true">
+                    <button type="submit" class="btn pading-horisontal-10">
+                        <i class="fa fa-upload"></i>
+                    </button>
+                </form>
             </div>
         </div>
         <div class="col s12 m8 l9">

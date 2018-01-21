@@ -20,6 +20,8 @@ using Aklion.Crm.Dao.OrderStatus;
 using Aklion.Crm.Dao.Product;
 using Aklion.Crm.Dao.ProductAttribute;
 using Aklion.Crm.Dao.ProductAttributeLink;
+using Aklion.Crm.Dao.ProductImageKey;
+using Aklion.Crm.Dao.ProductImageKeyLink;
 using Aklion.Crm.Dao.ProductStatus;
 using Aklion.Crm.Dao.Store;
 using Aklion.Crm.Dao.User;
@@ -90,6 +92,8 @@ namespace Aklion.Crm
                 .AddSingleton<IProductDao, ProductDao>()
                 .AddSingleton<IProductAttributeDao, ProductAttributeDao>()
                 .AddSingleton<IProductAttributeLinkDao, ProductAttributeLinkDao>()
+                .AddSingleton<IProductImageKeyDao, ProductImageKeyDao>()
+                .AddSingleton<IProductImageKeyLinkDao, ProductImageKeyLinkDao>()
                 .AddSingleton<IProductStatusDao, ProductStatusDao>()
                 .AddSingleton<IStoreDao, StoreDao>()
                 .AddSingleton<IUserDao, UserDao>()

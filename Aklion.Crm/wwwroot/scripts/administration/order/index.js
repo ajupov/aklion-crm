@@ -10,40 +10,42 @@ function initOrdersTable() {
         IsCreatable: true,
         IsDeletable: true,
         IsFilterable: true,
+        CanExtractFilters: true,
         DataUrl: '/Administration/Orders/GetList',
         CreateUrl: '/Administration/orders/Create',
         UpdateUrl: '/Administration/orders/Update',
         DeleteUrl: '/Administration/orders/Delete',
         Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
+            { Name: 'Id', Label: '№', Type: 'number', Width: 35 },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
-                Name: 'StoreName', Label: 'Название магазина', Type: 'autocomplete', Editable: true, Width: 130,
+                Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
                 AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
                 Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
             },
             { Name: 'ClientId', Type: 'number', Hidden: true, Editable: true },
             {
-                Name: 'ClientName', Label: 'Клиент', Type: 'autocomplete', Editable: true, Width: 130,
+                Name: 'ClientName', Label: 'Клиент', Type: 'autocomplete', Editable: true, Width: 120,
                 AutocompleteUrl: '/Administration/Clients/GetForAutocompleteByNamePattern', AutocompleteHidden: 'ClientId',
                 DependentFields: ['StoreId'], Formatter: administrationClientLinkFormatter, Unformatter: linkUnFormatter
             },
             {
-                Name: 'SourceId', Label: 'Источник', Type: 'select', Editable: true, Sortable: false, Width: 140,
+                Name: 'SourceId', Label: 'Источник', Type: 'select', Editable: true, Sortable: false, Width: 120,
                 DependentFields: ['StoreId'], SelectValues: getSelectValues('/Administration/OrderSources/GetForSelect')
             },
             {
-                Name: 'StatusId', Label: 'Статус', Type: 'select', Editable: true, Sortable: false, Width: 140,
+                Name: 'StatusId', Label: 'Статус', Type: 'select', Editable: true, Sortable: false, Width: 120,
                 DependentFields: ['StoreId'], SelectValues: getSelectValues('/Administration/OrderStatuses/GetForSelect')
             },
-            { Name: 'TotalSum', Label: 'Сумма', Type: 'money', Width: 140, Editable: true },
-            { Name: 'DiscountSum', Label: 'Сумма скидки', Type: 'money', Width: 140, Editable: true },
-            { Name: 'IsDeleted', Label: 'Удален', Type: 'checkbox', Width: 50, Editable: true, Sortable: false },
-            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 100 },
-            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 100 }
+            { Name: 'TotalSum', Label: 'Сумма', Type: 'money', Width: 80, Editable: true },
+            { Name: 'DiscountSum', Label: 'Скидка', Type: 'money', Width: 80, Editable: true },
+            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 45, Editable: true, Sortable: false },
+            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
+            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }
         ],
         OnSelectRow: id => {
             $('#orders-items-table').jqGrid('setGridParam', { postData: { OrderId: id } }).trigger('reloadGrid');
+            $('#orders-attributes-table').jqGrid('setGridParam', { postData: { OrderId: id } }).trigger('reloadGrid');
         }
     });
 
@@ -61,25 +63,61 @@ function initOrdersTable() {
         UpdateUrl: '/Administration/OrderItems/Update',
         DeleteUrl: '/Administration/OrderItems/Delete',
         Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
-            { Name: 'OrderId', Label: '№ заказа', Type: 'number', Width: 60, Editable: true },
+            { Name: 'Id', Label: '№', Type: 'number', Width: 35 },
+            { Name: 'OrderId', Label: '№ заказа', Type: 'number', Width: 80, Editable: true },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
-                Name: 'StoreName', Label: 'Название магазина', Type: 'autocomplete', Editable: true, Width: 130,
+                Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
                 AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
                 Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
             },
             { Name: 'ProductId', Type: 'number', Hidden: true, Editable: true },
             {
-                Name: 'ProductName', Label: 'Название продукта', Type: 'autocomplete', Editable: true, Width: 120,
+                Name: 'ProductName', Label: 'Продукт', Type: 'autocomplete', Editable: true, Width: 120,
                 AutocompleteUrl: '/Administration/Products/GetForAutocompleteByNamePattern', AutocompleteHidden: 'ProductId',
                 DependentFields: ['StoreId'], Formatter: administrationProductLinkFormatter, Unformatter: linkUnFormatter
             },
-            { Name: 'Price', Label: 'Стоимость', Type: 'money', Width: 140, Editable: true },
-            { Name: 'Count', Label: 'Количество', Type: 'number', Width: 100, Editable: true },
-            { Name: 'IsDeleted', Label: 'Удален', Type: 'checkbox', Width: 50, Editable: true, Sortable: false },
-            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 100 },
-            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 100 }
+            { Name: 'Price', Label: 'Стоимость', Type: 'money', Width: 80, Editable: true },
+            { Name: 'Count', Label: 'Количество', Type: 'number', Width: 80, Editable: true },
+            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 45, Editable: true, Sortable: false },
+            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
+            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }
+        ]
+    });
+
+    createTable({
+        Title: 'Атрибуты заказов',
+        Element: '#orders-attributes-table',
+        Pager: '#orders-attributes-table-pagination',
+        IsViewable: true,
+        IsEditable: true,
+        IsCreatable: true,
+        IsDeletable: true,
+        IsFilterable: true,
+        DataUrl: '/Administration/OrderAttributeLinks/GetList',
+        CreateUrl: '/Administration/OrderAttributeLinks/Create',
+        UpdateUrl: '/Administration/OrderAttributeLinks/Update',
+        DeleteUrl: '/Administration/OrderAttributeLinks/Delete',
+        Columns: [
+            { Name: 'Id', Label: '№', Type: 'number', Width: 35 },
+            { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
+            {
+                Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
+                AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
+                Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
+            },
+            { Name: 'ProductId', Type: 'number', Hidden: true, Editable: true },
+            { Name: 'OrderId', Label: '№ заказа', Type: 'number', Width: 80, Editable: true },
+            { Name: 'AttributeId', Type: 'number', Hidden: true, Editable: true },
+            {
+                Name: 'AttributeDescription', Label: 'Атрибут', Type: 'autocomplete', Editable: true, Width: 120,
+                AutocompleteUrl: '/Administration/OrderAttributes/GetForAutocompleteByDescriptionPattern',
+                AutocompleteHidden: 'AttributeId', DependentFields: ['StoreId']
+            },
+            { Name: 'Value', Label: 'Значение', Width: 250, Editable: true, EditHidden: true },
+            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 45, Editable: true, Sortable: false },
+            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
+            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }
         ]
     });
 }
@@ -99,57 +137,18 @@ function initAttributesTable() {
         UpdateUrl: '/Administration/OrderAttributes/Update',
         DeleteUrl: '/Administration/OrderAttributes/Delete',
         Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
+            { Name: 'Id', Label: '№', Type: 'number', Width: 35 },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
-                Name: 'StoreName', Label: 'Название магазина', Type: 'autocomplete', Editable: true, Width: 130,
+                Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
                 AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
                 Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
             },
-            { Name: 'Name', Label: 'Имя', Type: 'text', Width: 140, Editable: true, MaxLength: 256 },
-            { Name: 'Description', Label: 'Описание', Type: 'text', Width: 140, Editable: true, MaxLength: 256 },
-            { Name: 'IsDeleted', Label: 'Удален', Type: 'checkbox', Width: 50, Editable: true, Sortable: false },
-            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 100 },
-            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 100 }
-        ],
-        OnSelectRow: id => {
-            $('#orders-attributes-table').jqGrid('setGridParam', { postData: { AttributeId: id } }).trigger('reloadGrid');
-        }
-    });
-
-    createTable({
-        Title: 'Атрибуты заказов',
-        Element: '#orders-attributes-table',
-        Pager: '#orders-attributes-table-pagination',
-        IsViewable: true,
-        IsEditable: true,
-        IsCreatable: true,
-        IsDeletable: true,
-        IsFilterable: true,
-        DataUrl: '/Administration/OrderAttributeLinks/GetList',
-        CreateUrl: '/Administration/OrderAttributeLinks/Create',
-        UpdateUrl: '/Administration/OrderAttributeLinks/Update',
-        DeleteUrl: '/Administration/OrderAttributeLinks/Delete',
-        Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
-            { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
-            {
-                Name: 'StoreName', Label: 'Название магазина', Type: 'autocomplete', Editable: true, Width: 130,
-                AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
-                Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
-            },
-            { Name: 'ProductId', Type: 'number', Hidden: true, Editable: true },
-            { Name: 'OrderId', Label: '№ заказа', Type: 'number', Width: 60, Editable: true },
-            { Name: 'AttributeId', Type: 'number', Hidden: true, Editable: true },
-            {
-                Name: 'AttributeDescription', Label: 'Описание атрибута', Type: 'autocomplete', Editable: true, Width: 160,
-                AutocompleteUrl: '/Administration/OrderAttributes/GetForAutocompleteByDescriptionPattern',
-                AutocompleteHidden: 'AttributeId', DependentFields: ['StoreId']
-            },
-            { Name: 'Value', Label: 'Значение', Width: 550, Editable: true, EditHidden: true },
-            { Name: 'IsDeleted', Label: 'Удален', Type: 'checkbox', Width: 50, Editable: true, Sortable: false },
-            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 100 },
-            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 100 }
+            { Name: 'Name', Label: 'Название', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
+            { Name: 'Description', Label: 'Описание', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
+            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 45, Editable: true, Sortable: false },
+            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
+            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }
         ]
     });
 }
@@ -169,16 +168,16 @@ function initOthersTable() {
         UpdateUrl: '/Administration/OrderSources/Update',
         DeleteUrl: '/Administration/OrderSources/Delete',
         Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
+            { Name: 'Id', Label: '№', Type: 'number', Width: 35 },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
-                Name: 'StoreName', Label: 'Название магазина', Type: 'autocomplete', Editable: true, Width: 130,
+                Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
                 AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
                 Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
             },
-            { Name: 'Name', Label: 'Имя', Type: 'text', Width: 140, Editable: true, MaxLength: 256 },
-            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 100 },
-            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 100 }
+            { Name: 'Name', Label: 'Название', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
+            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
+            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }
         ]
     });
 
@@ -196,16 +195,16 @@ function initOthersTable() {
         UpdateUrl: '/Administration/OrderStatuses/Update',
         DeleteUrl: '/Administration/OrderStatuses/Delete',
         Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
+            { Name: 'Id', Label: '№', Type: 'number', Width: 35 },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
-                Name: 'StoreName', Label: 'Название магазина', Type: 'autocomplete', Editable: true, Width: 130,
+                Name: 'StoreName', Label: 'Название магазина', Type: 'autocomplete', Editable: true, Width: 120,
                 AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
                 Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
             },
-            { Name: 'Name', Label: 'Имя', Type: 'text', Width: 140, Editable: true, MaxLength: 256 },
-            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 100 },
-            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 100 }
+            { Name: 'Name', Label: 'Название', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
+            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
+            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }
         ]
     });
 }

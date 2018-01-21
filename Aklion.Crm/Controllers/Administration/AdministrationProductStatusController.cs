@@ -35,7 +35,7 @@ namespace Aklion.Crm.Controllers.Administration
 
         [HttpGet]
         [Route("GetForSelect")]
-        public async Task<Dictionary<string, int>> GetList(int storeId = 0)
+        public async Task<Dictionary<string, int>> GetForSelect(int storeId = 0)
         {
             var result = await _productStatusDao.GetForSelectAsync(storeId.MapNew()).ConfigureAwait(false);
 

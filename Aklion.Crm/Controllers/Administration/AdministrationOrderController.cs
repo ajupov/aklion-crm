@@ -25,7 +25,6 @@ namespace Aklion.Crm.Controllers.Administration
 
         [HttpGet]
         [Route("")]
-        [Route("Index")]
         public IActionResult Index()
         {
             return View("~/Views/Administration/Order/Index.cshtml");

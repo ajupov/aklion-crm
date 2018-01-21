@@ -17,30 +17,30 @@ function initAuditLogsTable() {
         DataUrl: '/Administration/AuditLogs/GetList',
         SortingColumn: 'TimeStamp',
         Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
+            { Name: 'Id', Label: '№', Type: 'number', Width: 35 },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
-                Name: 'StoreName', Label: 'Название магазина', Type: 'autocomplete', Editable: true, Width: 130,
+                Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
                 AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
                 Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
             },
             { Name: 'UserId', Type: 'number', Hidden: true, Editable: true },
             {
-                Name: 'UserLogin', Label: 'Логин пользователя', Type: 'autocomplete', Editable: true, Width: 130,
+                Name: 'UserLogin', Label: 'Пользователь', Type: 'autocomplete', Editable: true, Width: 120,
                 AutocompleteUrl: '/Administration/Users/GetForAutocompleteByLoginPattern', AutocompleteHidden: 'UserId',
                 Formatter: administrationUserLinkFormatter, Unformatter: linkUnFormatter
             },
             {
-                Name: 'ObjectType', Label: 'Тип объекта', Type: 'select', Editable: true, Sortable: false,
+                Name: 'ObjectType', Label: 'Объект', Type: 'select', Editable: true, Sortable: false,
                 SelectValues: getSelectValues('/Administration/AuditLogs/GetObjectTypesForSelect'), Width: 120
             },
             {
                 Name: 'ActionType', Label: 'Действие', Type: 'select', Editable: true, Sortable: false,
                 SelectValues: getSelectValues('/Administration/AuditLogs/GetActionTypesForSelect'), Width: 120
             },
-            { Name: 'OldValue', Label: 'Старое значение', Width: 250 },
-            { Name: 'NewValue', Label: 'Новое значение', Width: 250 },
-            { Name: 'TimeStamp', Label: 'Метка времени', Type: 'datetime', Width: 100 }
+            { Name: 'OldValue', Label: 'Старое значение', Hidden: true },
+            { Name: 'NewValue', Label: 'Новое значение', Hidden: true },
+            { Name: 'TimeStamp', Label: 'Метка времени', Type: 'datetime', Width: 110 }
         ]
     });
 }

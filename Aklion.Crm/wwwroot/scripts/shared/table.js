@@ -62,6 +62,10 @@ function createTable(options) {
                     ? 'select'
                     : column.Type === 'textarea'
                     ? 'textarea'
+                    : column.Type === 'image'
+                    ? 'image'
+                    : column.Type === 'file'
+                    ? 'file'
                     : 'text',
                 editoptions: {
                     value: column.Type === 'checkbox'
@@ -127,11 +131,10 @@ function createTable(options) {
         sortorder: 'desc',
         caption: options.Title,
         viewrecords: true,
-        hidegrid: false,
         colModel: colModel,
         sortable: true,
-        search: filters !== null,
-        postData: filters,
+        search: options.CanExtractFilters && filters !== null,
+        postData: options.CanExtractFilters && filters !== null ? filters : undefined,
         multiselect: options.Multiselect === true,
         onSelectRow: options.OnSelectRow !== null && options.OnSelectRow !== undefined ? options.OnSelectRow : undefined,
         prmNames: {
@@ -162,11 +165,12 @@ function createTable(options) {
         options.Pager,
         {
             view: options.IsViewable === true,
-            refresh: false,
+            refresh: true,
             search: false,
             add: options.IsCreatable === true,
             del: options.IsDeletable === true,
-            edit: options.IsEditable === true
+            edit: options.IsEditable === true,
+            afterRefresh: function() { $table[0].triggerToolbar(); }
         },
         {
             width: 'auto',
@@ -175,7 +179,14 @@ function createTable(options) {
             resize: false,
             url: options.UpdateUrl,
             closeAfterEdit: true,
-            errorTextFormat: e => e.responseJSON.Error
+            errorTextFormat: e => e.responseJSON.Error,
+            onInitializeForm: (formid) => {
+                if (options.IsWithFile) {
+                    $(formid).attr('method', 'post');
+                    $(formid).attr('action', '');
+                    $(formid).attr('enctype', 'multipart/form-data');
+                }
+            }
         },
         {
             width: 'auto',
@@ -185,7 +196,15 @@ function createTable(options) {
             url: options.CreateUrl,
             closeAfterAdd: true,
             clearAfterAdd: true,
-            errorTextFormat: e => e.responseJSON.Error
+            errorTextFormat: e => e.responseJSON.Error,
+
+            onInitializeForm: (formid) => {
+                if (options.IsWithFile) {
+                    $(formid).attr('method', 'post');
+                    $(formid).attr('action', '');
+                    $(formid).attr('enctype', 'multipart/form-data');
+                }
+            }
         },
         {
             width: 'auto',
@@ -204,6 +223,19 @@ function createTable(options) {
             viewPagerButtons: false
         }
     );
+
+    //$table.jqGrid('navGrid').navButtonAdd(options.Pager, {
+    //        caption: '',
+    //        buttonicon: 'ui-icon-disk',
+    //        onClickButton: () => {
+    //            $table.jqGrid('exportToExcel',
+    //                {
+    //                    fileName: 'jqGridExport.xlsx',
+    //                    maxlength: 40 // maxlength for visible string data 
+    //                });
+    //        },
+    //        position: 'last'
+    //    });
 
     if (options.IsFilterable === true) {
         $table.jqGrid('filterToolbar', {});

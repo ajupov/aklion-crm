@@ -150,6 +150,35 @@ create table dbo.ProductAttributeLink
 );
 go
 
+-- Ключ изображения продукта
+create table dbo.ProductImageKey
+(
+    Id            int           not null identity(1, 1) constraint PK_ProductImageKey_Id primary key,
+    StoreId       int           not null constraint FK_ProductImageKey_StoreId foreign key (StoreId) references dbo.Store (Id) index IX_ProductImageKey_StoreId nonclustered (StoreId),
+    [Name]        varchar(256)  not null,
+    [Description] varchar(1024) not null,
+    IsDeleted     bit           not null,
+    CreateDate    datetime2(7)  not null,
+    ModifyDate    datetime2(7)  null,
+    constraint UQ_ProductImageKey_StoreId_Name unique (StoreId, [Name])
+);
+go
+
+-- Cвязь продукта и ключа изображения продукта
+create table dbo.ProductImageKeyLink
+(
+    Id          int            not null identity(1, 1) constraint PK_ProductImageKeyLink_Id primary key,
+    StoreId     int            not null constraint FK_ProductImageKeyLink_StoreId foreign key (StoreId) references dbo.Store (Id) index IX_ProductImageKeyLink_StoreId nonclustered (StoreId),
+    ProductId   int            not null constraint FK_ProductImageKeyLink_ProductId foreign key (ProductId) references dbo.Product (Id) index IX_ProductImageKeyLink_ProductId nonclustered (ProductId),
+    KeyId		int            not null constraint FK_ProductImageKeyLink_KeyId foreign key (KeyId) references dbo.ProductImageKey (Id) index IX_ProductImageKeyLink_KeyId nonclustered (KeyId),
+    [Value]     varbinary(max) not null,
+    IsDeleted   bit            not null,
+    CreateDate  datetime2(7)   not null,
+    ModifyDate  datetime2(7)   null,
+    constraint UQ_ProductImageKeyLink_StoreId_ProductId_AttributeId unique (StoreId, ProductId, KeyId)
+);
+go
+
 /*** Клиенты ***/
 -- Клиент
 create table dbo.Client
