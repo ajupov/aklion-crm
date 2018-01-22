@@ -14,6 +14,7 @@ const commonUi = {
 
 $(document).ready(() => {
     commonUi.dialog.dialog({ autoOpen: false });
+    $('.ui-dialog').css('z-index', '999');
 
     commonUi.mobileMenuLink.click(() => {
         commonUi.navbar.toggleClass('responsive');

@@ -62,9 +62,10 @@ namespace Aklion.Crm.Controllers.Administration
         }
 
         [HttpPost]
-        public async Task LoadAvatar(ProductImageKeyLinkLoadImageModel model)
+        [AjaxErrorHandle]
+        public async Task LoadImage(ProductImageKeyLinkLoadImageModel model)
         {
-            if (!model.ImageFile.Name.IsImage())
+            if (!model.ImageFile.FileName.IsImage())
             {
                 return;
             }

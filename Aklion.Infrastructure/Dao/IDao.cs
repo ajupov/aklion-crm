@@ -22,8 +22,8 @@ namespace Aklion.Infrastructure.Dao
 
         Task<int> CreateAsync<TModel>(TModel model);
 
-        Task<bool> UpdateAsync<TModel>(TModel model);
+        Task UpdateAsync<TModel>(TModel model);
 
-        Task<bool> DeleteAsync<TModel>(int id);
+        Task DeleteAsync<TModel>(int id);
     }
 }

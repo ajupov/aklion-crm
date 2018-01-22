@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.ProductImageKeyLink;
 using Aklion.Infrastructure.Mapper;
@@ -12,7 +13,11 @@ namespace Aklion.Crm.Mappers.Administration.ProductImageKeyLink
     {
         public static PagingModel<ProductImageKeyLinkModel> MapNew(this Tuple<int, List<DomainProductImageKeyLinkModel>> tuple, int? page, int? size)
         {
-            return new PagingModel<ProductImageKeyLinkModel>(tuple.Item2.MapListNew<ProductImageKeyLinkModel>(), tuple.Item1, page, size);
+            var list = tuple.Item2.MapListNew<ProductImageKeyLinkModel>();
+
+            MapImage(tuple.Item2, list);
+
+            return new PagingModel<ProductImageKeyLinkModel>(list, tuple.Item1, page, size);
         }
 
         public static DomainProductImageKeyLinkModel MapNew(this ProductImageKeyLinkModel model)
@@ -28,6 +33,20 @@ namespace Aklion.Crm.Mappers.Administration.ProductImageKeyLink
         public static DomainProductImageKeyLinkParameterModel MapNew(this ProductImageKeyLinkParameterModel model)
         {
             return model.MapParameterNew<DomainProductImageKeyLinkParameterModel>();
+        }
+
+        private static void MapImage(IReadOnlyCollection<DomainProductImageKeyLinkModel> domainList, IEnumerable<ProductImageKeyLinkModel> list)
+        {
+            foreach (var item in list)
+            {
+                var domainItem = domainList.FirstOrDefault(i => i.Id == item.Id);
+                if (domainItem == null)
+                {
+                    continue;
+                }
+
+                item.Base64Value = Convert.ToBase64String(domainItem.Value);
+            }
         }
     }
 }

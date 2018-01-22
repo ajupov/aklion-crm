@@ -7,7 +7,7 @@ namespace Aklion.Infrastructure.DataBaseExecutor
 {
     public interface IDataBaseExecutor
     {
-        Task<bool> ExecuteAsync(string query, object parameters = null);
+        Task ExecuteAsync(string query, object parameters = null);
 
         Task<T> SelectOneAsync<T>(string query, object parameters = null);
 

@@ -16,7 +16,7 @@ function initClientsTable() {
         UpdateUrl: '/Administration/Clients/Update',
         DeleteUrl: '/Administration/Clients/Delete',
         Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 35 },
+            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
@@ -47,7 +47,7 @@ function initClientsTable() {
         UpdateUrl: '/Administration/ClientAttributeLinks/Update',
         DeleteUrl: '/Administration/ClientAttributeLinks/Delete',
         Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 35 },
+            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
@@ -89,7 +89,7 @@ function initAttributesTable() {
         UpdateUrl: '/Administration/ClientAttributes/Update',
         DeleteUrl: '/Administration/ClientAttributes/Delete',
         Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 35 },
+            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,

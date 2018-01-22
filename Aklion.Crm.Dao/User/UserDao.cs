@@ -35,12 +35,12 @@ namespace Aklion.Crm.Dao.User
             return _dao.CreateAsync(model);
         }
 
-        public Task<bool> UpdateAsync(UserModel model)
+        public Task UpdateAsync(UserModel model)
         {
             return _dao.UpdateAsync(model);
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public Task DeleteAsync(int id)
         {
             return _dao.DeleteAsync<UserModel>(id);
         }

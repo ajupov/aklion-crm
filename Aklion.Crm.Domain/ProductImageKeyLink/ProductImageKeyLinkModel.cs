@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using Aklion.Infrastructure.Dao.Attributes;
 
 namespace Aklion.Crm.Domain.ProductImageKeyLink
@@ -36,7 +35,7 @@ namespace Aklion.Crm.Domain.ProductImageKeyLink
         public string KeyDescription { get; }
 
         [Column("pikl.Value")]
-        public FileStream Value { get; set; }
+        public byte[] Value { get; set; }
 
         [Column("pikl.IsDeleted")]
         public bool IsDeleted { get; set; }

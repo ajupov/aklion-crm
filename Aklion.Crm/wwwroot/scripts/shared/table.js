@@ -42,6 +42,8 @@ function createTable(options) {
                     ? 'email'
                     : column.Type === 'money'
                     ? 'currency'
+                    : column.Type === 'image'
+                    ? 'image'
                     : e => e === undefined || e === null
                     ? ''
                     : e,

@@ -15,7 +15,7 @@ function initUsersTable() {
         UpdateUrl: '/Administration/Users/Update',
         DeleteUrl: '/Administration/Users/Delete',
         Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 35 },
+            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
             { Name: 'Login', Label: 'Логин', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
             { Name: 'Email', Label: 'Email', Type: 'email', Width: 120, Editable: true, MaxLength: 256 },
             { Name: 'Phone', Label: 'Телефон', Type: 'text', Width: 70, Editable: true, MaxLength: 10 },
@@ -36,7 +36,7 @@ function initUsersTable() {
                 EditHidden: true
             },
             { Name: 'IsLocked', Label: 'Заблокирован', Type: 'checkbox', Width: 75, Editable: true, Sortable: false },
-            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 45, Editable: true, Sortable: false },
+            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 55, Editable: true, Sortable: false },
             { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
             { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }
         ],
@@ -60,7 +60,7 @@ function initUsersTable() {
         UpdateUrl: '/Administration/UserAttributeLinks/Update',
         DeleteUrl: '/Administration/UserAttributeLinks/Delete',
         Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 35 },
+            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
@@ -80,7 +80,7 @@ function initUsersTable() {
                 DependentFields: ['StoreId']
             },
             { Name: 'Value', Label: 'Значение', Width: 250, Editable: true, EditHidden: true },
-            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 45, Editable: true, Sortable: false },
+            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 55, Editable: true, Sortable: false },
             { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
             { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }
         ]
@@ -100,7 +100,7 @@ function initUsersTable() {
         UpdateUrl: '/Administration/UserPermissions/Update',
         DeleteUrl: '/Administration/UserPermissions/Delete',
         Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 35 },
+            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
@@ -138,7 +138,7 @@ function initAttributesTable() {
         UpdateUrl: '/Administration/UserAttributes/Update',
         DeleteUrl: '/Administration/UserAttributes/Delete',
         Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 35 },
+            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
@@ -147,7 +147,7 @@ function initAttributesTable() {
             },
             { Name: 'Name', Label: 'Название', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
             { Name: 'Description', Label: 'Описание', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
-            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 45, Editable: true, Sortable: false },
+            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 55, Editable: true, Sortable: false },
             { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
             { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }
         ]

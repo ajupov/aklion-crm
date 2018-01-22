@@ -61,8 +61,9 @@
 
 <div id="load-image-dialog" class="dialog hidden" title="Загрузка изображения">
     <div class="col s12 m12 l12">
-        <form asp-controller="Account" asp-action="LoadAvatar" method="post" enctype="multipart/form-data">
-            <input type="file" name="AvatarFile" accept="image/*" required="required" aria-required="true" class="cell-button">
+        <form asp-controller="AdministrationProductImageKeyLink" asp-action="LoadImage" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="product-id" name="Id" />
+            <input type="file" name="ImageFile" accept="image/*" required="required" aria-required="true" class="cell-button">
             <br />
             <br />
             <button type="submit" class="fm-button ui-state-default ui-corner-all pading-5 right" style="height: auto; font-size: 11px;">

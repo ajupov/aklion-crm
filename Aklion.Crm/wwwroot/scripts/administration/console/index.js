@@ -17,7 +17,7 @@ function initAuditLogsTable() {
         DataUrl: '/Administration/AuditLogs/GetList',
         SortingColumn: 'TimeStamp',
         Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 35 },
+            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,

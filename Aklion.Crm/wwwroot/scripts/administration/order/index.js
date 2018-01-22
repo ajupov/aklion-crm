@@ -16,7 +16,7 @@ function initOrdersTable() {
         UpdateUrl: '/Administration/orders/Update',
         DeleteUrl: '/Administration/orders/Delete',
         Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 35 },
+            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
@@ -39,7 +39,7 @@ function initOrdersTable() {
             },
             { Name: 'TotalSum', Label: 'Сумма', Type: 'money', Width: 80, Editable: true },
             { Name: 'DiscountSum', Label: 'Скидка', Type: 'money', Width: 80, Editable: true },
-            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 45, Editable: true, Sortable: false },
+            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 55, Editable: true, Sortable: false },
             { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
             { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }
         ],
@@ -63,7 +63,7 @@ function initOrdersTable() {
         UpdateUrl: '/Administration/OrderItems/Update',
         DeleteUrl: '/Administration/OrderItems/Delete',
         Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 35 },
+            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
             { Name: 'OrderId', Label: '№ заказа', Type: 'number', Width: 80, Editable: true },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
@@ -79,7 +79,7 @@ function initOrdersTable() {
             },
             { Name: 'Price', Label: 'Стоимость', Type: 'money', Width: 80, Editable: true },
             { Name: 'Count', Label: 'Количество', Type: 'number', Width: 80, Editable: true },
-            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 45, Editable: true, Sortable: false },
+            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 55, Editable: true, Sortable: false },
             { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
             { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }
         ]
@@ -99,7 +99,7 @@ function initOrdersTable() {
         UpdateUrl: '/Administration/OrderAttributeLinks/Update',
         DeleteUrl: '/Administration/OrderAttributeLinks/Delete',
         Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 35 },
+            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
@@ -115,7 +115,7 @@ function initOrdersTable() {
                 AutocompleteHidden: 'AttributeId', DependentFields: ['StoreId']
             },
             { Name: 'Value', Label: 'Значение', Width: 250, Editable: true, EditHidden: true },
-            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 45, Editable: true, Sortable: false },
+            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 55, Editable: true, Sortable: false },
             { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
             { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }
         ]
@@ -137,7 +137,7 @@ function initAttributesTable() {
         UpdateUrl: '/Administration/OrderAttributes/Update',
         DeleteUrl: '/Administration/OrderAttributes/Delete',
         Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 35 },
+            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
@@ -146,7 +146,7 @@ function initAttributesTable() {
             },
             { Name: 'Name', Label: 'Название', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
             { Name: 'Description', Label: 'Описание', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
-            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 45, Editable: true, Sortable: false },
+            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 55, Editable: true, Sortable: false },
             { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
             { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }
         ]
@@ -168,7 +168,7 @@ function initOthersTable() {
         UpdateUrl: '/Administration/OrderSources/Update',
         DeleteUrl: '/Administration/OrderSources/Delete',
         Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 35 },
+            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
@@ -195,7 +195,7 @@ function initOthersTable() {
         UpdateUrl: '/Administration/OrderStatuses/Update',
         DeleteUrl: '/Administration/OrderStatuses/Delete',
         Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 35 },
+            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Название магазина', Type: 'autocomplete', Editable: true, Width: 120,

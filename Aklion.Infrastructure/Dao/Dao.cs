@@ -126,7 +126,7 @@ namespace Aklion.Infrastructure.Dao
             return _dataBaseExecutor.SelectOneAsync<int>(query, model);
         }
 
-        public Task<bool> UpdateAsync<TModel>(TModel model)
+        public Task UpdateAsync<TModel>(TModel model)
         {
             var query = QueryBuilder
                 .Create<TModel>(QueryType.Update)
@@ -138,7 +138,7 @@ namespace Aklion.Infrastructure.Dao
             return _dataBaseExecutor.ExecuteAsync(query, model);
         }
 
-        public Task<bool> DeleteAsync<TModel>(int id)
+        public Task DeleteAsync<TModel>(int id)
         {
             var query = QueryBuilder
                 .Create<TModel>(QueryType.Delete)
