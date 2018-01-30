@@ -30,6 +30,11 @@ namespace Aklion.Crm.Dao.UserPermission
             return _dao.CreateAsync(model);
         }
 
+        public Task CreateListAsync(List<UserPermissionModel> models)
+        {
+            return _dao.CreateListAsync(models);
+        }
+
         public Task UpdateAsync(UserPermissionModel model)
         {
             return _dao.UpdateAsync(model);

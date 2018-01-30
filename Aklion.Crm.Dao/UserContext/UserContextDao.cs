@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Aklion.Crm.Domain.Store;
 using Aklion.Crm.Domain.User;
 using Aklion.Crm.Domain.UserContext;
@@ -16,15 +17,19 @@ namespace Aklion.Crm.Dao.UserContext
             _dataBaseExecutor = dataBaseExecutor;
         }
 
-        public Task<UserContextModel> GetAsync(string login, int selectedStoreId)
+        public Task<UserContextModel> GetAsync(int userId, int storeId)
         {
             return _dataBaseExecutor.SelectMultipleAsync(Queries.Get, async r => new UserContextModel
             {
                 CurrentUser = await r.SelectOneAsync<UserModel>().ConfigureAwait(false),
                 CurrentStore = await r.SelectOneAsync<StoreModel>().ConfigureAwait(false),
-                CurrentStorePermissions = await r.SelectListAsync<UserPermissionModel>().ConfigureAwait(false),
-                Stores = await r.SelectListAsync<StoreModel>().ConfigureAwait(false)
-            }, new {login, selectedStoreId});
+                CurrentStorePermissions = await r.SelectListAsync<UserPermissionModel>().ConfigureAwait(false)
+            }, new {userId, storeId});
+        }
+
+        public Task<List<UserAvialableStoreModel>> GetAvialableStoresAsync(int userId)
+        {
+            return _dataBaseExecutor.SelectListAsync<UserAvialableStoreModel>(Queries.GetAvialableStores, new {userId});
         }
     }
 }

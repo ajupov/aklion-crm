@@ -11,8 +11,6 @@ namespace Aklion.Crm.Domain.UserContext
 
         public StoreModel CurrentStore { get; set; }
 
-        public List<StoreModel> Stores { get; set; }
-
         public List<UserPermissionModel> CurrentStorePermissions { get; set; }
     }
 }

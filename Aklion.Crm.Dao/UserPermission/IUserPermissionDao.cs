@@ -13,6 +13,8 @@ namespace Aklion.Crm.Dao.UserPermission
 
         Task<int> CreateAsync(UserPermissionModel model);
 
+        Task CreateListAsync(List<UserPermissionModel> models);
+
         Task UpdateAsync(UserPermissionModel model);
 
         Task DeleteAsync(int id);

@@ -28,7 +28,5 @@ namespace Aklion.Crm.UserContext
         public bool StoreIsDeleted { get; set; }
 
         public List<Permission> Permissions { get; set; }
-
-        public Dictionary<int, string> AvialableStores { get; set; }
     }
 }

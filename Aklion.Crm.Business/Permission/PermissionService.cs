@@ -7,12 +7,17 @@ namespace Aklion.Crm.Business.Permission
 {
     public class PermissionService : IPermissionService
     {
-        public Dictionary<string, Enums.Permission> GetForAdmin()
+        public List<Enums.Permission> GetForUser()
+        {
+            return GetAll().Where(p => p != Enums.Permission.Admin && p != Enums.Permission.None).ToList();
+        }
+
+        public Dictionary<string, Enums.Permission> GetForAdminWithNames()
         {
             return GetAll().ToDictionary(k => k.GetDisplayName(), v => v);
         }
 
-        public Dictionary<string, Enums.Permission> GetForStoreOwner()
+        public Dictionary<string, Enums.Permission> GetForUserWithNames()
         {
             return GetAll().Where(p => p != Enums.Permission.Admin).ToDictionary(k => k.GetDisplayName(), v => v);
         }

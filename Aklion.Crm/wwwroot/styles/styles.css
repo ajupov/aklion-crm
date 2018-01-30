@@ -18,6 +18,10 @@ h1, h2, h3, h4, h5, h6 {
     padding-right: 1%;
 }
 
+.inner-container-small {
+    max-width: 480px;
+}
+
 @media screen and (min-width: 992px) {
     .inner-container {
         width: 75%;
@@ -26,9 +30,17 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .inner-container-small {
-        width: 24%;
-        margin-left: 38%;
-        margin-right: 38%;
+        width: 35%;
+        margin-left: 35%;
+        margin-right: 35%;
+    }
+}
+
+@media screen and (min-width: 600px) and (max-width: 992px) {
+    .inner-container-small {
+        width: 50%;
+        margin-left: 25%;
+        margin-right: 25%;
     }
 }
 
@@ -178,6 +190,10 @@ nav {
     padding: 10px;    
 }
 
+.pading-left-20 {
+    padding-left: 20px;
+}
+
 .margin-10 {
     margin: 10px;
 }
@@ -193,6 +209,8 @@ input, select {
 }
 
 a.text-link {
+    display: inline-block;
+    padding-bottom: 10px;
     font-size: 0.9em;
     text-decoration: none;
     color: #2a5885;
@@ -912,4 +930,15 @@ td[id$="table-pagination_center"] {
 .button:hover {
     background: #486991;
     box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12), 0 3px 5px -1px rgba(0, 0, 0, 0.2);
+}
+
+.validation-summary-errors ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+#avialable-stores ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
 }

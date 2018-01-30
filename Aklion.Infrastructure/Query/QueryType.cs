@@ -9,6 +9,7 @@
         SelectPagedList,
         SelectForAutocompleteOrSelect,
         Insert,
+        InsertList,
         Update,
         Delete
     }

@@ -4,8 +4,10 @@ namespace Aklion.Crm.Business.Permission
 {
     public interface IPermissionService
     {
-        Dictionary<string, Enums.Permission> GetForAdmin();
+        List<Enums.Permission> GetForUser();
 
-        Dictionary<string, Enums.Permission> GetForStoreOwner();
+        Dictionary<string, Enums.Permission> GetForAdminWithNames();
+
+        Dictionary<string, Enums.Permission> GetForUserWithNames();
     }
 }

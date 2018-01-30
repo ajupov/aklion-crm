@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Aklion.Crm.Controllers;
 using Aklion.Crm.Dao.UserContext;
 using Microsoft.AspNetCore.Mvc;
@@ -36,14 +38,24 @@ namespace Aklion.Crm.Filters
             controller.ViewBag.IsUserContextInitialized = false;
 
             var isAuthenticated = context.HttpContext?.User?.Identity?.IsAuthenticated ?? false;
-            var login = context.HttpContext?.User?.Identity?.Name;
-            var selectedStoreId = 2;
 
-            if (!isAuthenticated || string.IsNullOrWhiteSpace(login))
+            var userIdClaim = context.HttpContext?.User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.PrimarySid);
+            var storeIdClaim = context.HttpContext?.User?.Claims.FirstOrDefault(c => c.Type == "StoreId");
+
+            if (!isAuthenticated || userIdClaim == null)
             {
                 await next().ConfigureAwait(false);
                 return;
             }
+
+            var userId = int.Parse(userIdClaim.Value);
+            if (userId <= 0)
+            {
+                await next().ConfigureAwait(false);
+                return;
+            }
+
+            int.TryParse(storeIdClaim?.Value, out var storeId);
 
             if (context.Controller.GetType().BaseType != typeof(BaseController))
             {
@@ -53,7 +65,7 @@ namespace Aklion.Crm.Filters
 
             if (context.Controller is BaseController baseController)
             {
-                var userContextDomain = await _userContextDao.GetAsync(login, selectedStoreId).ConfigureAwait(false);
+                var userContextDomain = await _userContextDao.GetAsync(userId, storeId).ConfigureAwait(false);
                 if (userContextDomain == null)
                 {
                     await next().ConfigureAwait(false);

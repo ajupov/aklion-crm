@@ -1,14 +1,21 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Business.ImageLoad;
 using Aklion.Crm.Business.Mail;
 using Aklion.Crm.Business.Sms;
+using Aklion.Crm.Business.UserPermission;
 using Aklion.Crm.Business.UserToken;
+using Aklion.Crm.Dao.Store;
 using Aklion.Crm.Dao.User;
 using Aklion.Crm.Dao.UserContext;
+using Aklion.Crm.Domain.Store;
 using Aklion.Crm.Enums;
 using Aklion.Crm.Mappers.Account;
+using Aklion.Crm.Mappers.UserContext;
 using Aklion.Crm.Models.Account;
+using Aklion.Crm.UserContext;
 using Aklion.Infrastructure.FileFormat;
 using Aklion.Infrastructure.Logger;
 using Aklion.Infrastructure.Password;
@@ -26,8 +33,10 @@ namespace Aklion.Crm.Controllers
         private readonly ISmsService _smsService;
         private readonly IImageLoadService _imageLoadService;
         private readonly IUserTokenService _userTokenService;
+        private readonly IUserPermissionService _userPermissionService;
         private readonly IUserDao _userDao;
         private readonly IUserContextDao _userContextDao;
+        private readonly IStoreDao _storeDao;
 
         public AccountController(
             ILogger logger,
@@ -36,8 +45,10 @@ namespace Aklion.Crm.Controllers
             ISmsService smsService,
             IImageLoadService imageLoadService,
             IUserTokenService userTokenService,
+            IUserPermissionService userPermissionService,
             IUserDao userDao,
-            IUserContextDao userContextDao)
+            IUserContextDao userContextDao,
+            IStoreDao storeDao)
         {
             _logger = logger;
             _auditLogService = auditLogService;
@@ -45,8 +56,10 @@ namespace Aklion.Crm.Controllers
             _smsService = smsService;
             _imageLoadService = imageLoadService;
             _userTokenService = userTokenService;
+            _userPermissionService = userPermissionService;
             _userDao = userDao;
             _userContextDao = userContextDao;
+            _storeDao = storeDao;
         }
 
         [HttpGet]
@@ -126,9 +139,9 @@ namespace Aklion.Crm.Controllers
                 return View(model);
             }
 
-            await SignInAsync(user.Login, model.RememberMe).ConfigureAwait(false);
+            await SignInAsync(user.Id, 0, model.RememberMe).ConfigureAwait(false);
 
-            var userContextDomain = await _userContextDao.GetAsync(user.Login, 0).ConfigureAwait(false);
+            var userContextDomain = await _userContextDao.GetAsync(user.Id, 0).ConfigureAwait(false);
             if (userContextDomain == null)
             {
                 _logger.LogWarning("AccountController.LogIn(). User context not found.", 0, new
@@ -191,19 +204,6 @@ namespace Aklion.Crm.Controllers
 
             if (!ModelState.IsValid)
             {
-                _logger.LogWarning("AccountController.Register(). ModelState is invalid.", 0, new
-                {
-                    model.Login,
-                    model.Email,
-                    model.Phone,
-                    model.Surname,
-                    model.Name,
-                    model.Patronymic,
-                    model.Gender,
-                    model.BirthDate,
-                    ReturnUrl = returnUrl
-                });
-
                 return View(model);
             }
 
@@ -211,19 +211,6 @@ namespace Aklion.Crm.Controllers
             if (isExistByLogin)
             {
                 ModelState.AddModelError("Login", "Логин уже занят");
-
-                _logger.LogWarning("AccountController.Register(). Login is exist.", 0, new
-                {
-                    model.Login,
-                    model.Email,
-                    model.Phone,
-                    model.Surname,
-                    model.Name,
-                    model.Patronymic,
-                    model.Gender,
-                    model.BirthDate,
-                    ReturnUrl = returnUrl
-                });
 
                 return View(model);
             }
@@ -233,39 +220,13 @@ namespace Aklion.Crm.Controllers
             {
                 ModelState.AddModelError("Email", "Email уже занят");
 
-                _logger.LogWarning("AccountController.Register(). Email is exist.", 0, new
-                {
-                    model.Login,
-                    model.Email,
-                    model.Phone,
-                    model.Surname,
-                    model.Name,
-                    model.Patronymic,
-                    model.Gender,
-                    model.BirthDate,
-                    ReturnUrl = returnUrl
-                });
-
                 return View(model);
             }
 
-            var isExistByPhone = await _userDao.IsExistByPhoneAsync(model.Phone).ConfigureAwait(false);
+            var isExistByPhone = await _userDao.IsExistByPhoneAsync(model.Phone.ExtractPhoneNumber()).ConfigureAwait(false);
             if (isExistByPhone)
             {
                 ModelState.AddModelError("Phone", "Телефон уже занят");
-
-                _logger.LogWarning("AccountController.Register(). Phone is exist.", 0, new
-                {
-                    model.Login,
-                    model.Email,
-                    model.Phone,
-                    model.Surname,
-                    model.Name,
-                    model.Patronymic,
-                    model.Gender,
-                    model.BirthDate,
-                    ReturnUrl = returnUrl
-                });
 
                 return View(model);
             }
@@ -273,72 +234,32 @@ namespace Aklion.Crm.Controllers
             var user = model.MapNew();
 
             user.PasswordHash = PasswordHelper.Generate(model.Password);
+            user.Phone = user.Phone.ExtractPhoneNumber();
             user.Id = await _userDao.CreateAsync(user).ConfigureAwait(false);
 
-            _auditLogService.LogInserting(UserContext.UserId, UserContext.StoreId, user);
+            var store = new StoreModel
+            {
+                Name = $"Магазин пользователя {user.Login}",
+                ApiSecret = null,
+                IsLocked = false,
+                IsDeleted = false,
+                CreateDate = DateTime.Now,
+                ModifyDate = null
+            };
 
-            _logger.LogInfo("AccountController.Register(). Registered.", 0,
-                new
-                {
-                    model.Login,
-                    model.Email,
-                    model.Phone,
-                    model.Surname,
-                    model.Name,
-                    model.Patronymic,
-                    model.Gender,
-                    model.BirthDate,
-                    ReturnUrl = returnUrl
-                });
+            store.Id = await _storeDao.CreateAsync(store).ConfigureAwait(false);
+
+            await _userPermissionService.CreateForRegisteredUserAsync(user.Id, store.Id).ConfigureAwait(false);
+
+            _auditLogService.LogInserting(0, 0, user);
 
             await EmailConfirmationProcess(user.Id).ConfigureAwait(false);
 
-            _logger.LogInfo("AccountController.Register(). Email confirmation link sended.", 0, new
-            {
-                model.Login,
-                model.Email,
-                model.Phone,
-                model.Surname,
-                model.Name,
-                model.Patronymic,
-                model.Gender,
-                model.BirthDate,
-                ReturnUrl = returnUrl
-            });
+            await SignInAsync(user.Id, store.Id, true).ConfigureAwait(false);
 
-            await SignInAsync(user.Login, true).ConfigureAwait(false);
-
-            var userContextDomain = await _userContextDao.GetAsync(user.Login, 0).ConfigureAwait(false);
-            if (userContextDomain == null)
-            {
-                _logger.LogWarning("AccountController.Register(). User context not found.", 0, new
-                {
-                    model.Login,
-                    model.Email,
-                    model.Phone,
-                    model.Surname,
-                    model.Name,
-                    model.Patronymic,
-                    model.Gender,
-                    model.BirthDate,
-                    ReturnUrl = returnUrl
-                });
-            }
+            var userContextDomain = await _userContextDao.GetAsync(user.Id, 0).ConfigureAwait(false);
 
             InitializeUserContext(userContextDomain);
-
-            _logger.LogInfo("AccountController.Register(). Signed in.", UserContext.UserId, new
-            {
-                model.Login,
-                model.Email,
-                model.Phone,
-                model.Surname,
-                model.Name,
-                model.Patronymic,
-                model.Gender,
-                model.BirthDate,
-                ReturnUrl = returnUrl
-            });
 
             return RedirectToAction("Index",
                 new {message = "На Вашу электронную почту отправлено письмо с подтверждением"});
@@ -481,7 +402,7 @@ namespace Aklion.Crm.Controllers
 
             _logger.LogInfo("AccountController.ChangePassword(). Password changed.", UserContext.UserId);
 
-            await SignInAsync(user.Login, true).ConfigureAwait(false);
+            await SignInAsync(user.Id, 0, true).ConfigureAwait(false);
 
             _logger.LogInfo("AccountController.ChangePassword(). Signed in.", UserContext.UserId);
 
@@ -912,7 +833,7 @@ namespace Aklion.Crm.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LoadAvatar(LoadAvatarModel model)
         {
-            if (!model.AvatarFile.Name.IsImage())
+            if (!model.AvatarFile.FileName.IsImage())
             {
                 return View("Error");
             }
@@ -932,6 +853,19 @@ namespace Aklion.Crm.Controllers
             _logger.LogInfo("AccountController.ResetPassword(). User.AvatarUrl updated.", UserContext.UserId);
 
             return RedirectToAction("Index", "Account");
+        }
+
+        [HttpGet]
+        public async Task<List<UserAvialableStore>> GetStores()
+        {
+            var result = await _userContextDao.GetAvialableStoresAsync(UserContext.UserId).ConfigureAwait(false);
+            return result.Map();
+        }
+
+        [HttpPost]
+        public Task SetStore(int storeId)
+        {
+            return SignInAsync(UserContext.UserId, storeId, true);
         }
 
         private async Task EmailConfirmationProcess(int userId)

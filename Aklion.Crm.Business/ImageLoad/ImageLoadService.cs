@@ -18,13 +18,13 @@ namespace Aklion.Crm.Business.ImageLoad
 
         private static async Task<string> LoadAsync(IFormFile file, string fsPath, string dbPath)
         {
-            if (!file.Name.IsImage())
+            if (!file.FileName.IsImage())
             {
                 return string.Empty;
             }
 
             var guid = Guid.NewGuid().ToString();
-            var extension = file.Name.GetExtension();
+            var extension = file.FileName.GetExtension();
             var path = $"{fsPath}{guid}.{extension}";
 
             using (var fileStream = new FileStream(path, FileMode.Create))

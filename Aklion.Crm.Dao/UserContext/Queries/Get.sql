@@ -1,8 +1,23 @@
-﻿declare @userId int = (
+﻿declare @correctStoreId int = (
 	select top 1
-		Id
-		from dbo.[User]
-		where [Login] = @login);
+		iif(
+			exists (
+				select
+					1
+					from dbo.UserPermission
+					where UserId = @userId 
+						and StoreId = @storeId 
+						and coalesce(Permission, 0) != 0),
+			@storeId,
+			(
+				select top 1
+					up.StoreId
+					from dbo.UserPermission as up
+						inner join dbo.Store as s on
+							up.StoreId = s.Id
+					where up.UserId = @userId
+					order by s.IsDeleted, s.IsLocked, s.CreateDate
+			)));
 
 select top 1
 	Id,
@@ -15,39 +30,17 @@ select top 1
 	from dbo.[User]
 	where Id = @userId;
 
-declare @storeId int = (
-	select top 1
-		iif(
-			exists (
-				select
-					1
-					from dbo.UserPermission
-					where UserId = @userId 
-						and StoreId = @selectedStoreId 
-						and coalesce(Permission, 0) != 0),
-			@selectedStoreId,
-			0));
-
 select top 1
 	Id,
-    [Name],
+    Name,
     IsLocked,
     IsDeleted
 	from dbo.Store
-	where Id = @storeId;
+	where Id = @correctStoreId;
 
 select
     Permission
 	from dbo.UserPermission
 	where UserId = @userId 
-		and (StoreId is null or StoreId = @storeId)
+		and (StoreId is null or StoreId = @correctStoreId)
 		and coalesce(Permission, 0) != 0;
-
-select
-	s.Id,
-	s.[Name]
-	from dbo.Store as s
-		inner join dbo.UserPermission as up on
-			s.Id = up.Permission
-	where up.UserId = @UserId
-		and coalesce(up.Permission, 0) != 0;

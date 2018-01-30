@@ -1,4 +1,5 @@
 ﻿@using Aklion.Crm.Enums
+@using Aklion.Infrastructure.DateTime
 @model Aklion.Crm.Models.Account.ChangePersonalInfoModel
 @{
     ViewData["Title"] = "Изменение данных аккаунта";
@@ -31,7 +32,7 @@
                         <label asp-for="Gender" class="control-label"></label><i class="bar"></i>
                     </div>
                     <div class="form-group">
-                        <input asp-for="BirthDate" class="datepicker" />
+                        <input asp-for="BirthDate" class="datepicker" value="@Model.BirthDate.TruncateTime()"/>
                         <label asp-for="BirthDate" class="control-label"></label><i class="bar"></i>
                         <span asp-validation-for="BirthDate" class="control-error-text"></span>
                     </div>

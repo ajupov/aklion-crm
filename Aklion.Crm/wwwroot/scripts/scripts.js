@@ -25,7 +25,23 @@ $(document).ready(() => {
             e.preventDefault();
             e.stopPropagation();
 
-            commonUi.dropdownMenuContent.toggle();
+            if (commonUi.dropdownMenuContent.css('display') === 'none') {
+                getJson('/Account/GetStores', null, (result) => {
+                    let html = '<ul>';
+
+                    $.each(result, (infdex, item) => {
+                        html += `<li><a onclick="setStore(${item.Id})">${item.Name}</a></li>`;
+                    });
+
+                    html += '</ul>';
+
+                    $('#avialable-stores').html(html);
+                    commonUi.dropdownMenuContent.show();
+                }
+                );
+            } else {
+                commonUi.dropdownMenuContent.hide();
+            }
         });
 
     new Inputmask('+79999999999', { greedy: false }).mask(commonUi.tel);
@@ -45,4 +61,10 @@ function openTab(event, tabName) {
 
     commonUi.tabs.hide();
     $(`#${tabName}`).show();
+}
+
+function setStore(storeId) {
+    postText('/Account/SetStore', { storeId: storeId }, () => {
+        window.location.reload();
+    });
 }

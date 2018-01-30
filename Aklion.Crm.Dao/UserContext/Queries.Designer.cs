@@ -61,24 +61,7 @@ namespace Aklion.Crm.Dao.UserContext {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на declare @userId int = (
-        ///	select top 1
-        ///		Id
-        ///		from dbo.[User]
-        ///		where [Login] = @login);
-        ///
-        ///select top 1
-        ///	Id,
-        ///    [Login],
-        ///    IsEmailConfirmed,
-        ///    IsPhoneConfirmed,
-        ///    IsLocked,
-        ///    IsDeleted,
-        ///    AvatarUrl
-        ///	from dbo.[User]
-        ///	where Id = @userId;
-        ///
-        ///declare @storeId int = (
+        ///   Ищет локализованную строку, похожую на declare @correctStoreId int = (
         ///	select top 1
         ///		iif(
         ///			exists (
@@ -86,14 +69,43 @@ namespace Aklion.Crm.Dao.UserContext {
         ///					1
         ///					from dbo.UserPermission
         ///					where UserId = @userId 
-        ///						and StoreId = @selectedStoreId 
+        ///						and StoreId = @storeId 
         ///						and coalesce(Permission, 0) != 0),
-        ///			@selectedStoreId,
-        ///			0 [остаток строки не уместился]&quot;;.
+        ///			@storeId,
+        ///			(
+        ///				select top 1
+        ///					up.StoreId
+        ///					from dbo.UserPermission as up
+        ///						inner join dbo.Store as s on
+        ///							up.StoreId = s.Id
+        ///					where up.UserId = @userId
+        ///					order by s.IsDeleted, s.IsLocked, s.CreateDate
+        ///			)));
+        ///
+        ///select top 1
+        ///	Id,
+        ///    [Login],
+        ///    IsE [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string Get {
             get {
                 return ResourceManager.GetString("Get", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на select distinct
+        ///	s.Id,
+        ///	s.Name
+        ///	from dbo.UserPermission as up
+        ///		inner join dbo.Store as s on
+        ///			up.StoreId = s.Id
+        ///	where s.IsDeleted = 0
+        ///		and up.UserId = @userId;.
+        /// </summary>
+        internal static string GetAvialableStores {
+            get {
+                return ResourceManager.GetString("GetAvialableStores", resourceCulture);
             }
         }
     }

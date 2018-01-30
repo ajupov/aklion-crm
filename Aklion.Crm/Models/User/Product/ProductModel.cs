@@ -18,6 +18,8 @@
 
         public string VendorCode { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public string CreateDate { get; set; }
     }
 }

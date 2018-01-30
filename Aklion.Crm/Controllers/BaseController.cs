@@ -12,11 +12,12 @@ namespace Aklion.Crm.Controllers
     public class BaseController : Controller
     {
         [NonAction]
-        public async Task SignInAsync(string login, bool rememberMe)
+        public async Task SignInAsync(int userId, int storeId, bool rememberMe)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, login)
+                new Claim(ClaimTypes.PrimarySid, userId.ToString(), ClaimValueTypes.Integer),
+                new Claim("StoreId", storeId.ToString(), ClaimValueTypes.Integer),
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType,
@@ -71,8 +72,7 @@ namespace Aklion.Crm.Controllers
                 StoreName = userContextDomain.CurrentStore?.Name,
                 StoreIsLocked = userContextDomain.CurrentStore?.IsLocked ?? false,
                 StoreIsDeleted = userContextDomain.CurrentStore?.IsDeleted ?? false,
-                Permissions = userContextDomain.CurrentStorePermissions?.Select(s => s.Permission).ToList(),
-                AvialableStores = userContextDomain.Stores?.ToDictionary(k => k.Id, v => v.Name)
+                Permissions = userContextDomain.CurrentStorePermissions?.Select(s => s.Permission).ToList()
             };
 
             ViewBag.UserContext = UserContext;

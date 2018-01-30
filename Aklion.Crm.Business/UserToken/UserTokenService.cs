@@ -24,7 +24,8 @@ namespace Aklion.Crm.Business.UserToken
                 TokenType = type,
                 Token = GenerateToken(type),
                 ExpirationDate = GetExpirationDate(type),
-                IsUsed = false
+                IsUsed = false,
+                CreateDate = DateTime.Now
             };
 
             await _userTokenDao.CreateAsync(token).ConfigureAwait(false);

@@ -68,6 +68,8 @@
         <div class="dropdown-content shadow" id="dropdown-menu-content">
             <a asp-controller="Account" asp-action="Index">Мой профиль</a>
             <div class="separator"></div>
+            <div id="avialable-stores"></div>
+            <div class="separator"></div>
             <form asp-controller="Account" asp-action="LogOff" method="post">
                 <button type="submit">Выйти</button>
             </form>
@@ -76,5 +78,6 @@
     else
     {
         <a class="link right" asp-controller="Account" asp-action="LogIn">Войти</a>
+        <a class="link right" asp-controller="Account" asp-action="Register">Регистрация</a>
     }
 </div>

@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Aklion.Infrastructure.Dao.Attributes;
@@ -9,11 +12,35 @@ namespace Aklion.Infrastructure.Query
     {
         public static QueryObject Create<TModel>(QueryType queryType)
         {
+            var type = typeof(TModel);
+
             return new QueryObject(queryType)
             {
-                Type = typeof(TModel),
-                Properties = typeof(TModel).GetProperties().ToList()
+                Type = type,
+                Properties = type.GetProperties().ToList()
             };
+
+            //var implementedInterfaces = type.GetInterfaces();
+            //var interfaces = new List<Type> {typeof(IEnumerable), typeof(ICollection), typeof(IList)};
+
+            //var isImplement = implementedInterfaces.Intersect(interfaces).Any();
+
+            //if (!isImplement)
+            //{
+            //    return new QueryObject(queryType)
+            //    {
+            //        Type = type,
+            //        Properties = type.GetProperties().ToList()
+            //    };
+            //}
+
+            //var genericType = type.GenericTypeArguments.FirstOrDefault();
+
+            //return new QueryObject(queryType)
+            //{
+            //    Type = genericType,
+            //    Properties = genericType?.GetProperties().ToList()
+            //};
         }
 
         public static QueryObject DefineTableName(this QueryObject queryObject)
@@ -298,6 +325,8 @@ namespace Aklion.Infrastructure.Query
                     return $"{noLockSelectCommand} select {queryObject.ColumnsForAutocomplete} from {queryObject.TableName} {queryObject.Filters};";
                 case QueryType.Insert:
                     return $"insert {queryObject.TableNameWithoutAlias} ({queryObject.ColumnsForInsert.Replace("@", string.Empty)}) values ({queryObject.ColumnsForInsert}); select scope_identity();";
+                case QueryType.InsertList:
+                    return $"insert {queryObject.TableNameWithoutAlias} ({queryObject.ColumnsForInsert.Replace("@", string.Empty)}) values ({queryObject.ColumnsForInsert});";
                 case QueryType.Update:
                     return $"update {queryObject.TableNameWithoutAlias} set {queryObject.ColumnsForUpdate} {queryObject.Filters.Replace($"{queryObject.TableAlias}.", string.Empty)}";
                 case QueryType.Delete:

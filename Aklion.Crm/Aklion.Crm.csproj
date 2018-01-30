@@ -20,9 +20,28 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Views\User\Product\Index.cshtml" />
-    <None Include="Views\User\Store\Index.cshtml" />
-    <None Include="Views\User\User\Index.cshtml" />
+    <Compile Include="Controllers\User\ClientAttributeController.cs" />
+    <Compile Include="Controllers\User\ClientAttributeLinkController.cs" />
+    <Compile Include="Controllers\User\ClientController.cs" />
+    <Compile Include="Controllers\User\ConsoleController.cs" />
+    <Compile Include="Controllers\User\OrderAttributeController.cs" />
+    <Compile Include="Controllers\User\OrderAttributeLinkController.cs" />
+    <Compile Include="Controllers\User\OrderController.cs" />
+    <Compile Include="Controllers\User\OrderItemController.cs" />
+    <Compile Include="Controllers\User\OrderSourceController.cs" />
+    <Compile Include="Controllers\User\OrderStatusController.cs" />
+    <Compile Include="Controllers\User\PermissionController.cs" />
+    <Compile Include="Controllers\User\ProductAttributeController.cs" />
+    <Compile Include="Controllers\User\ProductAttributeLinkController.cs" />
+    <Compile Include="Controllers\User\ProductController.cs" />
+    <Compile Include="Controllers\User\ProductImageKeyController.cs" />
+    <Compile Include="Controllers\User\ProductImageKeyLinkController.cs" />
+    <Compile Include="Controllers\User\ProductStatusController.cs" />
+    <Compile Include="Controllers\User\StoreController.cs" />
+    <Compile Include="Controllers\User\UserAttributeController.cs" />
+    <Compile Include="Controllers\User\UserAttributeLinkController.cs" />
+    <Compile Include="Controllers\User\UserController.cs" />
+    <Compile Include="Controllers\User\UserPermissionController.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,10 +58,6 @@
     <Content Update="wwwroot\scripts\shared\utils.min.js">
       <DependentUpon>utils.js</DependentUpon>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Mappers\User\" />
   </ItemGroup>
 
 </Project>

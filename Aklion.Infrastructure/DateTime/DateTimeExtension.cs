@@ -155,5 +155,10 @@ namespace Aklion.Infrastructure.DateTime
 
             return null;
         }
+
+        public static string TruncateTime(this string dateTimeString)
+        {
+            return dateTimeString.ToDate().ToDateString();
+        }
     }
 }

@@ -19,7 +19,7 @@ namespace Aklion.Crm.Controllers.Administration
         [Route("GetForSelect")]
         public Dictionary<string, Permission> GetList()
         {
-            return _permissionService.GetForAdmin();
+            return _permissionService.GetForAdminWithNames();
         }
     }
 }

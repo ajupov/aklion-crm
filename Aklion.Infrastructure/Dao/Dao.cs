@@ -126,6 +126,17 @@ namespace Aklion.Infrastructure.Dao
             return _dataBaseExecutor.SelectOneAsync<int>(query, model);
         }
 
+        public Task CreateListAsync<TModel>(List<TModel> model)
+        {
+            var query = QueryBuilder
+                .Create<TModel>(QueryType.InsertList)
+                .DefineTableName()
+                .DefineColumnsForInsert()
+                .Build();
+
+            return _dataBaseExecutor.ExecuteAsync(query, model);
+        }
+
         public Task UpdateAsync<TModel>(TModel model)
         {
             var query = QueryBuilder
