@@ -4,12 +4,12 @@ using Aklion.Crm.Attributes;
 using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Business.Store;
 using Aklion.Crm.Dao.Store;
-using Aklion.Crm.Mappers.Administration.Store;
+using Aklion.Crm.Mappers.User.Store;
 using Aklion.Crm.Models;
-using Aklion.Crm.Models.Administration.Store;
+using Aklion.Crm.Models.User.Store;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration
+namespace Aklion.Crm.Controllers.User
 {
     [Route("Stores")]
     public class StoreController : BaseController
@@ -32,14 +32,14 @@ namespace Aklion.Crm.Controllers.Administration
         [Route("")]
         public IActionResult Index()
         {
-            return View("~/Views/Administration/Store/Index.cshtml");
+            return View("~/Views/User/Store/Index.cshtml");
         }
 
         [HttpGet]
         [Route("GetList")]
         public async Task<PagingModel<StoreModel>> GetList(StoreParameterModel model)
         {
-            var result = await _storeDao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
+            var result = await _storeDao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
 
             return result.MapNew(model.Page, model.Size);
         }
@@ -56,7 +56,7 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Create(StoreModel model)
         {
-            var newModel = model.MapNew();
+            var newModel = model.MapNew(UserContext.StoreId);
 
             newModel.Id = await _storeDao.CreateAsync(newModel).ConfigureAwait(false);
 
@@ -71,7 +71,7 @@ namespace Aklion.Crm.Controllers.Administration
             var oldModel = await _storeDao.GetAsync(model.Id).ConfigureAwait(false);
             var oldModelClone = oldModel.Clone();
 
-            var newModel = oldModel.MapFrom(model);
+            var newModel = oldModel.MapFrom(model, UserContext.StoreId);
 
             await _storeDao.UpdateAsync(newModel).ConfigureAwait(false);
 
@@ -83,11 +83,15 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Delete(int id)
         {
-            var oldModel = await _storeDao.GetAsync(id).ConfigureAwait(false);
+            var model = await _storeDao.GetAsync(id).ConfigureAwait(false);
 
-            await _storeDao.DeleteAsync(id).ConfigureAwait(false);
+            var oldModelClone = model.Clone();
 
-            _auditLogService.LogDeleting(UserContext.UserId, UserContext.StoreId, oldModel);
+            model.IsDeleted = true;
+
+            await _storeDao.UpdateAsync(model).ConfigureAwait(false);
+
+            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, model);
         }
 
         [HttpPost]

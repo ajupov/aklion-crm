@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
 using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.OrderAttribute;
-using Aklion.Crm.Mappers.Administration.OrderAttribute;
+using Aklion.Crm.Mappers.User.OrderAttribute;
 using Aklion.Crm.Models;
-using Aklion.Crm.Models.Administration.OrderAttribute;
+using Aklion.Crm.Models.User.OrderAttribute;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration
+namespace Aklion.Crm.Controllers.User
 {
     [Route("OrderAttributes")]
     public class OrderAttributeController : BaseController
@@ -28,16 +28,16 @@ namespace Aklion.Crm.Controllers.Administration
         [Route("GetList")]
         public async Task<PagingModel<OrderAttributeModel>> GetList(OrderAttributeParameterModel model)
         {
-            var result = await _orderAttributeDao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
+            var result = await _orderAttributeDao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
 
             return result.MapNew(model.Page, model.Size);
         }
 
         [HttpGet]
         [Route("GetForAutocompleteByDescriptionPattern")]
-        public Task<Dictionary<string, int>> GetForAutocompleteByDescriptionPattern(string pattern, int storeId = 0)
+        public Task<Dictionary<string, int>> GetForAutocompleteByDescriptionPattern(string pattern)
         {
-            return _orderAttributeDao.GetForAutocompleteAsync(pattern.MapNew(storeId));
+            return _orderAttributeDao.GetForAutocompleteAsync(pattern.MapNew(UserContext.StoreId));
         }
 
         [HttpPost]
@@ -45,7 +45,7 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Create(OrderAttributeModel model)
         {
-            var newModel = model.MapNew();
+            var newModel = model.MapNew(UserContext.StoreId);
 
             newModel.Id = await _orderAttributeDao.CreateAsync(newModel).ConfigureAwait(false);
 
@@ -60,7 +60,7 @@ namespace Aklion.Crm.Controllers.Administration
             var oldModel = await _orderAttributeDao.GetAsync(model.Id).ConfigureAwait(false);
             var oldModelClone = oldModel.Clone();
 
-            var newModel = oldModel.MapFrom(model);
+            var newModel = oldModel.MapFrom(model, UserContext.StoreId);
 
             await _orderAttributeDao.UpdateAsync(newModel).ConfigureAwait(false);
 
@@ -72,11 +72,19 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Delete(int id)
         {
-            var oldModel = await _orderAttributeDao.GetAsync(id).ConfigureAwait(false);
+            var model = await _orderAttributeDao.GetAsync(id).ConfigureAwait(false);
+            if (model.StoreId != UserContext.StoreId)
+            {
+                return;
+            }
 
-            await _orderAttributeDao.DeleteAsync(id).ConfigureAwait(false);
+            var oldModelClone = model.Clone();
 
-            _auditLogService.LogDeleting(UserContext.UserId, UserContext.StoreId, oldModel);
+            model.IsDeleted = true;
+
+            await _orderAttributeDao.UpdateAsync(model).ConfigureAwait(false);
+
+            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, model);
         }
     }
 }

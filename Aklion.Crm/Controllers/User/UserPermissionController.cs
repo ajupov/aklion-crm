@@ -2,12 +2,12 @@
 using Aklion.Crm.Attributes;
 using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.UserPermission;
-using Aklion.Crm.Mappers.Administration.UserPermission;
+using Aklion.Crm.Mappers.User.UserPermission;
 using Aklion.Crm.Models;
-using Aklion.Crm.Models.Administration.UserPermission;
+using Aklion.Crm.Models.User.UserPermission;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration
+namespace Aklion.Crm.Controllers.User
 {
     [Route("UserPermissions")]
     public class UserPermissionController : BaseController
@@ -27,7 +27,7 @@ namespace Aklion.Crm.Controllers.Administration
         [Route("GetList")]
         public async Task<PagingModel<UserPermissionModel>> GetList(UserPermissionParameterModel model)
         {
-            var result = await _userPermissionDao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
+            var result = await _userPermissionDao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
 
             return result.MapNew(model.Page, model.Size);
         }
@@ -37,7 +37,7 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Create(UserPermissionModel model)
         {
-            var newModel = model.MapNew();
+            var newModel = model.MapNew(UserContext.StoreId);
 
             newModel.Id = await _userPermissionDao.CreateAsync(newModel).ConfigureAwait(false);
 
@@ -52,7 +52,7 @@ namespace Aklion.Crm.Controllers.Administration
             var oldModel = await _userPermissionDao.GetAsync(model.Id).ConfigureAwait(false);
             var oldModelClone = oldModel.Clone();
 
-            var newModel = oldModel.MapFrom(model);
+            var newModel = oldModel.MapFrom(model, UserContext.StoreId);
 
             await _userPermissionDao.UpdateAsync(newModel).ConfigureAwait(false);
 

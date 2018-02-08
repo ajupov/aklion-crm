@@ -25,7 +25,7 @@ namespace Aklion.Crm.Business.Sms
                 var client = new MainSmsClient(_configuration.ProjectName, _configuration.ApiKey);
                 await client.SendAsync(phoneNumber.ToFullPhoneNumber(), message).ConfigureAwait(false);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }

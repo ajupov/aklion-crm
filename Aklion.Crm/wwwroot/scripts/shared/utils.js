@@ -155,16 +155,32 @@ function administrationStoreLinkFormatter(value, options, data) {
     return data.StoreId > 0 ? `<a href="/Administration/Stores?Id=${data.StoreId}">${data.StoreName}</a>` : '';
 }
 
+function storeLinkFormatter(value, options, data) {
+    return data.StoreId > 0 ? `<a href="/Stores?Id=${data.StoreId}">${data.StoreName}</a>` : '';
+}
+
 function administrationUserLinkFormatter(value, options, data) {
     return `<a href="/Administration/Users?Id=${data.UserId}">${data.UserLogin}</a>`;
+}
+
+function userLinkFormatter(value, options, data) {
+    return `<a href="/Users?Id=${data.UserId}">${data.UserLogin}</a>`;
 }
 
 function administrationProductLinkFormatter(value, options, data) {
     return `<a href="/Administration/Products?Id=${data.ProductId}">${data.ProductName}</a>`;
 }
 
+function productLinkFormatter(value, options, data) {
+    return `<a href="/Products?Id=${data.ProductId}">${data.ProductName}</a>`;
+}
+
 function administrationClientLinkFormatter(value, options, data) {
     return `<a href="/Administration/Clients?Id=${data.ClientId}">${data.ClientName}</a>`;
+}
+
+function clientLinkFormatter(value, options, data) {
+    return `<a href="/Clients?Id=${data.ClientId}">${data.ClientName}</a>`;
 }
 
 function linkUnFormatter(value, options, cell) {

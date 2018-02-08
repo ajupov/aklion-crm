@@ -2,12 +2,12 @@
 using Aklion.Crm.Attributes;
 using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.Order;
-using Aklion.Crm.Mappers.Administration.Order;
+using Aklion.Crm.Mappers.User.Order;
 using Aklion.Crm.Models;
-using Aklion.Crm.Models.Administration.Order;
+using Aklion.Crm.Models.User.Order;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration
+namespace Aklion.Crm.Controllers.User
 {
     [Route("Orders")]
     public class OrderController : BaseController
@@ -27,14 +27,14 @@ namespace Aklion.Crm.Controllers.Administration
         [Route("")]
         public IActionResult Index()
         {
-            return View("~/Views/Administration/Order/Index.cshtml");
+            return View("~/Views/User/Order/Index.cshtml");
         }
 
         [HttpGet]
         [Route("GetList")]
         public async Task<PagingModel<OrderModel>> GetList(OrderParameterModel model)
         {
-            var result = await _orderDao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
+            var result = await _orderDao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
 
             return result.MapNew(model.Page, model.Size);
         }
@@ -44,7 +44,7 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Create(OrderModel model)
         {
-            var newModel = model.MapNew();
+            var newModel = model.MapNew(UserContext.StoreId);
 
             newModel.Id = await _orderDao.CreateAsync(newModel).ConfigureAwait(false);
 
@@ -59,7 +59,7 @@ namespace Aklion.Crm.Controllers.Administration
             var oldModel = await _orderDao.GetAsync(model.Id).ConfigureAwait(false);
             var oldModelClone = oldModel.Clone();
 
-            var newModel = oldModel.MapFrom(model);
+            var newModel = oldModel.MapFrom(model, UserContext.StoreId);
 
             await _orderDao.UpdateAsync(newModel).ConfigureAwait(false);
 
@@ -71,11 +71,19 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Delete(int id)
         {
-            var oldModel = await _orderDao.GetAsync(id).ConfigureAwait(false);
+            var model = await _orderDao.GetAsync(id).ConfigureAwait(false);
+            if (model.StoreId != UserContext.StoreId)
+            {
+                return;
+            }
 
-            await _orderDao.DeleteAsync(id).ConfigureAwait(false);
+            var oldModelClone = model.Clone();
 
-            _auditLogService.LogDeleting(UserContext.UserId, UserContext.StoreId, oldModel);
+            model.IsDeleted = true;
+
+            await _orderDao.UpdateAsync(model).ConfigureAwait(false);
+
+            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, model);
         }
     }
 }

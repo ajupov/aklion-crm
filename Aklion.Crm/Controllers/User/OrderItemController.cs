@@ -2,12 +2,12 @@
 using Aklion.Crm.Attributes;
 using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.OrderItem;
-using Aklion.Crm.Mappers.Administration.OrderItem;
+using Aklion.Crm.Mappers.User.OrderItem;
 using Aklion.Crm.Models;
-using Aklion.Crm.Models.Administration.OrderItem;
+using Aklion.Crm.Models.User.OrderItem;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration
+namespace Aklion.Crm.Controllers.User
 {
     [Route("OrderItems")]
     public class OrderItemController : BaseController
@@ -27,7 +27,7 @@ namespace Aklion.Crm.Controllers.Administration
         [Route("GetList")]
         public async Task<PagingModel<OrderItemModel>> GetList(OrderItemParameterModel model)
         {
-            var result = await _orderItemDao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
+            var result = await _orderItemDao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
 
             return result.MapNew(model.Page, model.Size);
         }
@@ -37,7 +37,7 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Create(OrderItemModel model)
         {
-            var newModel = model.MapNew();
+            var newModel = model.MapNew(UserContext.StoreId);
 
             newModel.Id = await _orderItemDao.CreateAsync(newModel).ConfigureAwait(false);
 
@@ -52,7 +52,7 @@ namespace Aklion.Crm.Controllers.Administration
             var oldModel = await _orderItemDao.GetAsync(model.Id).ConfigureAwait(false);
             var oldModelClone = oldModel.Clone();
 
-            var newModel = oldModel.MapFrom(model);
+            var newModel = oldModel.MapFrom(model, UserContext.StoreId);
 
             await _orderItemDao.UpdateAsync(newModel).ConfigureAwait(false);
 
@@ -64,11 +64,19 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Delete(int id)
         {
-            var oldModel = await _orderItemDao.GetAsync(id).ConfigureAwait(false);
+            var model = await _orderItemDao.GetAsync(id).ConfigureAwait(false);
+            if (model.StoreId != UserContext.StoreId)
+            {
+                return;
+            }
 
-            await _orderItemDao.DeleteAsync(id).ConfigureAwait(false);
+            var oldModelClone = model.Clone();
 
-            _auditLogService.LogDeleting(UserContext.UserId, UserContext.StoreId, oldModel);
+            model.IsDeleted = true;
+
+            await _orderItemDao.UpdateAsync(model).ConfigureAwait(false);
+
+            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, model);
         }
     }
 }

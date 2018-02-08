@@ -46,14 +46,14 @@
     <div class="row">
         <div class="col s12 m12 l12">
             <div class="horisontal-scrollable pading-10">
-                <table id="images-table"></table>
-                <div id="images-table-pagination"></div>
+                <table id="products-statuses-table"></table>
+                <div id="products-statuses-table-pagination"></div>
             </div>
         </div>
         <div class="col s12 m12 l12">
             <div class="horisontal-scrollable pading-10">
-                <table id="products-statuses-table"></table>
-                <div id="products-statuses-table-pagination"></div>
+                <table id="images-table"></table>
+                <div id="images-table-pagination"></div>
             </div>
         </div>
     </div>
@@ -61,7 +61,7 @@
 
 <div id="load-image-dialog" class="dialog hidden" title="Загрузка изображения">
     <div class="col s12 m12 l12">
-        <form asp-controller="AdministrationProductImageKeyLink" asp-action="LoadImage" method="post" enctype="multipart/form-data">
+        <form asp-controller="ProductImageKeyLink" asp-action="LoadImage" method="post" enctype="multipart/form-data">
             <input type="hidden" id="product-id" name="Id" />
             <input type="file" name="ImageFile" accept="image/*" required="required" aria-required="true" class="cell-button">
             <br />
@@ -77,10 +77,10 @@
 @section Scripts {
     @{
         <environment names="Development">
-            <script src="~/scripts/administration/product/index.js"></script>
+            <script src="~/scripts/user/product/index.js"></script>
         </environment>
         <environment names="Staging,Production">
-            <script src="~/scripts/administration/product/index.min.js"></script>
+            <script src="~/scripts/user/product/index.min.js"></script>
         </environment>
     }
 }

@@ -25,7 +25,7 @@ namespace Aklion.Crm.Filters
         {
         }
 
-        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        public async Task OnActionExecution(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             var controller = context.Controller as Controller;
             if (controller == null)
@@ -76,6 +76,11 @@ namespace Aklion.Crm.Filters
             }
 
             await next().ConfigureAwait(false);
+        }
+
+        public Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        {
+            return Task.CompletedTask;
         }
     }
 }

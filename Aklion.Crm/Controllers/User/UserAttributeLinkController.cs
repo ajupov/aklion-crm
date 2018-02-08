@@ -2,12 +2,12 @@
 using Aklion.Crm.Attributes;
 using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.UserAttributeLink;
-using Aklion.Crm.Mappers.Administration.UserAttributeLink;
+using Aklion.Crm.Mappers.User.UserAttributeLink;
 using Aklion.Crm.Models;
-using Aklion.Crm.Models.Administration.UserAttributeLink;
+using Aklion.Crm.Models.User.UserAttributeLink;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration
+namespace Aklion.Crm.Controllers.User
 {
     [Route("UserAttributeLinks")]
     public class UserAttributeLinkController : BaseController
@@ -27,7 +27,7 @@ namespace Aklion.Crm.Controllers.Administration
         [Route("GetList")]
         public async Task<PagingModel<UserAttributeLinkModel>> GetList(UserAttributeLinkParameterModel model)
         {
-            var result = await _userAttributeLinkDao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
+            var result = await _userAttributeLinkDao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
 
             return result.MapNew(model.Page, model.Size);
         }
@@ -37,7 +37,7 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Create(UserAttributeLinkModel model)
         {
-            var newModel = model.MapNew();
+            var newModel = model.MapNew(UserContext.StoreId);
 
             newModel.Id = await _userAttributeLinkDao.CreateAsync(newModel).ConfigureAwait(false);
 
@@ -52,7 +52,7 @@ namespace Aklion.Crm.Controllers.Administration
             var oldModel = await _userAttributeLinkDao.GetAsync(model.Id).ConfigureAwait(false);
             var oldModelClone = oldModel.Clone();
 
-            var newModel = oldModel.MapFrom(model);
+            var newModel = oldModel.MapFrom(model, UserContext.StoreId);
 
             await _userAttributeLinkDao.UpdateAsync(newModel).ConfigureAwait(false);
 
@@ -64,11 +64,19 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Delete(int id)
         {
-            var oldModel = await _userAttributeLinkDao.GetAsync(id).ConfigureAwait(false);
+            var model = await _userAttributeLinkDao.GetAsync(id).ConfigureAwait(false);
+            if (model.StoreId != UserContext.StoreId)
+            {
+                return;
+            }
 
-            await _userAttributeLinkDao.DeleteAsync(id).ConfigureAwait(false);
+            var oldModelClone = model.Clone();
 
-            _auditLogService.LogDeleting(UserContext.UserId, UserContext.StoreId, oldModel);
+            model.IsDeleted = true;
+
+            await _userAttributeLinkDao.UpdateAsync(model).ConfigureAwait(false);
+
+            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, model);
         }
     }
 }

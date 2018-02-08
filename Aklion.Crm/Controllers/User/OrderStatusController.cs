@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
 using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.OrderStatus;
-using Aklion.Crm.Mappers.Administration.OrderStatus;
+using Aklion.Crm.Mappers.User.OrderStatus;
 using Aklion.Crm.Models;
-using Aklion.Crm.Models.Administration.OrderStatus;
+using Aklion.Crm.Models.User.OrderStatus;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration
+namespace Aklion.Crm.Controllers.User
 {
     [Route("OrderStatuses")]
     public class OrderStatusController : BaseController
@@ -28,16 +28,16 @@ namespace Aklion.Crm.Controllers.Administration
         [Route("GetList")]
         public async Task<PagingModel<OrderStatusModel>> GetList(OrderStatusParameterModel model)
         {
-            var result = await _orderStatusDao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
+            var result = await _orderStatusDao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
 
             return result.MapNew(model.Page, model.Size);
         }
 
         [HttpGet]
         [Route("GetForSelect")]
-        public async Task<Dictionary<string, int>> GetForSelect(int storeId = 0)
+        public async Task<Dictionary<string, int>> GetForSelect()
         {
-            var result = await _orderStatusDao.GetForSelectAsync(storeId.MapNew()).ConfigureAwait(false);
+            var result = await _orderStatusDao.GetForSelectAsync(UserContext.StoreId.MapNew()).ConfigureAwait(false);
 
             return result.MapNew();
         }
@@ -47,7 +47,7 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Create(OrderStatusModel model)
         {
-            var newModel = model.MapNew();
+            var newModel = model.MapNew(UserContext.StoreId);
 
             newModel.Id = await _orderStatusDao.CreateAsync(newModel).ConfigureAwait(false);
 
@@ -62,7 +62,7 @@ namespace Aklion.Crm.Controllers.Administration
             var oldModel = await _orderStatusDao.GetAsync(model.Id).ConfigureAwait(false);
             var oldModelClone = oldModel.Clone();
 
-            var newModel = oldModel.MapFrom(model);
+            var newModel = oldModel.MapFrom(model, UserContext.StoreId);
 
             await _orderStatusDao.UpdateAsync(newModel).ConfigureAwait(false);
 

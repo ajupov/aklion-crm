@@ -1,9 +1,8 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Aklion.Crm.Filters
 {
-    public class LogFileFilter : IActionFilter, IAsyncActionFilter
+    public class LogFileFilter : IActionFilter
     {
         public void OnActionExecuting(ActionExecutingContext context)
         {
@@ -11,11 +10,6 @@ namespace Aklion.Crm.Filters
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-        }
-
-        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
-        {
-
         }
     }
 }

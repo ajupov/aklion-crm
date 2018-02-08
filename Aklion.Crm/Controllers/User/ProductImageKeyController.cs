@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
 using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.ProductImageKey;
-using Aklion.Crm.Mappers.Administration.ProductImageKey;
+using Aklion.Crm.Mappers.User.ProductImageKey;
 using Aklion.Crm.Models;
-using Aklion.Crm.Models.Administration.ProductImageKey;
+using Aklion.Crm.Models.User.ProductImageKey;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration
+namespace Aklion.Crm.Controllers.User
 {
     [Route("ProductImageKeys")]
     public class ProductImageKeyController : BaseController
@@ -28,7 +28,7 @@ namespace Aklion.Crm.Controllers.Administration
         [Route("GetList")]
         public async Task<PagingModel<ProductImageKeyModel>> GetList(ProductImageKeyParameterModel model)
         {
-            var result = await _productImageKeyDao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
+            var result = await _productImageKeyDao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
 
             return result.MapNew(model.Page, model.Size);
         }
@@ -36,9 +36,9 @@ namespace Aklion.Crm.Controllers.Administration
 
         [HttpGet]
         [Route("GetForSelect")]
-        public async Task<Dictionary<string, int>> GetForSelect(int storeId = 0)
+        public async Task<Dictionary<string, int>> GetForSelect()
         {
-            var result = await _productImageKeyDao.GetForSelectAsync(storeId.MapNew()).ConfigureAwait(false);
+            var result = await _productImageKeyDao.GetForSelectAsync(UserContext.StoreId.MapNew()).ConfigureAwait(false);
 
             return result.MapNew();
         }
@@ -48,7 +48,7 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Create(ProductImageKeyModel model)
         {
-            var newModel = model.MapNew();
+            var newModel = model.MapNew(UserContext.StoreId);
 
             newModel.Id = await _productImageKeyDao.CreateAsync(newModel).ConfigureAwait(false);
 
@@ -63,7 +63,7 @@ namespace Aklion.Crm.Controllers.Administration
             var oldModel = await _productImageKeyDao.GetAsync(model.Id).ConfigureAwait(false);
             var oldModelClone = oldModel.Clone();
 
-            var newModel = oldModel.MapFrom(model);
+            var newModel = oldModel.MapFrom(model, UserContext.StoreId);
 
             await _productImageKeyDao.UpdateAsync(newModel).ConfigureAwait(false);
 
@@ -75,11 +75,19 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Delete(int id)
         {
-            var oldModel = await _productImageKeyDao.GetAsync(id).ConfigureAwait(false);
+            var model = await _productImageKeyDao.GetAsync(id).ConfigureAwait(false);
+            if (model.StoreId != UserContext.StoreId)
+            {
+                return;
+            }
 
-            await _productImageKeyDao.DeleteAsync(id).ConfigureAwait(false);
+            var oldModelClone = model.Clone();
 
-            _auditLogService.LogDeleting(UserContext.UserId, UserContext.StoreId, oldModel);
+            model.IsDeleted = true;
+
+            await _productImageKeyDao.UpdateAsync(model).ConfigureAwait(false);
+
+            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, model);
         }
     }
 }

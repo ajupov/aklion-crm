@@ -3,7 +3,7 @@ using Aklion.Crm.Business.Permission;
 using Aklion.Crm.Enums;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration
+namespace Aklion.Crm.Controllers.User
 {
     [Route("Permissions")]
     public class PermissionController : BaseController
@@ -19,7 +19,7 @@ namespace Aklion.Crm.Controllers.Administration
         [Route("GetForSelect")]
         public Dictionary<string, Permission> GetList()
         {
-            return _permissionService.GetForAdminWithNames();
+            return _permissionService.GetForUserWithNames();
         }
     }
 }

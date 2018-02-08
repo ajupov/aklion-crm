@@ -68,7 +68,7 @@ namespace Aklion.Crm.Business.Mail
                     await client.DisconnectAsync(true).ConfigureAwait(false);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }

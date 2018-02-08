@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
 using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.User;
-using Aklion.Crm.Mappers.Administration.User;
+using Aklion.Crm.Mappers.User.User;
 using Aklion.Crm.Models;
-using Aklion.Crm.Models.Administration.User;
+using Aklion.Crm.Models.User.User;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration
+namespace Aklion.Crm.Controllers.User
 {
     [Route("Users")]
     public class UserController : BaseController
@@ -28,7 +28,7 @@ namespace Aklion.Crm.Controllers.Administration
         [Route("")]
         public IActionResult Index()
         {
-            return View("~/Views/Administration/User/Index.cshtml");
+            return View("~/Views/User/User/Index.cshtml");
         }
 
         [HttpGet]
@@ -67,11 +67,15 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Delete(int id)
         {
-            var oldModel = await _userDao.GetAsync(id).ConfigureAwait(false);
+            var model = await _userDao.GetAsync(id).ConfigureAwait(false);
 
-            await _userDao.DeleteAsync(id).ConfigureAwait(false);
+            var oldModelClone = model.Clone();
 
-            _auditLogService.LogDeleting(UserContext.UserId, UserContext.StoreId, oldModel);
+            model.IsDeleted = true;
+
+            await _userDao.UpdateAsync(model).ConfigureAwait(false);
+
+            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, model);
         }
     }
 }

@@ -1,165 +1,115 @@
 ﻿'use strict';
 
-const ui = {
-    productTable: $('#product-table'),
-    categoryTable: $('#category-table'),
-    productCategoryTable: $('#product-category-table'),
-    tagTable: $('#tag-table'),
-    productTagTable: $('#product-tag-table'),
-    attributeTable: $('#attribute-table'),
-    productAttributeTable: $('#product-attribute-table')
-}
-
-$(document).ready(() => {
-    $('.tab-button').first().click();
-});
-
 function initProductsTable() {
     createTable({
         Title: 'Продукты',
-        Element: '#product-table',
-        Pager: '#product-table-pagination',
+        Element: '#products-table',
+        Pager: '#products-table-pagination',
         IsViewable: true,
         IsEditable: true,
         IsCreatable: true,
         IsDeletable: true,
         IsFilterable: true,
+        CanExtractFilters: true,
         DataUrl: '/Products/GetList',
         CreateUrl: '/Products/Create',
         UpdateUrl: '/Products/Update',
         DeleteUrl: '/Products/Delete',
         Columns: [
             { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
-            { Name: 'Name', Label: 'Имя', Type: 'text', Width: 130, Editable: true, MaxLength: 256 },
-            {
-                Name: 'Type', Label: 'Тип', Type: 'select', SelectValues: '0:;1:Товар;2:Услуга', Width: 70,
-                Editable: true, Sortable: false
-            },
-            {
-                Name: 'Description', Label: 'Описание', Type: 'textarea', Hidden: true, EditHidden: true, Editable: true,
-                MaxLength: 4000
-            },
-            { Name: 'Price', Label: 'Стоимость', Type: 'money', Width: 80, Editable: true },
-            {
-                Name: 'Status', Label: 'Тип', Type: 'select', SelectValues: '0:;1:В наличии;2:На складе;3:На заказ;4:Отсутствует',
-                Width: 100, Editable: true, Sortable: false
-            },
-            { Name: 'VendorCode', Label: 'Артикул', Type: 'text', Width: 100, Editable: true, MaxLength: 16 },
             { Name: 'ParentId', Type: 'number', Hidden: true, Editable: true },
             {
-                Name: 'ParentName', Label: 'Родительский продукт', Type: 'autocomplete', Editable: true, Width: 130,
+                Name: 'ParentName', Label: 'Родительский продукт', Type: 'autocomplete', Editable: true, Width: 120,
                 AutocompleteUrl: '/Products/GetForAutocompleteByNamePattern', AutocompleteHidden: 'ParentId'
             },
-            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 100 }
-        ]
-    });
-}
-
-function initCategoriesTable() {
-    createTable({
-        Title: 'Категории',
-        Element: '#category-table',
-        Pager: '#category-table-pagination',
-        IsViewable: true,
-        IsEditable: true,
-        IsCreatable: true,
-        IsDeletable: true,
-        IsFilterable: true,
-        DataUrl: '/Categories/GetList',
-        CreateUrl: '/Categories/Create',
-        UpdateUrl: '/Categories/Update',
-        DeleteUrl: '/Categories/Delete',
-        Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
-            { Name: 'Name', Label: 'Имя', Type: 'text', Width: 130, Editable: true, MaxLength: 256 },
-            { Name: 'ParentId', Type: 'number', Hidden: true, Editable: true },
             {
-                Name: 'ParentName', Label: 'Название родителя', Type: 'autocomplete', Editable: true, Width: 130,
-                AutocompleteUrl: '/Administration/Categories/GetForAutocompleteByNamePattern', AutocompleteHidden: 'ParentId'
+                Name: 'StatusId', Label: 'Статус', Type: 'select', Editable: true, Sortable: false,
+                SelectValues: getSelectValues('/ProductStatuses/GetForSelect'), Width: 120
             },
-            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 100 }
-        ]
+            { Name: 'Name', Label: 'Название', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
+            { Name: 'Price', Label: 'Стоимость', Type: 'money', Width: 80, Editable: true },
+            { Name: 'VendorCode', Label: 'Артикул', Type: 'text', Width: 120, Editable: true, MaxLength: 16 },
+            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 55, Editable: true, Sortable: false },
+            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
+            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }
+        ],
+        OnSelectRow: id => {
+            $('#products-attributes-table').jqGrid('setGridParam', { postData: { ProductId: id } }).trigger('reloadGrid');
+            $('#products-images-table').jqGrid('setGridParam', { postData: { ProductId: id } }).trigger('reloadGrid');
+        }
     });
 
     createTable({
-        Title: 'Категории продуктов',
-        Element: '#product-category-table',
-        Pager: '#product-category-table-pagination',
+        Title: 'Атрибуты продуктов',
+        Element: '#products-attributes-table',
+        Pager: '#products-attributes-table-pagination',
         IsViewable: true,
         IsEditable: true,
         IsCreatable: true,
         IsDeletable: true,
         IsFilterable: true,
-        DataUrl: '/ProductCategories/GetList',
-        CreateUrl: '/ProductCategories/Create',
-        UpdateUrl: '/ProductCategories/Update',
-        DeleteUrl: '/ProductCategories/Delete',
+        DataUrl: '/ProductAttributeLinks/GetList',
+        CreateUrl: '/ProductAttributeLinks/Create',
+        UpdateUrl: '/ProductAttributeLinks/Update',
+        DeleteUrl: '/ProductAttributeLinks/Delete',
         Columns: [
             { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
             { Name: 'ProductId', Type: 'number', Hidden: true, Editable: true },
             {
-                Name: 'ProductName', Label: 'Название продукта', Type: 'autocomplete', Editable: true, Width: 130,
-                AutocompleteUrl: '/Administration/Products/GetForAutocompleteByNamePattern', AutocompleteHidden: 'ProductId'
+                Name: 'ProductName', Label: 'Продукт', Type: 'autocomplete', Editable: true, Width: 120,
+                AutocompleteUrl: '/Products/GetForAutocompleteByNamePattern', AutocompleteHidden: 'ProductId',
+                Formatter: productLinkFormatter, Unformatter: linkUnFormatter
             },
-            { Name: 'CategoryId', Type: 'number', Hidden: true, Editable: true },
+            { Name: 'AttributeId', Type: 'number', Hidden: true, Editable: true },
             {
-                Name: 'CategoryName', Label: 'Название категории', Type: 'autocomplete', Editable: true, Width: 130,
-                AutocompleteUrl: '/Administration/Categories/GetForAutocompleteByNamePattern', AutocompleteHidden: 'CategoryId'
+                Name: 'AttributeDescription', Label: 'Атрибут', Type: 'autocomplete', Editable: true, Width: 120,
+                AutocompleteUrl: '/ProductAttributes/GetForAutocompleteByDescriptionPattern',
+                AutocompleteHidden: 'AttributeId'
             },
-            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 100 }
+            { Name: 'Value', Label: 'Значение', Width: 250, Editable: true, EditHidden: true },
+            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 55, Editable: true, Sortable: false },
+            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
+            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }
         ]
     });
-}
 
-function initTagsTable() {
     createTable({
-        Title: 'Теги',
-        Element: '#tag-table',
-        Pager: '#tag-table-pagination',
+        Title: 'Изображения продуктов',
+        Element: '#products-images-table',
+        Pager: '#products-images-table-pagination',
         IsViewable: true,
         IsEditable: true,
         IsCreatable: true,
         IsDeletable: true,
         IsFilterable: true,
-        DataUrl: '/Tags/GetList',
-        CreateUrl: '/Tags/Create',
-        UpdateUrl: '/Tags/Update',
-        DeleteUrl: '/Tags/Delete',
+        IsWithFile: true,
+        DataUrl: '/ProductImageKeyLinks/GetList',
+        CreateUrl: '/ProductImageKeyLinks/Create',
+        UpdateUrl: '/ProductImageKeyLinks/Update',
+        DeleteUrl: '/ProductImageKeyLinks/Delete',
         Columns: [
             { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
-            { Name: 'Name', Label: 'Имя', Type: 'text', Width: 130, Editable: true, MaxLength: 256 },
-            { Name: 'IsDeleted', Label: 'Удален', Type: 'checkbox', Width: 50, Editable: true, Sortable: false },
-            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 100 },
-            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Hidden: true, EditHidden: true }
-        ]
-    });
-
-    createTable({
-        Title: 'Теги продуктов',
-        Element: '#product-tag-table',
-        Pager: '#product-tag-table-pagination',
-        IsViewable: true,
-        IsEditable: true,
-        IsCreatable: true,
-        IsDeletable: true,
-        IsFilterable: true,
-        DataUrl: '/Administration/ProductTags/GetList',
-        CreateUrl: '/Administration/ProductTags/Create',
-        UpdateUrl: '/Administration/ProductTags/Update',
-        DeleteUrl: '/Administration/ProductTags/Delete',
-        Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 70 },
             { Name: 'ProductId', Type: 'number', Hidden: true, Editable: true },
             {
-                Name: 'ProductName', Label: 'Название продукта', Type: 'autocomplete', Editable: true, Width: 130,
-                AutocompleteUrl: '/Products/GetForAutocompleteByNamePattern', AutocompleteHidden: 'ProductId'
+                Name: 'ProductName', Label: 'Продукт', Type: 'autocomplete', Editable: true, Width: 120,
+                AutocompleteUrl: '/Products/GetForAutocompleteByNamePattern', AutocompleteHidden: 'ProductId',
+                Formatter: productLinkFormatter, Unformatter: linkUnFormatter
             },
-            { Name: 'TagId', Type: 'number', Hidden: true, Editable: true },
             {
-                Name: 'TagName', Label: 'Название категории', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Tags/GetForAutocompleteByNamePattern', AutocompleteHidden: 'TagId'
+                Name: 'KeyId', Label: 'Ключ', Type: 'select', Editable: true, Sortable: false,
+                SelectValues: getSelectValues('/ProductImageKeys/GetForSelect'), Width: 120
             },
-            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 100 }
+            {
+                Name: 'SetValue', Label: 'Установить изображение', Type: 'custom', Width: 155, Align: 'center',
+                Formatter: loadImageDialogFormatter, Sortable: false, Search: false
+            },
+            {
+                Name: 'Base64Value', Label: 'Изображение', Type: 'image', Width: 100, Search: false, Sortable: false,
+                Editable: false, EditHidden: true, Formatter: base64ImageValueFormatter
+            },
+            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 55, Editable: true, Sortable: false },
+            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
+            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }
         ]
     });
 }
@@ -167,28 +117,8 @@ function initTagsTable() {
 function initAttributesTable() {
     createTable({
         Title: 'Атрибуты',
-        Element: '#attribute-table',
-        Pager: '#attribute-table-pagination',
-        IsViewable: true,
-        IsEditable: true,
-        IsCreatable: true,
-        IsDeletable: true,
-        IsFilterable: true,
-        DataUrl: '/Attributes/GetList',
-        CreateUrl: '/Attributes/Create',
-        UpdateUrl: '/Attributes/Update',
-        DeleteUrl: '/Attributes/Delete',
-        Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
-            { Name: 'Name', Label: 'Имя', Type: 'text', Width: 130, Editable: true, MaxLength: 256 },
-            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 100 }
-        ]
-    });
-
-    createTable({
-        Title: 'Атрибуты продуктов',
-        Element: '#product-attribute-table',
-        Pager: '#product-attribute-table-pagination',
+        Element: '#attributes-table',
+        Pager: '#attributes-table-pagination',
         IsViewable: true,
         IsEditable: true,
         IsCreatable: true,
@@ -200,18 +130,75 @@ function initAttributesTable() {
         DeleteUrl: '/ProductAttributes/Delete',
         Columns: [
             { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
-            { Name: 'ProductId', Type: 'number', Hidden: true, Editable: true },
-            {
-                Name: 'ProductName', Label: 'Название продукта', Type: 'autocomplete', Editable: true, Width: 130,
-                AutocompleteUrl: '/Products/GetForAutocompleteByNamePattern', AutocompleteHidden: 'ProductId'
-            },
-            { Name: 'AttributeId', Type: 'number', Hidden: true, Editable: true },
-            {
-                Name: 'AttributeName', Label: 'Название атрибута', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Attributes/GetForAutocompleteByNamePattern', AutocompleteHidden: 'AttributeId'
-            },
-            { Name: 'Value', Label: 'Значение', Type: 'text', Width: 130, Editable: true, MaxLength: 256 },
-            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 100 }
+            { Name: 'Name', Label: 'Название', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
+            { Name: 'Description', Label: 'Описание', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
+            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 55, Editable: true, Sortable: false },
+            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
+            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }
         ]
     });
+}
+
+function initOthersTable() {
+    createTable({
+        Title: 'Статус продукта',
+        Element: '#products-statuses-table',
+        Pager: '#products-statuses-table-pagination',
+        IsViewable: true,
+        IsEditable: true,
+        IsCreatable: true,
+        IsDeletable: true,
+        IsFilterable: true,
+        DataUrl: '/ProductStatuses/GetList',
+        CreateUrl: '/ProductStatuses/Create',
+        UpdateUrl: '/ProductStatuses/Update',
+        DeleteUrl: '/ProductStatuses/Delete',
+        Columns: [
+            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
+            { Name: 'Name', Label: 'Название', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
+            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
+            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }
+        ]
+    });
+
+    createTable({
+        Title: 'Ключи изображений продукта',
+        Element: '#images-table',
+        Pager: '#images-table-pagination',
+        IsViewable: true,
+        IsEditable: true,
+        IsCreatable: true,
+        IsDeletable: true,
+        IsFilterable: true,
+        DataUrl: '/ProductImageKeys/GetList',
+        CreateUrl: '/ProductImageKeys/Create',
+        UpdateUrl: '/ProductImageKeys/Update',
+        DeleteUrl: '/ProductImageKeys/Delete',
+        Columns: [
+            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
+            { Name: 'Name', Label: 'Название', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
+            { Name: 'Description', Label: 'Описание', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
+            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 55, Editable: true, Sortable: false },
+            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
+            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }
+        ]
+    });
+}
+
+function loadImageDialogFormatter(value, options, data) {
+    return `<button onclick="loadImageDialogShow(event, ${data.Id});" class="cell-button" title="Открыть окно загрузки изображения">
+                Установить
+            </button>`;
+}
+
+function base64ImageValueFormatter(value) {
+    return `<img style="width:100px; height:auto;" src="data:image/jpg;base64, ${value}"></img>`;
+}
+
+function loadImageDialogShow(event, id) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    $('#product-id').val(id);
+    $('#load-image-dialog').dialog('open');
 }

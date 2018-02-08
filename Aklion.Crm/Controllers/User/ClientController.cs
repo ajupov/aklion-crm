@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
 using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.Client;
-using Aklion.Crm.Mappers.Administration.Client;
+using Aklion.Crm.Mappers.User.Client;
 using Aklion.Crm.Models;
-using Aklion.Crm.Models.Administration.Client;
+using Aklion.Crm.Models.User.Client;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration
+namespace Aklion.Crm.Controllers.User
 {
     [Route("Clients")]
     public class ClientController : BaseController
@@ -28,23 +28,23 @@ namespace Aklion.Crm.Controllers.Administration
         [Route("")]
         public IActionResult Index()
         {
-            return View("~/Views/Administration/Client/Index.cshtml");
+            return View("~/Views/User/Client/Index.cshtml");
         }
 
         [HttpGet]
         [Route("GetList")]
         public async Task<PagingModel<ClientModel>> GetList(ClientParameterModel model)
         {
-            var result = await _clientDao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
+            var result = await _clientDao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
 
             return result.MapNew(model.Page, model.Size);
         }
 
         [HttpGet]
         [Route("GetForAutocompleteByNamePattern")]
-        public Task<Dictionary<string, int>> GetForAutocompleteByNamePattern(string pattern, int storeId = 0)
+        public Task<Dictionary<string, int>> GetForAutocompleteByNamePattern(string pattern)
         {
-            return _clientDao.GetForAutocompleteAsync(pattern.MapNew(storeId));
+            return _clientDao.GetForAutocompleteAsync(pattern.MapNew(UserContext.StoreId));
         }
 
         [HttpPost]
@@ -52,7 +52,7 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Create(ClientModel model)
         {
-            var newModel = model.MapNew();
+            var newModel = model.MapNew(UserContext.StoreId);
 
             newModel.Id = await _clientDao.CreateAsync(newModel).ConfigureAwait(false);
 
@@ -67,7 +67,7 @@ namespace Aklion.Crm.Controllers.Administration
             var oldModel = await _clientDao.GetAsync(model.Id).ConfigureAwait(false);
             var oldModelClone = oldModel.Clone();
 
-            var newModel = oldModel.MapFrom(model);
+            var newModel = oldModel.MapFrom(model, UserContext.StoreId);
 
             await _clientDao.UpdateAsync(newModel).ConfigureAwait(false);
 
@@ -79,11 +79,19 @@ namespace Aklion.Crm.Controllers.Administration
         [AjaxErrorHandle]
         public async Task Delete(int id)
         {
-            var oldModel = await _clientDao.GetAsync(id).ConfigureAwait(false);
+            var model = await _clientDao.GetAsync(id).ConfigureAwait(false);
+            if (model.StoreId != UserContext.StoreId)
+            {
+                return;
+            }
 
-            await _clientDao.DeleteAsync(id).ConfigureAwait(false);
+            var oldModelClone = model.Clone();
 
-            _auditLogService.LogDeleting(UserContext.UserId, UserContext.StoreId, oldModel);
+            model.IsDeleted = true;
+
+            await _clientDao.UpdateAsync(model).ConfigureAwait(false);
+
+            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, model);
         }
     }
 }
