@@ -8,40 +8,29 @@ namespace Aklion.Infrastructure.Http
 {
     public static class HttpExtension
     {
-        private const string Id = "id";
-        private const string MediaType = "application/json";
-        private const string AmpersandMark = "&";
-        private const string QuestionMark = "?";
-        private const string EquallyMark = "=";
-        private const string SlashMark = "/";
-
         public static string ToQueryParams(this object parameters)
         {
             var result = TypeDescriptor.GetProperties(parameters)
                 .Cast<PropertyDescriptor>()
-                .Where(p => p.Name != Id)
-                .Select(p => $"{p.Name}{EquallyMark}{p.GetValue(parameters)}")
+                .Where(p => p.Name != "id")
+                .Select(p => $"{p.Name}={p.GetValue(parameters)}")
                 .ToList();
 
-            return result.Any()
-                ? $"{QuestionMark}{string.Join(AmpersandMark, result)}"
-                : string.Empty;
+            return result.Any() ? $"?{string.Join("&", result)}" : string.Empty;
         }
 
         public static string ToId(this object parameters)
         {
             var result = TypeDescriptor.GetProperties(parameters)
                 .Cast<PropertyDescriptor>()
-                .FirstOrDefault(p => p.Name == Id);
+                .FirstOrDefault(p => p.Name == "id");
 
-            return result != null
-                ? $"{SlashMark}{result.GetValue(parameters)}"
-                : string.Empty;
+            return result != null ? $"/{result.GetValue(parameters)}" : string.Empty;
         }
 
         public static StringContent ToStringContent(this object model)
         {
-            return new StringContent(model.ToJsonString(), Encoding.UTF8, MediaType);
+            return new StringContent(model.ToJsonString(), Encoding.UTF8, "application/json");
         }
     }
 }

@@ -25,7 +25,17 @@ namespace Aklion.Crm.Filters
         {
         }
 
-        public async Task OnActionExecution(ActionExecutingContext context, ActionExecutionDelegate next)
+        public Task OnActionExecution(ActionExecutingContext context, ActionExecutionDelegate next)
+        {
+            return ActionExecution(context, next);
+        }
+
+        public Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        {
+            return ActionExecution(context, next);
+        }
+
+        public async Task ActionExecution(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             var controller = context.Controller as Controller;
             if (controller == null)
@@ -76,11 +86,6 @@ namespace Aklion.Crm.Filters
             }
 
             await next().ConfigureAwait(false);
-        }
-
-        public Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
-        {
-            return Task.CompletedTask;
         }
     }
 }

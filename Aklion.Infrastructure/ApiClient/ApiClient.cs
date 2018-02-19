@@ -15,9 +15,7 @@ namespace Aklion.Infrastructure.ApiClient
             {
                 var result = await client.GetAsync(fullUrl).ConfigureAwait(false);
                 if (!result.IsSuccessStatusCode)
-                {
                     return default(TResponseModel);
-                }
 
                 var content = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
                 return content.FromJsonString<TResponseModel>();
@@ -42,9 +40,7 @@ namespace Aklion.Infrastructure.ApiClient
             {
                 var result = await client.PostAsync(fullUrl, model.ToStringContent()).ConfigureAwait(false);
                 if (!result.IsSuccessStatusCode)
-                {
                     return default(TResponseModel);
-                }
 
                 var content = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
                 return content.FromJsonString<TResponseModel>();

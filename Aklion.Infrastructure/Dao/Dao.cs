@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Infrastructure.DataBaseExecutor;
 using Aklion.Infrastructure.Query;
+using Aklion.Infrastructure.Query.Enums;
 
 namespace Aklion.Infrastructure.Dao
 {
     public class Dao : IDao
     {
-        private readonly IDataBaseExecutor _dataBaseExecutor;
+        private readonly IDataBaseExecutor _executor;
 
-        public Dao(IDataBaseExecutor dataBaseExecutor)
+        public Dao(IDataBaseExecutor executor)
         {
-            _dataBaseExecutor = dataBaseExecutor;
+            _executor = executor;
         }
 
         public Task<TModel> GetAsync<TModel>(int id)
@@ -25,7 +25,7 @@ namespace Aklion.Infrastructure.Dao
                 .ApplyIdFilter()
                 .Build();
 
-            return _dataBaseExecutor.SelectOneAsync<TModel>(query, new {id});
+            return _executor.SelectOneAsync<TModel>(query, new {id});
         }
 
         public Task<TModel> GetAsync<TModel, TParameter>(TParameter parameter)
@@ -37,36 +37,37 @@ namespace Aklion.Infrastructure.Dao
                 .DefineColumnsForSelect()
                 .ApplyFilter(parameter)
                 .Build();
-            
-            return _dataBaseExecutor.SelectOneAsync<TModel>(query, parameter);
+
+            return _executor.SelectOneAsync<TModel>(query, parameter);
         }
 
-        public Task<List<TModel>> GetListAsync<TModel>()
+        public Task<List<TModel>> GetListAsync<TModel>(bool distinct = false)
         {
             var query = QueryBuilder
-                .Create<TModel>(QueryType.SelectList)
+                .Create<TModel>(QueryType.SelectList, distinct)
                 .DefineTableName()
                 .ApplyJoins()
                 .DefineColumnsForSelect()
                 .Build();
 
-            return _dataBaseExecutor.SelectListAsync<TModel>(query);
+            return _executor.SelectListAsync<TModel>(query);
         }
 
-        public Task<List<TModel>> GetListAsync<TModel, TParameter>(TParameter parameter)
+        public Task<List<TModel>> GetListAsync<TModel, TParameter>(TParameter parameter, bool distinct = false)
         {
             var query = QueryBuilder
-                .Create<TModel>(QueryType.SelectList)
+                .Create<TModel>(QueryType.SelectList, distinct)
                 .DefineTableName()
                 .ApplyJoins()
                 .DefineColumnsForSelect()
                 .ApplyFilter(parameter)
                 .Build();
 
-            return _dataBaseExecutor.SelectListAsync<TModel>(query, parameter);
+            return _executor.SelectListAsync<TModel>(query, parameter);
         }
 
-        public Task<Tuple<int, List<TModel>>> GetPagedListAsync<TModel, TParameter>(TParameter parameter)
+        public Task<(int TotalCount, List<TModel> List)> GetPagedListAsync<TModel, TParameter>(TParameter parameter,
+            bool distinct = false)
         {
             var query1 = QueryBuilder
                 .Create<TModel>(QueryType.SelectCount)
@@ -76,7 +77,7 @@ namespace Aklion.Infrastructure.Dao
                 .Build();
 
             var query2 = QueryBuilder
-                .Create<TModel>(QueryType.SelectPagedList)
+                .Create<TModel>(QueryType.SelectPagedList, distinct)
                 .DefineTableName()
                 .ApplyJoins()
                 .DefineColumnsForSelect()
@@ -85,34 +86,36 @@ namespace Aklion.Infrastructure.Dao
                 .ApplyPaging(parameter)
                 .Build();
 
-            return _dataBaseExecutor.SelectMultipleAsync(query1 + query2, async r => new Tuple<int, List<TModel>>(
+            return _executor.SelectMultipleAsync(query1 + query2, async r => (
                 await r.SelectOneAsync<int>().ConfigureAwait(false),
                 await r.SelectListAsync<TModel>().ConfigureAwait(false)
-            ), parameter);
+                ), parameter);
         }
 
-        public Task<Dictionary<string, int>> GetForAutoCompleteAsync<TModel, TParameter>(TParameter parameter)
+        public Task<Dictionary<string, int>> GetForAutoCompleteAsync<TModel, TParameter>(TParameter parameter,
+            bool distinct = false)
         {
             var query = QueryBuilder
-                .Create<TModel>(QueryType.SelectForAutocompleteOrSelect)
+                .Create<TModel>(QueryType.SelectForAutocompleteOrSelect, distinct)
                 .DefineTableName()
                 .DefineColumnsForAutocompleteOrSelect()
                 .ApplyFilter(parameter)
                 .Build();
 
-            return _dataBaseExecutor.SelectDictonaryAsync(query, parameter);
+            return _executor.SelectDictonaryAsync(query, parameter);
         }
 
-        public Task<Dictionary<string, int>> GetForSelectAsync<TModel, TParameter>(TParameter parameter)
+        public Task<Dictionary<string, int>> GetForSelectAsync<TModel, TParameter>(TParameter parameter,
+            bool distinct = false)
         {
             var query = QueryBuilder
-                .Create<TModel>(QueryType.SelectForAutocompleteOrSelect)
+                .Create<TModel>(QueryType.SelectForAutocompleteOrSelect, distinct)
                 .DefineTableName()
                 .DefineColumnsForAutocompleteOrSelect()
                 .ApplyFilter(parameter)
                 .Build();
 
-            return _dataBaseExecutor.SelectDictonaryAsync(query, parameter);
+            return _executor.SelectDictonaryAsync(query, parameter);
         }
 
         public Task<int> CreateAsync<TModel>(TModel model)
@@ -123,7 +126,7 @@ namespace Aklion.Infrastructure.Dao
                 .DefineColumnsForInsert()
                 .Build();
 
-            return _dataBaseExecutor.SelectOneAsync<int>(query, model);
+            return _executor.SelectOneAsync<int>(query, model);
         }
 
         public Task CreateListAsync<TModel>(List<TModel> model)
@@ -134,7 +137,7 @@ namespace Aklion.Infrastructure.Dao
                 .DefineColumnsForInsert()
                 .Build();
 
-            return _dataBaseExecutor.ExecuteAsync(query, model);
+            return _executor.ExecuteAsync(query, model);
         }
 
         public Task UpdateAsync<TModel>(TModel model)
@@ -146,7 +149,7 @@ namespace Aklion.Infrastructure.Dao
                 .ApplyIdFilter()
                 .Build();
 
-            return _dataBaseExecutor.ExecuteAsync(query, model);
+            return _executor.ExecuteAsync(query, model);
         }
 
         public Task DeleteAsync<TModel>(int id)
@@ -157,7 +160,7 @@ namespace Aklion.Infrastructure.Dao
                 .ApplyIdFilter()
                 .Build();
 
-            return _dataBaseExecutor.ExecuteAsync(query, new {id});
+            return _executor.ExecuteAsync(query, new {id});
         }
     }
 }

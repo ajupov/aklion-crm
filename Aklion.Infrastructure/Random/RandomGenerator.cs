@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 
 namespace Aklion.Infrastructure.Random
 {
-    public class RandomGenerator
+    public static class RandomGenerator
     {
         public static string GenerateAlphaNumbericString(int length)
         {

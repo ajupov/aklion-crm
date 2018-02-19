@@ -3,6 +3,7 @@
 function createTable(options) {
     const $table = $(options.Element);
     const filters = getFilters();
+    const isDeletedFilters = { IsDeleted: false };
     const colModel = [];
 
     $.each(options.Columns,
@@ -24,7 +25,7 @@ function createTable(options) {
                     : column.Type === 'money'
                     ? 'right'
                     : 'left',
-                hidden: column.Hidden === true,
+                hidden: column.Hidden,
                 datefmt: column.Type === 'datetime'
                     ? 'd.m.Y H:i:s'
                     : 'd.m.Y',
@@ -57,7 +58,7 @@ function createTable(options) {
                     : column.Type === 'money'
                     ? { suffix: ' ₽' }
                     : undefined,
-                editable: column.Editable === true,
+                editable: column.Editable,
                 edittype: column.Type === 'checkbox'
                     ? 'checkbox'
                     : column.Type === 'select'
@@ -89,9 +90,9 @@ function createTable(options) {
                     }
                 },
                 editrules: {
-                    edithidden: column.EditHidden === true
+                    edithidden: column.EditHidden
                 },
-                search: column.Search === false ? false : true,
+                search: column.Search,
                 stype: column.Type === 'select' || column.Type === 'checkbox'
                     ? 'select'
                     : 'text',
@@ -107,10 +108,10 @@ function createTable(options) {
                     value: column.Type === 'select'
                         ? column.SelectValues
                         : column.Type === 'checkbox'
-                        ? 'null:;false:Нет;true:Да'
+                        ? 'false:Нет;true:Да;null:Все'
                         : []
                 },
-                sortable: column.Sortable === false ? false : true,
+                sortable: column.Sortable,
                 sorttype: column.Type === 'date' || column.Type === 'datetime'
                     ? 'date'
                     : column.Type === 'number'
@@ -130,14 +131,16 @@ function createTable(options) {
         pager: options.Pager,
         width: '100%',
         sortname: options.SortingColumn !== null && options.SortingColumn !== undefined ? options.SortingColumn : 'CreateDate',
-        sortorder: 'desc',
+        sortorder: options.SortingColumn ? 'asc' : 'desc',
         caption: options.Title,
         viewrecords: true,
         colModel: colModel,
         sortable: true,
-        search: options.CanExtractFilters && filters !== null,
-        postData: options.CanExtractFilters && filters !== null ? filters : undefined,
-        multiselect: options.Multiselect === true,
+        search: true,
+        postData: options.CanExtractFilters && filters !== null
+            ? Object.assign({}, filters, isDeletedFilters)
+            : isDeletedFilters,
+        multiselect: options.Multiselect,
         onSelectRow: options.OnSelectRow !== null && options.OnSelectRow !== undefined ? options.OnSelectRow : undefined,
         prmNames: {
             page: 'Page',
@@ -166,13 +169,13 @@ function createTable(options) {
     $table.jqGrid('navGrid',
         options.Pager,
         {
-            view: options.IsViewable === true,
+            view: options.IsViewable,
             refresh: true,
             search: false,
-            add: options.IsCreatable === true,
-            del: options.IsDeletable === true,
-            edit: options.IsEditable === true,
-            afterRefresh: function() { $table[0].triggerToolbar(); }
+            add: options.IsCreatable,
+            del: options.IsDeletable,
+            edit: options.IsEditable,
+            afterRefresh: () => $table[0].triggerToolbar()
         },
         {
             width: 'auto',
@@ -239,7 +242,7 @@ function createTable(options) {
     //        position: 'last'
     //    });
 
-    if (options.IsFilterable === true) {
+    if (options.IsFilterable) {
         $table.jqGrid('filterToolbar', {});
     }
 }

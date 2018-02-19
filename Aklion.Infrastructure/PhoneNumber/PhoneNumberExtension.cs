@@ -17,9 +17,7 @@ namespace Aklion.Infrastructure.PhoneNumber
             const char russianPhoneNumberFirstDigit = '7';
 
             if (result.Length > russianPhoneNumberLength && result[0] == russianPhoneNumberFirstDigit)
-            {
                 result = result.Substring(1, russianPhoneNumberLength);
-            }
 
             return result;
         }

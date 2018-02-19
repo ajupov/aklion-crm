@@ -5,7 +5,7 @@ namespace Aklion.Crm.Domain.UserAttribute
 {
     [Table("dbo.UserAttribute as ua")]
     [Join("inner join dbo.Store as s on ua.StoreId = s.Id")]
-    public class UserAttributeModel : ICloneable
+    public class UserAttributeModel
     {
         [Column("ua.Id")]
         [Identificator]
@@ -17,12 +17,12 @@ namespace Aklion.Crm.Domain.UserAttribute
         [Column("s.Name")]
         public string StoreName { get; }
 
-        [Column("ua.Name")]
-        public string Name { get; set; }
+        [Column("ua.Key")]
+        public string Key { get; set; }
 
-        [Column("ua.Description")]
-        [AutocompleteOrSelect("ua.Description")]
-        public string Description { get; set; }
+        [Column("ua.Name")]
+        [AutocompleteOrSelect("ua.Name")]
+        public string Name { get; set; }
 
         [Column("ua.IsDeleted")]
         public bool IsDeleted { get; set; }
@@ -34,10 +34,5 @@ namespace Aklion.Crm.Domain.UserAttribute
         [Column("ua.ModifyDate")]
         [ModifyDate]
         public DateTime? ModifyDate { get; set; }
-
-        public object Clone()
-        {
-            return MemberwiseClone();
-        }
     }
 }

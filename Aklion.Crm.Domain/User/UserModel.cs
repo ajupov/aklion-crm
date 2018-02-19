@@ -5,7 +5,7 @@ using Aklion.Infrastructure.Dao.Attributes;
 namespace Aklion.Crm.Domain.User
 {
     [Table("dbo.[User] as u")]
-    public class UserModel : ICloneable
+    public class UserModel
     {
         [Column("u.Id")]
         [Identificator]
@@ -59,10 +59,5 @@ namespace Aklion.Crm.Domain.User
 
         [Column("u.ModifyDate")]
         public DateTime? ModifyDate { get; set; }
-
-        public object Clone()
-        {
-            return MemberwiseClone();
-        }
     }
 }

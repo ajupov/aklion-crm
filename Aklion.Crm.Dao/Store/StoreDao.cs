@@ -20,6 +20,16 @@ namespace Aklion.Crm.Dao.Store
             return _dao.GetPagedListAsync<StoreModel, StoreParameterModel>(parameter);
         }
 
+        public Task<Tuple<int, List<StoreByUserModel>>> GetPagedListAsync(StoreByUserParameterModel parameter)
+        {
+            return _dao.GetPagedListAsync<StoreByUserModel, StoreByUserParameterModel>(parameter);
+        }
+
+        public Task<List<StoreByUserModel>> GetListAsync(StoreByUserParameterModel parameter)
+        {
+            return _dao.GetListAsync<StoreByUserModel, StoreByUserParameterModel>(parameter, true);
+        }
+
         public Task<Dictionary<string, int>> GetForAutocompleteAsync(StoreAutocompleteParameterModel parameter)
         {
             return _dao.GetForAutoCompleteAsync<StoreModel, StoreAutocompleteParameterModel>(parameter);

@@ -7,6 +7,11 @@ namespace Aklion.Crm.Business.Permission
 {
     public class PermissionService : IPermissionService
     {
+        public List<Enums.Permission> GetForRegistration()
+        {
+            return GetAll().Where(p => p != Enums.Permission.Admin).ToList();
+        }
+
         public List<Enums.Permission> GetForUser()
         {
             return GetAll().Where(p => p != Enums.Permission.Admin && p != Enums.Permission.None).ToList();
@@ -22,7 +27,12 @@ namespace Aklion.Crm.Business.Permission
             return GetAll().Where(p => p != Enums.Permission.Admin).ToDictionary(k => k.GetDisplayName(), v => v);
         }
 
-        private static IEnumerable<Enums.Permission> GetAll()
+        public Dictionary<string, Enums.Permission> GetWithNames(IEnumerable<Enums.Permission> permisssions)
+        {
+            return permisssions.ToDictionary(k => k.GetDisplayName(), v => v);
+        }
+
+        public IEnumerable<Enums.Permission> GetAll()
         {
             return Enum.GetValues(typeof(Enums.Permission)).OfType<Enums.Permission>().OrderBy(p => p);
         }

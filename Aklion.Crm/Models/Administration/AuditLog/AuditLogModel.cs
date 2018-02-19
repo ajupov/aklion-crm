@@ -1,4 +1,5 @@
 ﻿using Aklion.Crm.Enums;
+using Aklion.Infrastructure.AuditLogger.Enums;
 
 namespace Aklion.Crm.Models.Administration.AuditLog
 {

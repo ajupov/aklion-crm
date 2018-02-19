@@ -186,3 +186,11 @@ function clientLinkFormatter(value, options, data) {
 function linkUnFormatter(value, options, cell) {
     return $('a', cell).text();
 }
+
+function phoneFormatter(value) {
+    return `+7${value}`;
+}
+
+function phoneUnFormatter(value) {
+    return value && value.length > 0 ? value.slice(value.length - 10) : value;
+}

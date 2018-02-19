@@ -4,14 +4,15 @@ using Aklion.Crm.Models;
 using Aklion.Crm.Models.User.User;
 using Aklion.Infrastructure.Mapper;
 using DomainUserModel = Aklion.Crm.Domain.User.UserModel;
-using DomainUserParameterModel = Aklion.Crm.Domain.User.UserParameterModel;
+using DomainUserByStoreModel = Aklion.Crm.Domain.User.UserByStoreModel;
+using DomainUserParameterModel = Aklion.Crm.Domain.User.UserByStoreParameterModel;
 using DomainUserAutocompleteParameterModel = Aklion.Crm.Domain.User.UserAutocompleteParameterModel;
 
 namespace Aklion.Crm.Mappers.User.User
 {
     public static class UserMapper
     {
-        public static PagingModel<UserModel> MapNew(this Tuple<int, List<DomainUserModel>> tuple, int? page, int? size)
+        public static PagingModel<UserModel> MapNew(this Tuple<int, List<DomainUserByStoreModel>> tuple, int? page, int? size)
         {
             return new PagingModel<UserModel>(tuple.Item2.MapListNew<UserModel>(), tuple.Item1, page, size);
         }
@@ -26,9 +27,12 @@ namespace Aklion.Crm.Mappers.User.User
             return Mapper.MapFrom(domainModel, model);
         }
 
-        public static DomainUserParameterModel MapNew(this UserParameterModel model)
+        public static DomainUserParameterModel MapNew(this UserParameterModel model, int storeId)
         {
-            return model.MapParameterNew<DomainUserParameterModel>();
+            var result = model.MapParameterNew<DomainUserParameterModel>();
+            result.StoreId = storeId;
+
+            return result;
         }
 
         public static DomainUserAutocompleteParameterModel MapNew(this string pattern)

@@ -1,23 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
-using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.ProductStatus;
 using Aklion.Crm.Mappers.Administration.ProductStatus;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.ProductStatus;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration
+namespace Aklion.Crm.Controllers.AdministrationControllers
 {
     [Route("Administration/ProductStatuses")]
     public class AdministrationProductStatusController : BaseController
     {
-        private readonly IAuditLogService _auditLogService;
+        private readonly IAuditLogger _auditLogService;
         private readonly IProductStatusDao _productStatusDao;
 
         public AdministrationProductStatusController(
-            IAuditLogService auditLogService,
+            IAuditLogger auditLogService,
             IProductStatusDao productStatusDao)
         {
             _auditLogService = auditLogService;

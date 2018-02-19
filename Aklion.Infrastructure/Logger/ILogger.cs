@@ -4,16 +4,10 @@ namespace Aklion.Infrastructure.Logger
 {
     public interface ILogger
     {
-        void LogInfo(string message, int userId = 0, object data = null);
+        void Info(string tag, string message = null, object data = null, Exception exception = null);
 
-        void LogInfoException(string message, Exception exception, int userId = 0, object data = null);
+        void Warning(string tag, string message = null, object data = null, Exception exception = null);
 
-        void LogWarning(string message, int userId = 0, object data = null);
-
-        void LogWarningException(string message, Exception exception, int userId = 0, object data = null);
-
-        void LogError(string message, int userId = 0, object data = null);
-
-        void LogErrorException(string message, Exception exception, int userId = 0, object data = null);
+        void Error(string tag, string message = null, object data = null, Exception exception = null);
     }
 }

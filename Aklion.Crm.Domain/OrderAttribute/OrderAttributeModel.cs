@@ -5,7 +5,7 @@ namespace Aklion.Crm.Domain.OrderAttribute
 {
     [Table("dbo.OrderAttribute as oa")]
     [Join("inner join dbo.Store as s on oa.StoreId = s.Id")]
-    public class OrderAttributeModel : ICloneable
+    public class OrderAttributeModel
     {
         [Column("oa.Id")]
         [Identificator]
@@ -17,12 +17,12 @@ namespace Aklion.Crm.Domain.OrderAttribute
         [Column("s.Name")]
         public string StoreName { get; }
 
-        [Column("oa.Name")]
-        public string Name { get; set; }
+        [Column("oa.Key")]
+        public string Key { get; set; }
 
-        [Column("oa.Description")]
-        [AutocompleteOrSelect("oa.Description")]
-        public string Description { get; set; }
+        [Column("oa.Name")]
+        [AutocompleteOrSelect("oa.Name")]
+        public string Name { get; set; }
 
         [Column("oa.IsDeleted")]
         public bool IsDeleted { get; set; }
@@ -34,10 +34,5 @@ namespace Aklion.Crm.Domain.OrderAttribute
         [Column("oa.ModifyDate")]
         [ModifyDate]
         public DateTime? ModifyDate { get; set; }
-
-        public object Clone()
-        {
-            return MemberwiseClone();
-        }
     }
 }

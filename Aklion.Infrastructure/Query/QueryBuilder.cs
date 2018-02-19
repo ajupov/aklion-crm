@@ -1,46 +1,23 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Reflection;
 using Aklion.Infrastructure.Dao.Attributes;
+using Aklion.Infrastructure.Query.Enums;
 
 namespace Aklion.Infrastructure.Query
 {
     public static class QueryBuilder
     {
-        public static QueryObject Create<TModel>(QueryType queryType)
+        public static QueryObject Create<TModel>(QueryType queryType, bool distinct = false)
         {
             var type = typeof(TModel);
 
             return new QueryObject(queryType)
             {
                 Type = type,
-                Properties = type.GetProperties().ToList()
+                Properties = type.GetProperties().ToList(),
+                Distinct = distinct ? "distinct" : string.Empty
             };
-
-            //var implementedInterfaces = type.GetInterfaces();
-            //var interfaces = new List<Type> {typeof(IEnumerable), typeof(ICollection), typeof(IList)};
-
-            //var isImplement = implementedInterfaces.Intersect(interfaces).Any();
-
-            //if (!isImplement)
-            //{
-            //    return new QueryObject(queryType)
-            //    {
-            //        Type = type,
-            //        Properties = type.GetProperties().ToList()
-            //    };
-            //}
-
-            //var genericType = type.GenericTypeArguments.FirstOrDefault();
-
-            //return new QueryObject(queryType)
-            //{
-            //    Type = genericType,
-            //    Properties = genericType?.GetProperties().ToList()
-            //};
         }
 
         public static QueryObject DefineTableName(this QueryObject queryObject)
@@ -50,9 +27,7 @@ namespace Aklion.Infrastructure.Query
             queryObject.TableAlias = queryObject.TableName.Split(" as ").LastOrDefault();
 
             if (queryObject.TableAlias == queryObject.TableNameWithoutAlias)
-            {
                 queryObject.TableAlias = string.Empty;
-            }
 
             return queryObject;
         }
@@ -82,20 +57,17 @@ namespace Aklion.Infrastructure.Query
                 .Value;
 
             if (string.IsNullOrWhiteSpace(identificatorColumnName))
-            {
                 return queryObject;
-            }
 
             var autocompleteColumnName = ((AutocompleteOrSelectAttribute) queryObject.Properties.FirstOrDefault(p =>
                     p.GetCustomAttribute(typeof(AutocompleteOrSelectAttribute)) != null)
                 .GetCustomAttribute(typeof(AutocompleteOrSelectAttribute))).Value;
 
             if (string.IsNullOrWhiteSpace(autocompleteColumnName))
-            {
                 return queryObject;
-            }
 
-            queryObject.ColumnsForAutocomplete = $"{autocompleteColumnName} as Value, {identificatorColumnName} as [Key]";
+            queryObject.ColumnsForAutocomplete =
+                $"{autocompleteColumnName} as Value, {identificatorColumnName} as [Key]";
 
             return queryObject;
         }
@@ -105,38 +77,30 @@ namespace Aklion.Infrastructure.Query
             queryObject.ColumnsForInsert = string.Join(", ", queryObject.Properties
                 .Where(p =>
                 {
-                    if (p.PropertyType == typeof(Stream) || p.PropertyType == typeof(FileStream) || p.PropertyType == typeof(MemoryStream))
-                    {
+                    if (p.PropertyType == typeof(Stream) || p.PropertyType == typeof(FileStream) ||
+                        p.PropertyType == typeof(MemoryStream))
                         return false;
-                    }
 
                     var columnAttribute = p.GetCustomAttribute(typeof(ColumnAttribute));
                     if (columnAttribute == null)
-                    {
                         return false;
-                    }
 
                     var identificatorAttribute = p.GetCustomAttribute(typeof(IdentificatorAttribute));
                     if (identificatorAttribute != null)
-                    {
                         return false;
-                    }
 
                     var columnAttributeValue = ((ColumnAttribute) columnAttribute).Value;
-                    if(string.IsNullOrWhiteSpace(columnAttributeValue))
-                    {
+                    if (string.IsNullOrWhiteSpace(columnAttributeValue))
                         return false;
-                    }
 
                     var columnAttributeValueAlias = columnAttributeValue.Split('.').FirstOrDefault();
                     if (string.IsNullOrWhiteSpace(columnAttributeValueAlias))
-                    {
                         return true;
-                    }
 
                     return columnAttributeValueAlias == queryObject.TableAlias;
                 })
-                .Select(a => $"@{((ColumnAttribute) a.GetCustomAttribute(typeof(ColumnAttribute))).Value.Replace(queryObject.TableAlias + ".", string.Empty)}"));
+                .Select(a =>
+                    $"@{((ColumnAttribute) a.GetCustomAttribute(typeof(ColumnAttribute))).Value.Replace(queryObject.TableAlias + ".", string.Empty)}"));
 
             return queryObject;
         }
@@ -145,46 +109,34 @@ namespace Aklion.Infrastructure.Query
         {
             queryObject.ColumnsForUpdate =
                 string.Join(", ", queryObject.Properties
-                .Where(p =>
+                    .Where(p =>
                     {
-                        if (p.PropertyType == typeof(Stream) || p.PropertyType == typeof(FileStream) || p.PropertyType == typeof(MemoryStream))
-                        {
+                        if (p.PropertyType == typeof(Stream) || p.PropertyType == typeof(FileStream) ||
+                            p.PropertyType == typeof(MemoryStream))
                             return false;
-                        }
 
                         var columnAttribute = p.GetCustomAttribute(typeof(ColumnAttribute));
                         if (columnAttribute == null)
-                        {
                             return false;
-                        }
 
                         var identificatorAttribute = p.GetCustomAttribute(typeof(IdentificatorAttribute));
                         if (identificatorAttribute != null)
-                        {
                             return false;
-                        }
 
                         var createDateAttribute = p.GetCustomAttribute(typeof(CreateDateAttribute));
                         if (createDateAttribute != null)
-                        {
                             return false;
-                        }
 
-                        var columnAttributeValue = ((ColumnAttribute)columnAttribute).Value;
+                        var columnAttributeValue = ((ColumnAttribute) columnAttribute).Value;
                         if (string.IsNullOrWhiteSpace(columnAttributeValue))
-                        {
                             return false;
-                        }
 
                         var columnAttributeValueAlias = columnAttributeValue.Split('.').FirstOrDefault();
                         if (string.IsNullOrWhiteSpace(columnAttributeValueAlias))
-                        {
                             return true;
-                        }
 
                         return columnAttributeValueAlias == queryObject.TableAlias;
                     })
-
                     .Select(a =>
                     {
                         var name = ((ColumnAttribute) a.GetCustomAttribute(typeof(ColumnAttribute))).Value.Replace(
@@ -202,13 +154,14 @@ namespace Aklion.Infrastructure.Query
             queryObject.FilterProperties = queryObject.FilterType.GetProperties().ToList();
 
             var filterGroupAttribute =
-                (WhereCombinationAttribute)queryObject.FilterType.GetCustomAttribute(typeof(WhereCombinationAttribute));
+                (WhereCombinationAttribute) queryObject.FilterType.GetCustomAttribute(
+                    typeof(WhereCombinationAttribute));
 
             var propertiesWithWhereAttributes =
                 queryObject.FilterProperties.Where(p => p.GetCustomAttribute(typeof(WhereAttribute)) != null).ToList();
 
             var filters = propertiesWithWhereAttributes
-                .Select(p => $"({((WhereAttribute)p.GetCustomAttribute(typeof(WhereAttribute))).Value})")
+                .Select(p => $"({((WhereAttribute) p.GetCustomAttribute(typeof(WhereAttribute))).Value})")
                 .ToList();
 
             if (filters.Count == 1)
@@ -218,7 +171,7 @@ namespace Aklion.Infrastructure.Query
             else if (filters.Count > 1)
             {
                 var group = !string.IsNullOrWhiteSpace(filterGroupAttribute.Value) ? filterGroupAttribute.Value : "and";
-                queryObject.Filters = $"where {string.Join($" {@group} ", filters)}";
+                queryObject.Filters = $"where {string.Join($" {group} ", filters)}";
             }
 
             return queryObject;
@@ -234,10 +187,12 @@ namespace Aklion.Infrastructure.Query
         public static QueryObject ApplySorting<TParameterModel>(this QueryObject queryObject, TParameterModel parameter)
         {
             var propertiesWithSortingColumnAttribute =
-                queryObject.FilterProperties.FirstOrDefault(p => p.GetCustomAttribute(typeof(SortingColumnAttribute)) != null);
+                queryObject.FilterProperties.FirstOrDefault(p =>
+                    p.GetCustomAttribute(typeof(SortingColumnAttribute)) != null);
 
             var propertiesWithSortingOrderAttribute =
-                queryObject.FilterProperties.FirstOrDefault(p => p.GetCustomAttribute(typeof(SortingOrderAttribute)) != null);
+                queryObject.FilterProperties.FirstOrDefault(p =>
+                    p.GetCustomAttribute(typeof(SortingOrderAttribute)) != null);
 
             if (propertiesWithSortingColumnAttribute != null && propertiesWithSortingOrderAttribute != null)
             {
@@ -252,14 +207,10 @@ namespace Aklion.Infrastructure.Query
                     {
                         var columnAttribute = (ColumnAttribute) property.GetCustomAttribute(typeof(ColumnAttribute));
                         if (columnAttribute == null)
-                        {
                             continue;
-                        }
 
                         if (property.Name != sortingColumn)
-                        {
                             continue;
-                        }
 
                         sortingColumnWithAlias = columnAttribute.Value;
                         break;
@@ -290,9 +241,7 @@ namespace Aklion.Infrastructure.Query
                 var size = sizeObject != null ? int.Parse(sizeObject.ToString()) : 0;
 
                 if (page <= 0)
-                {
                     page = 0;
-                }
 
                 page--;
 
@@ -314,23 +263,32 @@ namespace Aklion.Infrastructure.Query
             switch (queryObject.QueryType)
             {
                 case QueryType.SelectCount:
-                    return $"{noLockSelectCommand} select count(0) from {queryObject.TableName} {queryObject.Joins} {queryObject.Filters};";
+                    return
+                        $"{noLockSelectCommand} select count(0) from {queryObject.TableName} {queryObject.Joins} {queryObject.Filters};";
                 case QueryType.SelectOne:
-                    return $"{noLockSelectCommand} select top 1 {queryObject.ColumnsForSelect} from {queryObject.TableName} {queryObject.Joins} {queryObject.Filters};";
+                    return
+                        $"{noLockSelectCommand} select top 1 {queryObject.ColumnsForSelect} from {queryObject.TableName} {queryObject.Joins} {queryObject.Filters};";
                 case QueryType.SelectList:
-                    return $"{noLockSelectCommand} select {queryObject.ColumnsForSelect} from {queryObject.TableName} {queryObject.Joins} {queryObject.Filters};";
+                    return
+                        $"{noLockSelectCommand} select {queryObject.Distinct} {queryObject.ColumnsForSelect} from {queryObject.TableName} {queryObject.Joins} {queryObject.Filters};";
                 case QueryType.SelectPagedList:
-                    return $"{noLockSelectCommand} select {queryObject.ColumnsForSelect} from {queryObject.TableName} {queryObject.Joins} {queryObject.Filters} {queryObject.Sorting} {queryObject.Paging};";
+                    return
+                        $"{noLockSelectCommand} select {queryObject.Distinct} {queryObject.ColumnsForSelect} from {queryObject.TableName} {queryObject.Joins} {queryObject.Filters} {queryObject.Sorting} {queryObject.Paging};";
                 case QueryType.SelectForAutocompleteOrSelect:
-                    return $"{noLockSelectCommand} select {queryObject.ColumnsForAutocomplete} from {queryObject.TableName} {queryObject.Filters};";
+                    return
+                        $"{noLockSelectCommand} select {queryObject.Distinct} {queryObject.ColumnsForAutocomplete} from {queryObject.TableName} {queryObject.Filters};";
                 case QueryType.Insert:
-                    return $"insert {queryObject.TableNameWithoutAlias} ({queryObject.ColumnsForInsert.Replace("@", string.Empty)}) values ({queryObject.ColumnsForInsert}); select scope_identity();";
+                    return
+                        $"insert {queryObject.TableNameWithoutAlias} ({queryObject.ColumnsForInsert.Replace("@", string.Empty)}) values ({queryObject.ColumnsForInsert}); select scope_identity();";
                 case QueryType.InsertList:
-                    return $"insert {queryObject.TableNameWithoutAlias} ({queryObject.ColumnsForInsert.Replace("@", string.Empty)}) values ({queryObject.ColumnsForInsert});";
+                    return
+                        $"insert {queryObject.TableNameWithoutAlias} ({queryObject.ColumnsForInsert.Replace("@", string.Empty)}) values ({queryObject.ColumnsForInsert});";
                 case QueryType.Update:
-                    return $"update {queryObject.TableNameWithoutAlias} set {queryObject.ColumnsForUpdate} {queryObject.Filters.Replace($"{queryObject.TableAlias}.", string.Empty)}";
+                    return
+                        $"update {queryObject.TableNameWithoutAlias} set {queryObject.ColumnsForUpdate} {queryObject.Filters.Replace($"{queryObject.TableAlias}.", string.Empty)}";
                 case QueryType.Delete:
-                    return $"delete from {queryObject.TableNameWithoutAlias} {queryObject.Filters.Replace($"{queryObject.TableAlias}.", string.Empty)};";
+                    return
+                        $"delete from {queryObject.TableNameWithoutAlias} {queryObject.Filters.Replace($"{queryObject.TableAlias}.", string.Empty)};";
             }
 
             return string.Empty;

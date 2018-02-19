@@ -5,7 +5,7 @@ namespace Aklion.Crm.Domain.ClientAttribute
 {
     [Table("dbo.ClientAttribute as ca")]
     [Join("inner join dbo.Store as s on ca.StoreId = s.Id")]
-    public class ClientAttributeModel : ICloneable
+    public class ClientAttributeModel
     {
         [Column("ca.Id")]
         [Identificator]
@@ -17,12 +17,12 @@ namespace Aklion.Crm.Domain.ClientAttribute
         [Column("s.Name")]
         public string StoreName { get; }
 
-        [Column("ca.Name")]
-        public string Name { get; set; }
+        [Column("ca.Key")]
+        public string Key { get; set; }
 
-        [Column("ca.Description")]
-        [AutocompleteOrSelect("ca.Description")]
-        public string Description { get; set; }
+        [Column("ca.Name")]
+        [AutocompleteOrSelect("ca.Name")]
+        public string Name { get; set; }
 
         [Column("ca.IsDeleted")]
         public bool IsDeleted { get; set; }
@@ -34,10 +34,5 @@ namespace Aklion.Crm.Domain.ClientAttribute
         [Column("ca.ModifyDate")]
         [ModifyDate]
         public DateTime? ModifyDate { get; set; }
-
-        public object Clone()
-        {
-            return MemberwiseClone();
-        }
     }
 }

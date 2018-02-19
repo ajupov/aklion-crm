@@ -7,12 +7,11 @@ namespace Aklion.Infrastructure.Mapper
 {
     public static class Mapper
     {
-        public static TNewParameterModel MapParameterNew<TNewParameterModel>(this object oldParameterModel) where TNewParameterModel : new()
+        public static TNewParameterModel MapParameterNew<TNewParameterModel>(this object oldParameterModel)
+            where TNewParameterModel : new()
         {
             if (oldParameterModel == null)
-            {
                 return default(TNewParameterModel);
-            }
 
             var newParameterModel = new TNewParameterModel();
 
@@ -27,9 +26,7 @@ namespace Aklion.Infrastructure.Mapper
         public static TNewModel MapNew<TNewModel>(this object oldModel) where TNewModel : new()
         {
             if (oldModel == null)
-            {
                 return default(TNewModel);
-            }
 
             var newModel = new TNewModel();
 
@@ -45,16 +42,12 @@ namespace Aklion.Infrastructure.Mapper
         public static List<TNewModel> MapListNew<TNewModel>(this IEnumerable<object> oldModels) where TNewModel : new()
         {
             if (oldModels == null)
-            {
                 return null;
-            }
 
             var oldModelsList = oldModels.ToList();
             var firstOldModel = oldModelsList.FirstOrDefault();
             if (firstOldModel == null)
-            {
                 return null;
-            }
 
             var newModels = new List<TNewModel>();
 
@@ -76,9 +69,7 @@ namespace Aklion.Infrastructure.Mapper
         public static TToModel MapFrom<TToModel>(this TToModel toModel, object fromModel)
         {
             if (fromModel == null)
-            {
                 return toModel;
-            }
 
             var fromModelProperties = fromModel.GetType().GetProperties();
             var toModelProperties = typeof(TToModel).GetProperties();
@@ -89,7 +80,8 @@ namespace Aklion.Infrastructure.Mapper
             return toModel;
         }
 
-        private static void Map(object fromModel, object toModel, IEnumerable<PropertyInfo> fromModelProperties, IEnumerable<PropertyInfo> toModelProperties)
+        private static void Map(object fromModel, object toModel, IEnumerable<PropertyInfo> fromModelProperties,
+            IEnumerable<PropertyInfo> toModelProperties)
         {
             var newModelPropertiesList = toModelProperties.ToList();
 
@@ -97,14 +89,10 @@ namespace Aklion.Infrastructure.Mapper
             {
                 var newModelProperty = newModelPropertiesList.FirstOrDefault(p => p.Name == oldModelProperty.Name);
                 if (newModelProperty == null)
-                {
                     continue;
-                }
 
                 if (!newModelProperty.CanWrite)
-                {
                     continue;
-                }
 
                 if (newModelProperty.PropertyType == oldModelProperty.PropertyType)
                 {
@@ -116,19 +104,17 @@ namespace Aklion.Infrastructure.Mapper
                 if (oldModelProperty.PropertyType == typeof(System.DateTime) &&
                     newModelProperty.PropertyType == typeof(string))
                 {
-                    var oldModelPropertyValue = (System.DateTime)oldModelProperty.GetValue(fromModel);
-                    newModelProperty.SetValue(toModel, oldModelPropertyValue.ToDateTimeWithSecondsString());
+                    var oldModelPropertyValue = (System.DateTime) oldModelProperty.GetValue(fromModel);
+                    newModelProperty.SetValue(toModel, oldModelPropertyValue.ToDateTimeString());
                     continue;
                 }
 
                 if (oldModelProperty.PropertyType == typeof(System.DateTime?) &&
                     newModelProperty.PropertyType == typeof(string))
                 {
-                    var oldModelPropertyValue = (System.DateTime?)oldModelProperty.GetValue(fromModel);
+                    var oldModelPropertyValue = (System.DateTime?) oldModelProperty.GetValue(fromModel);
                     if (oldModelPropertyValue.HasValue)
-                    {
-                        newModelProperty.SetValue(toModel, oldModelPropertyValue.Value.ToDateTimeWithSecondsString());
-                    }
+                        newModelProperty.SetValue(toModel, oldModelPropertyValue.Value.ToDateTimeString());
                     continue;
                 }
 
@@ -139,7 +125,8 @@ namespace Aklion.Infrastructure.Mapper
                     var oldModelPropertyValue = oldModelProperty.GetValue(fromModel)?.ToString();
                     if (!string.IsNullOrWhiteSpace(oldModelPropertyValue))
                     {
-                        var value = oldModelPropertyValue.ToNullableDateTime() ?? oldModelPropertyValue.ToNullableDate();
+                        var value = oldModelPropertyValue.ToNullableDateTime() ??
+                                    oldModelPropertyValue.ToNullableDate();
                         newModelProperty.SetValue(toModel, value);
                     }
                 }
@@ -160,14 +147,10 @@ namespace Aklion.Infrastructure.Mapper
         {
             var property = properties.FirstOrDefault(p => p.Name == propertyName);
             if (property == null)
-            {
                 return;
-            }
 
             if (property.PropertyType != typeof(System.DateTime?) && property.PropertyType != typeof(System.DateTime))
-            {
                 return;
-            }
 
             property.SetValue(model, System.DateTime.Now);
         }

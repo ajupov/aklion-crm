@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Aklion.Infrastructure.Query.Enums;
 
 namespace Aklion.Infrastructure.Query
 {
@@ -20,6 +21,8 @@ namespace Aklion.Infrastructure.Query
         public List<PropertyInfo> Properties { get; set; }
 
         public List<PropertyInfo> FilterProperties { get; set; }
+
+        public string Distinct { get; set; }
 
         public string TableName { get; set; }
 

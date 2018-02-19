@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.Store;
 using Aklion.Infrastructure.Random;
 
@@ -7,11 +6,11 @@ namespace Aklion.Crm.Business.Store
 {
     public class StoreService : IStoreService
     {
-        private readonly IAuditLogService _auditLogService;
+        private readonly IAuditLogger _auditLogService;
         private readonly IStoreDao _storeDao;
 
         public StoreService(
-            IAuditLogService auditLogService,
+            IAuditLogger auditLogService,
             IStoreDao storeDao)
         {
             _auditLogService = auditLogService;

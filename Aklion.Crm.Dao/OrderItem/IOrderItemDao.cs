@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Domain.OrderItem;
 
@@ -7,7 +6,7 @@ namespace Aklion.Crm.Dao.OrderItem
 {
     public interface IOrderItemDao
     {
-        Task<Tuple<int, List<OrderItemModel>>> GetPagedListAsync(OrderItemParameterModel parameter);
+        Task<(int TotalCount, List<OrderItemModel> List)> GetPagedListAsync(OrderItemParameterModel parameter);
 
         Task<OrderItemModel> GetAsync(int id);
 

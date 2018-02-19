@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Domain.OrderAttribute;
 
@@ -7,9 +6,10 @@ namespace Aklion.Crm.Dao.OrderAttribute
 {
     public interface IOrderAttributeDao
     {
-        Task<Tuple<int, List<OrderAttributeModel>>> GetPagedListAsync(OrderAttributeParameterModel parameter);
+        Task<(int TotalCount, List<OrderAttributeModel> List)>
+            GetPagedListAsync(OrderAttributeParameterModel parameter);
 
-        Task<Dictionary<string, int>> GetForAutocompleteAsync(OrderAttributeAutocompleteParameterModel parameter);
+        Task<Dictionary<string, int>> GetAutocompleteAsync(OrderAttributeAutocompleteParameterModel parameter);
 
         Task<OrderAttributeModel> GetAsync(int id);
 

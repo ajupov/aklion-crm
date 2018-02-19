@@ -1,22 +1,21 @@
 ﻿using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
-using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.ProductAttributeLink;
 using Aklion.Crm.Mappers.Administration.ProductAttributeLink;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.ProductAttributeLink;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration
+namespace Aklion.Crm.Controllers.AdministrationControllers
 {
     [Route("Administration/ProductAttributeLinks")]
     public class AdministrationProductAttributeLinkController : BaseController
     {
-        private readonly IAuditLogService _auditLogService;
+        private readonly IAuditLogger _auditLogService;
         private readonly IProductAttributeLinkDao _productAttributeLinkDao;
 
         public AdministrationProductAttributeLinkController(
-            IAuditLogService auditLogService,
+            IAuditLogger auditLogService,
             IProductAttributeLinkDao productAttributeLinkDao)
         {
             _auditLogService = auditLogService;

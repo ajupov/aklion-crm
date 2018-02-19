@@ -6,20 +6,12 @@ namespace Aklion.Infrastructure.DateTime
     public static class DateTimeExtension
     {
         private const string DateFormat = "dd.MM.yyyy";
-        private const string IsoDateFormat = "yyyy-MM-dd";
-        private const string TimeFormat = "HH:mm";
-        private const string DateTimeFormat = "dd.MM.yyyy HH:mm";
-        private const string DateTimeWithSecondsFormat = "dd.MM.yyyy HH:mm:ss";
-        private const string DateWithoutYearFormat = "dd.MM";
+        private const string TimeFormat = "HH:mm:ss";
+        private const string DateTimeFormat = "dd.MM.yyyy HH:mm:ss";
 
         public static string ToDateString(this System.DateTime date)
         {
             return date.ToString(DateFormat);
-        }
-
-        public static string ToIsoDateString(this System.DateTime date)
-        {
-            return date.ToString(IsoDateFormat);
         }
 
         public static string ToTimeString(this System.DateTime time)
@@ -32,19 +24,21 @@ namespace Aklion.Infrastructure.DateTime
             return dateTime.ToString(DateTimeFormat);
         }
 
-        public static string ToDateTimeWithSecondsString(this System.DateTime dateTime)
-        {
-            return dateTime.ToString(DateTimeWithSecondsFormat);
-        }
-
-        public static string ToDateWithoutYearString(this System.DateTime date)
-        {
-            return date.ToString(DateWithoutYearFormat);
-        }
-
         public static System.DateTime ToDate(this string dateString)
         {
             return System.DateTime.ParseExact(dateString, DateFormat, CultureInfo.InvariantCulture);
+        }
+
+        public static System.DateTime? ToNullableDate(this string dateString)
+        {
+            if (string.IsNullOrWhiteSpace(dateString))
+                return null;
+
+            if (System.DateTime.TryParseExact(dateString, DateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None,
+                out var outDate))
+                return outDate;
+
+            return null;
         }
 
         public static System.DateTime ToTime(this string timeString)
@@ -52,15 +46,22 @@ namespace Aklion.Infrastructure.DateTime
             return System.DateTime.ParseExact(timeString, TimeFormat, CultureInfo.InvariantCulture);
         }
 
-        public static System.DateTime ToTime(this int hour)
-        {
-            var today = System.DateTime.Today;
-            return new System.DateTime(today.Year, today.Month, today.Day, hour, 0, 0);
-        }
-
         public static System.DateTime ToDateTime(this string dateTimeString)
         {
             return System.DateTime.ParseExact(dateTimeString, DateTimeFormat, CultureInfo.InvariantCulture);
+        }
+
+        public static System.DateTime? ToNullableDateTime(this string dateTimeString)
+        {
+            if (string.IsNullOrWhiteSpace(dateTimeString))
+                return null;
+
+            if (System.DateTime.TryParseExact(dateTimeString, DateTimeFormat, CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out var outDateTime))
+                return outDateTime;
+
+            return null;
         }
 
         public static string ToWeekName(this DayOfWeek dayOfWeek)
@@ -122,38 +123,6 @@ namespace Aklion.Infrastructure.DateTime
         public static System.DateTime FirstDayOfYear(this System.DateTime date)
         {
             return new System.DateTime(date.Year, 1, 1);
-        }
-
-        public static System.DateTime? ToNullableDate(this string dateString)
-        {
-            if (string.IsNullOrWhiteSpace(dateString))
-            {
-                return null;
-            }
-
-            if (System.DateTime.TryParseExact(dateString, DateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None,
-                out var outDate))
-            {
-                return outDate;
-            }
-
-            return null;
-        }
-
-        public static System.DateTime? ToNullableDateTime(this string dateTimeString)
-        {
-            if (string.IsNullOrWhiteSpace(dateTimeString))
-            {
-                return null;
-            }
-
-            if (System.DateTime.TryParseExact(dateTimeString, DateTimeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None,
-                out var outDateTime))
-            {
-                return outDateTime;
-            }
-
-            return null;
         }
 
         public static string TruncateTime(this string dateTimeString)

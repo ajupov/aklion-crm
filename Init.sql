@@ -10,7 +10,7 @@ go
 create table dbo.Store
 (
     Id         int          not null identity(1, 1) constraint PK_Store_Id primary key,
-    [Name]     varchar(256) not null constraint UQ_Store_Name unique,
+    [Name]     varchar(256) not null,
     ApiSecret  varchar(16)  null,
     IsLocked   bit          not null,
     IsDeleted  bit          not null,
@@ -45,14 +45,14 @@ go
 -- Атрибут пользователя
 create table dbo.UserAttribute
 (
-    Id            int           not null identity(1, 1) constraint PK_UserAttribute_Id primary key,
-    StoreId       int           not null constraint FK_UserAttribute_StoreId foreign key (StoreId) references dbo.Store (Id) index IX_UserAttribute_StoreId nonclustered (StoreId),
-    [Name]        varchar(256)  not null,
-    [Description] varchar(1024) not null,
-    IsDeleted     bit           not null,
-    CreateDate    datetime2(7)  not null,
-    ModifyDate    datetime2(7)  null,
-    constraint UQ_UserAttribute_StoreId_Name unique (StoreId, [Name])
+    Id         int           not null identity(1, 1) constraint PK_UserAttribute_Id primary key,
+    StoreId    int           not null constraint FK_UserAttribute_StoreId foreign key (StoreId) references dbo.Store (Id) index IX_UserAttribute_StoreId nonclustered (StoreId),
+    [Key]      varchar(256)  not null,
+    [Name]     varchar(1024) not null,
+    IsDeleted  bit           not null,
+    CreateDate datetime2(7)  not null,
+    ModifyDate datetime2(7)  null,
+    constraint UQ_UserAttribute_StoreId_Key unique (StoreId, [Key])
 );
 go
 -- Cвязь пользователя и атрибута пользователя
@@ -73,12 +73,12 @@ go
 create table dbo.UserPermission
 (
     Id         int          not null identity(1, 1) constraint PK_UserPermission_Id primary key,
-    UserId     int          not null constraint FK_UserPermission_UserId foreign key (UserId) references dbo.[User] (Id) index IX_UserPermission_UserId nonclustered (UserId),
     StoreId    int          null constraint FK_UserPermission_StoreId foreign key (StoreId) references dbo.Store (Id) index IX_UserPermission_StoreId nonclustered (StoreId),
+    UserId     int          not null constraint FK_UserPermission_UserId foreign key (UserId) references dbo.[User] (Id) index IX_UserPermission_UserId nonclustered (UserId),
     Permission tinyint      not null,
     CreateDate datetime2(7) not null,
     ModifyDate datetime2(7) null,
-    constraint UQ_UserPermission_UserId_StoreId_Permission unique (UserId, StoreId, Permission)
+    constraint UQ_UserPermission_StoreId_UserId_Permission unique (StoreId, UserId, Permission)
 );
 go
 -- Токены при смене телефона, email, пароля и т.д.
@@ -104,6 +104,7 @@ create table dbo.ProductStatus
     [Name]     varchar(256) not null,
     CreateDate datetime2(7) not null,
     ModifyDate datetime2(7) null,
+	constraint UQ_ProductStatus_StoreId_Name unique (StoreId, [Name])
 );
 go
 -- Продукт (товар или услуга)
@@ -119,20 +120,20 @@ create table dbo.Product
     IsDeleted  bit            not null,
     CreateDate datetime2(7)   not null,
     ModifyDate datetime2(7)   null,
-    constraint UQ_Product_StoreId_Name_VendorCode unique (StoreId, [Name])
+    constraint UQ_Product_StoreId_Name unique (StoreId, [Name])
 );
 go
 -- Атрибут продукта
 create table dbo.ProductAttribute
 (
-    Id            int           not null identity(1, 1) constraint PK_ProductAttribute_Id primary key,
-    StoreId       int           not null constraint FK_ProductAttribute_StoreId foreign key (StoreId) references dbo.Store (Id) index IX_ProductAttribute_StoreId nonclustered (StoreId),
-    [Name]        varchar(256)  not null,
-    [Description] varchar(1024) not null,
-    IsDeleted     bit           not null,
-    CreateDate    datetime2(7)  not null,
-    ModifyDate    datetime2(7)  null,
-    constraint UQ_ProductAttribute_StoreId_Name unique (StoreId, [Name])
+    Id         int           not null identity(1, 1) constraint PK_ProductAttribute_Id primary key,
+    StoreId    int           not null constraint FK_ProductAttribute_StoreId foreign key (StoreId) references dbo.Store (Id) index IX_ProductAttribute_StoreId nonclustered (StoreId),
+    [Key]      varchar(256)  not null,
+    [Name]     varchar(1024) not null,
+    IsDeleted  bit           not null,
+    CreateDate datetime2(7)  not null,
+    ModifyDate datetime2(7)  null,
+    constraint UQ_ProductAttribute_StoreId_Key unique (StoreId, [Key])
 );
 go
 -- Cвязь продукта и атрибута продукта
@@ -153,14 +154,14 @@ go
 -- Ключ изображения продукта
 create table dbo.ProductImageKey
 (
-    Id            int           not null identity(1, 1) constraint PK_ProductImageKey_Id primary key,
-    StoreId       int           not null constraint FK_ProductImageKey_StoreId foreign key (StoreId) references dbo.Store (Id) index IX_ProductImageKey_StoreId nonclustered (StoreId),
-    [Name]        varchar(256)  not null,
-    [Description] varchar(1024) not null,
-    IsDeleted     bit           not null,
-    CreateDate    datetime2(7)  not null,
-    ModifyDate    datetime2(7)  null,
-    constraint UQ_ProductImageKey_StoreId_Name unique (StoreId, [Name])
+    Id         int           not null identity(1, 1) constraint PK_ProductImageKey_Id primary key,
+    StoreId    int           not null constraint FK_ProductImageKey_StoreId foreign key (StoreId) references dbo.Store (Id) index IX_ProductImageKey_StoreId nonclustered (StoreId),
+    [Key]      varchar(256)  not null,
+    [Name]     varchar(1024) not null,
+    IsDeleted  bit           not null,
+    CreateDate datetime2(7)  not null,
+    ModifyDate datetime2(7)  null,
+    constraint UQ_ProductImageKey_StoreId_Key unique (StoreId, [Key])
 );
 go
 
@@ -194,14 +195,14 @@ go
 -- Атрибут клиента
 create table dbo.ClientAttribute
 (
-    Id            int           not null identity(1, 1) constraint PK_ClientAttribute_Id primary key,
-    StoreId       int           not null constraint FK_ClientAttribute_StoreId foreign key (StoreId) references dbo.Store (Id) index IX_ClientAttribute_StoreId nonclustered (StoreId),
-    [Name]        varchar(256)  not null,
-    [Description] varchar(1024) not null,
-    IsDeleted     bit           not null,
-    CreateDate    datetime2(7)  not null,
-    ModifyDate    datetime2(7)  null,
-    constraint UQ_ClientAttribute_StoreId_Name unique (StoreId, [Name])
+    Id         int           not null identity(1, 1) constraint PK_ClientAttribute_Id primary key,
+    StoreId    int           not null constraint FK_ClientAttribute_StoreId foreign key (StoreId) references dbo.Store (Id) index IX_ClientAttribute_StoreId nonclustered (StoreId),
+    [Key]      varchar(256)  not null,
+    [Name]     varchar(1024) not null,
+    IsDeleted  bit           not null,
+    CreateDate datetime2(7)  not null,
+    ModifyDate datetime2(7)  null,
+    constraint UQ_ClientAttribute_StoreId_Key unique (StoreId, [Key])
 );
 go
 -- Cвязь клиента и атрибута клиента
@@ -228,6 +229,8 @@ create table dbo.OrderSource
     [Name]     varchar(256) not null,
     CreateDate datetime2(7) not null,
     ModifyDate datetime2(7) null,
+	constraint UQ_OrderSource_StoreId_Name unique (StoreId, [Name])
+
 );
 -- Статус заказа
 create table dbo.OrderStatus
@@ -237,6 +240,7 @@ create table dbo.OrderStatus
     [Name]     varchar(256) not null,
     CreateDate datetime2(7) not null,
     ModifyDate datetime2(7) null,
+	constraint UQ_OrderStatus_StoreId_Name unique (StoreId, [Name])
 );
 -- Заказ
 create table dbo.[Order]
@@ -250,20 +254,20 @@ create table dbo.[Order]
     DiscountSum decimal(18, 2) null,
     IsDeleted   bit            not null,
     CreateDate  datetime2(7)   not null,
-    ModifyDate  datetime2(7)   null,
+    ModifyDate  datetime2(7)   null
 );
 go
 -- Атрибут заказа
 create table dbo.OrderAttribute
 (
-    Id            int           not null identity(1, 1) constraint PK_OrderAttribute_Id primary key,
-    StoreId       int           not null constraint FK_OrderAttribute_StoreId foreign key (StoreId) references dbo.Store (Id) index IX_OrderAttribute_StoreId nonclustered (StoreId),
-    [Name]        varchar(256)  not null,
-    [Description] varchar(1024) not null,
-    IsDeleted     bit           not null,
-    CreateDate    datetime2(7)  not null,
-    ModifyDate    datetime2(7)  null,
-    constraint UQ_OrderAttribute_StoreId_Name unique (StoreId, [Name])
+    Id         int           not null identity(1, 1) constraint PK_OrderAttribute_Id primary key,
+    StoreId    int           not null constraint FK_OrderAttribute_StoreId foreign key (StoreId) references dbo.Store (Id) index IX_OrderAttribute_StoreId nonclustered (StoreId),
+    [Key]      varchar(256)  not null,
+    [Name]     varchar(1024) not null,
+    IsDeleted  bit           not null,
+    CreateDate datetime2(7)  not null,
+    ModifyDate datetime2(7)  null,
+    constraint UQ_OrderAttribute_StoreId_Key unique (StoreId, [Key])
 );
 go
 -- Cвязь заказа и атрибута заказа
@@ -291,21 +295,8 @@ create table dbo.OrderItem
     [Count]    int            not null,
     IsDeleted  bit            not null,
     CreateDate datetime2(7)   not null,
-    ModifyDate datetime2(7)   null
-);
-go
-
--- Аудит
-create table dbo.[AuditLog]
-(
-    Id          int          not null identity(1, 1) constraint PK_Log_Id primary key,
-    UserId      int          null,
-    StoreId     int          null,
-    ActionType  tinyint      not null,
-	ObjectType  tinyint      not null,
-    [OldValue]  varchar(max) null,
-    [NewValue]  varchar(max) null,
-    [TimeStamp] datetime2(7) not null
+    ModifyDate datetime2(7)   null,
+	constraint UQ_OrderItem_StoreId_OrderId_ProductId unique (StoreId, OrderId, ProductId)
 );
 go
 

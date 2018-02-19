@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
-using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Business.Store;
 using Aklion.Crm.Dao.Store;
 using Aklion.Crm.Mappers.Administration.Store;
@@ -9,17 +8,17 @@ using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.Store;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration
+namespace Aklion.Crm.Controllers.AdministrationControllers
 {
     [Route("Administration/Stores")]
     public class AdministrationStoreController : BaseController
     {
-        private readonly IAuditLogService _auditLogService;
+        private readonly IAuditLogger _auditLogService;
         private readonly IStoreService _storeService;
         private readonly IStoreDao _storeDao;
 
         public AdministrationStoreController(
-            IAuditLogService auditLogService,
+            IAuditLogger auditLogService,
             IStoreService storeService,
             IStoreDao storeDao)
         {

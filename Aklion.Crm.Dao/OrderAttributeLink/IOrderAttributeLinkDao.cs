@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Domain.OrderAttributeLink;
 
@@ -7,7 +6,8 @@ namespace Aklion.Crm.Dao.OrderAttributeLink
 {
     public interface IOrderAttributeLinkDao
     {
-        Task<Tuple<int, List<OrderAttributeLinkModel>>> GetPagedListAsync(OrderAttributeLinkParameterModel parameter);
+        Task<(int TotalCount, List<OrderAttributeLinkModel> List)> GetPagedListAsync(
+            OrderAttributeLinkParameterModel parameter);
 
         Task<OrderAttributeLinkModel> GetAsync(int id);
 

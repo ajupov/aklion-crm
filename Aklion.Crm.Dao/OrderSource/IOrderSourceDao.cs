@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Domain.OrderSource;
 
@@ -7,9 +6,9 @@ namespace Aklion.Crm.Dao.OrderSource
 {
     public interface IOrderSourceDao
     {
-        Task<Tuple<int, List<OrderSourceModel>>> GetPagedListAsync(OrderSourceParameterModel parameter);
+        Task<(int TotalCount, List<OrderSourceModel> List)> GetPagedListAsync(OrderSourceParameterModel parameter);
 
-        Task<Dictionary<string, int>> GetForSelectAsync(OrderSourceSelectParameterModel parameter);
+        Task<Dictionary<string, int>> GetSelectAsync(OrderSourceSelectParameterModel parameter);
 
         Task<OrderSourceModel> GetAsync(int id);
 

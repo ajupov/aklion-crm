@@ -27,9 +27,7 @@ namespace Aklion.Infrastructure.Password
         {
             var hashedPasswordArray = Convert.FromBase64String(hashedPassword);
             if (hashedPasswordArray.Length != HashLength)
-            {
                 return false;
-            }
 
             var salt = GetVerifySalt(hashedPasswordArray);
             var array = GetVerifyArray(hashedPasswordArray);
@@ -87,21 +85,15 @@ namespace Aklion.Infrastructure.Password
         private static bool IsEqual(IReadOnlyList<byte> byteArray1, IReadOnlyList<byte> byteArray2)
         {
             if (byteArray1 == null && byteArray2 == null)
-            {
                 return true;
-            }
 
             if (byteArray1 == null || byteArray2 == null || byteArray1.Count != byteArray2.Count)
-            {
                 return false;
-            }
 
             var result = true;
 
             for (var index = 0; index < byteArray1.Count; ++index)
-            {
                 result &= byteArray1[index] == byteArray2[index];
-            }
 
             return result;
         }

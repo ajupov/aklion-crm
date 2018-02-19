@@ -1,23 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
-using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.UserAttribute;
 using Aklion.Crm.Mappers.Administration.UserAttribute;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.UserAttribute;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration
+namespace Aklion.Crm.Controllers.AdministrationControllers
 {
     [Route("Administration/UserAttributes")]
     public class AdministrationUserAttributeController : BaseController
     {
-        private readonly IAuditLogService _auditLogService;
+        private readonly IAuditLogger _auditLogService;
         private readonly IUserAttributeDao _userAttributeDao;
 
         public AdministrationUserAttributeController(
-            IAuditLogService auditLogService,
+            IAuditLogger auditLogService,
             IUserAttributeDao userAttributeDao)
         {
             _auditLogService = auditLogService;

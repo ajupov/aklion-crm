@@ -17,7 +17,7 @@ namespace Aklion.Crm.Controllers
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.PrimarySid, userId.ToString(), ClaimValueTypes.Integer),
-                new Claim("StoreId", storeId.ToString(), ClaimValueTypes.Integer),
+                new Claim("StoreId", storeId.ToString(), ClaimValueTypes.Integer)
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType,
@@ -42,18 +42,14 @@ namespace Aklion.Crm.Controllers
             UserContext = null;
             ViewBag.UserContext = null;
             ViewBag.IsUserContextInitialized = false;
+
             return HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
         [NonAction]
         public IActionResult RedirectToLocal(string returnUrl)
         {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-
-            return RedirectToAction("Index", "Home");
+            return Url.IsLocalUrl(returnUrl) ? (IActionResult) Redirect(returnUrl) : RedirectToAction("Index", "Home");
         }
 
         [NonAction]

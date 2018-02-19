@@ -4,14 +4,15 @@ using Aklion.Crm.Models;
 using Aklion.Crm.Models.User.Store;
 using Aklion.Infrastructure.Mapper;
 using DomainStoreModel = Aklion.Crm.Domain.Store.StoreModel;
-using DomainStoreParameterModel = Aklion.Crm.Domain.Store.StoreParameterModel;
+using DomainStoreByUserModel = Aklion.Crm.Domain.Store.StoreByUserModel;
+using DomainStoreParameterModel = Aklion.Crm.Domain.Store.StoreByUserParameterModel;
 using DomainStoreAutocompleteParameterModel = Aklion.Crm.Domain.Store.StoreAutocompleteParameterModel;
 
 namespace Aklion.Crm.Mappers.User.Store
 {
     public static class StoreMapper
     {
-        public static PagingModel<StoreModel> MapNew(this Tuple<int, List<DomainStoreModel>> tuple, int? page, int? size)
+        public static PagingModel<StoreModel> MapNew(this Tuple<int, List<DomainStoreByUserModel>> tuple, int? page, int? size)
         {
             return new PagingModel<StoreModel>(tuple.Item2.MapListNew<StoreModel>(), tuple.Item1, page, size);
         }
@@ -23,7 +24,7 @@ namespace Aklion.Crm.Mappers.User.Store
 
         public static DomainStoreModel MapFrom(this DomainStoreModel domainModel, StoreModel model, int storeId)
         {
-            return Mapper.MapFrom(domainModel, model);
+            return domainModel.MapFrom(model);
         }
 
         public static DomainStoreParameterModel MapNew(this StoreParameterModel model, int storeId)

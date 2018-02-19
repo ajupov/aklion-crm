@@ -22,6 +22,12 @@ namespace Aklion.Crm.Models.Account
         [Compare("Password", ErrorMessage = "Пароли не совпадают")]
         public string ConfirmPassword { get; set; }
 
+        [Required(ErrorMessage = "Введите название магазина")]
+        [DataType(DataType.Text)]
+        [Display(Name = "Название магазина")]
+        [StringLength(256, ErrorMessage = "Название магазина не должно превышать 256 символов")]
+        public string StoreName { get; set; }
+
         [Required(ErrorMessage = "Введите фамилию")]
         [DataType(DataType.Text)]
         [Display(Name = "Фамилия")]

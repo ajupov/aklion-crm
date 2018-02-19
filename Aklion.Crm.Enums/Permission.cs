@@ -4,6 +4,7 @@ namespace Aklion.Crm.Enums
 {
     public enum Permission : byte
     {
+        //Привязка
         [Display(Name = "")]
         None = 0,
 
@@ -14,20 +15,21 @@ namespace Aklion.Crm.Enums
         //Главная учетная запись
         [Display(Name = "Управление пользователями")]
         UserManagement = 2,
-
+        
+        //Главная учетная запись
         [Display(Name = "Управление магазинами")]
         StoreManagement = 3,
 
         //Менеджер по продуктам
         [Display(Name = "Управление продуктами")]
-        ProductManagement = 7,
+        ProductManagement = 4,
 
         //Менеджер по клиентам
         [Display(Name = "Управление клиентами")]
-        ClientManagement = 14,
+        ClientManagement = 5,
 
         //Менеджер по продажам
         [Display(Name = "Управление заказами")]
-        OrderManagement = 17
+        OrderManagement = 6
     }
 }

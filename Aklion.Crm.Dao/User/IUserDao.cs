@@ -9,6 +9,8 @@ namespace Aklion.Crm.Dao.User
     {
         Task<Tuple<int, List<UserModel>>> GetPagedListAsync(UserParameterModel parameter);
 
+        Task<Tuple<int, List<UserByStoreModel>>> GetPagedListAsync(UserByStoreParameterModel parameter);
+
         Task<Dictionary<string, int>> GetForAutocompleteAsync(UserAutocompleteParameterModel parameter);
 
         Task<UserModel> GetAsync(int id);

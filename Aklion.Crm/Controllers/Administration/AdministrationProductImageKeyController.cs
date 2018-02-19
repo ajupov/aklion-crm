@@ -1,23 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
-using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.ProductImageKey;
 using Aklion.Crm.Mappers.Administration.ProductImageKey;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.ProductImageKey;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration
+namespace Aklion.Crm.Controllers.AdministrationControllers
 {
     [Route("Administration/ProductImageKeys")]
     public class AdministrationProductImageKeyController : BaseController
     {
-        private readonly IAuditLogService _auditLogService;
+        private readonly IAuditLogger _auditLogService;
         private readonly IProductImageKeyDao _productImageKeyDao;
 
         public AdministrationProductImageKeyController(
-            IAuditLogService auditLogService,
+            IAuditLogger auditLogService,
             IProductImageKeyDao productImageKeyDao)
         {
             _auditLogService = auditLogService;

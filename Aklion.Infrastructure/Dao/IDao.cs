@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Aklion.Infrastructure.Dao
@@ -10,15 +9,18 @@ namespace Aklion.Infrastructure.Dao
 
         Task<TModel> GetAsync<TModel, TParameter>(TParameter parameter);
 
-        Task<List<TModel>> GetListAsync<TModel>();
+        Task<List<TModel>> GetListAsync<TModel>(bool distinct = false);
 
-        Task<List<TModel>> GetListAsync<TModel, TParameter>(TParameter parameter);
+        Task<List<TModel>> GetListAsync<TModel, TParameter>(TParameter parameter, bool distinct = false);
 
-        Task<Tuple<int, List<TModel>>> GetPagedListAsync<TModel, TParameter>(TParameter parameter);
+        Task<(int TotalCount, List<TModel> List)> GetPagedListAsync<TModel, TParameter>(TParameter parameter,
+            bool distinct = false);
 
-        Task<Dictionary<string, int>> GetForAutoCompleteAsync<TModel, TParameter>(TParameter parameter);
+        Task<Dictionary<string, int>> GetForAutoCompleteAsync<TModel, TParameter>(TParameter parameter,
+            bool distinct = false);
 
-        Task<Dictionary<string, int>> GetForSelectAsync<TModel, TParameter>(TParameter parameter);
+        Task<Dictionary<string, int>>
+            GetForSelectAsync<TModel, TParameter>(TParameter parameter, bool distinct = false);
 
         Task<int> CreateAsync<TModel>(TModel model);
 

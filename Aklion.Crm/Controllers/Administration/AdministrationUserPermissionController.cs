@@ -1,24 +1,22 @@
 ﻿using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
-using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.UserPermission;
-using Aklion.Crm.Enums;
 using Aklion.Crm.Mappers.Administration.UserPermission;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.UserPermission;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration
+namespace Aklion.Crm.Controllers.AdministrationControllers
 {
     [Route("Administration/UserPermissions")]
     public class AdministrationUserPermissionController : BaseController
     {
-        private readonly IAuditLogService _auditLogService;
+        private readonly IAuditLogger _auditLogService;
         private readonly IUserPermissionDao _userPermissionDao;
 
         public AdministrationUserPermissionController(
             IUserPermissionDao userPermissionDao,
-            IAuditLogService auditLogService)
+            IAuditLogger auditLogService)
         {
             _auditLogService = auditLogService;
             _userPermissionDao = userPermissionDao;

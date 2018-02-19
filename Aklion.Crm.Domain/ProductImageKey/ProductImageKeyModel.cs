@@ -5,7 +5,7 @@ namespace Aklion.Crm.Domain.ProductImageKey
 {
     [Table("dbo.ProductImageKey as pik")]
     [Join("inner join dbo.Store as s on pik.StoreId = s.Id")]
-    public class ProductImageKeyModel : ICloneable
+    public class ProductImageKeyModel
     {
         [Column("pik.Id")]
         [Identificator]
@@ -34,10 +34,5 @@ namespace Aklion.Crm.Domain.ProductImageKey
         [Column("pik.ModifyDate")]
         [ModifyDate]
         public DateTime? ModifyDate { get; set; }
-
-        public object Clone()
-        {
-            return MemberwiseClone();
-        }
     }
 }

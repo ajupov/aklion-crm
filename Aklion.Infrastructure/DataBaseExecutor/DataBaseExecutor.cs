@@ -10,16 +10,16 @@ namespace Aklion.Infrastructure.DataBaseExecutor
 {
     public sealed class DataBaseExecutor : IDataBaseExecutor
     {
-        private readonly IConnectionFactory _connectionFactory;
+        private readonly IConnectionFactory _factory;
 
-        public DataBaseExecutor(IConnectionFactory connectionFactory)
+        public DataBaseExecutor(IConnectionFactory factory)
         {
-            _connectionFactory = connectionFactory;
+            _factory = factory;
         }
 
         public async Task ExecuteAsync(string query, object parameters = null)
         {
-            using (var connection = _connectionFactory.GetConnection())
+            using (var connection = _factory.GetConnection())
             {
                 await connection.ExecuteAsync(query, parameters).ConfigureAwait(false);
             }
@@ -27,7 +27,7 @@ namespace Aklion.Infrastructure.DataBaseExecutor
 
         public async Task<TModel> SelectOneAsync<TModel>(string query, object parameters = null)
         {
-            using (var connection = _connectionFactory.GetConnection())
+            using (var connection = _factory.GetConnection())
             {
                 return await connection.QueryFirstOrDefaultAsync<TModel>(query, parameters).ConfigureAwait(false);
             }
@@ -35,7 +35,7 @@ namespace Aklion.Infrastructure.DataBaseExecutor
 
         public async Task<List<TModel>> SelectListAsync<TModel>(string query, object parameters = null)
         {
-            using (var connection = _connectionFactory.GetConnection())
+            using (var connection = _factory.GetConnection())
             {
                 return (await connection.QueryAsync<TModel>(query, parameters).ConfigureAwait(false)).ToList();
             }
@@ -43,16 +43,17 @@ namespace Aklion.Infrastructure.DataBaseExecutor
 
         public async Task<Dictionary<string, int>> SelectDictonaryAsync(string query, object parameters = null)
         {
-            using (var connection = _connectionFactory.GetConnection())
+            using (var connection = _factory.GetConnection())
             {
                 return (await connection.QueryAsync<KeyValuePair<int, string>>(query, parameters).ConfigureAwait(false))
                     .ToDictionary(k => k.Value, v => v.Key);
             }
         }
 
-        public async Task<T> SelectMultipleAsync<T>(string query, Func<IReader, Task<T>> reader, object parameters = null)
+        public async Task<T> SelectMultipleAsync<T>(string query, Func<IReader, Task<T>> reader,
+            object parameters = null)
         {
-            using (var connection = _connectionFactory.GetConnection())
+            using (var connection = _factory.GetConnection())
             {
                 var gridReader = await connection.QueryMultipleAsync(query, parameters).ConfigureAwait(false);
 

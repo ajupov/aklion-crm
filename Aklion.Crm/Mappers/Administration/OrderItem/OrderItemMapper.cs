@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.OrderItem;
 using Aklion.Infrastructure.Mapper;
@@ -10,9 +9,11 @@ namespace Aklion.Crm.Mappers.Administration.OrderItem
 {
     public static class OrderItemMapper
     {
-        public static PagingModel<OrderItemModel> MapNew(this Tuple<int, List<DomainOrderItemModel>> tuple, int? page, int? size)
+        public static PagingModel<OrderItemModel> MapNew(this (int TotalCount, List<DomainOrderItemModel> List) tuple,
+            int? page, int? size)
         {
-            return new PagingModel<OrderItemModel>(tuple.Item2.MapListNew<OrderItemModel>(), tuple.Item1, page, size);
+            return new PagingModel<OrderItemModel>(tuple.List.MapListNew<OrderItemModel>(), tuple.TotalCount, page,
+                size);
         }
 
         public static DomainOrderItemModel MapNew(this OrderItemModel model)

@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.Client;
 using Aklion.Infrastructure.Mapper;
+using DomainClientAutocompleteParameterModel = Aklion.Crm.Domain.Client.ClientAutocompleteParameterModel;
 using DomainClientModel = Aklion.Crm.Domain.Client.ClientModel;
 using DomainClientParameterModel = Aklion.Crm.Domain.Client.ClientParameterModel;
-using DomainClientAutocompleteParameterModel = Aklion.Crm.Domain.Client.ClientAutocompleteParameterModel;
 
 namespace Aklion.Crm.Mappers.Administration.Client
 {
     public static class ClientMapper
     {
-        public static PagingModel<ClientModel> MapNew(this Tuple<int, List<DomainClientModel>> tuple, int? page, int? size)
+        public static PagingModel<ClientModel> MapNew(this (int TotalCount, List<DomainClientModel> List) tuple, int? page,
+            int? size)
         {
-            return new PagingModel<ClientModel>(tuple.Item2.MapListNew<ClientModel>(), tuple.Item1, page, size);
+            return new PagingModel<ClientModel>(tuple.List.MapListNew<ClientModel>(), tuple.TotalCount, page, size);
         }
 
         public static DomainClientModel MapNew(this ClientModel model)

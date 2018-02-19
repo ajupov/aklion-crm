@@ -9,7 +9,7 @@ namespace Aklion.Crm.Dao.OrderStatus
     {
         Task<Tuple<int, List<OrderStatusModel>>> GetPagedListAsync(OrderStatusParameterModel parameter);
 
-        Task<Dictionary<string, int>> GetForSelectAsync(OrderStatusSelectParameterModel parameter);
+        Task<Dictionary<string, int>> GetSelectAsync(OrderStatusSelectParameterModel parameter);
 
         Task<OrderStatusModel> GetAsync(int id);
 

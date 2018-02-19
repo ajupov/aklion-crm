@@ -1,7 +1,5 @@
-﻿using System.IO;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
-using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.ProductImageKeyLink;
 using Aklion.Crm.Mappers.Administration.ProductImageKeyLink;
 using Aklion.Crm.Models;
@@ -9,16 +7,16 @@ using Aklion.Crm.Models.Administration.ProductImageKeyLink;
 using Aklion.Infrastructure.FileFormat;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration
+namespace Aklion.Crm.Controllers.AdministrationControllers
 {
     [Route("Administration/ProductImageKeyLinks")]
     public class AdministrationProductImageKeyLinkController : BaseController
     {
-        private readonly IAuditLogService _auditLogService;
+        private readonly IAuditLogger _auditLogService;
         private readonly IProductImageKeyLinkDao _productImageKeyLinkDao;
 
         public AdministrationProductImageKeyLinkController(
-            IAuditLogService auditLogService,
+            IAuditLogger auditLogService,
             IProductImageKeyLinkDao productImageKeyLinkDao)
         {
             _auditLogService = auditLogService;

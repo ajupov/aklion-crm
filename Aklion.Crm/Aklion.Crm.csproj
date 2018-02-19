@@ -6,42 +6,42 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\Api\**" />
-    <Compile Remove="Controllers\User\**" />
+    <Compile Remove="Controllers\Users\**" />
     <Compile Remove="wwwroot\scripts\user\**" />
     <Content Remove="Controllers\Api\**" />
-    <Content Remove="Controllers\User\**" />
+    <Content Remove="Controllers\Users\**" />
     <Content Remove="wwwroot\scripts\user\**" />
     <EmbeddedResource Remove="Controllers\Api\**" />
-    <EmbeddedResource Remove="Controllers\User\**" />
+    <EmbeddedResource Remove="Controllers\Users\**" />
     <EmbeddedResource Remove="wwwroot\scripts\user\**" />
     <None Remove="Controllers\Api\**" />
-    <None Remove="Controllers\User\**" />
+    <None Remove="Controllers\Users\**" />
     <None Remove="wwwroot\scripts\user\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Controllers\User\ClientAttributeController.cs" />
-    <Compile Include="Controllers\User\ClientAttributeLinkController.cs" />
-    <Compile Include="Controllers\User\ClientController.cs" />
-    <Compile Include="Controllers\User\ConsoleController.cs" />
-    <Compile Include="Controllers\User\OrderAttributeController.cs" />
-    <Compile Include="Controllers\User\OrderAttributeLinkController.cs" />
-    <Compile Include="Controllers\User\OrderController.cs" />
-    <Compile Include="Controllers\User\OrderItemController.cs" />
-    <Compile Include="Controllers\User\OrderSourceController.cs" />
-    <Compile Include="Controllers\User\OrderStatusController.cs" />
-    <Compile Include="Controllers\User\PermissionController.cs" />
-    <Compile Include="Controllers\User\ProductAttributeController.cs" />
-    <Compile Include="Controllers\User\ProductAttributeLinkController.cs" />
-    <Compile Include="Controllers\User\ProductController.cs" />
-    <Compile Include="Controllers\User\ProductImageKeyController.cs" />
-    <Compile Include="Controllers\User\ProductImageKeyLinkController.cs" />
-    <Compile Include="Controllers\User\ProductStatusController.cs" />
-    <Compile Include="Controllers\User\StoreController.cs" />
-    <Compile Include="Controllers\User\UserAttributeController.cs" />
-    <Compile Include="Controllers\User\UserAttributeLinkController.cs" />
-    <Compile Include="Controllers\User\UserController.cs" />
-    <Compile Include="Controllers\User\UserPermissionController.cs" />
+    <Compile Include="Controllers\Users\UserClientAttributeController.cs" />
+    <Compile Include="Controllers\Users\UserClientAttributeLinkController.cs" />
+    <Compile Include="Controllers\Users\UserClientController.cs" />
+    <Compile Include="Controllers\Users\UserConsoleController.cs" />
+    <Compile Include="Controllers\Users\UserOrderAttributeController.cs" />
+    <Compile Include="Controllers\Users\UserOrderAttributeLinkController.cs" />
+    <Compile Include="Controllers\Users\UserOrderController.cs" />
+    <Compile Include="Controllers\Users\UserOrderItemController.cs" />
+    <Compile Include="Controllers\Users\UserOrderSourceController.cs" />
+    <Compile Include="Controllers\Users\UserOrderStatusController.cs" />
+    <Compile Include="Controllers\Users\UserPermissionController.cs" />
+    <Compile Include="Controllers\Users\UserProductAttributeController.cs" />
+    <Compile Include="Controllers\Users\UserProductAttributeLinkController.cs" />
+    <Compile Include="Controllers\Users\UserProductController.cs" />
+    <Compile Include="Controllers\Users\UserProductImageKeyController.cs" />
+    <Compile Include="Controllers\Users\UserProductImageKeyLinkController.cs" />
+    <Compile Include="Controllers\Users\UserProductStatusController.cs" />
+    <Compile Include="Controllers\Users\UserStoreController.cs" />
+    <Compile Include="Controllers\Users\UserUserAttributeController.cs" />
+    <Compile Include="Controllers\Users\UserUserAttributeLinkController.cs" />
+    <Compile Include="Controllers\Users\UserUserController.cs" />
+    <Compile Include="Controllers\Users\UserUserPermissionController.cs" />
   </ItemGroup>
 
   <ItemGroup>
