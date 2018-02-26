@@ -15,11 +15,11 @@ namespace Aklion.Crm.Domain.ProductAttribute
         [Where("@StoreName is null or s.Name like @StoreName + '%'")]
         public string StoreName { get; set; }
 
+        [Where("@Key is null or pa.Key like @Key + '%'")]
+        public string Key { get; set; }
+
         [Where("@Name is null or pa.Name like @Name + '%'")]
         public string Name { get; set; }
-
-        [Where("@Description is null or pa.Description like @Description + '%'")]
-        public string Description { get; set; }
 
         [Where("@IsDeleted is null or pa.IsDeleted = @IsDeleted")]
         public bool? IsDeleted { get; set; }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Domain.ProductImageKey;
 using Aklion.Infrastructure.Dao;
@@ -15,7 +14,7 @@ namespace Aklion.Crm.Dao.ProductImageKey
             _dao = dao;
         }
 
-        public Task<Tuple<int, List<ProductImageKeyModel>>> GetPagedListAsync(ProductImageKeyParameterModel parameter)
+        public Task<(int TotalCount, List<ProductImageKeyModel> List)> GetPagedListAsync(ProductImageKeyParameterModel parameter)
         {
             return _dao.GetPagedListAsync<ProductImageKeyModel, ProductImageKeyParameterModel>(parameter);
         }

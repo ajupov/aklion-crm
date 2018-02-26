@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.ProductImageKey;
@@ -12,7 +11,7 @@ namespace Aklion.Crm.Mappers.Administration.ProductImageKey
 {
     public static class ProductImageKeyMapper
     {
-        public static PagingModel<ProductImageKeyModel> MapNew(this Tuple<int, List<DomainProductImageKeyModel>> tuple, int? page, int? size)
+        public static PagingModel<ProductImageKeyModel> MapNew(this (int TotalCount, List<DomainProductImageKeyModel> List) tuple, int? page, int? size)
         {
             return new PagingModel<ProductImageKeyModel>(tuple.Item2.MapListNew<ProductImageKeyModel>(), tuple.Item1, page, size);
         }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Domain.Product;
 
@@ -7,9 +6,9 @@ namespace Aklion.Crm.Dao.Product
 {
     public interface IProductDao
     {
-        Task<Tuple<int, List<ProductModel>>> GetPagedListAsync(ProductParameterModel parameter);
+        Task<(int TotalCount, List<ProductModel> List)> GetPagedListAsync(ProductParameterModel parameter);
 
-        Task<Dictionary<string, int>> GetForAutocompleteAsync(ProductAutocompleteParameterModel parameter);
+        Task<Dictionary<string, int>> GetAutocompleteAsync(ProductAutocompleteParameterModel parameter);
 
         Task<ProductModel> GetAsync(int id);
 

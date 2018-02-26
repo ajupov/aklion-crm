@@ -15,12 +15,12 @@ namespace Aklion.Crm.Domain.ProductImageKey
         [Where("@StoreName is null or s.Name like @StoreName + '%'")]
         public string StoreName { get; set; }
 
+        [Where("@Key is null or pik.Key like @Key + '%'")]
+        public string Key { get; set; }
+
         [Where("@Name is null or pik.Name like @Name + '%'")]
         public string Name { get; set; }
-
-        [Where("@Description is null or pik.Description like @Description + '%'")]
-        public string Description { get; set; }
-
+  
         [Where("@IsDeleted is null or pik.IsDeleted = @IsDeleted")]
         public bool? IsDeleted { get; set; }
 

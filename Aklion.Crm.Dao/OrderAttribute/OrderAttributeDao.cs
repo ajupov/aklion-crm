@@ -14,16 +14,14 @@ namespace Aklion.Crm.Dao.OrderAttribute
             _dao = dao;
         }
 
-        public Task<(int TotalCount, List<OrderAttributeModel> List)> GetPagedListAsync(
-            OrderAttributeParameterModel parameter)
+        public Task<(int TotalCount, List<OrderAttributeModel> List)> GetPagedListAsync(OrderAttributeParameterModel parameter)
         {
             return _dao.GetPagedListAsync<OrderAttributeModel, OrderAttributeParameterModel>(parameter);
         }
 
         public Task<Dictionary<string, int>> GetAutocompleteAsync(OrderAttributeAutocompleteParameterModel parameter)
         {
-            return _dao.GetForAutoCompleteAsync<OrderAttributeModel, OrderAttributeAutocompleteParameterModel>(
-                parameter);
+            return _dao.GetForAutoCompleteAsync<OrderAttributeModel, OrderAttributeAutocompleteParameterModel>(parameter);
         }
 
         public Task<OrderAttributeModel> GetAsync(int id)

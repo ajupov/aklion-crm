@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Threading.Tasks;
@@ -15,15 +14,13 @@ namespace Aklion.Crm.Dao.ProductImageKeyLink
         private readonly IDataBaseExecutor _dataBaseExecutor;
         private readonly IDao _dao;
 
-        public ProductImageKeyLinkDao(
-            IDataBaseExecutor dataBaseExecutor, 
-            IDao dao)
+        public ProductImageKeyLinkDao(IDataBaseExecutor dataBaseExecutor, IDao dao)
         {
             _dao = dao;
             _dataBaseExecutor = dataBaseExecutor;
         }
 
-        public Task<Tuple<int, List<ProductImageKeyLinkModel>>> GetPagedListAsync(ProductImageKeyLinkParameterModel parameter)
+        public Task<(int TotalCount, List<ProductImageKeyLinkModel> List)> GetPagedListAsync(ProductImageKeyLinkParameterModel parameter)
         {
             return _dao.GetPagedListAsync<ProductImageKeyLinkModel, ProductImageKeyLinkParameterModel>(parameter);
         }

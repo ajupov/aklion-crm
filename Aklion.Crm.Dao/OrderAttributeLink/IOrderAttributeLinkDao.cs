@@ -6,8 +6,7 @@ namespace Aklion.Crm.Dao.OrderAttributeLink
 {
     public interface IOrderAttributeLinkDao
     {
-        Task<(int TotalCount, List<OrderAttributeLinkModel> List)> GetPagedListAsync(
-            OrderAttributeLinkParameterModel parameter);
+        Task<(int TotalCount, List<OrderAttributeLinkModel> List)> GetPagedListAsync(OrderAttributeLinkParameterModel parameter);
 
         Task<OrderAttributeLinkModel> GetAsync(int id);
 

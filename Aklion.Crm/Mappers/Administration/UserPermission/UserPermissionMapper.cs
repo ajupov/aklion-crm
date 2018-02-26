@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.UserPermission;
 using Aklion.Infrastructure.Mapper;
@@ -10,9 +9,9 @@ namespace Aklion.Crm.Mappers.Administration.UserPermission
 {
     public static class UserPermissionMapper
     {
-        public static PagingModel<UserPermissionModel> MapNew(this Tuple<int, List<DomainUserPermissionModel>> tuple, int? page, int? size)
+        public static PagingModel<UserPermissionModel> MapNew(this (int TotalCount, List<DomainUserPermissionModel> List) tuple, int? page, int? size)
         {
-            return new PagingModel<UserPermissionModel>(tuple.Item2.MapListNew<UserPermissionModel>(), tuple.Item1, page, size);
+            return new PagingModel<UserPermissionModel>(tuple.List.MapListNew<UserPermissionModel>(), tuple.TotalCount, page, size);
         }
 
         public static DomainUserPermissionModel MapNew(this UserPermissionModel model)

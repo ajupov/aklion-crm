@@ -14,8 +14,7 @@ namespace Aklion.Crm.Dao.ClientAttributeLink
             _dao = dao;
         }
 
-        public Task<(int TotalCount, List<ClientAttributeLinkModel> List)> GetPagedListAsync(
-            ClientAttributeLinkParameterModel parameter)
+        public Task<(int TotalCount, List<ClientAttributeLinkModel> List)> GetPagedListAsync(ClientAttributeLinkParameterModel parameter)
         {
             return _dao.GetPagedListAsync<ClientAttributeLinkModel, ClientAttributeLinkParameterModel>(parameter);
         }

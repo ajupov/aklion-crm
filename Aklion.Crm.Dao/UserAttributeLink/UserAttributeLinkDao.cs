@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Domain.UserAttributeLink;
 using Aklion.Infrastructure.Dao;
@@ -15,7 +14,7 @@ namespace Aklion.Crm.Dao.UserAttributeLink
             _dao = dao;
         }
 
-        public Task<Tuple<int, List<UserAttributeLinkModel>>> GetPagedListAsync(UserAttributeLinkParameterModel parameter)
+        public Task<(int TotalCount, List<UserAttributeLinkModel> List)> GetPagedListAsync(UserAttributeLinkParameterModel parameter)
         {
             return _dao.GetPagedListAsync<UserAttributeLinkModel, UserAttributeLinkParameterModel>(parameter);
         }

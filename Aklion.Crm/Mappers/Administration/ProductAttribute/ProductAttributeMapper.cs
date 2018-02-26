@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.ProductAttribute;
 using Aklion.Infrastructure.Mapper;
+using DomainProductAttributeAutocompleteParameterModel = Aklion.Crm.Domain.ProductAttribute.ProductAttributeAutocompleteParameterModel;
 using DomainProductAttributeModel = Aklion.Crm.Domain.ProductAttribute.ProductAttributeModel;
 using DomainProductAttributeParameterModel = Aklion.Crm.Domain.ProductAttribute.ProductAttributeParameterModel;
-using DomainProductAttributeAutocompleteParameterModel = Aklion.Crm.Domain.ProductAttribute.ProductAttributeAutocompleteParameterModel;
 
 namespace Aklion.Crm.Mappers.Administration.ProductAttribute
 {
     public static class ProductAttributeMapper
     {
-        public static PagingModel<ProductAttributeModel> MapNew(this Tuple<int, List<DomainProductAttributeModel>> tuple, int? page, int? size)
+        public static PagingModel<ProductAttributeModel> MapNew(this (int TotalCount, List<DomainProductAttributeModel> List) tuple, int? page, int? size)
         {
-            return new PagingModel<ProductAttributeModel>(tuple.Item2.MapListNew<ProductAttributeModel>(), tuple.Item1, page, size);
+            return new PagingModel<ProductAttributeModel>(tuple.List.MapListNew<ProductAttributeModel>(), tuple.TotalCount, page, size);
         }
 
         public static DomainProductAttributeModel MapNew(this ProductAttributeModel model)
@@ -35,7 +34,7 @@ namespace Aklion.Crm.Mappers.Administration.ProductAttribute
         {
             return new DomainProductAttributeAutocompleteParameterModel
             {
-                Description = pattern,
+                Name = pattern,
                 StoreId = storeId,
                 IsDeleted = false
             };

@@ -14,30 +14,30 @@ namespace Aklion.Crm.Controllers.Administration.AuditLogs
     [Route("Administration/AuditLogs")]
     public class AdministrationAuditLogController : BaseController
     {
-        private readonly IAuditLogger _service;
+        private readonly IAuditLogger _logger;
 
-        public AdministrationAuditLogController(IAuditLogger service)
+        public AdministrationAuditLogController(IAuditLogger logger)
         {
-            _service = service;
+            _logger = logger;
         }
 
         [HttpGet]
         public async Task<PagingModel<AuditLogModel>> GetList(AuditLogParameterModel model)
         {
-            var result = await _service.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
+            var result = await _logger.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
             return result.MapNew(model.Page, model.Size);
         }
 
         [HttpGet]
         public Dictionary<string, AuditLogActionType> GetActionTypes()
         {
-            return _service.GetActionTypes();
+            return _logger.GetActionTypes();
         }
 
         [HttpGet]
         public Dictionary<string, AuditLogObjectType> GetObjectTypes()
         {
-            return _service.GetObjectTypes();
+            return _logger.GetObjectTypes();
         }
     }
 }

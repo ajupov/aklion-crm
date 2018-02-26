@@ -28,11 +28,11 @@ namespace Aklion.Crm.Domain.UserAttributeLink
         [Column("ual.AttributeId")]
         public int AttributeId { get; set; }
 
+        [Column("ua.Key")]
+        public string AttributeKey { get; }
+
         [Column("ua.Name")]
         public string AttributeName { get; }
-
-        [Column("ua.Description")]
-        public string AttributeDescription { get; }
 
         [Column("ual.Value")]
         public string Value { get; set; }

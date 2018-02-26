@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.UserAttribute;
 using Aklion.Infrastructure.Mapper;
+using DomainUserAttributeAutocompleteParameterModel = Aklion.Crm.Domain.UserAttribute.UserAttributeAutocompleteParameterModel;
 using DomainUserAttributeModel = Aklion.Crm.Domain.UserAttribute.UserAttributeModel;
 using DomainUserAttributeParameterModel = Aklion.Crm.Domain.UserAttribute.UserAttributeParameterModel;
-using DomainUserAttributeAutocompleteParameterModel = Aklion.Crm.Domain.UserAttribute.UserAttributeAutocompleteParameterModel;
 
 namespace Aklion.Crm.Mappers.Administration.UserAttribute
 {
     public static class UserAttributeMapper
     {
-        public static PagingModel<UserAttributeModel> MapNew(this Tuple<int, List<DomainUserAttributeModel>> tuple, int? page, int? size)
+        public static PagingModel<UserAttributeModel> MapNew(this (int TotalCount, List<DomainUserAttributeModel> List) tuple, int? page, int? size)
         {
-            return new PagingModel<UserAttributeModel>(tuple.Item2.MapListNew<UserAttributeModel>(), tuple.Item1, page, size);
+            return new PagingModel<UserAttributeModel>(tuple.List.MapListNew<UserAttributeModel>(), tuple.TotalCount, page, size);
         }
 
         public static DomainUserAttributeModel MapNew(this UserAttributeModel model)
@@ -35,7 +34,7 @@ namespace Aklion.Crm.Mappers.Administration.UserAttribute
         {
             return new DomainUserAttributeAutocompleteParameterModel
             {
-                Description = pattern,
+                Name = pattern,
                 StoreId = storeId,
                 IsDeleted = false
             };

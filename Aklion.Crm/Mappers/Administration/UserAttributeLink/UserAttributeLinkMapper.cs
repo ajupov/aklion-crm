@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.UserAttributeLink;
 using Aklion.Infrastructure.Mapper;
@@ -10,9 +9,9 @@ namespace Aklion.Crm.Mappers.Administration.UserAttributeLink
 {
     public static class UserAttributeLinkMapper
     {
-        public static PagingModel<UserAttributeLinkModel> MapNew(this Tuple<int, List<DomainUserAttributeLinkModel>> tuple, int? page, int? size)
+        public static PagingModel<UserAttributeLinkModel> MapNew(this (int TotalCount, List<DomainUserAttributeLinkModel> List) tuple, int? page, int? size)
         {
-            return new PagingModel<UserAttributeLinkModel>(tuple.Item2.MapListNew<UserAttributeLinkModel>(), tuple.Item1, page, size);
+            return new PagingModel<UserAttributeLinkModel>(tuple.List.MapListNew<UserAttributeLinkModel>(), tuple.TotalCount, page, size);
         }
 
         public static DomainUserAttributeLinkModel MapNew(this UserAttributeLinkModel model)

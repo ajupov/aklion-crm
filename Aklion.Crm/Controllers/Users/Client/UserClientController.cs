@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
-using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.Client;
 using Aklion.Crm.Mappers.User.Client;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.User.Client;
+using Aklion.Infrastructure.AuditLogger;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aklion.Crm.Controllers.UsersControllers
@@ -49,7 +49,6 @@ namespace Aklion.Crm.Controllers.UsersControllers
 
         [HttpPost]
         [Route("Create")]
-        [AjaxErrorHandle]
         public async Task Create(ClientModel model)
         {
             var newModel = model.MapNew(UserContext.StoreId);

@@ -14,8 +14,7 @@ namespace Aklion.Crm.Dao.OrderSource
             _dao = dao;
         }
 
-        public Task<(int TotalCount, List<OrderSourceModel> List)> GetPagedListAsync(
-            OrderSourceParameterModel parameter)
+        public Task<(int TotalCount, List<OrderSourceModel> List)> GetPagedListAsync(OrderSourceParameterModel parameter)
         {
             return _dao.GetPagedListAsync<OrderSourceModel, OrderSourceParameterModel>(parameter);
         }

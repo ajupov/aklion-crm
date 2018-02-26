@@ -8,8 +8,8 @@ namespace Aklion.Crm.Domain.UserAttribute
         [Where("ua.StoreId = @StoreId")]
         public int StoreId { get; set; }
 
-        [Where("ua.Description like @Description + '%'")]
-        public string Description { get; set; }
+        [Where("ua.Name like @Name + '%'")]
+        public string Name { get; set; }
 
         [Where("ua.IsDeleted = @IsDeleted")]
         public bool IsDeleted { get; set; }

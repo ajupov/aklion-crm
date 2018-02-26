@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Domain.UserPermission;
 using Aklion.Crm.Enums;
@@ -19,7 +18,7 @@ namespace Aklion.Crm.Dao.UserPermission
             _dataBaseExecutor = dataBaseExecutor;
         }
 
-        public Task<Tuple<int, List<UserPermissionModel>>> GetPagedListAsync(UserPermissionParameterModel parameter)
+        public Task<(int TotalCount, List<UserPermissionModel> List)> GetPagedListAsync(UserPermissionParameterModel parameter)
         {
             return _dao.GetPagedListAsync<UserPermissionModel, UserPermissionParameterModel>(parameter);
         }

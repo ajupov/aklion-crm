@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Domain.ProductAttributeLink;
 
@@ -7,7 +6,7 @@ namespace Aklion.Crm.Dao.ProductAttributeLink
 {
     public interface IProductAttributeLinkDao
     {
-        Task<Tuple<int, List<ProductAttributeLinkModel>>> GetPagedListAsync(ProductAttributeLinkParameterModel parameter);
+        Task<(int TotalCount, List<ProductAttributeLinkModel> List)> GetPagedListAsync(ProductAttributeLinkParameterModel parameter);
 
         Task<ProductAttributeLinkModel> GetAsync(int id);
 

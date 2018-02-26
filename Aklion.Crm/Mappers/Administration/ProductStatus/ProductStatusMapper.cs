@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.ProductStatus;
@@ -12,9 +11,9 @@ namespace Aklion.Crm.Mappers.Administration.ProductStatus
 {
     public static class ProductStatusMapper
     {
-        public static PagingModel<ProductStatusModel> MapNew(this Tuple<int, List<DomainProductStatusModel>> tuple, int? page, int? size)
+        public static PagingModel<ProductStatusModel> MapNew(this (int TotalCount, List<DomainProductStatusModel> List) tuple, int? page, int? size)
         {
-            return new PagingModel<ProductStatusModel>(tuple.Item2.MapListNew<ProductStatusModel>(), tuple.Item1, page, size);
+            return new PagingModel<ProductStatusModel>(tuple.List.MapListNew<ProductStatusModel>(), tuple.TotalCount, page, size);
         }
 
         public static DomainProductStatusModel MapNew(this ProductStatusModel model)

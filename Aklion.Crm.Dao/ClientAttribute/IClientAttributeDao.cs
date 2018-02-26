@@ -6,8 +6,7 @@ namespace Aklion.Crm.Dao.ClientAttribute
 {
     public interface IClientAttributeDao
     {
-        Task<(int TotalCount, List<ClientAttributeModel> List)> GetPagedListAsync(
-            ClientAttributeParameterModel parameter);
+        Task<(int TotalCount, List<ClientAttributeModel> List)> GetPagedListAsync(ClientAttributeParameterModel parameter);
 
         Task<Dictionary<string, int>> GetAutocompleteAsync(ClientAttributeAutocompleteParameterModel parameter);
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Domain.User;
 using Aklion.Infrastructure.Dao;
@@ -15,17 +14,17 @@ namespace Aklion.Crm.Dao.User
             _dao = dao;
         }
 
-        public Task<Tuple<int, List<UserModel>>> GetPagedListAsync(UserParameterModel parameter)
+        public Task<(int TotalCount, List<UserModel> List)> GetPagedListAsync(UserParameterModel parameter)
         {
             return _dao.GetPagedListAsync<UserModel, UserParameterModel>(parameter);
         }
 
-        public Task<Tuple<int, List<UserByStoreModel>>> GetPagedListAsync(UserByStoreParameterModel parameter)
+        public Task<(int TotalCount, List<UserByStoreModel> List)> GetPagedListAsync(UserByStoreParameterModel parameter)
         {
             return _dao.GetPagedListAsync<UserByStoreModel, UserByStoreParameterModel>(parameter, true);
         }
 
-        public Task<Dictionary<string, int>> GetForAutocompleteAsync(UserAutocompleteParameterModel parameter)
+        public Task<Dictionary<string, int>> GetAutocompleteAsync(UserAutocompleteParameterModel parameter)
         {
             return _dao.GetForAutoCompleteAsync<UserModel, UserAutocompleteParameterModel>(parameter);
         }

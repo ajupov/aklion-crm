@@ -1,39 +1,40 @@
 ﻿using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
-using Aklion.Crm.Dao.ClientAttributeLink;
-using Aklion.Crm.Mappers.Administration.ClientAttributeLink;
+using Aklion.Crm.Dao.UserPermission;
+using Aklion.Crm.Mappers.Administration.UserPermission;
 using Aklion.Crm.Models;
-using Aklion.Crm.Models.Administration.ClientAttributeLink;
+using Aklion.Crm.Models.Administration.UserPermission;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration.Clients
+namespace Aklion.Crm.Controllers.Administration.User
 {
     [AjaxErrorHandle]
-    [Route("Administration/ClientAttributeLinks")]
-    public class AdministrationClientAttributeLinkController : BaseController
+    [Route("Administration/UserPermissions")]
+    public class AdministrationUserPermissionController : BaseController
     {
-        private readonly IClientAttributeLinkDao _dao;
+        private readonly IUserPermissionDao _dao;
 
-        public AdministrationClientAttributeLinkController(IClientAttributeLinkDao dao)
+        public AdministrationUserPermissionController(IUserPermissionDao dao)
         {
             _dao = dao;
         }
 
         [HttpGet]
-        public async Task<PagingModel<ClientAttributeLinkModel>> GetList(ClientAttributeLinkParameterModel model)
+        public async Task<PagingModel<UserPermissionModel>> GetList(UserPermissionParameterModel model)
         {
             var result = await _dao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
             return result.MapNew(model.Page, model.Size);
         }
 
         [HttpPost]
-        public Task Create(ClientAttributeLinkModel model)
+        [Route("Create")]
+        public Task Create(UserPermissionModel model)
         {
             return _dao.CreateAsync(model.MapNew());
         }
 
         [HttpPost]
-        public async Task Update(ClientAttributeLinkModel model)
+        public async Task Update(UserPermissionModel model)
         {
             var result = await _dao.GetAsync(model.Id).ConfigureAwait(false);
             await _dao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);

@@ -8,8 +8,8 @@ namespace Aklion.Crm.Domain.ProductAttribute
         [Where("pa.StoreId = @StoreId")]
         public int StoreId { get; set; }
 
-        [Where("pa.Description like @Description + '%'")]
-        public string Description { get; set; }
+        [Where("pa.Name like @Name + '%'")]
+        public string Name { get; set; }
 
         [Where("pa.IsDeleted = 0")]
         public bool IsDeleted { get; set; }

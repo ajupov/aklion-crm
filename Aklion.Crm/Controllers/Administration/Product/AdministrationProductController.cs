@@ -1,21 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
-using Aklion.Crm.Dao.Client;
-using Aklion.Crm.Mappers.Administration.Client;
+using Aklion.Crm.Dao.Product;
+using Aklion.Crm.Mappers.Administration.Product;
 using Aklion.Crm.Models;
-using Aklion.Crm.Models.Administration.Client;
+using Aklion.Crm.Models.Administration.Product;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration.Clients
+namespace Aklion.Crm.Controllers.Administration.Product
 {
     [AjaxErrorHandle]
-    [Route("Administration/Clients")]
-    public class AdministrationClientController : BaseController
+    [Route("Administration/Products")]
+    public class AdministrationProductController : BaseController
     {
-        private readonly IClientDao _dao;
+        private readonly IProductDao _dao;
 
-        public AdministrationClientController(IClientDao dao)
+        public AdministrationProductController(IProductDao dao)
         {
             _dao = dao;
         }
@@ -23,11 +23,11 @@ namespace Aklion.Crm.Controllers.Administration.Clients
         [HttpGet("")]
         public IActionResult Index()
         {
-            return View("~/Views/Administration/Client/Index.cshtml");
+            return View("~/Views/Administration/Product/Index.cshtml");
         }
 
         [HttpGet]
-        public async Task<PagingModel<ClientModel>> GetList(ClientParameterModel model)
+        public async Task<PagingModel<ProductModel>> GetList(ProductParameterModel model)
         {
             var result = await _dao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
             return result.MapNew(model.Page, model.Size);
@@ -40,13 +40,13 @@ namespace Aklion.Crm.Controllers.Administration.Clients
         }
 
         [HttpPost]
-        public Task Create(ClientModel model)
+        public Task Create(ProductModel model)
         {
             return _dao.CreateAsync(model.MapNew());
         }
 
         [HttpPost]
-        public async Task Update(ClientModel model)
+        public async Task Update(ProductModel model)
         {
             var result = await _dao.GetAsync(model.Id).ConfigureAwait(false);
             await _dao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);
@@ -55,7 +55,7 @@ namespace Aklion.Crm.Controllers.Administration.Clients
         [HttpPost]
         public Task Delete(int id)
         {
-            return _dao.DeleteAsync(id);
+            return _dao.GetAsync(id);
         }
     }
 }

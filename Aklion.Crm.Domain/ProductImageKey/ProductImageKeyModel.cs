@@ -17,12 +17,12 @@ namespace Aklion.Crm.Domain.ProductImageKey
         [Column("s.Name")]
         public string StoreName { get; }
 
-        [Column("pik.Name")]
-        public string Name { get; set; }
+        [Column("pik.Key")]
+        public string Key { get; set; }
 
-        [Column("pik.Description")]
-        [AutocompleteOrSelect("pik.Description")]
-        public string Description { get; set; }
+        [Column("pik.Name")]
+        [AutocompleteOrSelect("pik.Name")]
+        public string Name { get; set; }
 
         [Column("pik.IsDeleted")]
         public bool IsDeleted { get; set; }

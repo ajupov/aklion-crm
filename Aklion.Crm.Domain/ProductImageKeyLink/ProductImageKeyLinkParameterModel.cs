@@ -24,11 +24,11 @@ namespace Aklion.Crm.Domain.ProductImageKeyLink
         [Where("@KeyId is null or pikl.KeyId = @KeyId")]
         public int? KeyId { get; set; }
 
+        [Where("@KeyKey is null or pik.Key like @KeyKey + '%'")]
+        public string KeyKey { get; set; }
+
         [Where("@KeyName is null or pik.Name like @KeyName + '%'")]
         public string KeyName { get; set; }
-
-        [Where("@KeyDescription is null or pik.Description like @KeyDescription + '%'")]
-        public string KeyDescription { get; set; }
 
         [Where("@IsDeleted is null or pikl.IsDeleted = @IsDeleted")]
         public bool? IsDeleted { get; set; }

@@ -6,8 +6,7 @@ namespace Aklion.Crm.Dao.OrderAttribute
 {
     public interface IOrderAttributeDao
     {
-        Task<(int TotalCount, List<OrderAttributeModel> List)>
-            GetPagedListAsync(OrderAttributeParameterModel parameter);
+        Task<(int TotalCount, List<OrderAttributeModel> List)> GetPagedListAsync(OrderAttributeParameterModel parameter);
 
         Task<Dictionary<string, int>> GetAutocompleteAsync(OrderAttributeAutocompleteParameterModel parameter);
 

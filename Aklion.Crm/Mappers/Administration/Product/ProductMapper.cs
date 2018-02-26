@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.Product;
 using Aklion.Infrastructure.Mapper;
+using DomainProductAutocompleteParameterModel = Aklion.Crm.Domain.Product.ProductAutocompleteParameterModel;
 using DomainProductModel = Aklion.Crm.Domain.Product.ProductModel;
 using DomainProductParameterModel = Aklion.Crm.Domain.Product.ProductParameterModel;
-using DomainProductAutocompleteParameterModel = Aklion.Crm.Domain.Product.ProductAutocompleteParameterModel;
 
 namespace Aklion.Crm.Mappers.Administration.Product
 {
     public static class ProductMapper
     {
-        public static PagingModel<ProductModel> MapNew(this Tuple<int, List<DomainProductModel>> tuple, int? page, int? size)
+        public static PagingModel<ProductModel> MapNew(this (int TotalCount, List<DomainProductModel> List) tuple, int? page, int? size)
         {
-            return new PagingModel<ProductModel>(tuple.Item2.MapListNew<ProductModel>(), tuple.Item1, page, size);
+            return new PagingModel<ProductModel>(tuple.List.MapListNew<ProductModel>(), tuple.TotalCount, page, size);
         }
 
         public static DomainProductModel MapNew(this ProductModel model)

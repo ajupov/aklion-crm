@@ -11,7 +11,7 @@ namespace Aklion.Crm.Mappers.Administration.ProductImageKeyLink
 {
     public static class ProductImageKeyLinkMapper
     {
-        public static PagingModel<ProductImageKeyLinkModel> MapNew(this Tuple<int, List<DomainProductImageKeyLinkModel>> tuple, int? page, int? size)
+        public static PagingModel<ProductImageKeyLinkModel> MapNew(this (int TotalCount, List<DomainProductImageKeyLinkModel> List) tuple, int? page, int? size)
         {
             var list = tuple.Item2.MapListNew<ProductImageKeyLinkModel>();
 

@@ -27,8 +27,8 @@ namespace Aklion.Crm.Domain.ClientAttributeLink
         [Where("@AttributeName is null or ca.Name like @AttributeName + '%'")]
         public string AttributeName { get; set; }
 
-        [Where("@AttributeDescription is null or ca.Description like @AttributeDescription + '%'")]
-        public string AttributeDescription { get; set; }
+        [Where("@AttributeKey is null or ca.Key like @AttributeKey + '%'")]
+        public string AttributeKey { get; set; }
 
         [Where("@Value is null or cal.Value like @Value + '%'")]
         public string Value { get; set; }

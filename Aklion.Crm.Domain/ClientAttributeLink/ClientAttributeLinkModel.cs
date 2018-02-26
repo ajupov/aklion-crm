@@ -28,11 +28,11 @@ namespace Aklion.Crm.Domain.ClientAttributeLink
         [Column("cal.AttributeId")]
         public int AttributeId { get; set; }
 
+        [Column("ca.Key")]
+        public string AttributeKey { get; }
+
         [Column("ca.Name")]
         public string AttributeName { get; }
-
-        [Column("ca.Description")]
-        public string AttributeDescription { get; }
 
         [Column("cal.Value")]
         public string Value { get; set; }
