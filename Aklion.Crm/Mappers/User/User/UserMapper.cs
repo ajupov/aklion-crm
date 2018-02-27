@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.User.User;
 using Aklion.Infrastructure.Mapper;
-using DomainUserModel = Aklion.Crm.Domain.User.UserModel;
-using DomainUserByStoreModel = Aklion.Crm.Domain.User.UserByStoreModel;
-using DomainUserParameterModel = Aklion.Crm.Domain.User.UserByStoreParameterModel;
 using DomainUserAutocompleteParameterModel = Aklion.Crm.Domain.User.UserAutocompleteParameterModel;
+using DomainUserByStoreModel = Aklion.Crm.Domain.User.UserByStoreModel;
+using DomainUserModel = Aklion.Crm.Domain.User.UserModel;
+using DomainUserParameterModel = Aklion.Crm.Domain.User.UserByStoreParameterModel;
 
 namespace Aklion.Crm.Mappers.User.User
 {
     public static class UserMapper
     {
-        public static PagingModel<UserModel> MapNew(this Tuple<int, List<DomainUserByStoreModel>> tuple, int? page, int? size)
+        public static PagingModel<UserModel> MapNew(this (int TotalCount, List<DomainUserByStoreModel> List) tuple, int? page, int? size)
         {
-            return new PagingModel<UserModel>(tuple.Item2.MapListNew<UserModel>(), tuple.Item1, page, size);
+            return new PagingModel<UserModel>(tuple.List.MapListNew<UserModel>(), tuple.TotalCount, page, size);
         }
 
         public static DomainUserModel MapNew(this UserModel model)

@@ -6,8 +6,6 @@ namespace Aklion.Crm.Models.User.User
     {
         public int Id { get; set; }
 
-        public int StoreId { get; set; }
-
         public string Login { get; set; }
 
         public string Email { get; set; }

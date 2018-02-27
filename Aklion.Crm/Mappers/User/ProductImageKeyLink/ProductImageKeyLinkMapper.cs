@@ -11,13 +11,13 @@ namespace Aklion.Crm.Mappers.User.ProductImageKeyLink
 {
     public static class ProductImageKeyLinkMapper
     {
-        public static PagingModel<ProductImageKeyLinkModel> MapNew(this Tuple<int, List<DomainProductImageKeyLinkModel>> tuple, int? page, int? size)
+        public static PagingModel<ProductImageKeyLinkModel> MapNew(this (int TotalCount, List<DomainProductImageKeyLinkModel> List) tuple, int? page, int? size)
         {
-            var list = tuple.Item2.MapListNew<ProductImageKeyLinkModel>();
+            var list = tuple.List.MapListNew<ProductImageKeyLinkModel>();
 
-            MapImage(tuple.Item2, list);
+            MapImage(tuple.List, list);
 
-            return new PagingModel<ProductImageKeyLinkModel>(list, tuple.Item1, page, size);
+            return new PagingModel<ProductImageKeyLinkModel>(list, tuple.TotalCount, page, size);
         }
 
         public static DomainProductImageKeyLinkModel MapNew(this ProductImageKeyLinkModel model, int storeId)

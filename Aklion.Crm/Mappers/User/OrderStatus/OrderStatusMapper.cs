@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.User.OrderStatus;
@@ -12,9 +11,9 @@ namespace Aklion.Crm.Mappers.User.OrderStatus
 {
     public static class OrderStatusMapper
     {
-        public static PagingModel<OrderStatusModel> MapNew(this Tuple<int, List<DomainOrderStatusModel>> tuple, int? page, int? size)
+        public static PagingModel<OrderStatusModel> MapNew(this (int TotalCount, List<DomainOrderStatusModel> List) tuple, int? page, int? size)
         {
-            return new PagingModel<OrderStatusModel>(tuple.Item2.MapListNew<OrderStatusModel>(), tuple.Item1, page, size);
+            return new PagingModel<OrderStatusModel>(tuple.List.MapListNew<OrderStatusModel>(), tuple.TotalCount, page, size);
         }
 
         public static DomainOrderStatusModel MapNew(this OrderStatusModel model, int storeId)
@@ -25,12 +24,9 @@ namespace Aklion.Crm.Mappers.User.OrderStatus
             return result;
         }
 
-        public static DomainOrderStatusModel MapFrom(this DomainOrderStatusModel domainModel, OrderStatusModel model, int storeId)
+        public static DomainOrderStatusModel MapFrom(this DomainOrderStatusModel domainModel, OrderStatusModel model)
         {
-            var result = domainModel.MapFrom(model);
-            result.StoreId = storeId;
-
-            return result;
+            return Mapper.MapFrom(domainModel, model);
         }
 
         public static DomainOrderStatusParameterModel MapNew(this OrderStatusParameterModel model, int storeId)

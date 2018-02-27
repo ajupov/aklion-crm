@@ -9,11 +9,9 @@ namespace Aklion.Crm.Mappers.Administration.OrderAttributeLink
 {
     public static class OrderAttributeLinkMapper
     {
-        public static PagingModel<OrderAttributeLinkModel> MapNew(
-            this (int TotalCount, List<DomainOrderAttributeLinkModel> List) tuple, int? page, int? size)
+        public static PagingModel<OrderAttributeLinkModel> MapNew(this (int TotalCount, List<DomainOrderAttributeLinkModel> List) tuple, int? page, int? size)
         {
-            return new PagingModel<OrderAttributeLinkModel>(tuple.List.MapListNew<OrderAttributeLinkModel>(),
-                tuple.TotalCount, page, size);
+            return new PagingModel<OrderAttributeLinkModel>(tuple.List.MapListNew<OrderAttributeLinkModel>(), tuple.TotalCount, page, size);
         }
 
         public static DomainOrderAttributeLinkModel MapNew(this OrderAttributeLinkModel model)

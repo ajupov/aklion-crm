@@ -1,84 +1,68 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
-using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.OrderSource;
+using Aklion.Crm.Exceptions;
 using Aklion.Crm.Mappers.User.OrderSource;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.User.OrderSource;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.UsersControllers
+namespace Aklion.Crm.Controllers.Users.Order
 {
+    [AjaxErrorHandle]
     [Route("OrderSources")]
     public class UserOrderSourceController : BaseController
     {
-        private readonly IAuditLogger _auditLogService;
-        private readonly IOrderSourceDao _orderSourceDao;
+        private readonly IOrderSourceDao _dao;
 
-        public UserOrderSourceController(
-            IAuditLogger auditLogService,
-            IOrderSourceDao orderSourceDao)
+        public UserOrderSourceController(IOrderSourceDao dao)
         {
-            _auditLogService = auditLogService;
-            _orderSourceDao = orderSourceDao;
+            _dao = dao;
         }
 
         [HttpGet]
-        [Route("GetList")]
         public async Task<PagingModel<OrderSourceModel>> GetList(OrderSourceParameterModel model)
         {
-            var result = await _orderSourceDao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
-
+            var result = await _dao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
             return result.MapNew(model.Page, model.Size);
         }
 
         [HttpGet]
-        [Route("GetForSelect")]
         public async Task<Dictionary<string, int>> GetForSelect()
         {
-            var result = await _orderSourceDao.GetForSelectAsync(UserContext.StoreId.MapNew()).ConfigureAwait(false);
-
+            var result = await _dao.GetSelectAsync(UserContext.StoreId.MapNew()).ConfigureAwait(false);
             return result.MapNew();
         }
 
         [HttpPost]
-        [Route("Create")]
-        [AjaxErrorHandle]
-        public async Task Create(OrderSourceModel model)
+        public Task Create(OrderSourceModel model)
         {
-            var newModel = model.MapNew(UserContext.StoreId);
-
-            newModel.Id = await _orderSourceDao.CreateAsync(newModel).ConfigureAwait(false);
-
-            _auditLogService.LogInserting(UserContext.UserId, UserContext.StoreId, newModel);
+            return _dao.CreateAsync(model.MapNew(UserContext.StoreId));
         }
 
         [HttpPost]
-        [Route("Update")]
-        [AjaxErrorHandle]
         public async Task Update(OrderSourceModel model)
         {
-            var oldModel = await _orderSourceDao.GetAsync(model.Id).ConfigureAwait(false);
-            var oldModelClone = oldModel.Clone();
+            var result = await _dao.GetAsync(model.Id).ConfigureAwait(false);
+            if (result.StoreId != UserContext.StoreId)
+            {
+                throw new NotAccessChangingException();
+            }
 
-            var newModel = oldModel.MapFrom(model, UserContext.StoreId);
-
-            await _orderSourceDao.UpdateAsync(newModel).ConfigureAwait(false);
-
-            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, newModel);
+            await _dao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);
         }
 
         [HttpPost]
-        [Route("Delete")]
-        [AjaxErrorHandle]
         public async Task Delete(int id)
         {
-            var oldModel = await _orderSourceDao.GetAsync(id).ConfigureAwait(false);
+            var result = await _dao.GetAsync(id).ConfigureAwait(false);
+            if (result.StoreId != UserContext.StoreId)
+            {
+                throw new NotAccessChangingException();
+            }
 
-            await _orderSourceDao.DeleteAsync(id).ConfigureAwait(false);
-
-            _auditLogService.LogDeleting(UserContext.UserId, UserContext.StoreId, oldModel);
+            await _dao.DeleteAsync(id).ConfigureAwait(false);
         }
     }
 }

@@ -9,8 +9,7 @@ namespace Aklion.Crm.Mappers.Administration.AuditLog
 {
     public static class AuditLogMapper
     {
-        public static PagingModel<AuditLogModel> MapNew(this (int TotalCount, List<DomainAuditLogModel> List) tuple,
-            int? page, int? size)
+        public static PagingModel<AuditLogModel> MapNew(this (int TotalCount, List<DomainAuditLogModel> List) tuple, int? page, int? size)
         {
             return new PagingModel<AuditLogModel>(tuple.List.MapListNew<AuditLogModel>(), tuple.TotalCount, page, size);
         }

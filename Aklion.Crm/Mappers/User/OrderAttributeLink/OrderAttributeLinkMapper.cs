@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.User.OrderAttributeLink;
 using Aklion.Infrastructure.Mapper;
@@ -10,9 +9,9 @@ namespace Aklion.Crm.Mappers.User.OrderAttributeLink
 {
     public static class OrderAttributeLinkMapper
     {
-        public static PagingModel<OrderAttributeLinkModel> MapNew(this Tuple<int, List<DomainOrderAttributeLinkModel>> tuple, int? page, int? size)
+        public static PagingModel<OrderAttributeLinkModel> MapNew(this (int TotalCount, List<DomainOrderAttributeLinkModel> List) tuple, int? page, int? size)
         {
-            return new PagingModel<OrderAttributeLinkModel>(tuple.Item2.MapListNew<OrderAttributeLinkModel>(), tuple.Item1, page, size);
+            return new PagingModel<OrderAttributeLinkModel>(tuple.List.MapListNew<OrderAttributeLinkModel>(), tuple.TotalCount, page, size);
         }
 
         public static DomainOrderAttributeLinkModel MapNew(this OrderAttributeLinkModel model, int storeId)
@@ -23,12 +22,9 @@ namespace Aklion.Crm.Mappers.User.OrderAttributeLink
             return result;
         }
 
-        public static DomainOrderAttributeLinkModel MapFrom(this DomainOrderAttributeLinkModel domainModel, OrderAttributeLinkModel model, int storeId)
+        public static DomainOrderAttributeLinkModel MapFrom(this DomainOrderAttributeLinkModel domainModel, OrderAttributeLinkModel model)
         {
-            var result = domainModel.MapFrom(model);
-            result.StoreId = storeId;
-
-            return result;
+            return Mapper.MapFrom(domainModel, model);
         }
 
         public static DomainOrderAttributeLinkParameterModel MapNew(this OrderAttributeLinkParameterModel model, int storeId)

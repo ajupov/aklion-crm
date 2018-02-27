@@ -11,11 +11,9 @@ namespace Aklion.Crm.Mappers.Administration.OrderSource
 {
     public static class OrderSourceMapper
     {
-        public static PagingModel<OrderSourceModel> MapNew(
-            this (int TotalCount, List<DomainOrderSourceModel> List) tuple, int? page, int? size)
+        public static PagingModel<OrderSourceModel> MapNew(this (int TotalCount, List<DomainOrderSourceModel> List) tuple, int? page, int? size)
         {
-            return new PagingModel<OrderSourceModel>(tuple.List.MapListNew<OrderSourceModel>(), tuple.TotalCount, page,
-                size);
+            return new PagingModel<OrderSourceModel>(tuple.List.MapListNew<OrderSourceModel>(), tuple.TotalCount, page, size);
         }
 
         public static DomainOrderSourceModel MapNew(this OrderSourceModel model)

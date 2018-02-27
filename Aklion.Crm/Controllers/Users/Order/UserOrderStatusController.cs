@@ -1,84 +1,68 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
-using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.OrderStatus;
+using Aklion.Crm.Exceptions;
 using Aklion.Crm.Mappers.User.OrderStatus;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.User.OrderStatus;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.UsersControllers
+namespace Aklion.Crm.Controllers.Users.Order
 {
+    [AjaxErrorHandle]
     [Route("OrderStatuses")]
     public class UserOrderStatusController : BaseController
     {
-        private readonly IAuditLogger _auditLogService;
-        private readonly IOrderStatusDao _orderStatusDao;
+        private readonly IOrderStatusDao _dao;
 
-        public UserOrderStatusController(
-            IAuditLogger auditLogService,
-            IOrderStatusDao orderStatusDao)
+        public UserOrderStatusController(IOrderStatusDao dao)
         {
-            _auditLogService = auditLogService;
-            _orderStatusDao = orderStatusDao;
+            _dao = dao;
         }
 
         [HttpGet]
-        [Route("GetList")]
         public async Task<PagingModel<OrderStatusModel>> GetList(OrderStatusParameterModel model)
         {
-            var result = await _orderStatusDao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
-
+            var result = await _dao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
             return result.MapNew(model.Page, model.Size);
         }
 
         [HttpGet]
-        [Route("GetForSelect")]
         public async Task<Dictionary<string, int>> GetForSelect()
         {
-            var result = await _orderStatusDao.GetForSelectAsync(UserContext.StoreId.MapNew()).ConfigureAwait(false);
-
+            var result = await _dao.GetSelectAsync(UserContext.StoreId.MapNew()).ConfigureAwait(false);
             return result.MapNew();
         }
 
         [HttpPost]
-        [Route("Create")]
-        [AjaxErrorHandle]
-        public async Task Create(OrderStatusModel model)
+        public Task Create(OrderStatusModel model)
         {
-            var newModel = model.MapNew(UserContext.StoreId);
-
-            newModel.Id = await _orderStatusDao.CreateAsync(newModel).ConfigureAwait(false);
-
-            _auditLogService.LogInserting(UserContext.UserId, UserContext.StoreId, newModel);
+            return _dao.CreateAsync(model.MapNew(UserContext.StoreId));
         }
 
         [HttpPost]
-        [Route("Update")]
-        [AjaxErrorHandle]
         public async Task Update(OrderStatusModel model)
         {
-            var oldModel = await _orderStatusDao.GetAsync(model.Id).ConfigureAwait(false);
-            var oldModelClone = oldModel.Clone();
+            var result = await _dao.GetAsync(model.Id).ConfigureAwait(false);
+            if (result.StoreId != UserContext.StoreId)
+            {
+                throw new NotAccessChangingException();
+            }
 
-            var newModel = oldModel.MapFrom(model, UserContext.StoreId);
-
-            await _orderStatusDao.UpdateAsync(newModel).ConfigureAwait(false);
-
-            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, newModel);
+            await _dao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);
         }
 
         [HttpPost]
-        [Route("Delete")]
-        [AjaxErrorHandle]
         public async Task Delete(int id)
         {
-            var oldModel = await _orderStatusDao.GetAsync(id).ConfigureAwait(false);
+            var result = await _dao.GetAsync(id).ConfigureAwait(false);
+            if (result.StoreId != UserContext.StoreId)
+            {
+                throw new NotAccessChangingException();
+            }
 
-            await _orderStatusDao.DeleteAsync(id).ConfigureAwait(false);
-
-            _auditLogService.LogDeleting(UserContext.UserId, UserContext.StoreId, oldModel);
+            await _dao.DeleteAsync(id).ConfigureAwait(false);
         }
     }
 }

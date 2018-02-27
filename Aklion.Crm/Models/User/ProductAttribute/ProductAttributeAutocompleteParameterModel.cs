@@ -2,6 +2,6 @@
 {
     public class ProductAttributeAutocompleteParameterModel
     {
-        public string Description { get; set; }
+        public string Name { get; set; }
     }
 }

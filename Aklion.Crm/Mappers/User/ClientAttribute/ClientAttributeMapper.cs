@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.User.ClientAttribute;
 using Aklion.Infrastructure.Mapper;
+using DomainClientAttributeAutocompleteParameterModel = Aklion.Crm.Domain.ClientAttribute.ClientAttributeAutocompleteParameterModel;
 using DomainClientAttributeModel = Aklion.Crm.Domain.ClientAttribute.ClientAttributeModel;
 using DomainClientAttributeParameterModel = Aklion.Crm.Domain.ClientAttribute.ClientAttributeParameterModel;
-using DomainClientAttributeAutocompleteParameterModel = Aklion.Crm.Domain.ClientAttribute.ClientAttributeAutocompleteParameterModel;
 
 namespace Aklion.Crm.Mappers.User.ClientAttribute
 {
     public static class ClientAttributeMapper
     {
-        public static PagingModel<ClientAttributeModel> MapNew(this Tuple<int, List<DomainClientAttributeModel>> tuple, int? page, int? size)
+        public static PagingModel<ClientAttributeModel> MapNew(this (int TotalCount, List<DomainClientAttributeModel> List) tuple, int? page, int? size)
         {
-            return new PagingModel<ClientAttributeModel>(tuple.Item2.MapListNew<ClientAttributeModel>(), tuple.Item1, page, size);
+            return new PagingModel<ClientAttributeModel>(tuple.List.MapListNew<ClientAttributeModel>(), tuple.TotalCount, page, size);
         }
 
         public static DomainClientAttributeModel MapNew(this ClientAttributeModel model, int storeId)
@@ -24,12 +23,9 @@ namespace Aklion.Crm.Mappers.User.ClientAttribute
             return result;
         }
 
-        public static DomainClientAttributeModel MapFrom(this DomainClientAttributeModel domainModel, ClientAttributeModel model, int storeId)
+        public static DomainClientAttributeModel MapFrom(this DomainClientAttributeModel domainModel, ClientAttributeModel model)
         {
-            var result = domainModel.MapFrom(model);
-            result.StoreId = storeId;
-
-            return result;
+            return Mapper.MapFrom(domainModel, model);
         }
 
         public static DomainClientAttributeParameterModel MapNew(this ClientAttributeParameterModel model, int storeId)
@@ -44,7 +40,7 @@ namespace Aklion.Crm.Mappers.User.ClientAttribute
         {
             return new DomainClientAttributeAutocompleteParameterModel
             {
-                Description = pattern,
+                Name = pattern,
                 StoreId = storeId,
                 IsDeleted = false
             };

@@ -11,11 +11,9 @@ namespace Aklion.Crm.Mappers.Administration.OrderAttribute
 {
     public static class OrderAttributeMapper
     {
-        public static PagingModel<OrderAttributeModel> MapNew(
-            this (int TotalCount, List<DomainOrderAttributeModel> List) tuple, int? page, int? size)
+        public static PagingModel<OrderAttributeModel> MapNew(this (int TotalCount, List<DomainOrderAttributeModel> List) tuple, int? page, int? size)
         {
-            return new PagingModel<OrderAttributeModel>(tuple.List.MapListNew<OrderAttributeModel>(), tuple.TotalCount,
-                page, size);
+            return new PagingModel<OrderAttributeModel>(tuple.List.MapListNew<OrderAttributeModel>(), tuple.TotalCount, page, size);
         }
 
         public static DomainOrderAttributeModel MapNew(this OrderAttributeModel model)
@@ -38,7 +36,7 @@ namespace Aklion.Crm.Mappers.Administration.OrderAttribute
         {
             return new DomainOrderAttributeAutocompleteParameterModel
             {
-                Description = pattern,
+                Name = pattern,
                 StoreId = storeId,
                 IsDeleted = false
             };

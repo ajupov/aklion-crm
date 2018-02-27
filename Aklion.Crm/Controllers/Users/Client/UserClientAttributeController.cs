@@ -1,90 +1,68 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
-using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.ClientAttribute;
+using Aklion.Crm.Exceptions;
 using Aklion.Crm.Mappers.User.ClientAttribute;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.User.ClientAttribute;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.UsersControllers
+namespace Aklion.Crm.Controllers.Users.Client
 {
+    [AjaxErrorHandle]
     [Route("ClientAttributes")]
     public class UserClientAttributeController : BaseController
     {
-        private readonly IAuditLogger _auditLogService;
-        private readonly IClientAttributeDao _clientAttributeDao;
+        private readonly IClientAttributeDao _dao;
 
-        public UserClientAttributeController(
-            IAuditLogger auditLogService,
-            IClientAttributeDao clientAttributeDao)
+        public UserClientAttributeController(IClientAttributeDao dao)
         {
-            _auditLogService = auditLogService;
-            _clientAttributeDao = clientAttributeDao;
+            _dao = dao;
         }
 
         [HttpGet]
-        [Route("GetList")]
         public async Task<PagingModel<ClientAttributeModel>> GetList(ClientAttributeParameterModel model)
         {
-            var result = await _clientAttributeDao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
-
+            var result = await _dao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
             return result.MapNew(model.Page, model.Size);
         }
 
         [HttpGet]
-        [Route("GetForAutocompleteByDescriptionPattern")]
-        public Task<Dictionary<string, int>> GetForAutocompleteByDescriptionPattern(string pattern, int storeId = 0)
+        public Task<Dictionary<string, int>> GetForAutocomplete(string pattern)
         {
-            return _clientAttributeDao.GetForAutocompleteAsync(pattern.MapNew(storeId));
+            return _dao.GetAutocompleteAsync(pattern.MapNew(UserContext.StoreId));
         }
 
         [HttpPost]
-        [Route("Create")]
-        [AjaxErrorHandle]
-        public async Task Create(ClientAttributeModel model)
+        public Task Create(ClientAttributeModel model)
         {
-            var newModel = model.MapNew(UserContext.StoreId);
-
-            newModel.Id = await _clientAttributeDao.CreateAsync(newModel).ConfigureAwait(false);
-
-            _auditLogService.LogInserting(UserContext.UserId, UserContext.StoreId, newModel);
+            return _dao.CreateAsync(model.MapNew(UserContext.StoreId));
         }
 
         [HttpPost]
-        [Route("Update")]
-        [AjaxErrorHandle]
         public async Task Update(ClientAttributeModel model)
         {
-            var oldModel = await _clientAttributeDao.GetAsync(model.Id).ConfigureAwait(false);
-            var oldModelClone = oldModel.Clone();
+            var result = await _dao.GetAsync(model.Id).ConfigureAwait(false);
+            if (result.StoreId != UserContext.StoreId)
+            {
+                throw new NotAccessChangingException();
+            }
 
-            var newModel = oldModel.MapFrom(model, UserContext.StoreId);
-
-            await _clientAttributeDao.UpdateAsync(newModel).ConfigureAwait(false);
-
-            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, newModel);
+            await _dao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);
         }
 
         [HttpPost]
-        [Route("Delete")]
-        [AjaxErrorHandle]
         public async Task Delete(int id)
         {
-            var model = await _clientAttributeDao.GetAsync(id).ConfigureAwait(false);
-            if (model.StoreId != UserContext.StoreId)
+            var result = await _dao.GetAsync(id).ConfigureAwait(false);
+            if (result.StoreId != UserContext.StoreId)
             {
-                return;
+                throw new NotAccessChangingException();
             }
 
-            var oldModelClone = model.Clone();
-
-            model.IsDeleted = true;
-
-            await _clientAttributeDao.UpdateAsync(model).ConfigureAwait(false);
-
-            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, model);
+            result.IsDeleted = true;
+            await _dao.UpdateAsync(result).ConfigureAwait(false);
         }
     }
 }

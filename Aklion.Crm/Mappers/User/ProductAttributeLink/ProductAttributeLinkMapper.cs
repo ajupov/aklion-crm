@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.User.ProductAttributeLink;
 using Aklion.Infrastructure.Mapper;
@@ -10,9 +9,9 @@ namespace Aklion.Crm.Mappers.User.ProductAttributeLink
 {
     public static class ProductAttributeLinkMapper
     {
-        public static PagingModel<ProductAttributeLinkModel> MapNew(this Tuple<int, List<DomainProductAttributeLinkModel>> tuple, int? page, int? size)
+        public static PagingModel<ProductAttributeLinkModel> MapNew(this (int TotalCount, List<DomainProductAttributeLinkModel> List) tuple, int? page, int? size)
         {
-            return new PagingModel<ProductAttributeLinkModel>(tuple.Item2.MapListNew<ProductAttributeLinkModel>(), tuple.Item1, page, size);
+            return new PagingModel<ProductAttributeLinkModel>(tuple.List.MapListNew<ProductAttributeLinkModel>(), tuple.TotalCount, page, size);
         }
 
         public static DomainProductAttributeLinkModel MapNew(this ProductAttributeLinkModel model, int storeId)

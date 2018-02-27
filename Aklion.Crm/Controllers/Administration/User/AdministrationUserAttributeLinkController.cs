@@ -12,37 +12,37 @@ namespace Aklion.Crm.Controllers.Administration.User
     [Route("Administration/UserAttributeLinks")]
     public class AdministrationUserAttributeLinkController : BaseController
     {
-        private readonly IUserAttributeLinkDao _userAttributeLinkDao;
+        private readonly IUserAttributeLinkDao _dao;
 
-        public AdministrationUserAttributeLinkController(IUserAttributeLinkDao userAttributeLinkDao)
+        public AdministrationUserAttributeLinkController(IUserAttributeLinkDao dao)
         {
-            _userAttributeLinkDao = userAttributeLinkDao;
+            _dao = dao;
         }
 
         [HttpGet]
         public async Task<PagingModel<UserAttributeLinkModel>> GetList(UserAttributeLinkParameterModel model)
         {
-            var result = await _userAttributeLinkDao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
+            var result = await _dao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
             return result.MapNew(model.Page, model.Size);
         }
 
         [HttpPost]
         public Task Create(UserAttributeLinkModel model)
         {
-            return _userAttributeLinkDao.CreateAsync(model.MapNew());
+            return _dao.CreateAsync(model.MapNew());
         }
 
         [HttpPost]
         public async Task Update(UserAttributeLinkModel model)
         {
-            var result = await _userAttributeLinkDao.GetAsync(model.Id).ConfigureAwait(false);
-            await _userAttributeLinkDao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);
+            var result = await _dao.GetAsync(model.Id).ConfigureAwait(false);
+            await _dao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);
         }
 
         [HttpPost]
         public Task Delete(int id)
         {
-            return _userAttributeLinkDao.DeleteAsync(id);
+            return _dao.DeleteAsync(id);
         }
     }
 }

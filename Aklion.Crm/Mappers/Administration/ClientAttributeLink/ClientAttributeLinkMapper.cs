@@ -9,11 +9,9 @@ namespace Aklion.Crm.Mappers.Administration.ClientAttributeLink
 {
     public static class ClientAttributeLinkMapper
     {
-        public static PagingModel<ClientAttributeLinkModel> MapNew(
-            this (int TotalCount, List<DomainClientAttributeLinkModel> List) tuple, int? page, int? size)
+        public static PagingModel<ClientAttributeLinkModel> MapNew(this (int TotalCount, List<DomainClientAttributeLinkModel> List) tuple, int? page, int? size)
         {
-            return new PagingModel<ClientAttributeLinkModel>(tuple.List.MapListNew<ClientAttributeLinkModel>(),
-                tuple.TotalCount, page, size);
+            return new PagingModel<ClientAttributeLinkModel>(tuple.List.MapListNew<ClientAttributeLinkModel>(), tuple.TotalCount, page, size);
         }
 
         public static DomainClientAttributeLinkModel MapNew(this ClientAttributeLinkModel model)
@@ -21,8 +19,7 @@ namespace Aklion.Crm.Mappers.Administration.ClientAttributeLink
             return model.MapNew<DomainClientAttributeLinkModel>();
         }
 
-        public static DomainClientAttributeLinkModel MapFrom(this DomainClientAttributeLinkModel domainModel,
-            ClientAttributeLinkModel model)
+        public static DomainClientAttributeLinkModel MapFrom(this DomainClientAttributeLinkModel domainModel, ClientAttributeLinkModel model)
         {
             return Mapper.MapFrom(domainModel, model);
         }

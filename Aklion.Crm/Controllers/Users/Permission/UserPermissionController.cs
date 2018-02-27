@@ -1,25 +1,25 @@
 ﻿using System.Collections.Generic;
+using Aklion.Crm.Attributes;
 using Aklion.Crm.Business.Permission;
-using Aklion.Crm.Enums;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.UsersControllers
+namespace Aklion.Crm.Controllers.Users.Permission
 {
+    [AjaxErrorHandle]
     [Route("Permissions")]
     public class UserPermissionController : BaseController
     {
-        private readonly IPermissionService _permissionService;
+        private readonly IPermissionService _service;
 
-        public UserPermissionController(IPermissionService permissionService)
+        public UserPermissionController(IPermissionService service)
         {
-            _permissionService = permissionService;
+            _service = service;
         }
 
         [HttpGet]
-        [Route("GetForSelect")]
-        public Dictionary<string, Permission> GetList()
+        public Dictionary<string, Enums.Permission> GetForSelect()
         {
-            return _permissionService.GetForUserWithNames();
+            return _service.GetForUserWithNames();
         }
     }
 }

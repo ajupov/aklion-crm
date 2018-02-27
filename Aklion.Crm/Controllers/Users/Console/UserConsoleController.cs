@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Users
+namespace Aklion.Crm.Controllers.Users.Console
 {
     [Route("Console")]
     public class UserConsoleController : BaseController

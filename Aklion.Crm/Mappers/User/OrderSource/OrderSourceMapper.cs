@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.User.OrderSource;
@@ -12,9 +11,9 @@ namespace Aklion.Crm.Mappers.User.OrderSource
 {
     public static class OrderSourceMapper
     {
-        public static PagingModel<OrderSourceModel> MapNew(this Tuple<int, List<DomainOrderSourceModel>> tuple, int? page, int? size)
+        public static PagingModel<OrderSourceModel> MapNew(this (int TotalCount, List<DomainOrderSourceModel> List) tuple, int? page, int? size)
         {
-            return new PagingModel<OrderSourceModel>(tuple.Item2.MapListNew<OrderSourceModel>(), tuple.Item1, page, size);
+            return new PagingModel<OrderSourceModel>(tuple.List.MapListNew<OrderSourceModel>(), tuple.TotalCount, page, size);
         }
 
         public static DomainOrderSourceModel MapNew(this OrderSourceModel model, int storeId)
@@ -25,12 +24,9 @@ namespace Aklion.Crm.Mappers.User.OrderSource
             return result;
         }
 
-        public static DomainOrderSourceModel MapFrom(this DomainOrderSourceModel domainModel, OrderSourceModel model, int storeId)
+        public static DomainOrderSourceModel MapFrom(this DomainOrderSourceModel domainModel, OrderSourceModel model)
         {
-            var result = domainModel.MapFrom(model);
-            result.StoreId = storeId;
-
-            return result;
+            return Mapper.MapFrom(domainModel, model);
         }
 
         public static DomainOrderSourceParameterModel MapNew(this OrderSourceParameterModel model, int storeId)

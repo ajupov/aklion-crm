@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
-using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Business.Store;
 using Aklion.Crm.Dao.Store;
 using Aklion.Crm.Mappers.User.Store;
@@ -9,23 +8,19 @@ using Aklion.Crm.Models;
 using Aklion.Crm.Models.User.Store;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.UsersControllers
+namespace Aklion.Crm.Controllers.Users.Store
 {
+    [AjaxErrorHandle]
     [Route("Stores")]
     public class UserStoreController : BaseController
     {
-        private readonly IAuditLogger _auditLogService;
-        private readonly IStoreService _storeService;
-        private readonly IStoreDao _storeDao;
+        private readonly IStoreService _service;
+        private readonly IStoreDao _dao;
 
-        public UserStoreController(
-            IAuditLogger auditLogService,
-            IStoreService storeService,
-            IStoreDao storeDao)
+        public UserStoreController(IStoreService service, IStoreDao dao)
         {
-            _auditLogService = auditLogService;
-            _storeService = storeService;
-            _storeDao = storeDao;
+            _service = service;
+            _dao = dao;
         }
 
         [HttpGet]
@@ -36,70 +31,43 @@ namespace Aklion.Crm.Controllers.UsersControllers
         }
 
         [HttpGet]
-        [Route("GetList")]
         public async Task<PagingModel<StoreModel>> GetList(StoreParameterModel model)
         {
-            var result = await _storeDao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
-
+            var result = await _dao.GetPagedListAsync(model.MapNew(UserContext.UserId)).ConfigureAwait(false);
             return result.MapNew(model.Page, model.Size);
         }
 
         [HttpGet]
-        [Route("GetForAutocompleteByNamePattern")]
-        public Task<Dictionary<string, int>> GetForAutocompleteByNamePattern(string pattern)
+        public Task<Dictionary<string, int>> GetAutocomplete(string pattern)
         {
-            return _storeDao.GetForAutocompleteAsync(pattern.MapNew());
+            return _dao.GetAutocompleteAsync(pattern.MapNew(UserContext.UserId));
         }
 
         [HttpPost]
-        [Route("Create")]
-        [AjaxErrorHandle]
-        public async Task Create(StoreModel model)
+        public Task Create(StoreModel model)
         {
-            var newModel = model.MapNew(UserContext.StoreId);
-
-            newModel.Id = await _storeDao.CreateAsync(newModel).ConfigureAwait(false);
-
-            _auditLogService.LogInserting(UserContext.UserId, UserContext.StoreId, newModel);
+            return _dao.CreateAsync(model.MapNew());
         }
 
         [HttpPost]
-        [Route("Update")]
-        [AjaxErrorHandle]
         public async Task Update(StoreModel model)
         {
-            var oldModel = await _storeDao.GetAsync(model.Id).ConfigureAwait(false);
-            var oldModelClone = oldModel.Clone();
-
-            var newModel = oldModel.MapFrom(model, UserContext.StoreId);
-
-            await _storeDao.UpdateAsync(newModel).ConfigureAwait(false);
-
-            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, newModel);
+            var result = await _dao.GetAsync(model.Id).ConfigureAwait(false);
+            await _dao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);
         }
 
         [HttpPost]
-        [Route("Delete")]
-        [AjaxErrorHandle]
         public async Task Delete(int id)
         {
-            var model = await _storeDao.GetAsync(id).ConfigureAwait(false);
-
-            var oldModelClone = model.Clone();
-
-            model.IsDeleted = true;
-
-            await _storeDao.UpdateAsync(model).ConfigureAwait(false);
-
-            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, model);
+            var result = await _dao.GetAsync(id).ConfigureAwait(false);
+            result.IsDeleted = true;
+            await _dao.UpdateAsync(result).ConfigureAwait(false);
         }
 
         [HttpPost]
-        [Route("GenerateApiSecret")]
-        [AjaxErrorHandle]
         public Task<string> GenerateApiSecret(int id)
         {
-            return _storeService.GenerateApiSecretAsync(UserContext.UserId, UserContext.StoreId, id);
+            return _service.GenerateApiSecretAsync(UserContext.UserId, UserContext.StoreId, id);
         }
     }
 }

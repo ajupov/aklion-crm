@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.User.ClientAttributeLink;
 using Aklion.Infrastructure.Mapper;
@@ -10,9 +9,9 @@ namespace Aklion.Crm.Mappers.User.ClientAttributeLink
 {
     public static class ClientAttributeLinkMapper
     {
-        public static PagingModel<ClientAttributeLinkModel> MapNew(this Tuple<int, List<DomainClientAttributeLinkModel>> tuple, int? page, int? size)
+        public static PagingModel<ClientAttributeLinkModel> MapNew(this (int TotalCount, List<DomainClientAttributeLinkModel> List) tuple, int? page, int? size)
         {
-            return new PagingModel<ClientAttributeLinkModel>(tuple.Item2.MapListNew<ClientAttributeLinkModel>(), tuple.Item1, page, size);
+            return new PagingModel<ClientAttributeLinkModel>(tuple.List.MapListNew<ClientAttributeLinkModel>(), tuple.TotalCount, page, size);
         }
 
         public static DomainClientAttributeLinkModel MapNew(this ClientAttributeLinkModel model, int storeId)
@@ -23,12 +22,9 @@ namespace Aklion.Crm.Mappers.User.ClientAttributeLink
             return result;
         }
 
-        public static DomainClientAttributeLinkModel MapFrom(this DomainClientAttributeLinkModel domainModel, ClientAttributeLinkModel model, int storeId)
+        public static DomainClientAttributeLinkModel MapFrom(this DomainClientAttributeLinkModel domainModel, ClientAttributeLinkModel model)
         {
-            var result = domainModel.MapFrom(model);
-            result.StoreId = storeId;
-
-            return result;
+            return Mapper.MapFrom(domainModel, model);
         }
 
         public static DomainClientAttributeLinkParameterModel MapNew(this ClientAttributeLinkParameterModel model, int storeId)

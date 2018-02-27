@@ -10,9 +10,9 @@
 
         public int KeyId { get; set; }
 
-        public string KeyName { get; set; }
+        public string KeyKey { get; set; }
 
-        public string KeyDescription { get; set; }
+        public string KeyName { get; set; }
 
         public string Base64Value { get; set; }
 

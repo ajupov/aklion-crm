@@ -18,7 +18,8 @@ namespace Aklion.Crm.Mappers.User.UserPermission
         {
             var result = model.MapListNew<UserPermissionExistModel>();
 
-            result.ForEach(r => {
+            result.ForEach(r =>
+            {
                 r.UserId = userId;
                 r.PermissionName = r.Permission.GetDisplayName();
             });

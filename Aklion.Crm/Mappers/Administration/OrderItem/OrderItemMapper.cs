@@ -9,11 +9,9 @@ namespace Aklion.Crm.Mappers.Administration.OrderItem
 {
     public static class OrderItemMapper
     {
-        public static PagingModel<OrderItemModel> MapNew(this (int TotalCount, List<DomainOrderItemModel> List) tuple,
-            int? page, int? size)
+        public static PagingModel<OrderItemModel> MapNew(this (int TotalCount, List<DomainOrderItemModel> List) tuple, int? page, int? size)
         {
-            return new PagingModel<OrderItemModel>(tuple.List.MapListNew<OrderItemModel>(), tuple.TotalCount, page,
-                size);
+            return new PagingModel<OrderItemModel>(tuple.List.MapListNew<OrderItemModel>(), tuple.TotalCount, page, size);
         }
 
         public static DomainOrderItemModel MapNew(this OrderItemModel model)

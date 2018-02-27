@@ -10,8 +10,7 @@ namespace Aklion.Crm.Mappers.Administration.Client
 {
     public static class ClientMapper
     {
-        public static PagingModel<ClientModel> MapNew(this (int TotalCount, List<DomainClientModel> List) tuple, int? page,
-            int? size)
+        public static PagingModel<ClientModel> MapNew(this (int TotalCount, List<DomainClientModel> List) tuple, int? page, int? size)
         {
             return new PagingModel<ClientModel>(tuple.List.MapListNew<ClientModel>(), tuple.TotalCount, page, size);
         }
