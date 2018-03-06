@@ -1,93 +1,70 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
-using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.ProductImageKey;
+using Aklion.Crm.Exceptions;
 using Aklion.Crm.Mappers.User.ProductImageKey;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.User.ProductImageKey;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.UsersControllers
+namespace Aklion.Crm.Controllers.Users.Product
 {
+    [AjaxErrorHandle]
     [Route("ProductImageKeys")]
     public class UserProductImageKeyController : BaseController
     {
-        private readonly IAuditLogger _auditLogService;
-        private readonly IProductImageKeyDao _productImageKeyDao;
+        private readonly IProductImageKeyDao _dao;
 
-        public UserProductImageKeyController(
-            IAuditLogger auditLogService,
-            IProductImageKeyDao productImageKeyDao)
+        public UserProductImageKeyController(IProductImageKeyDao dao)
         {
-            _auditLogService = auditLogService;
-            _productImageKeyDao = productImageKeyDao;
+            _dao = dao;
         }
 
         [HttpGet]
-        [Route("GetList")]
         public async Task<PagingModel<ProductImageKeyModel>> GetList(ProductImageKeyParameterModel model)
         {
-            var result = await _productImageKeyDao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
-
+            var result = await _dao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
             return result.MapNew(model.Page, model.Size);
         }
 
 
         [HttpGet]
-        [Route("GetForSelect")]
-        public async Task<Dictionary<string, int>> GetForSelect()
+        public async Task<Dictionary<string, int>> GetSelect()
         {
-            var result = await _productImageKeyDao.GetForSelectAsync(UserContext.StoreId.MapNew()).ConfigureAwait(false);
-
+            var result = await _dao.GetForSelectAsync(UserContext.StoreId.MapNew()).ConfigureAwait(false);
             return result.MapNew();
         }
 
         [HttpPost]
-        [Route("Create")]
-        [AjaxErrorHandle]
-        public async Task Create(ProductImageKeyModel model)
+        public Task Create(ProductImageKeyModel model)
         {
-            var newModel = model.MapNew(UserContext.StoreId);
-
-            newModel.Id = await _productImageKeyDao.CreateAsync(newModel).ConfigureAwait(false);
-
-            _auditLogService.LogInserting(UserContext.UserId, UserContext.StoreId, newModel);
+            return _dao.CreateAsync(model.MapNew(UserContext.StoreId));
         }
 
         [HttpPost]
-        [Route("Update")]
-        [AjaxErrorHandle]
         public async Task Update(ProductImageKeyModel model)
         {
-            var oldModel = await _productImageKeyDao.GetAsync(model.Id).ConfigureAwait(false);
-            var oldModelClone = oldModel.Clone();
+            var result = await _dao.GetAsync(model.Id).ConfigureAwait(false);
+            if (result.StoreId != UserContext.StoreId)
+            {
+                throw new NotAccessChangingException();
+            }
 
-            var newModel = oldModel.MapFrom(model, UserContext.StoreId);
-
-            await _productImageKeyDao.UpdateAsync(newModel).ConfigureAwait(false);
-
-            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, newModel);
+            await _dao.UpdateAsync(result.MapFrom(model, UserContext.StoreId)).ConfigureAwait(false);
         }
 
         [HttpPost]
-        [Route("Delete")]
-        [AjaxErrorHandle]
         public async Task Delete(int id)
         {
-            var model = await _productImageKeyDao.GetAsync(id).ConfigureAwait(false);
-            if (model.StoreId != UserContext.StoreId)
+            var result = await _dao.GetAsync(id).ConfigureAwait(false);
+            if (result.StoreId != UserContext.StoreId)
             {
-                return;
+                throw new NotAccessChangingException();
             }
 
-            var oldModelClone = model.Clone();
-
-            model.IsDeleted = true;
-
-            await _productImageKeyDao.UpdateAsync(model).ConfigureAwait(false);
-
-            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, model);
+            result.IsDeleted = true;
+            await _dao.UpdateAsync(result).ConfigureAwait(false);
         }
     }
 }

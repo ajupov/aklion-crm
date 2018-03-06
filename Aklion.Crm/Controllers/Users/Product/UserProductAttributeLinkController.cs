@@ -1,82 +1,61 @@
 ﻿using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
-using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.ProductAttributeLink;
+using Aklion.Crm.Exceptions;
 using Aklion.Crm.Mappers.User.ProductAttributeLink;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.User.ProductAttributeLink;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.UsersControllers
+namespace Aklion.Crm.Controllers.Users.Product
 {
+    [AjaxErrorHandle]
     [Route("ProductAttributeLinks")]
     public class UserProductAttributeLinkController : BaseController
     {
-        private readonly IAuditLogger _auditLogService;
-        private readonly IProductAttributeLinkDao _productAttributeLinkDao;
+        private readonly IProductAttributeLinkDao _dao;
 
-        public UserProductAttributeLinkController(
-            IAuditLogger auditLogService,
-            IProductAttributeLinkDao productAttributeLinkDao)
+        public UserProductAttributeLinkController(IProductAttributeLinkDao dao)
         {
-            _auditLogService = auditLogService;
-            _productAttributeLinkDao = productAttributeLinkDao;
+            _dao = dao;
         }
 
         [HttpGet]
-        [Route("GetList")]
         public async Task<PagingModel<ProductAttributeLinkModel>> GetList(ProductAttributeLinkParameterModel model)
         {
-            var result = await _productAttributeLinkDao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
-
+            var result = await _dao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
             return result.MapNew(model.Page, model.Size);
         }
 
         [HttpPost]
-        [Route("Create")]
-        [AjaxErrorHandle]
-        public async Task Create(ProductAttributeLinkModel model)
+        public Task Create(ProductAttributeLinkModel model)
         {
-            var newModel = model.MapNew(UserContext.StoreId);
-
-            newModel.Id = await _productAttributeLinkDao.CreateAsync(newModel).ConfigureAwait(false);
-
-            _auditLogService.LogInserting(UserContext.UserId, UserContext.StoreId, newModel);
+            return _dao.CreateAsync(model.MapNew(UserContext.StoreId));
         }
 
         [HttpPost]
-        [Route("Update")]
-        [AjaxErrorHandle]
         public async Task Update(ProductAttributeLinkModel model)
         {
-            var oldModel = await _productAttributeLinkDao.GetAsync(model.Id).ConfigureAwait(false);
-            var oldModelClone = oldModel.Clone();
+            var result = await _dao.GetAsync(model.Id).ConfigureAwait(false);
+            if (result.StoreId != UserContext.StoreId)
+            {
+                throw new NotAccessChangingException();
+            }
 
-            var newModel = oldModel.MapFrom(model, UserContext.StoreId);
-
-            await _productAttributeLinkDao.UpdateAsync(newModel).ConfigureAwait(false);
-
-            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, newModel);
+            await _dao.UpdateAsync(result.MapFrom(model, UserContext.StoreId)).ConfigureAwait(false);
         }
 
         [HttpPost]
-        [Route("Delete")]
-        [AjaxErrorHandle]
         public async Task Delete(int id)
         {
-            var model = await _productAttributeLinkDao.GetAsync(id).ConfigureAwait(false);
-            if (model.StoreId != UserContext.StoreId)
+            var result = await _dao.GetAsync(id).ConfigureAwait(false);
+            if (result.StoreId != UserContext.StoreId)
             {
-                return;
+                throw new NotAccessChangingException();
             }
 
-            var oldModelClone = model.Clone();
-
-            model.IsDeleted = true;
-
-            await _productAttributeLinkDao.UpdateAsync(model).ConfigureAwait(false);
-
-            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, model);
+            result.IsDeleted = true;
+            await _dao.UpdateAsync(result).ConfigureAwait(false);
         }
     }
 }

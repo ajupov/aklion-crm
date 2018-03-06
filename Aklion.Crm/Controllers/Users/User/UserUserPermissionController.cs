@@ -1,36 +1,25 @@
 ﻿using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
-using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Business.UserPermission;
-using Aklion.Crm.Dao.UserPermission;
-using Microsoft.AspNetCore.Mvc;
-using Aklion.Crm.Enums;
-using Aklion.Crm.Models.User.UserPermission;
 using Aklion.Crm.Mappers.User.UserPermission;
 using Aklion.Crm.Models;
+using Aklion.Crm.Models.User.UserPermission;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.UsersControllers
+namespace Aklion.Crm.Controllers.Users.User
 {
+    [AjaxErrorHandle]
     [Route("UserPermissions")]
     public class UserUserPermissionController : BaseController
     {
-        private readonly IAuditLogger _auditLogService;
-        private readonly IUserPermissionService _userPermissionService;
-        private readonly IUserPermissionDao _userPermissionDao;
+        private readonly IUserPermissionService _service;
 
-        public UserUserPermissionController(
-            IUserPermissionDao userPermissionDao,
-            IUserPermissionService userPermissionService,
-            IAuditLogger auditLogService)
+        public UserUserPermissionController(IUserPermissionService service)
         {
-            _auditLogService = auditLogService;
-            _userPermissionService = userPermissionService;
-            _userPermissionDao = userPermissionDao;
+            _service = service;
         }
 
         [HttpGet]
-        [Route("GetList")]
-        [AjaxErrorHandle]
         public async Task<PagingModel<UserPermissionExistModel>> GetList(UserPermissionParameterModel model)
         {
             if(model.UserId <= 0)
@@ -38,17 +27,14 @@ namespace Aklion.Crm.Controllers.UsersControllers
                 return new PagingModel<UserPermissionExistModel>(null, 0, 0, 0);
             }
 
-            var result = await _userPermissionService.GetForUserAsync(model.UserId, UserContext.StoreId).ConfigureAwait(false);
-
+            var result = await _service.GetForUserAsync(model.UserId, UserContext.StoreId).ConfigureAwait(false);
             return result.MapNew(model.UserId);
         }
 
         [HttpPost]
-        [Route("Switch")]
-        [AjaxErrorHandle]
-        public Task Switch(int userId, Permission permission)
+        public Task Switch(int userId, Enums.Permission permission)
         {
-            return _userPermissionService.SwitchAsync(userId, UserContext.StoreId, permission);
+            return _service.SwitchAsync(userId, UserContext.StoreId, permission);
         }
     }
 }

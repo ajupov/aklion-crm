@@ -73,7 +73,7 @@ namespace Aklion.Crm.Business.UserPermission
 
         public async Task<List<UserPermissionExistModel>> GetForUserAsync(int userId, int storeId)
         {
-            var userPermissions = await _userPermissionDao.GetListForUserAsync(userId, storeId);
+            var userPermissions = await _userPermissionDao.GetListForUserAsync(userId, storeId).ConfigureAwait(false);
 
             var allPermissions = _permissionService.GetForUser();
 

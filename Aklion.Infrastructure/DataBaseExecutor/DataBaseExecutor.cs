@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Aklion.Infrastructure.ConnectionFactory;
-using Aklion.Infrastructure.Reader;
+using Aklion.Infrastructure.DataBaseExecutor.Reader;
 using Dapper;
 
 namespace Aklion.Infrastructure.DataBaseExecutor
@@ -50,8 +50,7 @@ namespace Aklion.Infrastructure.DataBaseExecutor
             }
         }
 
-        public async Task<T> SelectMultipleAsync<T>(string query, Func<IReader, Task<T>> reader,
-            object parameters = null)
+        public async Task<T> SelectMultipleAsync<T>(string query, Func<IReader, Task<T>> reader, object parameters = null)
         {
             using (var connection = _factory.GetConnection())
             {

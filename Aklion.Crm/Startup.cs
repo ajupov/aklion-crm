@@ -7,7 +7,6 @@ using Aklion.Crm.Business.Sms.Models;
 using Aklion.Crm.Business.Store;
 using Aklion.Crm.Business.UserPermission;
 using Aklion.Crm.Business.UserToken;
-using Aklion.Crm.Dao.AuditLog;
 using Aklion.Crm.Dao.Client;
 using Aklion.Crm.Dao.ClientAttribute;
 using Aklion.Crm.Dao.ClientAttributeLink;
@@ -35,8 +34,8 @@ using Aklion.Infrastructure.ApiClient;
 using Aklion.Infrastructure.ConnectionFactory;
 using Aklion.Infrastructure.Dao;
 using Aklion.Infrastructure.DataBaseExecutor;
+using Aklion.Infrastructure.DataBaseExecutor.Reader;
 using Aklion.Infrastructure.Logger;
-using Aklion.Infrastructure.Reader;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -72,7 +71,6 @@ namespace Aklion.Crm
                 .AddSingleton<IReader, Reader>()
                 .AddSingleton<ILogger, Logger>()
                 .AddSingleton<IReader, Reader>()
-                .AddSingleton<IAuditLogger, AuditLogService>()
                 .AddSingleton<IImageLoadService, ImageLoadService>()
                 .AddSingleton<IMailService, MailService>()
                 .AddSingleton<IPermissionService, PermissionService>()
@@ -80,7 +78,6 @@ namespace Aklion.Crm
                 .AddSingleton<IStoreService, StoreService>()
                 .AddSingleton<IUserPermissionService, UserPermissionService>()
                 .AddSingleton<IUserTokenService, UserTokenService>()
-                .AddSingleton<IAuditLogDao, AuditLogDao>()
                 .AddSingleton<IClientDao, ClientDao>()
                 .AddSingleton<IClientAttributeDao, ClientAttributeDao>()
                 .AddSingleton<IClientAttributeLinkDao, ClientAttributeLinkDao>()

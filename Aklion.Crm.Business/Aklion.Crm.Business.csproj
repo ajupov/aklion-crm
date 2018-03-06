@@ -5,11 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MailKit" Version="2.0.0" />
+    <PackageReference Include="MailKit" Version="2.0.1" />
     <PackageReference Include="MainSMS" Version="1.4.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.0.1" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.0.0" />
-    <PackageReference Include="MimeKit" Version="2.0.0" />
+    <PackageReference Include="MimeKit" Version="2.0.1" />
   </ItemGroup>
 
   <ItemGroup>

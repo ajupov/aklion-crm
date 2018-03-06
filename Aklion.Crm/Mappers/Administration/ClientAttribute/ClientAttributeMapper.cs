@@ -35,7 +35,7 @@ namespace Aklion.Crm.Mappers.Administration.ClientAttribute
         {
             return new DomainClientAttributeAutocompleteParameterModel
             {
-                Description = pattern,
+                Name = pattern,
                 StoreId = storeId,
                 IsDeleted = false
             };

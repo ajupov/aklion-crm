@@ -1,84 +1,68 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
-using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Dao.ProductStatus;
+using Aklion.Crm.Exceptions;
 using Aklion.Crm.Mappers.User.ProductStatus;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.User.ProductStatus;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.UsersControllers
+namespace Aklion.Crm.Controllers.Users.Product
 {
+    [AjaxErrorHandle]
     [Route("ProductStatuses")]
     public class UserProductStatusController : BaseController
     {
-        private readonly IAuditLogger _auditLogService;
-        private readonly IProductStatusDao _productStatusDao;
+        private readonly IProductStatusDao _dao;
 
-        public UserProductStatusController(
-            IAuditLogger auditLogService,
-            IProductStatusDao productStatusDao)
+        public UserProductStatusController(IProductStatusDao dao)
         {
-            _auditLogService = auditLogService;
-            _productStatusDao = productStatusDao;
+            _dao = dao;
         }
 
         [HttpGet]
-        [Route("GetList")]
         public async Task<PagingModel<ProductStatusModel>> GetList(ProductStatusParameterModel model)
         {
-            var result = await _productStatusDao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
-
+            var result = await _dao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
             return result.MapNew(model.Page, model.Size);
         }
 
         [HttpGet]
-        [Route("GetForSelect")]
-        public async Task<Dictionary<string, int>> GetForSelect()
+        public async Task<Dictionary<string, int>> GetSelect()
         {
-            var result = await _productStatusDao.GetForSelectAsync(UserContext.StoreId.MapNew()).ConfigureAwait(false);
-
+            var result = await _dao.GetSelectAsync(UserContext.StoreId.MapNew()).ConfigureAwait(false);
             return result.MapNew();
         }
 
         [HttpPost]
-        [Route("Create")]
-        [AjaxErrorHandle]
-        public async Task Create(ProductStatusModel model)
+        public Task Create(ProductStatusModel model)
         {
-            var newModel = model.MapNew(UserContext.StoreId);
-
-            newModel.Id = await _productStatusDao.CreateAsync(newModel).ConfigureAwait(false);
-
-            _auditLogService.LogInserting(UserContext.UserId, UserContext.StoreId, newModel);
+            return _dao.CreateAsync(model.MapNew(UserContext.StoreId));
         }
 
         [HttpPost]
-        [Route("Update")]
-        [AjaxErrorHandle]
         public async Task Update(ProductStatusModel model)
         {
-            var oldModel = await _productStatusDao.GetAsync(model.Id).ConfigureAwait(false);
-            var oldModelClone = oldModel.Clone();
+            var result = await _dao.GetAsync(model.Id).ConfigureAwait(false);
+            if (result.StoreId != UserContext.StoreId)
+            {
+                throw new NotAccessChangingException();
+            }
 
-            var newModel = oldModel.MapFrom(model, UserContext.StoreId);
-
-            await _productStatusDao.UpdateAsync(newModel).ConfigureAwait(false);
-
-            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, newModel);
+            await _dao.UpdateAsync(result.MapFrom(model, UserContext.StoreId)).ConfigureAwait(false);
         }
 
         [HttpPost]
-        [Route("Delete")]
-        [AjaxErrorHandle]
         public async Task Delete(int id)
         {
-            var oldModel = await _productStatusDao.GetAsync(id).ConfigureAwait(false);
-
-            await _productStatusDao.DeleteAsync(id).ConfigureAwait(false);
-
-            _auditLogService.LogDeleting(UserContext.UserId, UserContext.StoreId, oldModel);
+            var result = await _dao.GetAsync(id).ConfigureAwait(false);
+            if (result.StoreId != UserContext.StoreId)
+            {
+                throw new NotAccessChangingException();
+            }
+            
+            await _dao.DeleteAsync(id).ConfigureAwait(false);
         }
     }
 }

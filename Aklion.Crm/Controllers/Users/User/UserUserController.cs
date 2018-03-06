@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Aklion.Crm.Attributes;
-using Aklion.Crm.Business.AuditLog;
 using Aklion.Crm.Business.Mail;
 using Aklion.Crm.Business.UserPermission;
 using Aklion.Crm.Business.UserToken;
@@ -16,13 +14,14 @@ using Aklion.Crm.Models.User.User;
 using Aklion.Infrastructure.Password;
 using Aklion.Infrastructure.PhoneNumber;
 using Aklion.Infrastructure.Random;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.UsersControllers
+namespace Aklion.Crm.Controllers.Users.User
 {
+    [AjaxErrorHandle]
     [Route("Users")]
     public class UserUserController : BaseController
     {
-        private readonly IAuditLogger _auditLogService;
         private readonly IMailService _mailService;
         private readonly IUserTokenService _userTokenService;
         private readonly IUserPermissionService _userPermissionService;
@@ -30,14 +29,12 @@ namespace Aklion.Crm.Controllers.UsersControllers
         private readonly IUserDao _userDao;
 
         public UserUserController(
-            IAuditLogger auditLogService,
             IMailService mailService,
             IUserTokenService userTokenService,
             IUserPermissionService userPermissionService,
             IUserPermissionDao userPermissionDao,
             IUserDao userDao)
         {
-            _auditLogService = auditLogService;
             _mailService = mailService;
             _userTokenService = userTokenService;
             _userPermissionService = userPermissionService;
@@ -53,24 +50,19 @@ namespace Aklion.Crm.Controllers.UsersControllers
         }
 
         [HttpGet]
-        [Route("GetList")]
         public async Task<PagingModel<UserModel>> GetList(UserParameterModel model)
         {
             var result = await _userDao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
-
             return result.MapNew(model.Page, model.Size);
         }
 
         [HttpGet]
-        [Route("GetForAutocompleteByLoginPattern")]
-        public Task<Dictionary<string, int>> GetForAutocompleteByLoginPattern(string pattern)
+        public Task<Dictionary<string, int>> GetAutocomplete(string pattern)
         {
-            return _userDao.GetForAutocompleteAsync(pattern.MapNew());
+            return _userDao.GetAutocompleteAsync(pattern.MapNew());
         }
 
         [HttpPost]
-        [Route("Create")]
-        [AjaxErrorHandle]
         public async Task Create(UserModel model)
         {
             var isExistByLogin = await _userDao.IsExistByLoginAsync(model.Login).ConfigureAwait(false);
@@ -102,15 +94,11 @@ namespace Aklion.Crm.Controllers.UsersControllers
 
             await _userPermissionService.CreateForAddedUserAsync(user.Id, UserContext.UserId).ConfigureAwait(false);
 
-            _auditLogService.LogInserting(UserContext.UserId, UserContext.StoreId, user);
-
             await EmailConfirmationProcess(password, user.Id).ConfigureAwait(false);
         }
 
         [HttpPost]
-        [Route("SwitchIsDeleted")]
-        [AjaxErrorHandle]
-        public async Task<bool> SwitchIsDeleted(int id)
+        public async Task Delete(int id)
         {
             var isExist = await _userPermissionDao.IsExistAsync(id, UserContext.StoreId).ConfigureAwait(false);
             if (!isExist)
@@ -118,17 +106,10 @@ namespace Aklion.Crm.Controllers.UsersControllers
                 throw new Exception("Вы не можете удалить данного пользователя");
             }
 
-            var user = await _userDao.GetAsync(id).ConfigureAwait(false);
+            var result = await _userDao.GetAsync(id).ConfigureAwait(false);
 
-            var oldModelClone = user.Clone();
-
-            user.IsDeleted = !user.IsDeleted;
-
-            await _userDao.UpdateAsync(user).ConfigureAwait(false);
-
-            _auditLogService.LogUpdating(UserContext.UserId, UserContext.StoreId, oldModelClone, user);
-
-            return user.IsDeleted;
+            result.IsDeleted = true;
+            await _userDao.UpdateAsync(result).ConfigureAwait(false);
         }
 
         private async Task EmailConfirmationProcess(string password, int userId)

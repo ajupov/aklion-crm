@@ -545,8 +545,6 @@ namespace Aklion.Crm.Controllers
                 return View("Error");
             }
 
-            var oldUserClone = user.Clone();
-
             user.PasswordHash = PasswordHelper.Generate(model.Password);
 
             await _userDao.UpdateAsync(user).ConfigureAwait(false);
