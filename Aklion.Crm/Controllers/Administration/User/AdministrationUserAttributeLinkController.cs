@@ -19,27 +19,27 @@ namespace Aklion.Crm.Controllers.Administration.User
             _dao = dao;
         }
 
-        [HttpGet]
+        [HttpGet("GetList")]
         public async Task<PagingModel<UserAttributeLinkModel>> GetList(UserAttributeLinkParameterModel model)
         {
             var result = await _dao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
             return result.MapNew(model.Page, model.Size);
         }
 
-        [HttpPost]
+        [HttpPost("Create")]
         public Task Create(UserAttributeLinkModel model)
         {
             return _dao.CreateAsync(model.MapNew());
         }
 
-        [HttpPost]
+        [HttpPost("Update")]
         public async Task Update(UserAttributeLinkModel model)
         {
             var result = await _dao.GetAsync(model.Id).ConfigureAwait(false);
             await _dao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);
         }
 
-        [HttpPost]
+        [HttpPost("Delete")]
         public Task Delete(int id)
         {
             return _dao.DeleteAsync(id);

@@ -20,34 +20,33 @@ namespace Aklion.Crm.Controllers.Administration.User
             _dao = dao;
         }
 
-        [HttpGet]
-        [Route("")]
+        [HttpGet("")]
         public IActionResult Index()
         {
             return View("~/Views/Administration/User/Index.cshtml");
         }
 
-        [HttpGet]
+        [HttpGet("GetList")]
         public async Task<PagingModel<UserModel>> GetList(UserParameterModel model)
         {
             var result = await _dao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
             return result.MapNew(model.Page, model.Size);
         }
 
-        [HttpGet]
+        [HttpGet("GetAutocomplete")]
         public Task<Dictionary<string, int>> GetAutocomplete(string pattern)
         {
             return _dao.GetAutocompleteAsync(pattern.MapNew());
         }
 
-        [HttpPost]
+        [HttpPost("Update")]
         public async Task Update(UserModel model)
         {
             var result = await _dao.GetAsync(model.Id).ConfigureAwait(false);
             await _dao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);
         }
 
-        [HttpPost]
+        [HttpPost("Delete")]
         public Task Delete(int id)
         {
             return _dao.DeleteAsync(id);
