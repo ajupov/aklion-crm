@@ -3,21 +3,19 @@ using Aklion.Crm.Attributes;
 using Aklion.Crm.Business.Permission;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration.Permission
+namespace Aklion.Crm.Controllers.Administration
 {
     [AjaxErrorHandle]
-    [Route("Administration/Permissions")]
-    public class AdministrationPermissionController : BaseController
+    public class PermissionsController : BaseController
     {
         private readonly IPermissionService _service;
 
-        public AdministrationPermissionController(IPermissionService service)
+        public PermissionsController(IPermissionService service)
         {
             _service = service;
         }
 
         [HttpGet]
-        [Route("GetSelect")]
         public Dictionary<string, Enums.Permission> GetSelect()
         {
             return _service.GetForAdminWithNames();

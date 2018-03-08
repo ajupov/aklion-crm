@@ -21,7 +21,7 @@ namespace Aklion.Crm.Domain.OrderAttributeLink
         [Where("@AttributeId is null or oal.AttributeId = @AttributeId")]
         public int? AttributeId { get; set; }
 
-        [Where("@AttributeKey is null or oa.Key like @AttributeKey + '%'")]
+        [Where("@AttributeKey is null or oa.[Key] like @AttributeKey + '%'")]
         public string AttributeKey { get; set; }
 
         [Where("@AttributeName is null or oa.Name like @AttributeName + '%'")]

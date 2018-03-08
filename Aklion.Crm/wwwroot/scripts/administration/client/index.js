@@ -20,7 +20,7 @@ function initClientsTable() {
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
+                AutocompleteUrl: '/Administration/Stores/GetAutocomplete', AutocompleteHidden: 'StoreId',
                 Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
             },
             { Name: 'Name', Label: 'Название', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
@@ -51,19 +51,19 @@ function initClientsTable() {
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
+                AutocompleteUrl: '/Administration/Stores/GetAutocomplete', AutocompleteHidden: 'StoreId',
                 Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
             },
             { Name: 'ClientId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'ClientName', Label: 'Клиент', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/Clients/GetForAutocompleteByNamePattern', AutocompleteHidden: 'ClientId',
+                AutocompleteUrl: '/Administration/Clients/GetAutocomplete', AutocompleteHidden: 'ClientId',
                 DependentFields: ['StoreId'], Formatter: administrationClientLinkFormatter, Unformatter: linkUnFormatter
             },
             { Name: 'AttributeId', Type: 'number', Hidden: true, Editable: true },
             {
-                Name: 'AttributeDescription', Label: 'Атрибут', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/ClientAttributes/GetForAutocompleteByDescriptionPattern',
+                Name: 'AttributeName', Label: 'Атрибут', Type: 'autocomplete', Editable: true, Width: 120,
+                AutocompleteUrl: '/Administration/ClientAttributes/GetAutocomplete',
                 AutocompleteHidden: 'AttributeId', DependentFields: ['StoreId']
             },
             { Name: 'Value', Label: 'Значение', Width: 250, Editable: true, EditHidden: true },
@@ -93,11 +93,11 @@ function initAttributesTable() {
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
+                AutocompleteUrl: '/Administration/Stores/GetAutocomplete', AutocompleteHidden: 'StoreId',
                 Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
             },
+            { Name: 'Key', Label: 'Ключ', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
             { Name: 'Name', Label: 'Название', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
-            { Name: 'Description', Label: 'Описание', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
             { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 45, Editable: true, Sortable: false },
             { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
             { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }

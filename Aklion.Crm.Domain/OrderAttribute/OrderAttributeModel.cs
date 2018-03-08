@@ -17,7 +17,7 @@ namespace Aklion.Crm.Domain.OrderAttribute
         [Column("s.Name")]
         public string StoreName { get; }
 
-        [Column("oa.Key")]
+        [Column("oa.[Key]")]
         public string Key { get; set; }
 
         [Column("oa.Name")]

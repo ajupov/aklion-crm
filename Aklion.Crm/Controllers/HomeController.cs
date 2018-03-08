@@ -9,7 +9,7 @@ namespace Aklion.Crm.Controllers
         {
             return IsUserContextInitialized
                 ? (IActionResult) RedirectToAction("Index", UserContext.Permissions.Contains(Permission.Admin)
-                    ? "AdministrationConsole"
+                    ? "Console"
                     : "UserConsole")
                 : View();
         }

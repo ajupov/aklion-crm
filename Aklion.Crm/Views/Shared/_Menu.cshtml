@@ -8,7 +8,7 @@
     {
         if (ViewBag.UserContext.Permissions.Contains(Permission.Admin))
         {
-            <a asp-controller="AdministrationConsole" asp-action="Index" class="link left">
+            <a asp-controller="Console" asp-action="Index" class="link left">
                 <i class="fa fa-dashboard"></i>
             </a>
 
@@ -24,11 +24,11 @@
                 Продукты
             </a>
 
-            <a asp-controller="AdministrationClient" asp-action="Index" class="link left">
+            <a asp-controller="Clients" asp-action="Index" class="link left">
                 Клиенты
             </a>
 
-            <a asp-controller="AdministrationOrder" asp-action="Index" class="link left">
+            <a asp-controller="Orders" asp-action="Index" class="link left">
                 Заказы
             </a>
         }

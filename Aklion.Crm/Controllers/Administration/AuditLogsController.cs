@@ -8,15 +8,14 @@ using Aklion.Infrastructure.AuditLogger;
 using Aklion.Infrastructure.AuditLogger.Enums;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration.AuditLogs
+namespace Aklion.Crm.Controllers.Administration
 {
     [AjaxErrorHandle]
-    [Route("Administration/AuditLogs")]
-    public class AdministrationAuditLogController : BaseController
+    public class AuditLogsController : BaseController
     {
         private readonly IAuditLogger _logger;
 
-        public AdministrationAuditLogController(IAuditLogger logger)
+        public AuditLogsController(IAuditLogger logger)
         {
             _logger = logger;
         }

@@ -33,13 +33,12 @@
                     @if (!Model.IsEmailConfirmed)
                     {
                         <a asp-controller="Account" asp-action="SendConfirmEmail" class="text-link">Подтвердить</a>
-                        <br>
                     }
+                    <br>
                     <span class="label">Телефон:</span> @Model.Phone.ToFullPhoneNumber() <a asp-controller="Account" asp-action="ChangePhone" class="text-link">Изменить</a>
                     @if (!Model.IsPhoneConfirmed)
                     {
                         <a asp-controller="Account" asp-action="SendSmsCode" class="text-link">Подтвердить</a>
-                        <br>
                     }
                     <br>
                     <span class="label">Пол:</span> @Model.Gender.GetDisplayName()

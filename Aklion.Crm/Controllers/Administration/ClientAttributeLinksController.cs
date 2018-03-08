@@ -6,15 +6,14 @@ using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.ClientAttributeLink;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration.Client
+namespace Aklion.Crm.Controllers.Administration
 {
     [AjaxErrorHandle]
-    [Route("Administration/ClientAttributeLinks")]
-    public class AdministrationClientAttributeLinkController : BaseController
+    public class ClientAttributeLinksController : BaseController
     {
         private readonly IClientAttributeLinkDao _dao;
 
-        public AdministrationClientAttributeLinkController(IClientAttributeLinkDao dao)
+        public ClientAttributeLinksController(IClientAttributeLinkDao dao)
         {
             _dao = dao;
         }

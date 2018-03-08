@@ -6,15 +6,14 @@ using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.OrderItem;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration.Order
+namespace Aklion.Crm.Controllers.Administration
 {
     [AjaxErrorHandle]
-    [Route("Administration/OrderItems")]
-    public class AdministrationOrderItemController : BaseController
+    public class OrderItemsController : BaseController
     {
         private readonly IOrderItemDao _dao;
 
-        public AdministrationOrderItemController(IOrderItemDao dao)
+        public OrderItemsController(IOrderItemDao dao)
         {
             _dao = dao;
         }

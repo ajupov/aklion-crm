@@ -15,7 +15,7 @@ namespace Aklion.Crm.Domain.OrderAttribute
         [Where("@StoreName is null or s.Name like @StoreName + '%'")]
         public string StoreName { get; set; }
 
-        [Where("@Key is null or oa.Key like @Key + '%'")]
+        [Where("@Key is null or oa.[Key] like @Key + '%'")]
         public string Key { get; set; }
 
         [Where("@Name is null or oa.Name like @Name + '%'")]

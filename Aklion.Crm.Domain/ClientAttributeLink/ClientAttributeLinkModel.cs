@@ -28,7 +28,7 @@ namespace Aklion.Crm.Domain.ClientAttributeLink
         [Column("cal.AttributeId")]
         public int AttributeId { get; set; }
 
-        [Column("ca.Key")]
+        [Column("ca.[Key]")]
         public string AttributeKey { get; }
 
         [Column("ca.Name")]

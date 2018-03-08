@@ -25,7 +25,7 @@ namespace Aklion.Crm.Domain.OrderAttributeLink
         [Column("oal.AttributeId")]
         public int AttributeId { get; set; }
 
-        [Column("oa.Key")]
+        [Column("oa.[Key]")]
         public string AttributeKey { get; }
 
         [Column("oa.Name")]

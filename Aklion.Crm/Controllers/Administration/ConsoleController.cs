@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration.Console
+namespace Aklion.Crm.Controllers.Administration
 {
-    [Route("Administration/Console")]
-    public class AdministrationConsoleController : BaseController
+    public class ConsoleController : BaseController
     {
+        [HttpGet]
         public IActionResult Index()
         {
             return View("~/Views/Administration/Console/Index.cshtml");

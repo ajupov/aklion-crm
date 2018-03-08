@@ -12,30 +12,30 @@ function initOrdersTable() {
         IsFilterable: true,
         CanExtractFilters: true,
         DataUrl: '/Administration/Orders/GetList',
-        CreateUrl: '/Administration/orders/Create',
-        UpdateUrl: '/Administration/orders/Update',
-        DeleteUrl: '/Administration/orders/Delete',
+        CreateUrl: '/Administration/Orders/Create',
+        UpdateUrl: '/Administration/Orders/Update',
+        DeleteUrl: '/Administration/Orders/Delete',
         Columns: [
             { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
+                AutocompleteUrl: '/Administration/Stores/GetAutocomplete', AutocompleteHidden: 'StoreId',
                 Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
             },
             { Name: 'ClientId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'ClientName', Label: 'Клиент', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/Clients/GetForAutocompleteByNamePattern', AutocompleteHidden: 'ClientId',
+                AutocompleteUrl: '/Administration/Clients/GetAutocomplete', AutocompleteHidden: 'ClientId',
                 DependentFields: ['StoreId'], Formatter: administrationClientLinkFormatter, Unformatter: linkUnFormatter
             },
             {
                 Name: 'SourceId', Label: 'Источник', Type: 'select', Editable: true, Sortable: false, Width: 120,
-                DependentFields: ['StoreId'], SelectValues: getSelectValues('/Administration/OrderSources/GetForSelect')
+                DependentFields: ['StoreId'], SelectValues: getSelectValues('/Administration/OrderSources/GetSelect')
             },
             {
                 Name: 'StatusId', Label: 'Статус', Type: 'select', Editable: true, Sortable: false, Width: 120,
-                DependentFields: ['StoreId'], SelectValues: getSelectValues('/Administration/OrderStatuses/GetForSelect')
+                DependentFields: ['StoreId'], SelectValues: getSelectValues('/Administration/OrderStatuses/GetSelect')
             },
             { Name: 'TotalSum', Label: 'Сумма', Type: 'money', Width: 80, Editable: true },
             { Name: 'DiscountSum', Label: 'Скидка', Type: 'money', Width: 80, Editable: true },
@@ -68,13 +68,13 @@ function initOrdersTable() {
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
+                AutocompleteUrl: '/Administration/Stores/GetAutocomplete', AutocompleteHidden: 'StoreId',
                 Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
             },
             { Name: 'ProductId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'ProductName', Label: 'Продукт', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/Products/GetForAutocompleteByNamePattern', AutocompleteHidden: 'ProductId',
+                AutocompleteUrl: '/Administration/Products/GetAutocomplete', AutocompleteHidden: 'ProductId',
                 DependentFields: ['StoreId'], Formatter: administrationProductLinkFormatter, Unformatter: linkUnFormatter
             },
             { Name: 'Price', Label: 'Стоимость', Type: 'money', Width: 80, Editable: true },
@@ -103,15 +103,15 @@ function initOrdersTable() {
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
+                AutocompleteUrl: '/Administration/Stores/GetAutocomplete', AutocompleteHidden: 'StoreId',
                 Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
             },
             { Name: 'ProductId', Type: 'number', Hidden: true, Editable: true },
             { Name: 'OrderId', Label: '№ заказа', Type: 'number', Width: 80, Editable: true },
             { Name: 'AttributeId', Type: 'number', Hidden: true, Editable: true },
             {
-                Name: 'AttributeDescription', Label: 'Атрибут', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/OrderAttributes/GetForAutocompleteByDescriptionPattern',
+                Name: 'AttributeName', Label: 'Атрибут', Type: 'autocomplete', Editable: true, Width: 120,
+                AutocompleteUrl: '/Administration/OrderAttributes/GetAutocomplete',
                 AutocompleteHidden: 'AttributeId', DependentFields: ['StoreId']
             },
             { Name: 'Value', Label: 'Значение', Width: 250, Editable: true, EditHidden: true },
@@ -141,11 +141,11 @@ function initAttributesTable() {
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
+                AutocompleteUrl: '/Administration/Stores/GetAutocomplete', AutocompleteHidden: 'StoreId',
                 Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
             },
+            { Name: 'Key', Label: 'Ключ', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
             { Name: 'Name', Label: 'Название', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
-            { Name: 'Description', Label: 'Описание', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
             { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 55, Editable: true, Sortable: false },
             { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
             { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }
@@ -172,7 +172,7 @@ function initOthersTable() {
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
+                AutocompleteUrl: '/Administration/Stores/GetAutocomplete', AutocompleteHidden: 'StoreId',
                 Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
             },
             { Name: 'Name', Label: 'Название', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
@@ -199,7 +199,7 @@ function initOthersTable() {
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Название магазина', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
+                AutocompleteUrl: '/Administration/Stores/GetAutocomplete', AutocompleteHidden: 'StoreId',
                 Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
             },
             { Name: 'Name', Label: 'Название', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
