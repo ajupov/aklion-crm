@@ -11,13 +11,13 @@ namespace Aklion.Crm.Dao.ProductImageKeyLink
 {
     public class ProductImageKeyLinkDao : IProductImageKeyLinkDao
     {
-        private readonly IDataBaseExecutor _dataBaseExecutor;
+        private readonly IDataBaseExecutor _executor;
         private readonly IDao _dao;
 
-        public ProductImageKeyLinkDao(IDataBaseExecutor dataBaseExecutor, IDao dao)
+        public ProductImageKeyLinkDao(IDataBaseExecutor executor, IDao dao)
         {
             _dao = dao;
-            _dataBaseExecutor = dataBaseExecutor;
+            _executor = executor;
         }
 
         public Task<(int TotalCount, List<ProductImageKeyLinkModel> List)> GetPagedListAsync(ProductImageKeyLinkParameterModel parameter)
@@ -45,7 +45,7 @@ namespace Aklion.Crm.Dao.ProductImageKeyLink
             var @params = new DynamicParameters();
             @params.Add("@stream", stream, DbType.Binary);
 
-            return _dataBaseExecutor.ExecuteAsync(Queries.SetImage, @params);
+            return _executor.ExecuteAsync(Queries.SetImage, @params);
         }
 
         public Task DeleteAsync(int id)

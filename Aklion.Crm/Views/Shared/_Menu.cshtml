@@ -61,7 +61,7 @@
 
         <a class="avatar-link right" id="dropdown-menu-link">
             <span>@ViewBag.UserContext.UserLogin</span>
-            <img src="/images/avatars/no-avatar.png" alt="Аватар" />
+            <img src="@(!string.IsNullOrWhiteSpace(ViewBag.UserContext.AvatarUrl) ? ViewBag.UserContext.AvatarUrl : "/images/avatars/no-avatar.png")" alt="Аватар" />
             <i class="fa fa-caret-down"></i>
         </a>
 

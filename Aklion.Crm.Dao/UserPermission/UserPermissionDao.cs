@@ -10,12 +10,12 @@ namespace Aklion.Crm.Dao.UserPermission
     public class UserPermissionDao : IUserPermissionDao
     {
         private readonly IDao _dao;
-        private readonly IDataBaseExecutor _dataBaseExecutor;
+        private readonly IDataBaseExecutor _executor;
 
-        public UserPermissionDao(IDao dao, IDataBaseExecutor dataBaseExecutor)
+        public UserPermissionDao(IDao dao, IDataBaseExecutor executor)
         {
             _dao = dao;
-            _dataBaseExecutor = dataBaseExecutor;
+            _executor = executor;
         }
 
         public Task<(int TotalCount, List<UserPermissionModel> List)> GetPagedListAsync(UserPermissionParameterModel parameter)
@@ -25,7 +25,7 @@ namespace Aklion.Crm.Dao.UserPermission
 
         public Task<List<Permission>> GetListForUserAsync(int userId, int storeId)
         {
-            return _dataBaseExecutor.SelectListAsync<Permission>(Queries.GetListForUser, new { userId, storeId });
+            return _executor.SelectListAsync<Permission>(Queries.GetListForUser, new { userId, storeId });
         }
 
         public Task<UserPermissionModel> GetAsync(int id)
@@ -35,12 +35,12 @@ namespace Aklion.Crm.Dao.UserPermission
 
         public Task<UserPermissionModel> GetForUserAsync(int userId, int storeId, Permission permission)
         {
-            return _dataBaseExecutor.SelectOneAsync<UserPermissionModel>(Queries.GetForUser, new { userId, storeId, permission });
+            return _executor.SelectOneAsync<UserPermissionModel>(Queries.GetForUser, new { userId, storeId, permission });
         }
 
         public Task<bool> IsExistAsync(int userId, int storeId)
         {
-            return _dataBaseExecutor.SelectOneAsync<bool>(Queries.IsExist, new {userId, storeId});
+            return _executor.SelectOneAsync<bool>(Queries.IsExist, new {userId, storeId});
         }
 
         public Task<int> CreateAsync(UserPermissionModel model)

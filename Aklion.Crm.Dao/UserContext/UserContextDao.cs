@@ -10,16 +10,16 @@ namespace Aklion.Crm.Dao.UserContext
 {
     public class UserContextDao : IUserContextDao
     {
-        private readonly IDataBaseExecutor _dataBaseExecutor;
+        private readonly IDataBaseExecutor _executor;
 
-        public UserContextDao(IDataBaseExecutor dataBaseExecutor)
+        public UserContextDao(IDataBaseExecutor executor)
         {
-            _dataBaseExecutor = dataBaseExecutor;
+            _executor = executor;
         }
 
         public Task<UserContextModel> GetAsync(int userId, int storeId)
         {
-            return _dataBaseExecutor.SelectMultipleAsync(Queries.Get, async r => new UserContextModel
+            return _executor.SelectMultipleAsync(Queries.Get, async r => new UserContextModel
             {
                 CurrentUser = await r.SelectOneAsync<UserModel>().ConfigureAwait(false),
                 CurrentStore = await r.SelectOneAsync<StoreModel>().ConfigureAwait(false),
@@ -29,7 +29,7 @@ namespace Aklion.Crm.Dao.UserContext
 
         public Task<List<UserAvialableStoreModel>> GetAvialableStoresAsync(int userId)
         {
-            return _dataBaseExecutor.SelectListAsync<UserAvialableStoreModel>(Queries.GetAvialableStores, new {userId});
+            return _executor.SelectListAsync<UserAvialableStoreModel>(Queries.GetAvialableStores, new {userId});
         }
     }
 }

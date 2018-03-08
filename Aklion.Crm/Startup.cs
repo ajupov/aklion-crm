@@ -7,6 +7,7 @@ using Aklion.Crm.Business.Sms.Models;
 using Aklion.Crm.Business.Store;
 using Aklion.Crm.Business.UserPermission;
 using Aklion.Crm.Business.UserToken;
+using Aklion.Crm.Dao.Analytics;
 using Aklion.Crm.Dao.Client;
 using Aklion.Crm.Dao.ClientAttribute;
 using Aklion.Crm.Dao.ClientAttributeLink;
@@ -78,6 +79,7 @@ namespace Aklion.Crm
                 .AddSingleton<IStoreService, StoreService>()
                 .AddSingleton<IUserPermissionService, UserPermissionService>()
                 .AddSingleton<IUserTokenService, UserTokenService>()
+                .AddSingleton<IAnalyticsDao, AnalyticsDao>()
                 .AddSingleton<IClientDao, ClientDao>()
                 .AddSingleton<IClientAttributeDao, ClientAttributeDao>()
                 .AddSingleton<IClientAttributeLinkDao, ClientAttributeLinkDao>()

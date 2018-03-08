@@ -1,10 +1,16 @@
 ﻿'use strict';
 
 function initGeneral() {
-    const html =
-        `<p>Всего пользователей: 0</p><p>Всего магазинов: 0</p><p>Всего клиентов: 0</p><p>Всего заказов: 0</p>`;
+    getJson('/Administration/Console/GetGeneralCounts', null, (result) => {
+        const html = `
+            <p>Всего пользователей: ${result.UsersCount}</p>
+            <p>Всего магазинов: ${result.StoresCount}</p>
+            <p>Всего продуктов: ${result.ProductsCount}</p>
+            <p>Всего клиентов: ${result.ClientsCount}</p>
+            <p>Всего заказов: ${result.OrdersCount}</p>`;
 
-    $('#general-div').html(html);
+        $('#general-div').html(html);
+    });
 }
 
 function initAuditLogsTable() {
