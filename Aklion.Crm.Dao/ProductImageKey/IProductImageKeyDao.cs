@@ -8,7 +8,7 @@ namespace Aklion.Crm.Dao.ProductImageKey
     {
         Task<(int TotalCount, List<ProductImageKeyModel> List)> GetPagedListAsync(ProductImageKeyParameterModel parameter);
 
-        Task<Dictionary<string, int>> GetForSelectAsync(ProductImageKeySelectParameterModel parameter);
+        Task<Dictionary<string, int>> GetSelectAsync(ProductImageKeySelectParameterModel parameter);
 
         Task<ProductImageKeyModel> GetAsync(int id);
 

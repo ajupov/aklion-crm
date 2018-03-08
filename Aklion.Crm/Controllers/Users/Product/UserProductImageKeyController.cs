@@ -32,7 +32,7 @@ namespace Aklion.Crm.Controllers.Users.Product
         [HttpGet]
         public async Task<Dictionary<string, int>> GetSelect()
         {
-            var result = await _dao.GetForSelectAsync(UserContext.StoreId.MapNew()).ConfigureAwait(false);
+            var result = await _dao.GetSelectAsync(UserContext.StoreId.MapNew()).ConfigureAwait(false);
             return result.MapNew();
         }
 

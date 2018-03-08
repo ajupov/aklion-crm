@@ -19,7 +19,7 @@ namespace Aklion.Crm.Dao.ProductImageKey
             return _dao.GetPagedListAsync<ProductImageKeyModel, ProductImageKeyParameterModel>(parameter);
         }
 
-        public Task<Dictionary<string, int>> GetForSelectAsync(ProductImageKeySelectParameterModel parameter)
+        public Task<Dictionary<string, int>> GetSelectAsync(ProductImageKeySelectParameterModel parameter)
         {
             return _dao.GetForSelectAsync<ProductImageKeyModel, ProductImageKeySelectParameterModel>(parameter);
         }

@@ -7,15 +7,14 @@ using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.ProductImageKey;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration.Product
+namespace Aklion.Crm.Controllers.Administration
 {
     [AjaxErrorHandle]
-    [Route("Administration/ProductImageKeys")]
-    public class AdministrationProductImageKeyController : BaseController
+    public class ProductImageKeysController : BaseController
     {
         private readonly IProductImageKeyDao _dao;
 
-        public AdministrationProductImageKeyController(IProductImageKeyDao dao)
+        public ProductImageKeysController(IProductImageKeyDao dao)
         {
             _dao = dao;
         }
@@ -28,9 +27,9 @@ namespace Aklion.Crm.Controllers.Administration.Product
         }
 
         [HttpGet]
-        public async Task<Dictionary<string, int>> GetForSelect(int storeId)
+        public async Task<Dictionary<string, int>> GetSelect(int storeId)
         {
-            var result = await _dao.GetForSelectAsync(storeId.MapNew()).ConfigureAwait(false);
+            var result = await _dao.GetSelectAsync(storeId.MapNew()).ConfigureAwait(false);
             return result.MapNew();
         }
 

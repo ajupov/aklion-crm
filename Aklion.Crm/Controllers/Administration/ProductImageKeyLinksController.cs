@@ -7,15 +7,14 @@ using Aklion.Crm.Models.Administration.ProductImageKeyLink;
 using Aklion.Infrastructure.FileFormat;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration.Product
+namespace Aklion.Crm.Controllers.Administration
 {
     [AjaxErrorHandle]
-    [Route("Administration/ProductImageKeyLinks")]
-    public class AdministrationProductImageKeyLinkController : BaseController
+    public class ProductImageKeyLinksController : BaseController
     {
         private readonly IProductImageKeyLinkDao _dao;
 
-        public AdministrationProductImageKeyLinkController(IProductImageKeyLinkDao dao)
+        public ProductImageKeyLinksController(IProductImageKeyLinkDao dao)
         {
             _dao = dao;
         }

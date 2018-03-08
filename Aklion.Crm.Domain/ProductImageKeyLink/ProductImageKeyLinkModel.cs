@@ -28,7 +28,7 @@ namespace Aklion.Crm.Domain.ProductImageKeyLink
         [Column("pikl.KeyId")]
         public int KeyId { get; set; }
 
-        [Column("pik.Key")]
+        [Column("pik.[Key]")]
         public string KeyKey { get; }
 
         [Column("pik.Name")]

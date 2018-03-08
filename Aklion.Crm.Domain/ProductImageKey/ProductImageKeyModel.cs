@@ -17,7 +17,7 @@ namespace Aklion.Crm.Domain.ProductImageKey
         [Column("s.Name")]
         public string StoreName { get; }
 
-        [Column("pik.Key")]
+        [Column("pik.[Key]")]
         public string Key { get; set; }
 
         [Column("pik.Name")]

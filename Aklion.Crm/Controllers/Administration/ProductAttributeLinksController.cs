@@ -6,15 +6,14 @@ using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.ProductAttributeLink;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration.Product
+namespace Aklion.Crm.Controllers.Administration
 {
     [AjaxErrorHandle]
-    [Route("Administration/ProductAttributeLinks")]
-    public class AdministrationProductAttributeLinkController : BaseController
+    public class ProductAttributeLinksController : BaseController
     {
         private readonly IProductAttributeLinkDao _dao;
 
-        public AdministrationProductAttributeLinkController(IProductAttributeLinkDao dao)
+        public ProductAttributeLinksController(IProductAttributeLinkDao dao)
         {
             _dao = dao;
         }

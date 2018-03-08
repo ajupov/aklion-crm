@@ -31,7 +31,7 @@ namespace Aklion.Crm.Domain.ProductAttributeLink
         [Column("pa.Name")]
         public string AttributeName { get; }
 
-        [Column("pa.Key")]
+        [Column("pa.[Key]")]
         public string AttributeKey { get; }
 
         [Column("pal.Value")]

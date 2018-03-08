@@ -27,7 +27,7 @@ namespace Aklion.Crm.Domain.ProductAttributeLink
         [Where("@AttributeName is null or pa.Name like @AttributeName + '%'")]
         public string AttributeName { get; set; }
 
-        [Where("@AttributeKey is null or pa.Key like @AttributeKey + '%'")]
+        [Where("@AttributeKey is null or pa.[Key] like @AttributeKey + '%'")]
         public string AttributeKey { get; set; }
 
         [Where("@Value is null or pal.Value like @Value + '%'")]

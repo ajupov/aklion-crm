@@ -24,7 +24,7 @@ namespace Aklion.Crm.Domain.ProductImageKeyLink
         [Where("@KeyId is null or pikl.KeyId = @KeyId")]
         public int? KeyId { get; set; }
 
-        [Where("@KeyKey is null or pik.Key like @KeyKey + '%'")]
+        [Where("@KeyKey is null or pik.[Key] like @KeyKey + '%'")]
         public string KeyKey { get; set; }
 
         [Where("@KeyName is null or pik.Name like @KeyName + '%'")]

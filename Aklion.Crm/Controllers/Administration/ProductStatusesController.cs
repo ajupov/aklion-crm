@@ -7,15 +7,14 @@ using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.ProductStatus;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aklion.Crm.Controllers.Administration.Product
+namespace Aklion.Crm.Controllers.Administration
 {
     [AjaxErrorHandle]
-    [Route("Administration/ProductStatuses")]
-    public class AdministrationProductStatusController : BaseController
+    public class ProductStatusesController : BaseController
     {
         private readonly IProductStatusDao _dao;
 
-        public AdministrationProductStatusController(IProductStatusDao dao)
+        public ProductStatusesController(IProductStatusDao dao)
         {
             _dao = dao;
         }
@@ -28,7 +27,7 @@ namespace Aklion.Crm.Controllers.Administration.Product
         }
 
         [HttpGet]
-        public async Task<Dictionary<string, int>> GetForSelect(int storeId)
+        public async Task<Dictionary<string, int>> GetSelect(int storeId)
         {
             var result = await _dao.GetSelectAsync(storeId.MapNew()).ConfigureAwait(false);
             return result.MapNew();

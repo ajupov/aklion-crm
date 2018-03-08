@@ -61,7 +61,7 @@
 
 <div id="load-image-dialog" class="dialog hidden" title="Загрузка изображения">
     <div class="col s12 m12 l12">
-        <form asp-controller="AdministrationProductImageKeyLink" asp-action="LoadImage" method="post" enctype="multipart/form-data">
+        <form asp-controller="ProductImageKeyLinks" asp-action="LoadImage" method="post" enctype="multipart/form-data">
             <input type="hidden" id="product-id" name="Id" />
             <input type="file" name="ImageFile" accept="image/*" required="required" aria-required="true" class="cell-button">
             <br />

@@ -15,7 +15,7 @@ namespace Aklion.Crm.Domain.ProductAttribute
         [Where("@StoreName is null or s.Name like @StoreName + '%'")]
         public string StoreName { get; set; }
 
-        [Where("@Key is null or pa.Key like @Key + '%'")]
+        [Where("@Key is null or pa.[Key] like @Key + '%'")]
         public string Key { get; set; }
 
         [Where("@Name is null or pa.Name like @Name + '%'")]
