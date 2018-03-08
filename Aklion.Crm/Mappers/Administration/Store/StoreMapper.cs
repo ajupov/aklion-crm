@@ -22,7 +22,10 @@ namespace Aklion.Crm.Mappers.Administration.Store
 
         public static DomainStoreModel MapFrom(this DomainStoreModel domainModel, StoreModel model)
         {
-            return Mapper.MapFrom(domainModel, model);
+            var apiSecret = domainModel.ApiSecret;
+            var result = Mapper.MapFrom(domainModel, model);
+            domainModel.ApiSecret = apiSecret;
+            return result;
         }
 
         public static DomainStoreParameterModel MapNew(this StoreParameterModel model)

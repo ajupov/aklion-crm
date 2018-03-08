@@ -28,7 +28,7 @@ namespace Aklion.Crm.Domain.UserAttributeLink
         [Column("ual.AttributeId")]
         public int AttributeId { get; set; }
 
-        [Column("ua.Key")]
+        [Column("ua.[Key]")]
         public string AttributeKey { get; }
 
         [Column("ua.Name")]

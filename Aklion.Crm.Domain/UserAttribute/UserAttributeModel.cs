@@ -17,7 +17,7 @@ namespace Aklion.Crm.Domain.UserAttribute
         [Column("s.Name")]
         public string StoreName { get; }
 
-        [Column("ua.Key")]
+        [Column("ua.[Key]")]
         public string Key { get; set; }
 
         [Column("ua.Name")]

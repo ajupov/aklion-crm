@@ -15,7 +15,7 @@ namespace Aklion.Crm.Domain.UserAttribute
         [Where("@StoreName is null or s.Name like @StoreName + '%'")]
         public string StoreName { get; set; }
 
-        [Where("@Key is null or ua.Key like @Key + '%'")]
+        [Where("@Key is null or ua.[Key] like @Key + '%'")]
         public string Key { get; set; }
 
         [Where("@Name is null or ua.Name like @Name + '%'")]

@@ -58,13 +58,13 @@ function initUsersTable() {
             { Name: 'UserId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'UserLogin', Label: 'Пользователь', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Users/GetForAutocompleteByLoginPattern', AutocompleteHidden: 'UserId',
+                AutocompleteUrl: '/Users/GetAutocomplete', AutocompleteHidden: 'UserId',
                 Formatter: userLinkFormatter, Unformatter: linkUnFormatter
             },
             { Name: 'AttributeId', Type: 'number', Hidden: true, Editable: true },
             {
-                Name: 'AttributeDescription', Label: 'Атрибут', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/UserAttributes/GetForAutocompleteByDescriptionPattern', AutocompleteHidden: 'AttributeId'
+                Name: 'AttributeName', Label: 'Атрибут', Type: 'autocomplete', Editable: true, Width: 120,
+                AutocompleteUrl: '/UserAttributes/GetAutocomplete', AutocompleteHidden: 'AttributeId'
             },
             { Name: 'Value', Label: 'Значение', Width: 250, Editable: true, EditHidden: true },
             {

@@ -24,7 +24,7 @@ namespace Aklion.Crm.Domain.UserAttributeLink
         [Where("@AttributeId is null or ual.AttributeId = @AttributeId")]
         public int? AttributeId { get; set; }
 
-        [Where("@AttributeKey is null or ua.Key like @AttributeKey + '%'")]
+        [Where("@AttributeKey is null or ua.[Key] like @AttributeKey + '%'")]
         public string AttributeKey { get; set; }
 
         [Where("@AttributeName is null or ua.Name like @AttributeName + '%'")]

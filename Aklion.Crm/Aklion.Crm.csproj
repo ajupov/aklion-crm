@@ -94,9 +94,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="wwwroot\scripts\administration\index.js">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\scripts\administration\index.min.js">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <Content Update="wwwroot\scripts\shared\utils.min.js">
       <DependentUpon>utils.js</DependentUpon>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\scripts\administration\store\" />
+    <Folder Include="wwwroot\scripts\administration\user\" />
   </ItemGroup>
 
 </Project>

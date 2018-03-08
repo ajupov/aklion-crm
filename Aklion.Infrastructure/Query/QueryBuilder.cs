@@ -44,7 +44,7 @@ namespace Aklion.Infrastructure.Query
         {
             queryObject.ColumnsForSelect = string.Join(", ", queryObject.Properties
                 .Where(p => p.GetCustomAttribute(typeof(ColumnAttribute)) != null)
-                .Select(a => $"{((ColumnAttribute) a.GetCustomAttribute(typeof(ColumnAttribute))).Value} as {a.Name}"));
+                .Select(a => $"{((ColumnAttribute) a.GetCustomAttribute(typeof(ColumnAttribute))).Value} as [{a.Name}]"));
 
             return queryObject;
         }
@@ -67,7 +67,7 @@ namespace Aklion.Infrastructure.Query
                 return queryObject;
 
             queryObject.ColumnsForAutocomplete =
-                $"{autocompleteColumnName} as Value, {identificatorColumnName} as [Key]";
+                $"{autocompleteColumnName} as [Value], {identificatorColumnName} as [Key]";
 
             return queryObject;
         }
@@ -142,7 +142,7 @@ namespace Aklion.Infrastructure.Query
                         var name = ((ColumnAttribute) a.GetCustomAttribute(typeof(ColumnAttribute))).Value.Replace(
                             queryObject.TableAlias + ".", string.Empty);
 
-                        return $"{name} = @{name}";
+                        return $"{name} = @{name.Replace("[", string.Empty).Replace("]", string.Empty)}";
                     }));
 
             return queryObject;
@@ -196,8 +196,8 @@ namespace Aklion.Infrastructure.Query
 
             if (propertiesWithSortingColumnAttribute != null && propertiesWithSortingOrderAttribute != null)
             {
-                var sortingColumn = propertiesWithSortingColumnAttribute.GetValue(parameter).ToString();
-                var sortingOrder = propertiesWithSortingOrderAttribute.GetValue(parameter).ToString();
+                var sortingColumn = propertiesWithSortingColumnAttribute.GetValue(parameter)?.ToString();
+                var sortingOrder = propertiesWithSortingOrderAttribute.GetValue(parameter)?.ToString();
 
                 if (!string.IsNullOrWhiteSpace(sortingColumn))
                 {
@@ -279,10 +279,10 @@ namespace Aklion.Infrastructure.Query
                         $"{noLockSelectCommand} select {queryObject.Distinct} {queryObject.ColumnsForAutocomplete} from {queryObject.TableName} {queryObject.Filters};";
                 case QueryType.Insert:
                     return
-                        $"insert {queryObject.TableNameWithoutAlias} ({queryObject.ColumnsForInsert.Replace("@", string.Empty)}) values ({queryObject.ColumnsForInsert}); select scope_identity();";
+                        $"insert {queryObject.TableNameWithoutAlias} ({queryObject.ColumnsForInsert.Replace("@", string.Empty)}) values ({queryObject.ColumnsForInsert.Replace("[", string.Empty).Replace("]", string.Empty)}); select scope_identity();";
                 case QueryType.InsertList:
                     return
-                        $"insert {queryObject.TableNameWithoutAlias} ({queryObject.ColumnsForInsert.Replace("@", string.Empty)}) values ({queryObject.ColumnsForInsert});";
+                        $"insert {queryObject.TableNameWithoutAlias} ({queryObject.ColumnsForInsert.Replace("@", string.Empty)}) values ({queryObject.ColumnsForInsert.Replace("[", string.Empty).Replace("]", string.Empty)});";
                 case QueryType.Update:
                     return
                         $"update {queryObject.TableNameWithoutAlias} set {queryObject.ColumnsForUpdate} {queryObject.Filters.Replace($"{queryObject.TableAlias}.", string.Empty)}";

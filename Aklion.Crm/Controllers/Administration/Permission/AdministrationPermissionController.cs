@@ -17,7 +17,8 @@ namespace Aklion.Crm.Controllers.Administration.Permission
         }
 
         [HttpGet]
-        public Dictionary<string, Enums.Permission> GetForSelect()
+        [Route("GetSelect")]
+        public Dictionary<string, Enums.Permission> GetSelect()
         {
             return _service.GetForAdminWithNames();
         }

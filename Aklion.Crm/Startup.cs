@@ -135,7 +135,11 @@ namespace Aklion.Crm
 
             app.UseStaticFiles();
             app.UseAuthentication();
-            app.UseMvc(r => r.MapRoute("default", "{controller=Home}/{action=Index}/{id?}"));
+            app.UseMvc(r =>
+            {
+                r.MapRoute("administration", "Administration/{controller}/{action=Index}");
+                r.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+            });
         }
     }
 }

@@ -127,7 +127,7 @@ namespace Aklion.Infrastructure.DateTime
 
         public static string TruncateTime(this string dateTimeString)
         {
-            return dateTimeString.ToDate().ToDateString();
+            return dateTimeString.ToDateTime().ToDateString();
         }
     }
 }

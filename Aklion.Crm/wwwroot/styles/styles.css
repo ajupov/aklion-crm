@@ -306,6 +306,7 @@ input[type="file"] {
 
 .ui-widget-content {
     background: #ffffff;
+    color: #000000;
 }
 
 td.ui-state-default, a.ui-state-default, .ui-jqgrid-hdiv {

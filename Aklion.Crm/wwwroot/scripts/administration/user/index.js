@@ -64,19 +64,19 @@ function initUsersTable() {
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
+                AutocompleteUrl: '/Administration/Stores/GetAutocomplete', AutocompleteHidden: 'StoreId',
                 Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
             },
             { Name: 'UserId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'UserLogin', Label: 'Пользователь', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/Users/GetForAutocompleteByLoginPattern', AutocompleteHidden: 'UserId',
+                AutocompleteUrl: '/Administration/Users/GetAutocomplete', AutocompleteHidden: 'UserId',
                 Formatter: administrationUserLinkFormatter, Unformatter: linkUnFormatter
             },
             { Name: 'AttributeId', Type: 'number', Hidden: true, Editable: true },
             {
-                Name: 'AttributeDescription', Label: 'Атрибут', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/UserAttributes/GetForAutocompleteByDescriptionPattern', AutocompleteHidden: 'AttributeId',
+                Name: 'AttributeName', Label: 'Атрибут', Type: 'autocomplete', Editable: true, Width: 120,
+                AutocompleteUrl: '/Administration/UserAttributes/GetAutocomplete', AutocompleteHidden: 'AttributeId',
                 DependentFields: ['StoreId']
             },
             { Name: 'Value', Label: 'Значение', Width: 250, Editable: true, EditHidden: true },
@@ -104,18 +104,18 @@ function initUsersTable() {
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
+                AutocompleteUrl: '/Administration/Stores/GetAutocomplete', AutocompleteHidden: 'StoreId',
                 Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
             },
             { Name: 'UserId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'UserLogin', Label: 'Пользователь', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/Users/GetForAutocompleteByLoginPattern', AutocompleteHidden: 'UserId',
+                AutocompleteUrl: '/Administration/Users/GetAutocomplete', AutocompleteHidden: 'UserId',
                 Formatter: administrationUserLinkFormatter, Unformatter: linkUnFormatter
             },
             {
                 Name: 'Permission', Label: 'Право', Type: 'select', Editable: true, Sortable: false,
-                SelectValues: getSelectValues('/Administration/Permissions/GetForSelect'), Width: 120
+                SelectValues: getSelectValues('/Administration/Permissions/GetSelect'), Width: 120
             },
             { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
             { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }
@@ -142,7 +142,7 @@ function initAttributesTable() {
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
-                AutocompleteUrl: '/Administration/Stores/GetForAutocompleteByNamePattern', AutocompleteHidden: 'StoreId',
+                AutocompleteUrl: '/Administration/Stores/GetAutocomplete', AutocompleteHidden: 'StoreId',
                 Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
             },
             { Name: 'Name', Label: 'Название', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
