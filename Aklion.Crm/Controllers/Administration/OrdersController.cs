@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Aklion.Crm.Attributes;
 using Aklion.Crm.Dao.Order;
 using Aklion.Crm.Mappers.Administration.Order;
@@ -29,6 +30,13 @@ namespace Aklion.Crm.Controllers.Administration
         {
             var result = await _dao.GetPagedListAsync(model.MapNew()).ConfigureAwait(false);
             return result.MapNew(model.Page, model.Size);
+        }
+
+        [HttpGet]
+        public async Task<Dictionary<int, int>> GetAutocomplete(int pattern, int storeId)
+        {
+            var result = await _dao.GetAutocompleteAsync(pattern, storeId).ConfigureAwait(false);
+            return result.MapNew();
         }
 
         [HttpPost]

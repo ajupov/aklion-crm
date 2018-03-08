@@ -64,12 +64,16 @@ function initOrdersTable() {
         DeleteUrl: '/Administration/OrderItems/Delete',
         Columns: [
             { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
-            { Name: 'OrderId', Label: '№ заказа', Type: 'number', Width: 80, Editable: true },
             { Name: 'StoreId', Type: 'number', Hidden: true, Editable: true },
             {
                 Name: 'StoreName', Label: 'Магазин', Type: 'autocomplete', Editable: true, Width: 120,
                 AutocompleteUrl: '/Administration/Stores/GetAutocomplete', AutocompleteHidden: 'StoreId',
                 Formatter: administrationStoreLinkFormatter, Unformatter: linkUnFormatter
+            },
+            {
+                Name: 'OrderId', Label: '№ заказа', Type: 'autocomplete', Width: 80, Editable: true,
+                AutocompleteUrl: '/Administration/Orders/GetAutocomplete', AutocompleteHidden: 'OrderId',
+                DependentFields: ['StoreId'], Formatter: administrationOrderLinkFormatter, Unformatter: linkUnFormatter
             },
             { Name: 'ProductId', Type: 'number', Hidden: true, Editable: true },
             {

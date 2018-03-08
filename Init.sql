@@ -267,7 +267,6 @@ create table dbo.[Order]
     ClientId    int            not null constraint FK_Order_ClientId foreign key (ClientId) references dbo.Client (Id),
     SourceId    int            not null constraint FK_Order_SourceId foreign key (SourceId) references dbo.OrderSource (Id),
     StatusId    int            not null constraint FK_Order_StatusId foreign key (StatusId) references dbo.OrderStatus (Id),
-    TotalSum    decimal(18, 2) null,
     DiscountSum decimal(18, 2) null,
     IsDeleted   bit            not null,
     CreateDate  datetime2(7)   not null,

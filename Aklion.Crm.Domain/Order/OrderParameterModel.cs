@@ -33,7 +33,7 @@ namespace Aklion.Crm.Domain.Order
         [Where("@StatusName is null or ost.Name like @StatusName + '%'")]
         public string StatusName { get; set; }
 
-        [Where("coalesce(@TotalSum, 0) = 0 or o.TotalSum = @TotalSum")]
+        [Where("coalesce(@TotalSum, 0) = 0 or i.Sum = @TotalSum")]
         public decimal? TotalSum { get; set; }
 
         [Where("coalesce(@DiscountSum, 0) = 0 or o.DiscountSum = @DiscountSum")]

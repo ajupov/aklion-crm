@@ -10,6 +10,8 @@ namespace Aklion.Crm.Dao.Order
 
         Task<OrderModel> GetAsync(int id);
 
+        Task<List<int>> GetAutocompleteAsync(int pattern, int storeId);
+
         Task<int> CreateAsync(OrderModel model);
 
         Task UpdateAsync(OrderModel model);

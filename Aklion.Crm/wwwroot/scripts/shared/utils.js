@@ -179,6 +179,10 @@ function administrationClientLinkFormatter(value, options, data) {
     return `<a href="/Administration/Clients?Id=${data.ClientId}">${data.ClientName}</a>`;
 }
 
+function administrationOrderLinkFormatter(value, options, data) {
+    return `<a href="/Administration/Orders?Id=${data.OrderId}">${data.OrderId}</a>`; 
+}
+
 function clientLinkFormatter(value, options, data) {
     return `<a href="/Clients?Id=${data.ClientId}">${data.ClientName}</a>`;
 }

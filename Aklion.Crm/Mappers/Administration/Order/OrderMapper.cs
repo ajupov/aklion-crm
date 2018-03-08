@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Aklion.Crm.Models;
 using Aklion.Crm.Models.Administration.Order;
 using Aklion.Infrastructure.Mapper;
@@ -27,6 +28,11 @@ namespace Aklion.Crm.Mappers.Administration.Order
         public static DomainOrderParameterModel MapNew(this OrderParameterModel model)
         {
             return model.MapParameterNew<DomainOrderParameterModel>();
+        }
+
+        public static Dictionary<int, int> MapNew(this List<int> models)
+        {
+            return models.ToDictionary(m => m, m => m);
         }
     }
 }
