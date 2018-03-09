@@ -13,7 +13,7 @@ namespace Infrastructure.FileFormat
 
         public static string GetExtension(this string fileName)
         {
-            return fileName.Split('.').LastOrDefault();
+            return fileName.Split('.').LastOrDefault()?.ToLower();
         }
     }
 }
