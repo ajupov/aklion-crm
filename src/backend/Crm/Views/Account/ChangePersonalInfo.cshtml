@@ -1,0 +1,46 @@
+﻿@using Crm.Enums
+@using Infrastructure.DateTime
+@model Crm.Models.Account.ChangePersonalInfoModel
+@{
+    ViewData["Title"] = "Изменение данных аккаунта";
+}
+
+<div class="inner-container-small">
+    <div class="row">
+        <div class="col s12 m12 l12">
+            <div class="card pading-10 margin-10">
+                <h3>@ViewBag.Title</h3>
+                <div class="separator"></div>
+                <form asp-controller="Account" asp-action="ChangePersonalInfo" method="post">
+                    <div class="form-group">
+                        <input asp-for="Surname" />
+                        <label asp-for="Surname" class="control-label"></label><i class="bar"></i>
+                        <span asp-validation-for="Surname" class="control-error-text"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="Name" />
+                        <label asp-for="Name" class="control-label"></label><i class="bar"></i>
+                        <span asp-validation-for="Name" class="control-error-text"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="Patronymic" />
+                        <label asp-for="Patronymic" class="control-label"></label><i class="bar"></i>
+                        <span asp-validation-for="Patronymic" class="control-error-text"></span>
+                    </div>
+                    <div class="form-group">
+                        <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Gender>()"></select>
+                        <label asp-for="Gender" class="control-label"></label><i class="bar"></i>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="BirthDate" class="datepicker" value="@Model.BirthDate.TruncateTime()"/>
+                        <label asp-for="BirthDate" class="control-label"></label><i class="bar"></i>
+                        <span asp-validation-for="BirthDate" class="control-error-text"></span>
+                    </div>
+                    <div class="right-align form-group">
+                        <button class="button" type="submit">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

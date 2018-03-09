@@ -1,0 +1,46 @@
+﻿@model Crm.Models.Account.LoginModel
+@{
+    ViewData["Title"] = "Вход";
+}
+
+<div class="inner-container-small">
+    <div class="row">
+        <div class="col s12 m12 l12">
+            <div class="card pading-10 margin-10">
+                <h3>@ViewBag.Title</h3>
+                <div class="separator"></div>
+                <form asp-controller="Account" asp-action="LogIn" method="post">
+                    <div class="control-error-text" asp-validation-summary="All"></div>
+                    <div class="form-group">
+                        <input asp-for="Login" required="required" />
+                        <label asp-for="Login" class="control-label"></label><i class="bar"></i>
+                        <span asp-validation-for="Login" class="control-error-text"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="Password" required="required" />
+                        <label asp-for="Password" class="control-label"></label><i class="bar"></i>
+                        <span asp-validation-for="Password" class="control-error-text"></span>
+                    </div>
+                    <div class="checkbox">
+                        <label asp-for="RememberMe">
+                            <input asp-for="RememberMe" type="checkbox" />
+                            <i class="helper"></i>
+                            @Html.DisplayNameFor(m => m.RememberMe)
+                        </label>
+                    </div>
+                    <div class="row">
+                        <div class="col s6 m6 l6">
+                            <a asp-action="Register" asp-route-returnurl="@ViewBag.ReturnUrl" class="text-link">Регистрация</a>
+                            <a asp-action="ForgotPassword" class="text-link">Забыли пароль?</a>
+                        </div>
+                        <div class="col s6 m6 l6">
+                            <div class="right-align">
+                                <button class="button" type="submit">Вход</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
