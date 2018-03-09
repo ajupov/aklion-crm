@@ -1,11 +1,20 @@
 module.exports = {
-  context: __dirname + "/app",
   entry: {
-    accountLogin: "./src/account/login/index.js",
-    accountRegister: "./src/account/register/index.js"
+    index: "./src/index.js"
   },
   output: {
     path: __dirname + "../../backend/Crm/wwwroot/dist/",
-    filename: "[name].min.js"
+    filename: "[name].js"
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader"
+        }
+      }
+    ]
   }
 }
