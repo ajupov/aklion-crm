@@ -1,6 +1,6 @@
 module.exports = {
   entry: {
-    index: "./src/index.js"
+    'account/login/index': "./src/account/login/index.js"
   },
   output: {
     path: __dirname + "../../backend/Crm/wwwroot/dist/",

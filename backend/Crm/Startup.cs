@@ -1,4 +1,5 @@
-﻿using Crm.Business.AuditLog;
+﻿using System;
+using Crm.Business.AuditLog;
 using Crm.Business.ImageLoad;
 using Crm.Business.Mail;
 using Crm.Business.Mail.Models;
@@ -47,6 +48,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
+using React.AspNet;
 
 namespace Crm
 {
@@ -65,72 +67,91 @@ namespace Crm
             Configuration = builder.Build();
         }
 
+        //public IServiceProvider ConfigureServices(IServiceCollection services)
+        //{
+        //    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        //    services.AddReact();
+        //    services.AddMvc();
+
+        //    return services.BuildServiceProvider();
+        //}
+
+        //public void Configure(IApplicationBuilder app)
+        //{
+        //    app.UseReact(config => { });
+        //    app.UseDefaultFiles();
+        //    app.UseStaticFiles();
+        //    app.UseMvc();
+        //}
+
         public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddSingleton(Configuration)
-                .AddSingleton<IApiClient, ApiClient>()
-                .AddSingleton<IAuditLogger, AuditLogger>()
-                .AddSingleton<IConnectionFactory, ConnectionFactory>()
-                .AddSingleton<IDataBaseExecutor, DataBaseExecutor>()
-                .AddSingleton<IDao, Infrastructure.Dao.Dao>()
-                .AddSingleton<IReader, Reader>()
-                .AddSingleton<ILogger, Logger>()
-                .AddSingleton<IReader, Reader>()
-                .AddSingleton<IAuditLogService, AuditLogService>()
-                .AddSingleton<IImageLoadService, ImageLoadService>()
-                .AddSingleton<IMailService, MailService>()
-                .AddSingleton<IPermissionService, PermissionService>()
-                .AddSingleton<ISmsService, SmsService>()
-                .AddSingleton<IStoreService, StoreService>()
-                .AddSingleton<IUserPermissionService, UserPermissionService>()
-                .AddSingleton<IUserTokenService, UserTokenService>()
-                .AddSingleton<IAnalyticsDao, AnalyticsDao>()
-                .AddSingleton<IClientDao, ClientDao>()
-                .AddSingleton<IClientAttributeDao, ClientAttributeDao>()
-                .AddSingleton<IClientAttributeLinkDao, ClientAttributeLinkDao>()
-                .AddSingleton<IOrderDao, OrderDao>()
-                .AddSingleton<IOrderAttributeDao, OrderAttributeDao>()
-                .AddSingleton<IOrderAttributeLinkDao, OrderAttributeLinkDao>()
-                .AddSingleton<IOrderItemDao, OrderItemDao>()
-                .AddSingleton<IOrderSourceDao, OrderSourceDao>()
-                .AddSingleton<IOrderStatusDao, OrderStatusDao>()
-                .AddSingleton<IProductDao, ProductDao>()
-                .AddSingleton<IProductAttributeDao, ProductAttributeDao>()
-                .AddSingleton<IProductAttributeLinkDao, ProductAttributeLinkDao>()
-                .AddSingleton<IProductImageKeyDao, ProductImageKeyDao>()
-                .AddSingleton<IProductImageKeyLinkDao, ProductImageKeyLinkDao>()
-                .AddSingleton<IProductStatusDao, ProductStatusDao>()
-                .AddSingleton<IStoreDao, StoreDao>()
-                .AddSingleton<IUserDao, UserDao>()
-                .AddSingleton<IUserAttributeDao, UserAttributeDao>()
-                .AddSingleton<IUserAttributeLinkDao, UserAttributeLinkDao>()
-                .AddSingleton<IUserContextDao, UserContextDao>()
-                .AddSingleton<IUserPermissionDao, UserPermissionDao>()
-                .AddSingleton<IUserTokenDao, UserTokenDao>()
-                .Configure<LoggerConfiguration>(Configuration.GetSection("LoggerConfiguration"))
-                .Configure<MailServiceConfiguration>(Configuration.GetSection("MailServiceConfiguration"))
-                .Configure<SmsServiceConfiguration>(Configuration.GetSection("SmsServiceConfiguration"));
+         {
+             services.AddSingleton(Configuration)
+                 .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
+                 .AddSingleton<IApiClient, ApiClient>()
+                 .AddSingleton<IAuditLogger, AuditLogger>()
+                 .AddSingleton<IConnectionFactory, ConnectionFactory>()
+                 .AddSingleton<IDataBaseExecutor, DataBaseExecutor>()
+                 .AddSingleton<IDao, Infrastructure.Dao.Dao>()
+                 .AddSingleton<IReader, Reader>()
+                 .AddSingleton<ILogger, Logger>()
+                 .AddSingleton<IReader, Reader>()
+                 .AddSingleton<IAuditLogService, AuditLogService>()
+                 .AddSingleton<IImageLoadService, ImageLoadService>()
+                 .AddSingleton<IMailService, MailService>()
+                 .AddSingleton<IPermissionService, PermissionService>()
+                 .AddSingleton<ISmsService, SmsService>()
+                 .AddSingleton<IStoreService, StoreService>()
+                 .AddSingleton<IUserPermissionService, UserPermissionService>()
+                 .AddSingleton<IUserTokenService, UserTokenService>()
+                 .AddSingleton<IAnalyticsDao, AnalyticsDao>()
+                 .AddSingleton<IClientDao, ClientDao>()
+                 .AddSingleton<IClientAttributeDao, ClientAttributeDao>()
+                 .AddSingleton<IClientAttributeLinkDao, ClientAttributeLinkDao>()
+                 .AddSingleton<IOrderDao, OrderDao>()
+                 .AddSingleton<IOrderAttributeDao, OrderAttributeDao>()
+                 .AddSingleton<IOrderAttributeLinkDao, OrderAttributeLinkDao>()
+                 .AddSingleton<IOrderItemDao, OrderItemDao>()
+                 .AddSingleton<IOrderSourceDao, OrderSourceDao>()
+                 .AddSingleton<IOrderStatusDao, OrderStatusDao>()
+                 .AddSingleton<IProductDao, ProductDao>()
+                 .AddSingleton<IProductAttributeDao, ProductAttributeDao>()
+                 .AddSingleton<IProductAttributeLinkDao, ProductAttributeLinkDao>()
+                 .AddSingleton<IProductImageKeyDao, ProductImageKeyDao>()
+                 .AddSingleton<IProductImageKeyLinkDao, ProductImageKeyLinkDao>()
+                 .AddSingleton<IProductStatusDao, ProductStatusDao>()
+                 .AddSingleton<IStoreDao, StoreDao>()
+                 .AddSingleton<IUserDao, UserDao>()
+                 .AddSingleton<IUserAttributeDao, UserAttributeDao>()
+                 .AddSingleton<IUserAttributeLinkDao, UserAttributeLinkDao>()
+                 .AddSingleton<IUserContextDao, UserContextDao>()
+                 .AddSingleton<IUserPermissionDao, UserPermissionDao>()
+                 .AddSingleton<IUserTokenDao, UserTokenDao>()
+                 .Configure<LoggerConfiguration>(Configuration.GetSection("LoggerConfiguration"))
+                 .Configure<MailServiceConfiguration>(Configuration.GetSection("MailServiceConfiguration"))
+                 .Configure<SmsServiceConfiguration>(Configuration.GetSection("SmsServiceConfiguration"));
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(o => 
-                {
-                    o.LoginPath = new PathString("/Account/Login");
-                });
+             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                 .AddCookie(o => 
+                 {
+                     o.LoginPath = new PathString("/Account/Login");
+                 });
 
-            services.AddMvc(o =>
-                {
-                    o.Filters.Add(typeof(UserContextInitializeFilter));
-                    o.Filters.Add(typeof(LogFileFilter));
-                })
-                .AddJsonOptions(o =>
-                {
-                    o.SerializerSettings.ContractResolver = new DefaultContractResolver
-                    {
-                        IgnoreSerializableAttribute = false
-                    };
-                });
-        }
-        
+             services.AddMvc(o =>
+                 {
+                     o.Filters.Add(typeof(UserContextInitializeFilter));
+                     o.Filters.Add(typeof(LogFileFilter));
+                 })
+                 .AddJsonOptions(o =>
+                 {
+                     o.SerializerSettings.ContractResolver = new DefaultContractResolver
+                     {
+                         IgnoreSerializableAttribute = false
+                     };
+                 });
+             //services.AddReact();
+         }
+
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -143,6 +164,8 @@ namespace Crm
             }
 
             app.UseStaticFiles();
+            //app.UseReact(config =>{});
+
             app.UseAuthentication();
             app.UseMvc(r =>
             {

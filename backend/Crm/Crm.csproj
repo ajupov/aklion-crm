@@ -85,6 +85,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+    <PackageReference Include="React.AspNet" Version="3.3.0" />
   </ItemGroup>
 
   <ItemGroup>
