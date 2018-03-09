@@ -120,6 +120,7 @@ namespace Crm
             services.AddMvc(o =>
                 {
                     o.Filters.Add(typeof(UserContextInitializeFilter));
+                    o.Filters.Add(typeof(LogFileFilter));
                 })
                 .AddJsonOptions(o =>
                 {
