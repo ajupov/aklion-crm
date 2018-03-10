@@ -50,7 +50,7 @@ namespace Crm.Controllers
 
         [HttpPost]
         [Route("Delete")]
-        public async Task Delete(int id)
+        public async Task<bool> Delete(int id)
         {
             var result = await _dao.GetAsync(id).ConfigureAwait(false);
             if (result.StoreId != UserContext.StoreId)
@@ -58,8 +58,10 @@ namespace Crm.Controllers
                 throw new NotAccessChangingException();
             }
 
-            result.IsDeleted = true;
+            result.IsDeleted = !result.IsDeleted;
             await _dao.UpdateAsync(result).ConfigureAwait(false);
+
+            return result.IsDeleted;
         }
     }
 }

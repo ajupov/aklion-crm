@@ -4,6 +4,8 @@ using Crm.Attributes;
 using Crm.Business.Store;
 using Crm.Business.UserPermission;
 using Crm.Dao.Store;
+using Crm.Dao.UserPermission;
+using Crm.Exceptions;
 using Crm.Mappers.User.Store;
 using Crm.Models;
 using Crm.Models.User.Store;
@@ -18,12 +20,14 @@ namespace Crm.Controllers
         private readonly IStoreService _service;
         private readonly IUserPermissionService _userPermissionService;
         private readonly IStoreDao _dao;
+        private readonly IUserPermissionDao _userPermissionDao;
 
-        public StoresController(IStoreService service, IUserPermissionService userPermissionService, IStoreDao dao)
+        public StoresController(IStoreService service, IUserPermissionService userPermissionService, IStoreDao dao, IUserPermissionDao userPermissionDao)
         {
             _service = service;
-            _dao = dao;
             _userPermissionService = userPermissionService;
+            _dao = dao;
+            _userPermissionDao = userPermissionDao;
         }
 
         [HttpGet]
@@ -61,6 +65,11 @@ namespace Crm.Controllers
         [Route("Update")]
         public async Task Update(StoreModel model)
         {
+            if (!await _userPermissionDao.IsExistAsync(UserContext.UserId, model.Id).ConfigureAwait(false))
+            {
+                throw new NotAccessChangingException();
+            }
+
             var result = await _dao.GetAsync(model.Id).ConfigureAwait(false);
             await _dao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);
         }
@@ -69,16 +78,26 @@ namespace Crm.Controllers
         [Route("Delete")]
         public async Task Delete(int id)
         {
+            if (!await _userPermissionDao.IsExistAsync(UserContext.UserId, id).ConfigureAwait(false))
+            {
+                throw new NotAccessChangingException();
+            }
+
             var result = await _dao.GetAsync(id).ConfigureAwait(false);
-            result.IsDeleted = true;
+            result.IsDeleted = !result.IsDeleted;
             await _dao.UpdateAsync(result).ConfigureAwait(false);
         }
 
         [HttpPost]
         [Route("GenerateApiSecret")]
-        public Task<string> GenerateApiSecret(int id)
+        public async Task<string> GenerateApiSecret(int id)
         {
-            return _service.GenerateApiSecretAsync(UserContext.UserId, UserContext.StoreId, id);
+            if (!await _userPermissionDao.IsExistAsync(UserContext.UserId, id).ConfigureAwait(false))
+            {
+                throw new NotAccessChangingException();
+            }
+
+            return await _service.GenerateApiSecretAsync(UserContext.UserId, UserContext.StoreId, id).ConfigureAwait(false);
         }
     }
 }

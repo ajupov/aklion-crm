@@ -68,7 +68,7 @@ namespace Crm.Controllers
                 throw new NotAccessChangingException();
             }
 
-            result.IsDeleted = true;
+            result.IsDeleted = !result.IsDeleted;
             await _dao.UpdateAsync(result).ConfigureAwait(false);
         }
     }

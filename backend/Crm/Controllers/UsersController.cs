@@ -113,7 +113,7 @@ namespace Crm.Controllers
 
             var result = await _userDao.GetAsync(id).ConfigureAwait(false);
 
-            result.IsDeleted = true;
+            result.IsDeleted = !result.IsDeleted;
             await _userDao.UpdateAsync(result).ConfigureAwait(false);
         }
 
