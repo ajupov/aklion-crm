@@ -10,7 +10,7 @@ function initClientsTable() {
         IsCreatable: true,
         IsDeletable: true,
         CanExtractFilters: true,
-        IsCustomFilter: true,
+        IsFilterable: true,
         DataUrl: '/Clients/GetList',
         CreateUrl: '/Clients/Create',
         UpdateUrl: '/Clients/Update',
@@ -18,8 +18,10 @@ function initClientsTable() {
         Columns: [
             { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
             { Name: 'Name', Label: 'Название', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
+            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 50, Editable: true, Sortable: false },
             { Name: 'Attributes', Label: 'Атрибуты', Type: 'datetime', Width: 1000 }
         ],
+
         OnSelectRow: id => {
             $('#clients-attributes-table').jqGrid('setGridParam', { postData: { ClientId: id } }).trigger('reloadGrid');
         }
@@ -45,7 +47,7 @@ function initClientsTable() {
                 AutocompleteUrl: '/ClientAttributes/GetAutocomplete', AutocompleteHidden: 'AttributeId'
             },
             { Name: 'Value', Label: 'Значение', Width: 250, Editable: true, EditHidden: true },
-            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 45, Editable: true, Sortable: false },
+            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 50, Editable: true, Sortable: false },
         ]
     });
 }
@@ -68,7 +70,7 @@ function initAttributesTable() {
             { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
             { Name: 'Key', Label: 'Ключ', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
             { Name: 'Name', Label: 'Название', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
-            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 45, Editable: true, Sortable: false },
+            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 50, Editable: true, Sortable: false },
             { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
             { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }
         ]

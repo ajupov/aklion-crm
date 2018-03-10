@@ -31,7 +31,7 @@ function initUsersTable() {
             },
             { Name: 'BirthDate', Label: 'Дата рождения', Type: 'date', Width: 110, Editable: true },
             {
-                Name: 'IsDeleted', Label: 'Статус удалённости', Type: 'checkbox', Width: 120, Align: 'center',
+                Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 120, Align: 'center',
                 Formatter: userSwitchIsDeletedFormatter, Sortable: false
             }
         ],

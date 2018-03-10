@@ -24,7 +24,7 @@ function initStoresTable() {
                 Formatter: generateApiSecretFormatter, Sortable: false, Search: false
             },
             { Name: 'IsLocked', Label: 'Заблокирован', Type: 'checkbox', Width: 75, Editable: true, Sortable: false },
-            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 55, Editable: true, Sortable: false },
+            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 50, Editable: true, Sortable: false },
             { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
             { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }
         ]
