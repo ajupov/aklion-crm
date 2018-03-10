@@ -8,6 +8,32 @@
     {
         if (ViewBag.UserContext.Permissions.Contains(Permission.Admin))
         {
+            <a asp-controller="AdministrationConsole" asp-action="Index" class="link left">
+                <i class="fa fa-dashboard"></i>
+            </a>
+
+            <a asp-controller="AdministrationUsers" asp-action="Index" class="link left">
+                Пользователи
+            </a>
+
+            <a asp-controller="AdministrationStores" asp-action="Index" class="link left">
+                Магазины
+            </a>
+
+            <a asp-controller="AdministrationProducts" asp-action="Index" class="link left">
+                Продукты
+            </a>
+
+            <a asp-controller="AdministrationClients" asp-action="Index" class="link left">
+                Клиенты
+            </a>
+
+            <a asp-controller="AdministrationOrders" asp-action="Index" class="link left">
+                Заказы
+            </a>
+        }
+        else
+        {
             <a asp-controller="Console" asp-action="Index" class="link left">
                 <i class="fa fa-dashboard"></i>
             </a>
@@ -29,32 +55,6 @@
             </a>
 
             <a asp-controller="Orders" asp-action="Index" class="link left">
-                Заказы
-            </a>
-        }
-        else
-        {
-            <a asp-controller="UserConsole" asp-action="Index" class="link left">
-                <i class="fa fa-dashboard"></i>
-            </a>
-
-            <a asp-controller="UserUser" asp-action="Index" class="link left">
-                Пользователи
-            </a>
-
-            <a asp-controller="UserStore" asp-action="Index" class="link left">
-                Магазины
-            </a>
-
-            <a asp-controller="UserProduct" asp-action="Index" class="link left">
-                Продукты
-            </a>
-
-            <a asp-controller="UserClient" asp-action="Index" class="link left">
-                Клиенты
-            </a>
-
-            <a asp-controller="UserOrder" asp-action="Index" class="link left">
                 Заказы
             </a>
         }

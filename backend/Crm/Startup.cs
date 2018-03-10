@@ -1,5 +1,4 @@
-﻿using System;
-using Crm.Business.AuditLog;
+﻿using Crm.Business.AuditLog;
 using Crm.Business.ImageLoad;
 using Crm.Business.Mail;
 using Crm.Business.Mail.Models;
@@ -48,7 +47,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
-using React.AspNet;
 
 namespace Crm
 {
@@ -66,23 +64,6 @@ namespace Crm
 
             Configuration = builder.Build();
         }
-
-        //public IServiceProvider ConfigureServices(IServiceCollection services)
-        //{
-        //    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-        //    services.AddReact();
-        //    services.AddMvc();
-
-        //    return services.BuildServiceProvider();
-        //}
-
-        //public void Configure(IApplicationBuilder app)
-        //{
-        //    app.UseReact(config => { });
-        //    app.UseDefaultFiles();
-        //    app.UseStaticFiles();
-        //    app.UseMvc();
-        //}
 
         public void ConfigureServices(IServiceCollection services)
          {
@@ -149,7 +130,6 @@ namespace Crm
                          IgnoreSerializableAttribute = false
                      };
                  });
-             //services.AddReact();
          }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -164,12 +144,9 @@ namespace Crm
             }
 
             app.UseStaticFiles();
-            //app.UseReact(config =>{});
-
             app.UseAuthentication();
             app.UseMvc(r =>
             {
-                r.MapRoute("administration", "Administration/{controller}/{action=Index}");
                 r.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
         }

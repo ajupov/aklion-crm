@@ -3,15 +3,28 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Crm.Controllers
 {
+    [Route("")]
+    [Route("Home")]
     public class HomeController : BaseController
     {
+        [HttpGet]
+        [Route("")]
+        [Route("Index")]
         public IActionResult Index()
         {
-            return IsUserContextInitialized
-                ? (IActionResult) RedirectToAction("Index", UserContext.Permissions.Contains(Permission.Admin)
-                    ? "Console"
-                    : "UserConsole")
-                : View();
+            if (!IsUserContextInitialized)
+            {
+                return View();
+            }
+
+            if (UserContext.Permissions.Contains(Permission.Admin))
+            {
+                return RedirectToAction("Index", "AdministrationConsole");
+            }
+            else
+            {
+                return RedirectToAction("Index", "Console");
+            }
         }
     }
 }

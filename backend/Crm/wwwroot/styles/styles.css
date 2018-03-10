@@ -89,7 +89,7 @@ nav {
 .navbar a.avatar-link img {
     border-radius: 16px;
     margin: 0 10px;
-    width: 32px;
+    width: 28px;
 }
 
 @media screen and (min-width: 600px) {

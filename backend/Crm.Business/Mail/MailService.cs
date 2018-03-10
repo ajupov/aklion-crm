@@ -38,7 +38,7 @@ namespace Crm.Business.Mail
         {
             var mimeMessage = new MimeMessage
             {
-                From = {new MailboxAddress("Админстратор Aklion CRM", _configuration.AccountName)},
+                From = {new MailboxAddress("Админстратор CRM", _configuration.AccountName)},
                 To = {new MailboxAddress(string.Empty, to)},
                 Subject = subject,
                 Body = new TextPart(TextFormat.Html)

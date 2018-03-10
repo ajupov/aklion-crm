@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Crm.Controllers
 {
+    [Route("Account")]
     public class AccountController : BaseController
     {
         private readonly IMailService _mailService;
@@ -56,6 +57,8 @@ namespace Crm.Controllers
 
         [HttpGet]
         [Authorize]
+        [Route("")]
+        [Route("Account")]
         public async Task<IActionResult> Index()
         {
             var user = await _userDao.GetAsync(UserContext.UserId).ConfigureAwait(false);
@@ -64,6 +67,7 @@ namespace Crm.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [Route("LogIn")]
         public IActionResult LogIn(string returnUrl = null)
         {
             ViewBag.ReturnUrl = returnUrl;
@@ -74,6 +78,7 @@ namespace Crm.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Route("LogIn")]
         public async Task<IActionResult> LogIn(LoginModel model, string returnUrl = null)
         {
             ViewBag.ReturnUrl = returnUrl;
@@ -117,6 +122,7 @@ namespace Crm.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
+        [Route("LogOff")]
         public async Task<IActionResult> LogOff()
         {
             await SignOutAsync().ConfigureAwait(false);
@@ -126,6 +132,7 @@ namespace Crm.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [Route("Register")]
         public IActionResult Register(string returnUrl = null)
         {
             ViewBag.ReturnUrl = returnUrl;
@@ -136,6 +143,7 @@ namespace Crm.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Route("Register")]
         public async Task<IActionResult> Register(RegisterModel model, string returnUrl = null)
         {
             ViewBag.ReturnUrl = returnUrl;
@@ -203,6 +211,7 @@ namespace Crm.Controllers
 
         [HttpGet]
         [Authorize]
+        [Route("SendConfirmEmail")]
         public async Task<IActionResult> SendConfirmEmail()
         {
             await EmailConfirmationProcess(UserContext.UserId).ConfigureAwait(false);
@@ -213,6 +222,7 @@ namespace Crm.Controllers
 
         [HttpGet]
         [Authorize]
+        [Route("SendSmsCode")]
         public async Task<IActionResult> SendSmsCode()
         {
             await PhoneConfirmationProcess(UserContext.UserId).ConfigureAwait(false);
@@ -223,6 +233,7 @@ namespace Crm.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [Route("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(int userId, string code)
         {
             if (userId == 0 || string.IsNullOrEmpty(code))
@@ -253,6 +264,7 @@ namespace Crm.Controllers
 
         [HttpGet]
         [Authorize]
+        [Route("ChangePassword")]
         public IActionResult ChangePassword()
         {
             return View();
@@ -261,6 +273,7 @@ namespace Crm.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
+        [Route("ChangePassword")]
         public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
         {
             if (!ModelState.IsValid)
@@ -293,6 +306,7 @@ namespace Crm.Controllers
 
         [HttpGet]
         [Authorize]
+        [Route("ChangeEmail")]
         public IActionResult ChangeEmail()
         {
             return View();
@@ -301,6 +315,7 @@ namespace Crm.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
+        [Route("ChangeEmail")]
         public async Task<IActionResult> ChangeEmail(ChangeEmailModel model)
         {
             if (!ModelState.IsValid)
@@ -344,6 +359,7 @@ namespace Crm.Controllers
 
         [HttpGet]
         [Authorize]
+        [Route("ChangePhone")]
         public IActionResult ChangePhone()
         {
             return View();
@@ -352,6 +368,7 @@ namespace Crm.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
+        [Route("ChangePhone")]
         public async Task<IActionResult> ChangePhone(ChangePhoneModel model)
         {
             if (!ModelState.IsValid)
@@ -388,6 +405,7 @@ namespace Crm.Controllers
 
         [HttpGet]
         [Authorize]
+        [Route("VerifySmsCode")]
         public IActionResult VerifySmsCode(string message = null)
         {
             ViewBag.StatusMessage = message;
@@ -398,6 +416,7 @@ namespace Crm.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
+        [Route("VerifySmsCode")]
         public async Task<IActionResult> VerifySmsCode(VerifySmsCodeModel model)
         {
             if (!ModelState.IsValid)
@@ -428,6 +447,7 @@ namespace Crm.Controllers
 
         [HttpGet]
         [Authorize]
+        [Route("ChangePersonalInfo")]
         public async Task<IActionResult> ChangePersonalInfo()
         {
             var user = await _userDao.GetAsync(UserContext.UserId).ConfigureAwait(false);
@@ -444,6 +464,7 @@ namespace Crm.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
+        [Route("ChangePersonalInfo")]
         public async Task<IActionResult> ChangePersonalInfo(ChangePersonalInfoModel model)
         {
             if (!ModelState.IsValid)
@@ -466,6 +487,7 @@ namespace Crm.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [Route("ForgotPassword")]
         public IActionResult ForgotPassword()
         {
             return View();
@@ -474,6 +496,7 @@ namespace Crm.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Route("ForgotPassword")]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordModel model)
         {
             if (!ModelState.IsValid)
@@ -497,6 +520,7 @@ namespace Crm.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [Route("ForgotPasswordConfirmation")]
         public IActionResult ForgotPasswordConfirmation()
         {
             return View();
@@ -504,6 +528,7 @@ namespace Crm.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [Route("ResetPassword")]
         public IActionResult ResetPassword(int userId, string code)
         {
             if (userId == 0 || string.IsNullOrEmpty(code))
@@ -522,6 +547,7 @@ namespace Crm.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Route("ResetPassword")]
         public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
         {
             if (!ModelState.IsValid)
@@ -554,6 +580,7 @@ namespace Crm.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [Route("ResetPasswordConfirmation")]
         public IActionResult ResetPasswordConfirmation()
         {
             return View();
@@ -562,6 +589,7 @@ namespace Crm.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
+        [Route("LoadAvatar")]
         public async Task<IActionResult> LoadAvatar(LoadAvatarModel model)
         {
             if (!model.AvatarFile.FileName.IsImage())
@@ -579,6 +607,7 @@ namespace Crm.Controllers
         }
 
         [HttpGet]
+        [Route("GetStores")]
         public async Task<List<UserAvialableStore>> GetStores()
         {
             var result = await _userContextDao.GetAvialableStoresAsync(UserContext.UserId).ConfigureAwait(false);
@@ -586,11 +615,13 @@ namespace Crm.Controllers
         }
 
         [HttpPost]
+        [Route("SetStore")]
         public Task SetStore(int storeId)
         {
             return SignInAsync(UserContext.UserId, storeId, true);
         }
 
+        [NonAction]
         private async Task EmailConfirmationProcess(int userId)
         {
             var user = await _userDao.GetAsync(userId).ConfigureAwait(false);
@@ -604,6 +635,7 @@ namespace Crm.Controllers
                 .ConfigureAwait(false);
         }
 
+        [NonAction]
         private async Task PhoneConfirmationProcess(int userId)
         {
             var user = await _userDao.GetAsync(userId).ConfigureAwait(false);
@@ -613,6 +645,7 @@ namespace Crm.Controllers
             await _smsService.SendAsync(user.Phone, code).ConfigureAwait(false);
         }
 
+        [NonAction]
         private async Task PasswordResetProcess(int userId)
         {
             var user = await _userDao.GetAsync(userId).ConfigureAwait(false);

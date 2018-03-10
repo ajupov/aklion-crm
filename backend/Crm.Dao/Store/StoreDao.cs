@@ -21,7 +21,7 @@ namespace Crm.Dao.Store
 
         public Task<(int TotalCount, List<StoreByUserModel> List)> GetPagedListAsync(StoreByUserParameterModel parameter)
         {
-            return _dao.GetPagedListAsync<StoreByUserModel, StoreByUserParameterModel>(parameter);
+            return _dao.GetPagedListAsync<StoreByUserModel, StoreByUserParameterModel>(parameter, true);
         }
 
         public Task<List<StoreByUserModel>> GetListAsync(StoreByUserParameterModel parameter)

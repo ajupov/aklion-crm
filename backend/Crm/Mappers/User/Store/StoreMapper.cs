@@ -18,7 +18,7 @@ namespace Crm.Mappers.User.Store
 
         public static DomainStoreModel MapNew(this StoreModel model)
         {
-            return model.MapParameterNew<DomainStoreModel>();
+            return model.MapNew<DomainStoreModel>();
         }
 
         public static DomainStoreModel MapFrom(this DomainStoreModel domainModel, StoreModel model)
