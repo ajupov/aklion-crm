@@ -36,6 +36,14 @@ namespace Crm.Controllers
             return _dao.GetAutocompleteAsync(pattern.MapNew(UserContext.StoreId));
         }
 
+        [HttpGet]
+        [Route("GetSelect")]
+        public async Task<Dictionary<string, int>> GetSelect()
+        {
+            var result = await _dao.GetSelectAsync(UserContext.StoreId.MapNew()).ConfigureAwait(false);
+            return result.MapNew();
+        }
+
         [HttpPost]
         [Route("Create")]
         public Task Create(ClientAttributeModel model)

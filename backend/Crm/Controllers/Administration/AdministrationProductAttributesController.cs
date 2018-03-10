@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Crm.Controllers.Administration
 {
     [AjaxErrorHandle]
-    [Route("Administration/ProductAttributeLinks")]
+    [Route("Administration/ProductAttributes")]
     public class AdministrationProductAttributesController : BaseController
     {
         private readonly IProductAttributeDao _dao;

@@ -10,6 +10,8 @@ namespace Crm.Dao.ClientAttribute
 
         Task<Dictionary<string, int>> GetAutocompleteAsync(ClientAttributeAutocompleteParameterModel parameter);
 
+        Task<Dictionary<string, int>> GetSelectAsync(ClientAttributeSelectParameterModel parameter);
+
         Task<ClientAttributeModel> GetAsync(int id);
 
         Task<int> CreateAsync(ClientAttributeModel model);

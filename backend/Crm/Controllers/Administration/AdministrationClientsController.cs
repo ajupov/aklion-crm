@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Crm.Controllers.Administration
 {
     [AjaxErrorHandle]
-    [Route("Administration/ClientAttributes")]
+    [Route("Administration/Clients")]
     public class AdministrationClientsController : BaseController
     {
         private readonly IClientDao _dao;

@@ -24,6 +24,11 @@ namespace Crm.Dao.ClientAttribute
             return _dao.GetForAutoCompleteAsync<ClientAttributeModel, ClientAttributeAutocompleteParameterModel>(parameter);
         }
 
+        public Task<Dictionary<string, int>> GetSelectAsync(ClientAttributeSelectParameterModel parameter)
+        {
+            return _dao.GetForSelectAsync<ClientAttributeModel, ClientAttributeSelectParameterModel>(parameter);
+        }
+
         public Task<ClientAttributeModel> GetAsync(int id)
         {
             return _dao.GetAsync<ClientAttributeModel>(id);

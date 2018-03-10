@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Crm.Models;
 using Crm.Models.User.ClientAttribute;
 using Infrastructure.Mapper;
 using DomainClientAttributeAutocompleteParameterModel = Crm.Domain.ClientAttribute.ClientAttributeAutocompleteParameterModel;
+using ClientAttributeSelectParameterModel = Crm.Domain.ClientAttribute.ClientAttributeSelectParameterModel;
 using DomainClientAttributeModel = Crm.Domain.ClientAttribute.ClientAttributeModel;
 using DomainClientAttributeParameterModel = Crm.Domain.ClientAttribute.ClientAttributeParameterModel;
 
@@ -44,6 +46,22 @@ namespace Crm.Mappers.User.ClientAttribute
                 StoreId = storeId,
                 IsDeleted = false
             };
+        }
+
+        public static ClientAttributeSelectParameterModel MapNew(this int storeId)
+        {
+            return new ClientAttributeSelectParameterModel
+            {
+                StoreId = storeId,
+                IsDeleted = false
+            };
+        }
+
+        public static Dictionary<string, int> MapNew(this Dictionary<string, int> models)
+        {
+            models.TryAdd(string.Empty, 0);
+
+            return models.OrderBy(k => k.Key).ToDictionary(k => k.Key, v => v.Value);
         }
     }
 }
