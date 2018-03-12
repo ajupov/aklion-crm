@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Crm.Attributes;
 using Crm.Dao.Client;
@@ -6,6 +7,8 @@ using Crm.Exceptions;
 using Crm.Mappers.User.Client;
 using Crm.Models;
 using Crm.Models.User.Client;
+using Infrastructure.Dao.Enums;
+using Infrastructure.Dao.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Crm.Controllers
@@ -33,6 +36,16 @@ namespace Crm.Controllers
         [Route("GetList")]
         public async Task<PagingModel<ClientModel>> GetList(ClientParameterModel model)
         {
+            var columns = new List<string>();
+            var filters = new List<string>();
+
+        
+
+ 
+
+
+
+
             var result = await _dao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
             return result.MapNew(model.Page, model.Size);
         }

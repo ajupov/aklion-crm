@@ -1,7 +1,11 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Infrastructure.Dao.Attributes;
+using Infrastructure.Dao.Enums;
+using Infrastructure.Dao.Models;
 using Infrastructure.Query.Enums;
 
 namespace Infrastructure.Query
@@ -175,16 +179,8 @@ namespace Infrastructure.Query
             queryObject.FilterType = typeof(TParameter);
             queryObject.FilterProperties = queryObject.FilterType.GetProperties().ToList();
 
-            var filterGroupAttribute =
-                (WhereCombinationAttribute) queryObject.FilterType.GetCustomAttribute(
-                    typeof(WhereCombinationAttribute));
-
-            var propertiesWithWhereAttributes =
-                queryObject.FilterProperties.Where(p => p.GetCustomAttribute(typeof(WhereAttribute)) != null).ToList();
-
-            var filters = propertiesWithWhereAttributes
-                .Select(p => $"({((WhereAttribute) p.GetCustomAttribute(typeof(WhereAttribute))).Value})")
-                .ToList();
+            var filterCombination = GetFiltercombination(queryObject);
+            var filters = GetFilters(queryObject);
 
             if (filters.Count == 1)
             {
@@ -192,11 +188,69 @@ namespace Infrastructure.Query
             }
             else if (filters.Count > 1)
             {
-                var group = !string.IsNullOrWhiteSpace(filterGroupAttribute.Value) ? filterGroupAttribute.Value : "and";
-                queryObject.Filters = $"where {string.Join($" {group} ", filters)}";
+                queryObject.Filters = $"where {string.Join($" {filterCombination} ", filters)}";
             }
 
             return queryObject;
+        }
+
+        private static List<string> GetFilters(QueryObject queryObject)
+        {
+            var whereProperties = queryObject.FilterProperties.Where(p => p.GetCustomAttribute(typeof(WhereAttribute)) != null);
+            var filters = whereProperties.Select(p => $"({((WhereAttribute)p.GetCustomAttribute(typeof(WhereAttribute))).Value})").ToList();
+                
+            var filterProperties = queryObject.FilterProperties.Where(p => p.GetCustomAttribute(typeof(FilterAttribute)) != null).ToList();
+            foreach (var property in filterProperties)
+            {
+                var value = property.GetValue(queryObject);
+                if (value == null)
+                {
+                    continue;
+                }
+
+                if (value is FilterModel filterModel && filterModel.Type != FilterType.None)
+                {
+                    var filter = "";
+                    switch (filterModel.Type)
+                    {
+                        case FilterType.Equal:
+                            if()
+                            filter = "@CreateDate is null or convert(date, c.CreateDate) = convert(date, @CreateDate)";
+                            break;
+                        case FilterType.NotEqual:
+                            break;
+                        case FilterType.Above:
+                            break;
+                        case FilterType.AboveOrEqual:
+                            break;
+                        case FilterType.Less:
+                            break;
+                        case FilterType.LessOrEqual:
+                            break;
+                        case FilterType.Begins:
+                            break;
+                        case FilterType.NotBegins:
+                            break;
+                        case FilterType.Ends:
+                            break;
+                        case FilterType.NotEnds:
+                            break;
+                        case FilterType.NotContains:
+                            break;
+                        case FilterType.Between:
+                            break;
+                        case FilterType.Inlist:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                    var filter = "@CreateDate is null or convert(date, c.CreateDate) = convert(date, @CreateDate)";
+
+                    filters.Add(filter);
+                }
+            }
+
+            return filters.ToList();
         }
 
         public static QueryObject ApplyIdFilter(this QueryObject queryObject)
@@ -318,6 +372,27 @@ namespace Infrastructure.Query
             }
 
             return string.Empty;
+        }
+
+        private static string GetFiltercombination(QueryObject queryObject)
+        {
+            var property = queryObject.FilterProperties.FirstOrDefault(p => p.GetCustomAttribute(typeof(FilterCombinationAttribute)) != null);
+            if (property != null)
+            {
+                var value = property.GetValue(queryObject);
+                if (value != null)
+                {
+                    return property.GetValue(queryObject)?.ToString();
+                }
+            }
+
+            var attribute = (WhereCombinationAttribute)queryObject.FilterType.GetCustomAttribute(typeof(WhereCombinationAttribute));
+            if (!string.IsNullOrWhiteSpace(attribute?.Value))
+            {
+                return attribute.Value;
+            }
+
+            return "and";
         }
     }
 }
