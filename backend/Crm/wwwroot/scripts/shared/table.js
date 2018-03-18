@@ -164,12 +164,12 @@ function createPager($table, pager, isViewable, isCreatable, createUrl, isEditab
         pager,
         {
             view: isViewable,
-            refresh: true,
+            refresh: false,
             search: false,
             add: isCreatable === true,
             del: isDeletable === true,
-            edit: isEditable === true,
-            afterRefresh: () => $table[0].triggerToolbar()
+            edit: isEditable === true//,
+           // afterRefresh: () => $table[0].triggerToolbar()
         },
         {
             width: 'auto',
@@ -189,14 +189,14 @@ function createPager($table, pager, isViewable, isCreatable, createUrl, isEditab
             closeAfterAdd: true,
             clearAfterAdd: true,
             errorTextFormat: e => e.responseJSON.Error,
-            onInitializeForm: (formid) => {
-                debugger;
-                //if (options.IsWithFile) {
-                //    $(formid).attr('method', 'post');
-                //    $(formid).attr('action', '');
-                //    $(formid).attr('enctype', 'multipart/form-data');
-                //}
-            }
+            //onInitializeForm: (formid) => {
+            //    debugger;
+            //    //if (options.IsWithFile) {
+            //    //    $(formid).attr('method', 'post');
+            //    //    $(formid).attr('action', '');
+            //    //    $(formid).attr('enctype', 'multipart/form-data');
+            //    //}
+            //}
         },
         {
             width: 'auto',

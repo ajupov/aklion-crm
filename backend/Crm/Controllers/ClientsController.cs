@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using Crm.Attributes;
-using Crm.Dao.Client;
 using Crm.Exceptions;
-using Crm.Mappers.User.Client;
 using Crm.Models;
 using Crm.Models.User.Client;
-using Infrastructure.Dao.Enums;
+using Crm.Storages;
+using Crm.Storages.Models;
 using Infrastructure.Dao.Models;
+using Infrastructure.DateTime;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Crm.Controllers
 {
@@ -17,11 +20,11 @@ namespace Crm.Controllers
     [Route("Clients")]
     public class ClientsController : BaseController
     {
-        private readonly IClientDao _dao;
+        private readonly Storage _storage;
 
-        public ClientsController(IClientDao dao)
+        public ClientsController(Storage storage)
         {
-            _dao = dao;
+            _storage = storage;
         }
 
         [HttpGet]
@@ -36,59 +39,163 @@ namespace Crm.Controllers
         [Route("GetList")]
         public async Task<PagingModel<ClientModel>> GetList(ClientParameterModel model)
         {
-            var columns = new List<string>();
-            var filters = new List<string>();
+            var store = await _storage.Store.FirstOrDefaultAsync(x => x.Id == UserContext.StoreId).ConfigureAwait(false);
+            if (store == null)
+            {
+                throw new StoreNotFoundException();
+            }
 
-        
+            if (store.IsDeleted)
+            {
+                throw new StoreIsDeletedException();
+            }
 
- 
+            var query = GetQuery(model);
 
+            var list = await GetOrder(model, query).Skip(model.SkipCount).Take(model.TakeCount).ToListAsync().ConfigureAwait(false);
+            var count = await query.CountAsync().ConfigureAwait(false);
 
+            var result = list.Select(x => new ClientModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                IsDeleted = x.IsDeleted,
+                CreateDate = x.CreateDate.ToDateTimeString()
+            }).ToList();
 
-
-            var result = await _dao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
-            return result.MapNew(model.Page, model.Size);
+            return new PagingModel<ClientModel>(result, count, model.Page, model.Size);
         }
 
         [HttpGet]
         [Route("GetAutocomplete")]
-        public Task<Dictionary<string, int>> GetAutocomplete(string pattern)
+        public async Task<Dictionary<string, int>> GetAutocomplete(string pattern)
         {
-            return _dao.GetAutocompleteAsync(pattern.MapNew(UserContext.StoreId));
+            var store = _storage.Store.FirstOrDefault(x => x.Id == UserContext.StoreId);
+            if (store == null)
+            {
+                throw new StoreNotFoundException();
+            }
+
+            if (store.IsDeleted)
+            {
+                throw new StoreIsDeletedException();
+            }
+
+            return await _storage.Client.Where(x =>
+                    !x.IsDeleted
+                    && x.StoreId == UserContext.StoreId
+                    && x.Name.StartsWith(pattern, true, CultureInfo.InvariantCulture))
+                .ToDictionaryAsync(k => k.Name, v => v.Id)
+                .ConfigureAwait(false);
         }
 
         [HttpPost]
         [Route("Create")]
-        public Task Create(ClientModel model)
+        public async Task Create(ClientModel model)
         {
-            return _dao.CreateAsync(model.MapNew(UserContext.StoreId));
+            var store = await _storage.Store.FirstOrDefaultAsync(x => x.Id == UserContext.StoreId).ConfigureAwait(false);
+            if (store == null)
+            {
+                throw new StoreNotFoundException();
+            }
+
+            if (store.IsDeleted)
+            {
+                throw new StoreIsDeletedException();
+            }
+
+            var client = new Client
+            {
+                Name = model.Name,
+                Store = store,
+                IsDeleted = false,
+                CreateDate = DateTime.Now,
+                ModifyDate = null
+            };
+
+            await _storage.Client.AddAsync(client).ConfigureAwait(false);
+            await _storage.SaveChangesAsync().ConfigureAwait(false);
         }
 
         [HttpPost]
         [Route("Update")]
         public async Task Update(ClientModel model)
         {
-            var result = await _dao.GetAsync(model.Id).ConfigureAwait(false);
-            if (result.StoreId != UserContext.StoreId)
+            var store = await _storage.Store.FirstOrDefaultAsync(x => x.Id == UserContext.StoreId).ConfigureAwait(false);
+            if (store == null)
+            {
+                throw new StoreNotFoundException();
+            }
+
+            if (store.IsDeleted)
+            {
+                throw new StoreIsDeletedException();
+            }
+
+            var client = await _storage.Client.FirstOrDefaultAsync(x => x.Id == model.Id).ConfigureAwait(false);
+            if (client.StoreId != UserContext.StoreId)
             {
                 throw new NotAccessChangingException();
             }
 
-            await _dao.UpdateAsync(result.MapFrom(model)).ConfigureAwait(false);
+            if (client.IsDeleted)
+            {
+                throw new ObjectIsDeletedException();
+            }
+
+            client.Name = model.Name;
+            client.ModifyDate = DateTime.Now;
+
+            _storage.Update(client);
+            await _storage.SaveChangesAsync().ConfigureAwait(false);
         }
 
         [HttpPost]
         [Route("Delete")]
         public async Task Delete(int id)
         {
-            var result = await _dao.GetAsync(id).ConfigureAwait(false);
-            if (result.StoreId != UserContext.StoreId)
+            var store = await _storage.Store.FirstOrDefaultAsync(x => x.Id == UserContext.StoreId).ConfigureAwait(false);
+            if (store == null)
+            {
+                throw new StoreNotFoundException();
+            }
+
+            if (store.IsDeleted)
+            {
+                throw new StoreIsDeletedException();
+            }
+
+            var client = await _storage.Client.FirstOrDefaultAsync(x => x.Id == id).ConfigureAwait(false);
+            if (client.StoreId != UserContext.StoreId)
             {
                 throw new NotAccessChangingException();
             }
 
-            result.IsDeleted = !result.IsDeleted;
-            await _dao.UpdateAsync(result).ConfigureAwait(false);
+            client.IsDeleted = !client.IsDeleted;
+            await _storage.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        [NonAction]
+        private IQueryable<Client> GetQuery(ClientParameterModel model)
+        {
+            return _storage.Client.Where(x =>
+                x.StoreId == UserContext.StoreId
+                && (string.IsNullOrEmpty(model.Name) || x.Name.Contains(model.Name))
+                && (!model.IsDeleted.HasValue || x.IsDeleted == model.IsDeleted)
+                && (!model.MinCreateDate.ToNullableDate().HasValue || x.CreateDate > model.MinCreateDate.ToNullableDate())
+                && (!model.MaxCreateDate.ToNullableDate().HasValue || x.CreateDate < model.MaxCreateDate.ToNullableDate()));
+        }
+
+        [NonAction]
+        private static IQueryable<Client> GetOrder(BaseParameterModel model, IQueryable<Client> query)
+        {
+            switch (model.SortingColumn)
+            {
+                case "Name":
+                    return model.IsDescSortingOrder ? query.OrderByDescending(x => x.Name) : query.OrderBy(x => x.Name);
+                default:
+                    return model.IsDescSortingOrder ? query.OrderByDescending(x => x.CreateDate) : query.OrderBy(x => x.CreateDate);
+            }
         }
     }
 }

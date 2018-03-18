@@ -12,9 +12,6 @@ namespace Crm.Domain.Client
         [Where("@StoreId is null or c.StoreId = @StoreId")]
         public int? StoreId { get; set; }
 
-        [Where("@StoreName is null or s.Name like @StoreName + '%'")]
-        public string StoreName { get; set; }
-
         [Where("@Name is null or c.Name like @Name + '%'")]
         public string Name { get; set; }
 

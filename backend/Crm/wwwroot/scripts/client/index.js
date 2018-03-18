@@ -59,8 +59,43 @@ function initClientsTable() {
     });
 }
 
+function initAttributesTable() {
+    createTable({
+        Title: 'Атрибуты',
+        Element: '#attributes-table',
+        Pager: '#attributes-table-pagination',
+        IsFilterable: true,
+        IsCreatable: true,
+        IsEditable: true,
+        DataUrl: '/ClientAttributes/GetList',
+        CreateUrl: '/ClientAttributes/Create',
+        UpdateUrl: '/ClientAttributes/Update',
+        Columns: [
+            { Name: 'Id', Label: '№', Type: 'number', Hidden: true },
+            { Name: 'Key', Label: 'Ключ', Type: 'text', Width: 150, Editable: true, MaxLength: 256 },
+            { Name: 'Name', Label: 'Название', Type: 'text', Width: 150, Editable: true, MaxLength: 256 },
+            {
+                Name: 'IsDeleted', Label: ' ', Type: 'checkbox', Width: 100, Align: 'center',
+                Formatter: clientAttributeIsDeletedFormatter, Sortable: false, Search: false
+            }
+        ]
+    });
+}
+
 function clientIsDeletedFormatter(value, options, data) {
     return `<button onclick="deleteClient(event, ${data.Id});" class="cell-button" 
+                title="${value ? 'Восстановить' : 'Удалить'}">${value ? 'Восстановить' : 'Удалить'}
+            </button>`;
+}
+
+function clientAttributeIsDeletedFormatter(value, options, data) {
+    return `<button onclick="deleteClientAttribute(event, ${data.Id});" class="cell-button" 
+                title="${value ? 'Восстановить' : 'Удалить'}">${value ? 'Восстановить' : 'Удалить'}
+            </button>`;
+}
+
+function clientAttributeLinksIsDeletedFormatter(value, options, data) {
+    return `<button onclick="deleteClientAttributeLink(event, ${data.Id}, ${data.ClientId});" class="cell-button" 
                 title="${value ? 'Восстановить' : 'Удалить'}">${value ? 'Восстановить' : 'Удалить'}
             </button>`;
 }
@@ -79,10 +114,18 @@ function deleteClient(event, id) {
     });
 }
 
-function clientAttributeLinksIsDeletedFormatter(value, options, data) {
-    return `<button onclick="deleteClientAttributeLink(event, ${data.Id}, ${data.ClientId});" class="cell-button" 
-                title="${value ? 'Восстановить' : 'Удалить'}">${value ? 'Восстановить' : 'Удалить'}
-            </button>`;
+function deleteClientAttribute(event, id) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    postText('/ClientAttributes/Delete', { id: id }, result => {
+        $('#attributes-table').trigger('reloadGrid');
+
+        const text = result === 'true' ? 'Восстановить' : 'Удалить';
+        const button = $('#ViewGrid_attributes-table td#v_IsDeleted span button');
+        button.attr('title', text);
+        button.text(text);
+    });
 }
 
 function deleteClientAttributeLink(event, id, clientId) {
@@ -90,37 +133,12 @@ function deleteClientAttributeLink(event, id, clientId) {
     event.stopPropagation();
 
     postText('/ClientAttributeLinks/Delete', { id: id }, result => {
-        $(`#clients-table_${clientId}`).trigger('reloadGrid');
+        $(`#clients-attributes-table_${clientId}`).trigger('reloadGrid');
 
         const text = result === 'true' ? 'Восстановить' : 'Удалить';
-        const button = $(`#ViewGrid_clients-table_${clientId}-sub-table td#v_IsDeleted span button`);
+        const button = $(`#ViewGrid_clients-attributes-table_${clientId}-sub-table td#v_IsDeleted span button`);
         debugger;
         button.attr('title', text);
         button.text(text);
-    });
-}
-
-function initAttributesTable() {
-    createTable({
-        Title: 'Атрибуты',
-        Element: '#attributes-table',
-        Pager: '#attributes-table-pagination',
-        IsViewable: true,
-        IsEditable: true,
-        IsCreatable: true,
-        IsDeletable: true,
-        IsFilterable: true,
-        DataUrl: '/ClientAttributes/GetList',
-        CreateUrl: '/ClientAttributes/Create',
-        UpdateUrl: '/ClientAttributes/Update',
-        DeleteUrl: '/ClientAttributes/Delete',
-        Columns: [
-            { Name: 'Id', Label: '№', Type: 'number', Width: 60 },
-            { Name: 'Key', Label: 'Ключ', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
-            { Name: 'Name', Label: 'Название', Type: 'text', Width: 120, Editable: true, MaxLength: 256 },
-            { Name: 'IsDeleted', Label: 'Удалён', Type: 'checkbox', Width: 50, Editable: true, Sortable: false },
-            { Name: 'CreateDate', Label: 'Дата создания', Type: 'datetime', Width: 110 },
-            { Name: 'ModifyDate', Label: 'Дата изменения', Type: 'datetime', Width: 110 }
-        ]
     });
 }

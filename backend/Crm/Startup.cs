@@ -44,6 +44,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
@@ -118,7 +119,11 @@ namespace Crm
                      o.LoginPath = new PathString("/Account/Login");
                  });
 
-             services.AddMvc(o =>
+             var connection = Configuration.GetConnectionString("ConnectionString");
+
+             services.AddDbContext<Storages.Storage>(o => o.UseSqlServer(connection));
+
+            services.AddMvc(o =>
                  {
                      o.Filters.Add(typeof(UserContextInitializeFilter));
                      o.Filters.Add(typeof(LogFileFilter));

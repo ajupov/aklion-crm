@@ -208,46 +208,45 @@ namespace Infrastructure.Query
                     continue;
                 }
 
-                if (value is FilterModel filterModel && filterModel.Type != FilterType.None)
-                {
-                    var filter = "";
-                    switch (filterModel.Type)
-                    {
-                        case FilterType.Equal:
-                            if()
-                            filter = "@CreateDate is null or convert(date, c.CreateDate) = convert(date, @CreateDate)";
-                            break;
-                        case FilterType.NotEqual:
-                            break;
-                        case FilterType.Above:
-                            break;
-                        case FilterType.AboveOrEqual:
-                            break;
-                        case FilterType.Less:
-                            break;
-                        case FilterType.LessOrEqual:
-                            break;
-                        case FilterType.Begins:
-                            break;
-                        case FilterType.NotBegins:
-                            break;
-                        case FilterType.Ends:
-                            break;
-                        case FilterType.NotEnds:
-                            break;
-                        case FilterType.NotContains:
-                            break;
-                        case FilterType.Between:
-                            break;
-                        case FilterType.Inlist:
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-                    var filter = "@CreateDate is null or convert(date, c.CreateDate) = convert(date, @CreateDate)";
+                //if (value is FilterModel filterModel && filterModel.Type != FilterType.None)
+                //{
+                //    var filter = "";
+                //    switch (filterModel.Type)
+                //    {
+                //        case FilterType.Equal:
+                //            filter = "@CreateDate is null or convert(date, c.CreateDate) = convert(date, @CreateDate)";
+                //            break;
+                //        case FilterType.NotEqual:
+                //            break;
+                //        case FilterType.Above:
+                //            break;
+                //        case FilterType.AboveOrEqual:
+                //            break;
+                //        case FilterType.Less:
+                //            break;
+                //        case FilterType.LessOrEqual:
+                //            break;
+                //        case FilterType.Begins:
+                //            break;
+                //        case FilterType.NotBegins:
+                //            break;
+                //        case FilterType.Ends:
+                //            break;
+                //        case FilterType.NotEnds:
+                //            break;
+                //        case FilterType.NotContains:
+                //            break;
+                //        case FilterType.Between:
+                //            break;
+                //        case FilterType.Inlist:
+                //            break;
+                //        default:
+                //            throw new ArgumentOutOfRangeException();
+                //    }
+                //    var filter = "@CreateDate is null or convert(date, c.CreateDate) = convert(date, @CreateDate)";
 
-                    filters.Add(filter);
-                }
+                //    filters.Add(filter);
+                //}
             }
 
             return filters.ToList();

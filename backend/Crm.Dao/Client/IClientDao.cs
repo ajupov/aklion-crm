@@ -8,7 +8,7 @@ namespace Crm.Dao.Client
     {
         Task<(int TotalCount, List<ClientModel> List)> GetPagedListAsync(ClientParameterModel parameter);
 
-        Task<(int TotalCount, List<ShortClientModel> List)> GetPagedListAsync(UserClientParameterModel parameter);
+        //Task<(int TotalCount, List<ShortClientModel> List)> GetPagedListAsync(UserClientParameterModel parameter);
 
         Task<Dictionary<string, int>> GetAutocompleteAsync(ClientAutocompleteParameterModel parameter);
 

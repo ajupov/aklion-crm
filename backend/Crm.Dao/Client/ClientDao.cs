@@ -24,85 +24,85 @@ namespace Crm.Dao.Client
             return _dao.GetPagedListAsync<ClientModel, ClientParameterModel>(parameter);
         }
 
-        public Task<(int TotalCount, List<ShortClientModel> List)> GetPagedListAsync(UserClientParameterModel parameter)
-        {
-            var sql = "select Id, Name, IsDeleted, CreateDate, ModifyDate from dbo.Client where StoreId = @storeId";
+        //public Task<(int TotalCount, List<ShortClientModel> List)> GetPagedListAsync(UserClientParameterModel parameter)
+        //{
+        //    var sql = "select Id, Name, IsDeleted, CreateDate, ModifyDate from dbo.Client where StoreId = @storeId";
 
-            var sorting = "";
-            foreach (var field in parameter.GetType().GetProperties())
-            {
-                if (field.PropertyType == typeof(FilterModel))
-                {
-                    var value = field.GetValue(parameter) as FilterModel;
-                    if (value == null)
-                    {
-                        continue;
-                    }
+        //    var sorting = "";
+        //    foreach (var field in parameter.GetType().GetProperties())
+        //    {
+        //        if (field.PropertyType == typeof(FilterModel))
+        //        {
+        //            var value = field.GetValue(parameter) as FilterModel;
+        //            if (value == null)
+        //            {
+        //                continue;
+        //            }
 
-                    columns.Add(field.Name);
+        //            columns.Add(field.Name);
 
-                    switch (value.Type)
-                    {
-                        case FilterType.Equal:
-                            filters.Add(field.Name);
-                            break;
-                        case FilterType.NotEqual:
-                            break;
-                        case FilterType.Above:
-                            break;
-                        case FilterType.AboveOrEqual:
-                            break;
-                        case FilterType.Less:
-                            break;
-                        case FilterType.LessOrEqual:
-                            break;
-                        case FilterType.Begins:
-                            break;
-                        case FilterType.NotBegins:
-                            break;
-                        case FilterType.Ends:
-                            break;
-                        case FilterType.NotEnds:
-                            break;
-                        case FilterType.NotContains:
-                            break;
-                        case FilterType.Inlist:
-                            break;
-                    }
-                }
-                else if (field.PropertyType == typeof(SortingModel))
-                {
-                    var value = field.GetValue(parameter) as SortingModel;
-                    if (value == null)
-                    {
-                        continue;
-                    }
+        //            switch (value.Type)
+        //            {
+        //                case FilterType.Equal:
+        //                    filters.Add(field.Name);
+        //                    break;
+        //                case FilterType.NotEqual:
+        //                    break;
+        //                case FilterType.Above:
+        //                    break;
+        //                case FilterType.AboveOrEqual:
+        //                    break;
+        //                case FilterType.Less:
+        //                    break;
+        //                case FilterType.LessOrEqual:
+        //                    break;
+        //                case FilterType.Begins:
+        //                    break;
+        //                case FilterType.NotBegins:
+        //                    break;
+        //                case FilterType.Ends:
+        //                    break;
+        //                case FilterType.NotEnds:
+        //                    break;
+        //                case FilterType.NotContains:
+        //                    break;
+        //                case FilterType.Inlist:
+        //                    break;
+        //            }
+        //        }
+        //        else if (field.PropertyType == typeof(SortingModel))
+        //        {
+        //            var value = field.GetValue(parameter) as SortingModel;
+        //            if (value == null)
+        //            {
+        //                continue;
+        //            }
 
-                    sorting = !string.IsNullOrWhiteSpace(value.Name) 
-                        ? "order by " + value.Name + (value.Type == SortingType.Descending ? " desc" : " asc")
-                        : string.Empty;
-                }
-                else if (field.PropertyType == typeof(PagingModel))
-                {
-                    var value = field.GetValue(model) as PagingModel;
-                    if (value == null)
-                    {
-                        continue;
-                    }
-                }
-
-
-                if (filter == null)
-                {
-                    continue;
-                }
+        //            sorting = !string.IsNullOrWhiteSpace(value.Name) 
+        //                ? "order by " + value.Name + (value.Type == SortingType.Descending ? " desc" : " asc")
+        //                : string.Empty;
+        //        }
+        //        else if (field.PropertyType == typeof(PagingModel))
+        //        {
+        //            var value = field.GetValue(model) as PagingModel;
+        //            if (value == null)
+        //            {
+        //                continue;
+        //            }
+        //        }
 
 
-            }
+        //        if (filter == null)
+        //        {
+        //            continue;
+        //        }
 
 
-            throw new System.NotImplementedException();
-        }
+        //    }
+
+
+        //    throw new System.NotImplementedException();
+        //}
 
         public Task<Dictionary<string, int>> GetAutocompleteAsync(ClientAutocompleteParameterModel parameter)
         {
