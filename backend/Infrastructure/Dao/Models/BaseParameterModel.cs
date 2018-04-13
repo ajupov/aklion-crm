@@ -6,11 +6,11 @@
 
         public string SortingOrder { get; set; }
 
-        public bool IsDescSortingOrder => SortingOrder == "desc";
-
         public int Page { get; set; }
 
         public int Size { get; set; }
+
+        public bool IsDescSortingOrder => SortingOrder == "desc";
 
         public int TakeCount => Size > 0 ? Size : int.MaxValue;
 

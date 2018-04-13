@@ -7,7 +7,5 @@ namespace Crm.Models.User.ClientAttribute
         public string Key { get; set; }
 
         public string Name { get; set; }
-
-        public bool? IsDeleted { get; set; }
     }
 }

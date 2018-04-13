@@ -13,7 +13,7 @@ const commonUi = {
 };
 
 $(document).ready(() => {
-    commonUi.dialog.dialog({ autoOpen: false });
+    commonUi.dialog.dialog({ autoOpen: false, modal: true });
     $('.ui-dialog').css('z-index', '999');
 
     commonUi.mobileMenuLink.click(() => {

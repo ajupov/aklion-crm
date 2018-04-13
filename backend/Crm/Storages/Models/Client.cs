@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Crm.Storages.Models
 {
@@ -17,5 +19,7 @@ namespace Crm.Storages.Models
         public DateTime CreateDate { get; set; }
 
         public DateTime? ModifyDate { get; set; }
+
+        public List<ClientAttributeLink> ClientAttributeLinks { get; set; }
     }
 }

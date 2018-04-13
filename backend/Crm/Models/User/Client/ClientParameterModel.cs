@@ -1,4 +1,5 @@
-﻿using Infrastructure.Dao.Models;
+﻿using System.Collections.Generic;
+using Infrastructure.Dao.Models;
 
 namespace Crm.Models.User.Client
 {
@@ -13,5 +14,7 @@ namespace Crm.Models.User.Client
         public string MinCreateDate { get; set; }
 
         public string MaxCreateDate { get; set; }
+
+        public Dictionary<int, string> Attributes { get; set; }
     }
 }

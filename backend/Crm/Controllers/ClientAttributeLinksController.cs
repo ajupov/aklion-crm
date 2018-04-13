@@ -74,32 +74,7 @@ namespace Crm.Controllers
                 throw new StoreIsDeletedException();
             }
 
-            var attributeId = model.AttributeId;
-
-            if (attributeId > 0)
-            {
-                var clientAttribute = await _storage.ClientAttribute.FirstOrDefaultAsync(x => x.Id == model.AttributeId).ConfigureAwait(false);
-                if (clientAttribute.IsDeleted)
-                {
-                    clientAttribute.IsDeleted = false;
-                }
-            }
-            else
-            {
-                var clientAttribute = new ClientAttribute
-                {
-                    Key = model.AttributeName.Trim().Replace(" ", "_"),
-                    Name = model.AttributeName.Trim(),
-                    Store = store,
-                    IsDeleted = false,
-                    CreateDate = DateTime.Now,
-                    ModifyDate = null
-                };
-
-                var savedClientAttribute = await _storage.ClientAttribute.AddAsync(clientAttribute).ConfigureAwait(false);
-                await _storage.SaveChangesAsync().ConfigureAwait(false);
-                attributeId = savedClientAttribute.Entity.Id;
-            }
+            var attributeId = await GetAttribute(model).ConfigureAwait(false);
 
             var clientAttributeLink = new ClientAttributeLink
             {
@@ -203,6 +178,34 @@ namespace Crm.Controllers
                 default:
                     return model.IsDescSortingOrder ? query.OrderByDescending(x => x.CreateDate) : query.OrderBy(x => x.CreateDate);
             }
+        }
+
+        [NonAction]
+        private async Task<int> GetAttribute(ClientAttributeLinkModel model)
+        {
+            var attribute = (model.AttributeId > 0
+                                ? await _storage.ClientAttribute
+                                    .FirstOrDefaultAsync(x => x.StoreId == UserContext.StoreId && x.Id == model.AttributeId)
+                                    .ConfigureAwait(false)
+                                : await _storage.ClientAttribute
+                                    .FirstOrDefaultAsync(x =>
+                                        x.StoreId == UserContext.StoreId && x.Name.ToLower() == model.AttributeName.Trim().ToLower())
+                                    .ConfigureAwait(false)) ?? new ClientAttribute
+                            {
+                                Key = model.AttributeName.Trim().Replace(" ", "_"),
+                                Name = model.AttributeName.Trim(),
+                                StoreId = UserContext.StoreId,
+                                IsDeleted = false,
+                                CreateDate = DateTime.Now,
+                                ModifyDate = null
+                            };
+
+            attribute.IsDeleted = false;
+
+            var savedClientAttribute = await _storage.ClientAttribute.AddAsync(attribute).ConfigureAwait(false);
+            await _storage.SaveChangesAsync().ConfigureAwait(false);
+
+            return savedClientAttribute.Entity.Id;
         }
     }
 }

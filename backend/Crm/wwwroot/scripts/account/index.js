@@ -2,7 +2,7 @@
 
 $(document).ready(() => {
 
-    $('#load-image-link').click(e => {
+    $('#load-image-link').click(event => {
         event.preventDefault();
         event.stopPropagation();
 

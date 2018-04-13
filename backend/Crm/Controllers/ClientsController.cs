@@ -160,11 +160,6 @@ namespace Crm.Controllers
                 throw new StoreNotFoundException();
             }
 
-            if (store.IsDeleted)
-            {
-                throw new StoreIsDeletedException();
-            }
-
             var client = await _storage.Client.FirstOrDefaultAsync(x => x.Id == id).ConfigureAwait(false);
             if (client.StoreId != UserContext.StoreId)
             {
@@ -178,12 +173,17 @@ namespace Crm.Controllers
         [NonAction]
         private IQueryable<Client> GetQuery(ClientParameterModel model)
         {
-            return _storage.Client.Where(x =>
-                x.StoreId == UserContext.StoreId
-                && (string.IsNullOrEmpty(model.Name) || x.Name.Contains(model.Name))
-                && (!model.IsDeleted.HasValue || x.IsDeleted == model.IsDeleted)
-                && (!model.MinCreateDate.ToNullableDate().HasValue || x.CreateDate > model.MinCreateDate.ToNullableDate())
-                && (!model.MaxCreateDate.ToNullableDate().HasValue || x.CreateDate < model.MaxCreateDate.ToNullableDate()));
+            return _storage.Client
+                .Include(x => x.ClientAttributeLinks)
+                .Where(x => x.StoreId == UserContext.StoreId
+                            && (string.IsNullOrEmpty(model.Name) || x.Name.Contains(model.Name))
+                            && (!model.MinCreateDate.ToNullableDate().HasValue || x.CreateDate > model.MinCreateDate.ToNullableDate())
+                            && (!model.MaxCreateDate.ToNullableDate().HasValue || x.CreateDate < model.MaxCreateDate.ToNullableDate())
+                            && (!model.IsDeleted.HasValue || x.IsDeleted == model.IsDeleted)
+                            && (x.ClientAttributeLinks == null || model.Attributes == null || !model.Attributes.Any()
+                                || model.Attributes.Where(a => !string.IsNullOrWhiteSpace(a.Value)).All(a =>
+                                    x.ClientAttributeLinks.Any(ca =>
+                                        a.Key == ca.AttributeId && !ca.IsDeleted && ca.Value.Trim().Contains(a.Value.Trim())))));
         }
 
         [NonAction]
@@ -192,9 +192,9 @@ namespace Crm.Controllers
             switch (model.SortingColumn)
             {
                 case "Name":
-                    return model.IsDescSortingOrder ? query.OrderByDescending(x => x.Name) : query.OrderBy(x => x.Name);
+                    return model.IsDescSortingOrder ? query.OrderBy(x => x.IsDeleted).ThenByDescending(x => x.Name) : query.OrderBy(x => x.IsDeleted).ThenBy(x => x.Name);
                 default:
-                    return model.IsDescSortingOrder ? query.OrderByDescending(x => x.CreateDate) : query.OrderBy(x => x.CreateDate);
+                    return model.IsDescSortingOrder ? query.OrderBy(x => x.IsDeleted).ThenByDescending(x => x.CreateDate) : query.OrderBy(x => x.IsDeleted).ThenBy(x => x.CreateDate);
             }
         }
     }
