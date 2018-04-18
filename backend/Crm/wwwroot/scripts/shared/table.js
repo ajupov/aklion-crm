@@ -169,7 +169,10 @@ function createPager($table, pager, isViewable, isCreatable, createUrl, isEditab
             add: isCreatable === true,
             del: isDeletable === true,
             edit: isEditable === true,
-            cloneToTop: true//,
+            cloneToTop: true,
+            beforeSend: () => {
+                debugger;
+            }
            // afterRefresh: () => $table[0].triggerToolbar()
         },
         {
@@ -214,34 +217,34 @@ function createPager($table, pager, isViewable, isCreatable, createUrl, isEditab
             recreateForm: true,
             closeOnEscape: true,
             resize: false,
-            viewPagerButtons: false//,
-            //beforeShowForm: viewFormFilterParam !== null && viewFormFilterParam !== undefined
-            //    ? form => {
-            //        const viewTableBody = $(form[0]).find('table>tbody');
-            //        const id = parseInt(viewTableBody.find('tr#trv_Id>td.DataTD>span').text());
-            //        const params = Object.assign({}, isDeletedFilters);
+            viewPagerButtons: false,
+            beforeShowForm: viewFormFilterParam !== null && viewFormFilterParam !== undefined
+                ? form => {
+                    const viewTableBody = $(form[0]).find('table>tbody');
+                    const id = parseInt(viewTableBody.find('tr#trv_Id>td.DataTD>span').text());
+                    const params = Object.assign({}, isDeletedFilters);
 
-            //        params[viewFormFilterParam] = id;
+                    params[viewFormFilterParam] = id;
 
-            //        getJson(additionalDataUrl, params, result => {
-            //            $.each(result.Items, (index, item) => {
-            //                var key = item[viewFormAdditionalFieldKey];
-            //                var value = item[viewFormAdditionalFieldValue];
+                    getJson(additionalDataUrl, params, result => {
+                        $.each(result.Items, (index, item) => {
+                            var key = item[viewFormAdditionalFieldKey];
+                            var value = item[viewFormAdditionalFieldValue];
 
-            //                const html =
-            //                    `<tr class="FormData">
-            //                        <td class="CaptionTD form-view-label ui-widget-content" width="30%">
-            //                            <b>${key}</b>
-            //                        </td>
-            //                        <td class="DataTD form-view-data ui-helper-reset ui-widget-content">&nbsp;
-            //                            <span>${value}</span>
-            //                        </td>
-            //                    </tr>`;
-            //                viewTableBody.append(html);
-            //            });
-            //        });
-            //    }
-            //    : null
+                            const html =
+                                `<tr class="FormData">
+                                    <td class="CaptionTD form-view-label ui-widget-content" width="30%">
+                                        <b>${key}</b>
+                                    </td>
+                                    <td class="DataTD form-view-data ui-helper-reset ui-widget-content">&nbsp;
+                                        <span>${value}</span>
+                                    </td>
+                                </tr>`;
+                            viewTableBody.append(html);
+                        });
+                    });
+                }
+                : null
         });
 
     if (isFilterable) {
@@ -277,7 +280,6 @@ function createTable(options) {
         onSelectRow: options.OnSelectRow !== null && options.OnSelectRow !== undefined ? options.OnSelectRow : undefined,
         prmNames: prmNames,
         jsonReader: jsonReader,
-
         subGrid: options.HasSubTable,
         subGridOptions: options.HasSubTable ? subTableOptions : null,
         subGridRowExpanded: options.HasSubTable
@@ -304,9 +306,15 @@ function createTable(options) {
                     colModel: getColModel(options.SubTableColumns, $table),
                     sortable: true,
                     search: true,
-                    postData: Object.assign({}, isDeletedFilters, { ClientId: parseInt(id) }),
                     prmNames: prmNames,
-                    jsonReader: jsonReader
+                    jsonReader: jsonReader,
+                    serializeGridData: data => {
+                        data[options.SubTableLink] = parseInt(id);
+                        return data;
+                    },
+                    beforeSend: data => {
+                        debugger;
+                    }
                 });
 
                 if (options.HasSubTablePager) {
@@ -455,6 +463,21 @@ function createFilterForm($table, options) {
             let valueIndex = 0;
 
             $.each(data, (index, item) => {
+                if (item.name === 'IsDeleted') {
+                    switch (item.value) {
+                        case 'true':
+                            item.value = true;
+                            break;
+
+                        case 'false':
+                            item.value = false;
+                            break;
+                        default:
+                            item.value = null;
+                            break;
+                    }
+                }
+
                 if (item.name.indexOf('[0].Key') >= 0) {
                     item.name = item.name.replace('[0]', `[${keyIndex}]`);
                     keyIndex++;
@@ -465,6 +488,11 @@ function createFilterForm($table, options) {
                     valueIndex++;
                 }
             });
+
+            const param = $table.jqGrid('getGridParam');
+
+            data.push({ 'name': 'SortingColumn', 'value': param.sortname });
+            data.push({ 'name': 'SortingOrder', 'value': param.sortorder });
 
             $table.setGridParam({ postData: data }).trigger('reloadGrid');
         });

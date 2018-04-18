@@ -202,9 +202,15 @@ namespace Crm.Controllers
 
             attribute.IsDeleted = false;
 
+            if (attribute.Id > 0)
+            {
+                _storage.ClientAttribute.Update(attribute);
+                await _storage.SaveChangesAsync().ConfigureAwait(false);
+                return attribute.Id;
+            }
+
             var savedClientAttribute = await _storage.ClientAttribute.AddAsync(attribute).ConfigureAwait(false);
             await _storage.SaveChangesAsync().ConfigureAwait(false);
-
             return savedClientAttribute.Entity.Id;
         }
     }

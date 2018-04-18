@@ -15,47 +15,41 @@ function initClientsTable() {
         CreateUrl: '/Clients/Create',
         UpdateUrl: '/Clients/Update',
         DeleteUrl: '/Clients/Delete',
+        ViewFormFilterParam: 'ClientId',
+        ViewFormAdditionalFieldKey: 'AttributeName',
+        ViewFormAdditionalFieldValue: 'Value',
         Columns: [
             { Name: 'Id', Label: '№', Type: 'number', Hidden: true },
             { Name: 'Name', Label: 'Наименование', Type: 'text', Width: 300, Editable: true, MaxLength: 256 },
             { Name: 'CreateDate', Label: 'Создан', Type: 'datetime', Width: 120 },
             { Name: 'IsDeleted', Label: 'Удалён', Width: 100, Align: 'center', Type: 'checkbox', Formatter: clientIsDeletedFormatter, Sortable: false },
+            { Name: 'Attributes', Label: 'Атрибуты', Type: 'filterlist', FilterSelectDataUrl: '/ClientAttributes/GetSelect' }
+        ],
+        HasSubTable: true,
+        HasSubTablePager: true,
+        SubTableLink: 'ClientId',
+        SubTableDataUrl: '/ClientAttributeLinks/GetList',
+        SubTableIsCreatable: true,
+        SubTableCreateUrl: '/ClientAttributeLinks/Create',
+        SubTableIsEditable: true,
+        SubTableUpdateUrl: '/ClientAttributeLinks/Update',
+        SubTableIsDeletable: true,
+        SubTableDeleteUrl: '/ClientAttributeLinks/Delete',
+        SubTableIsFilterable: true,
+        SubTableSortingColumn: 'AttributeName',
+        SubTableColumns: [
+            { Name: 'AttributeId', Type: 'number', Hidden: true, Editable: true },
             {
-                Name: 'Attributes', Label: 'Атрибуты', Type: 'filterlist', FilterSelectDataUrl: '/ClientAttributes/GetSelect'
+                Name: 'AttributeName', Label: 'Атрибут', Type: 'autocomplete', Editable: true, Width: 200,
+                AutocompleteUrl: '/ClientAttributes/GetAutocomplete', AutocompleteHidden: 'AttributeId'
+            },
+            { Name: 'ClientId', Type: 'number', Hidden: true, EditHidden: true},
+            { Name: 'Value', Label: 'Значение', Editable: true, EditHidden: true, Width: 300 },
+            {
+                Name: 'IsDeleted', Label: ' ', Type: 'checkbox', Width: 100, Align: 'center',
+                Formatter: clientAttributeLinksIsDeletedFormatter, Sortable: false
             }
         ]
-
-        //HasSubTable: true,
-        //HasSubTablePager: true,
-        //SubTableDataUrl: '/ClientAttributeLinks/GetList',
-        //SubTableIsViewable: true,
-        //SubTableIsCreatable: true,
-        //SubTableCreateUrl: '/ClientAttributeLinks/Create',
-        //SubTableIsEditable: true,
-        //SubTableUpdateUrl: '/ClientAttributeLinks/Update',
-        //SubTableIsDeletable: true,
-        //SubTableDeleteUrl: '/ClientAttributeLinks/Delete',
-        //SubTableIsFilterable: false,
-        //SubTableSortingColumn: 'AttributeName',
-
-        //ViewFormFilterParam: 'ClientId',
-        //ViewFormAdditionalFieldKey: 'AttributeName', 
-        //ViewFormAdditionalFieldValue: 'Value',
-
-        //SubTableColumns: [
-        //    { Name: 'CreateDate', Label: 'Создан', Type: 'datetime', Hidden: true, EditHidden: true },
-        //    { Name: 'AttributeId', Type: 'number', Hidden: true, Editable: true },
-        //    {
-        //        Name: 'AttributeName', Label: 'Атрибут', Type: 'autocomplete', Editable: true, Width: 200,
-        //        AutocompleteUrl: '/ClientAttributes/GetAutocomplete', AutocompleteHidden: 'AttributeId'
-        //    },
-        //    { Name: 'ClientId', Type: 'number', Hidden: true, Editable: true },
-        //    { Name: 'Value', Label: 'Значение', Editable: true, EditHidden: true, Width: 400 },
-        //    {
-        //        Name: 'IsDeleted', Label: ' ', Type: 'checkbox', Width: 100, Align: 'center',
-        //        Formatter: clientAttributeLinksIsDeletedFormatter, Sortable: false
-        //    }
-        //]
     });
 }
 
