@@ -12,8 +12,6 @@
 
         public string Value { get; set; }
 
-        public bool IsDeleted { get; set; }
-
         public string CreateDate { get; set; }
     }
 }

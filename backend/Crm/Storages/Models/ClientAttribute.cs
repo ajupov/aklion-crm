@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Crm.Storages.Models
+﻿namespace Crm.Storages.Models
 {
     public class ClientAttribute
     {
@@ -13,11 +11,5 @@ namespace Crm.Storages.Models
         public string Key { get; set; }
 
         public string Name { get; set; }
-
-        public bool IsDeleted { get; set; }
-
-        public DateTime CreateDate { get; set; }
-
-        public DateTime? ModifyDate { get; set; }
     }
 }

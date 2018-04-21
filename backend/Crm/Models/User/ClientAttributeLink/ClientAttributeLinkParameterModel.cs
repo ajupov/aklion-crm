@@ -14,8 +14,6 @@ namespace Crm.Models.User.ClientAttributeLink
 
         public string Value { get; set; }
 
-        public bool? IsDeleted { get; set; }
-
         public string MinCreateDate { get; set; }
 
         public string MaxCreateDate { get; set; }

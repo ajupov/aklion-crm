@@ -51,13 +51,13 @@ function getColModel(columns, $table) {
                 align: column.Align !== null && column.Align !== undefined && column.Align.length > 0
                     ? column.Align
                     : column.Type === 'checkbox' ||
-                        column.Type === 'select' ||
-                        column.Type === 'date' ||
-                        column.Type === 'datetime'
-                        ? 'center'
-                        : column.Type === 'money'
-                            ? 'right'
-                            : 'left',
+                    column.Type === 'select' ||
+                    column.Type === 'date' ||
+                    column.Type === 'datetime'
+                    ? 'center'
+                    : column.Type === 'money'
+                    ? 'right'
+                    : 'left',
                 hidden: column.Hidden,
                 datefmt: column.Type === 'datetime'
                     ? 'd.m.Y H:i:s'
@@ -65,57 +65,60 @@ function getColModel(columns, $table) {
                 formatter: column.Formatter !== null && column.Formatter !== undefined
                     ? column.Formatter
                     : column.Type === 'checkbox'
-                        ? 'checkbox'
-                        : column.Type === 'select'
-                            ? 'select'
-                            : column.Type === 'date' || column.Type === 'datetime'
-                                ? 'date'
-                                : column.Type === 'number'
-                                    ? 'integer'
-                                    : column.Type === 'email'
-                                        ? 'email'
-                                        : column.Type === 'money'
-                                            ? 'currency'
-                                            : column.Type === 'image'
-                                                ? 'image'
-                                                : e => e === undefined || e === null
-                                                    ? ''
-                                                    : e,
+                    ? 'checkbox'
+                    : column.Type === 'select'
+                    ? 'select'
+                    : column.Type === 'date' || column.Type === 'datetime'
+                    ? 'date'
+                    : column.Type === 'number'
+                    ? 'integer'
+                    : column.Type === 'email'
+                    ? 'email'
+                    : column.Type === 'money'
+                    ? 'currency'
+                    : column.Type === 'image'
+                    ? 'image'
+                    : e => e === undefined || e === null
+                    ? ''
+                    : e,
                 unformat: column.Unformatter !== null && column.Formatter !== undefined
                     ? column.Unformatter
                     : null,
                 formatoptions: column.Type === 'datetime'
                     ? { srcformat: 'd.m.Y h:i:s', newformat: 'd.m.Y H:i:s' }
                     : column.Type === 'date'
-                        ? { srcformat: 'd.m.Y', newformat: 'd.m.Y' }
-                        : column.Type === 'money'
-                            ? { suffix: ' ₽' }
-                            : undefined,
+                    ? { srcformat: 'd.m.Y', newformat: 'd.m.Y' }
+                    : column.Type === 'money'
+                    ? { suffix: ' ₽' }
+                    : undefined,
                 editable: column.Editable,
                 edittype: column.Type === 'checkbox'
                     ? 'checkbox'
                     : column.Type === 'select'
-                        ? 'select'
-                        : column.Type === 'textarea'
-                            ? 'textarea'
-                            : column.Type === 'image'
-                                ? 'image'
-                                : column.Type === 'file'
-                                    ? 'file'
-                                    : 'text',
+                    ? 'select'
+                    : column.Type === 'textarea'
+                    ? 'textarea'
+                    : column.Type === 'image'
+                    ? 'image'
+                    : column.Type === 'file'
+                    ? 'file'
+                    : 'text',
                 editoptions: {
                     value: column.Type === 'checkbox'
                         ? 'true:false'
                         : column.Type === 'select'
-                            ? column.SelectValues.replace('0:;', '')
-                            : [],
+                        ? column.SelectValues.replace('0:;', '')
+                        : [],
                     maxlength: column.MaxLength > 0 ? column.MaxLength : 0x7FFFFFFF,
                     dataInit: e => {
                         if (column.Type === 'date' || column.Type === 'datetime') {
                             initDatePicker(e, $table);
                         }
                         if (column.Type === 'autocomplete') {
-                            initAutocomplete(e, column.AutocompleteUrl, column.AutocompleteHidden, column.DependentFields);
+                            initAutocomplete(e,
+                                column.AutocompleteUrl,
+                                column.AutocompleteHidden,
+                                column.DependentFields);
                         }
                         if (column.Type === 'money') {
                             initMoney(e, false);
@@ -141,25 +144,38 @@ function getColModel(columns, $table) {
                     value: column.Type === 'select'
                         ? column.SelectValues
                         : column.Type === 'checkbox'
-                            ? 'false:Нет;true:Да;null:Все'
-                            : []
+                        ? 'false:Нет;true:Да;null:Все'
+                        : []
                 },
                 sortable: column.Sortable,
                 sorttype: column.Type === 'date' || column.Type === 'datetime'
                     ? 'date'
                     : column.Type === 'number'
-                        ? 'int'
-                        : column.Type === 'money' || column.Type === 'double'
-                            ? 'currency'
-                            : 'text'
+                    ? 'int'
+                    : column.Type === 'money' || column.Type === 'double'
+                    ? 'currency'
+                    : 'text'
             });
         });
 
     return colModel;
 }
 
-function createPager($table, pager, isViewable, isCreatable, createUrl, isEditable, updateUrl, isDeletable, deleteUrl,
-    isFilterable, additionalDataUrl, viewFormFilterParam, viewFormAdditionalFieldKey, viewFormAdditionalFieldValue) {
+function createPager($table,
+    pager,
+    isViewable,
+    isCreatable,
+    createUrl,
+    isEditable,
+    updateUrl,
+    isDeletable,
+    deleteUrl,
+    isFilterable,
+    additionalDataUrl,
+    viewFormFilterParam,
+    viewFormAdditionalFieldKey,
+    viewFormAdditionalFieldValue,
+    linkData) {
     $table.jqGrid('navGrid',
         pager,
         {
@@ -169,11 +185,7 @@ function createPager($table, pager, isViewable, isCreatable, createUrl, isEditab
             add: isCreatable === true,
             del: isDeletable === true,
             edit: isEditable === true,
-            cloneToTop: true,
-            beforeSend: () => {
-                debugger;
-            }
-           // afterRefresh: () => $table[0].triggerToolbar()
+            cloneToTop: true
         },
         {
             width: 'auto',
@@ -182,7 +194,17 @@ function createPager($table, pager, isViewable, isCreatable, createUrl, isEditab
             resize: false,
             url: updateUrl,
             closeAfterEdit: true,
-            errorTextFormat: e => e.responseJSON.Error
+            errorTextFormat: e => e.responseJSON.Error,
+            onInitializeForm: (formid) => {
+                if (!linkData) {
+                    return;
+                }
+
+                $.each(linkData,
+                    (key, value) => {
+                        $(formid[0].elements[key]).val(value);
+                    });
+            }
         },
         {
             width: 'auto',
@@ -193,14 +215,16 @@ function createPager($table, pager, isViewable, isCreatable, createUrl, isEditab
             closeAfterAdd: true,
             clearAfterAdd: true,
             errorTextFormat: e => e.responseJSON.Error,
-            //onInitializeForm: (formid) => {
-            //    debugger;
-            //    //if (options.IsWithFile) {
-            //    //    $(formid).attr('method', 'post');
-            //    //    $(formid).attr('action', '');
-            //    //    $(formid).attr('enctype', 'multipart/form-data');
-            //    //}
-            //}
+            onInitializeForm: (formid) => {
+                if (!linkData) {
+                    return;
+                }
+
+                $.each(linkData,
+                    (key, value) => {
+                        $(formid[0].elements[key]).val(value);
+                    });
+            }
         },
         {
             width: 'auto',
@@ -221,18 +245,24 @@ function createPager($table, pager, isViewable, isCreatable, createUrl, isEditab
             beforeShowForm: viewFormFilterParam !== null && viewFormFilterParam !== undefined
                 ? form => {
                     const viewTableBody = $(form[0]).find('table>tbody');
+
+                    viewTableBody.find('tr#trv_IsDeleted').remove();
+
                     const id = parseInt(viewTableBody.find('tr#trv_Id>td.DataTD>span').text());
                     const params = Object.assign({}, isDeletedFilters);
 
                     params[viewFormFilterParam] = id;
 
-                    getJson(additionalDataUrl, params, result => {
-                        $.each(result.Items, (index, item) => {
-                            var key = item[viewFormAdditionalFieldKey];
-                            var value = item[viewFormAdditionalFieldValue];
+                    getJson(additionalDataUrl,
+                        params,
+                        result => {
+                            $.each(result.Items,
+                                (index, item) => {
+                                    var key = item[viewFormAdditionalFieldKey];
+                                    var value = item[viewFormAdditionalFieldValue];
 
-                            const html =
-                                `<tr class="FormData">
+                                    const html =
+                                        `<tr class="FormData">
                                     <td class="CaptionTD form-view-label ui-widget-content" width="30%">
                                         <b>${key}</b>
                                     </td>
@@ -240,9 +270,9 @@ function createPager($table, pager, isViewable, isCreatable, createUrl, isEditab
                                         <span>${value}</span>
                                     </td>
                                 </tr>`;
-                            viewTableBody.append(html);
+                                    viewTableBody.append(html);
+                                });
                         });
-                    });
                 }
                 : null
         });
@@ -268,16 +298,22 @@ function createTable(options) {
         height: 'auto',
         pager: options.Pager,
         width: '100%',
-        sortname: options.SortingColumn !== null && options.SortingColumn !== undefined ? options.SortingColumn : 'CreateDate',
+        sortname: options.SortingColumn !== null && options.SortingColumn !== undefined
+            ? options.SortingColumn
+            : 'CreateDate',
         sortorder: options.SortingColumn ? 'asc' : 'desc',
         caption: options.Title,
         viewrecords: true,
         colModel: getColModel(options.Columns, $table),
         sortable: true,
         search: true,
-        postData: options.CanExtractFilters && filters !== null ? Object.assign({}, filters, isDeletedFilters) : isDeletedFilters,
+        postData: options.CanExtractFilters && filters !== null
+            ? Object.assign({}, filters, isDeletedFilters)
+            : isDeletedFilters,
         multiselect: options.Multiselect,
-        onSelectRow: options.OnSelectRow !== null && options.OnSelectRow !== undefined ? options.OnSelectRow : undefined,
+        onSelectRow: options.OnSelectRow !== null && options.OnSelectRow !== undefined
+            ? options.OnSelectRow
+            : undefined,
         prmNames: prmNames,
         jsonReader: jsonReader,
         subGrid: options.HasSubTable,
@@ -288,19 +324,22 @@ function createTable(options) {
                 const subTablePager = `${rowId}-sub-table-pager`;
                 const subTableSelector = `#${subTableId}`;
                 const subTablePagerSelector = `#${subTablePager}`;
-                $(`#${rowId}`).html(`<table id='${subTableId}' class='scroll'></table><div id='${subTablePager}'></div>`);
+                $(`#${rowId}`)
+                    .html(`<table id='${subTableId}' class='scroll'></table><div id='${subTablePager}'></div>`);
 
                 const $subTable = $(subTableSelector);
 
                 $subTable.jqGrid({
                     url: options.SubTableDataUrl,
                     datatype: 'json',
-                    rowNum: 100,
+                    rowNum: 10,
                     rowList: [10, 20, 50, 100],
                     height: 'auto',
                     pager: options.HasSubTablePager ? subTablePagerSelector : '',
                     width: '100%',
-                    sortname: options.SubTableSortingColumn !== null && options.SubTableSortingColumn !== undefined ? options.SubTableSortingColumn : 'CreateDate',
+                    sortname: options.SubTableSortingColumn !== null && options.SubTableSortingColumn !== undefined
+                        ? options.SubTableSortingColumn
+                        : 'CreateDate',
                     sortorder: options.SubTableSortingColumn ? 'asc' : 'desc',
                     viewrecords: options.HasSubTablePager,
                     colModel: getColModel(options.SubTableColumns, $table),
@@ -311,24 +350,47 @@ function createTable(options) {
                     serializeGridData: data => {
                         data[options.SubTableLink] = parseInt(id);
                         return data;
-                    },
-                    beforeSend: data => {
-                        debugger;
                     }
                 });
 
+                const linkData = {};
+
+                linkData[options.SubTableLink] = parseInt(id);
+
                 if (options.HasSubTablePager) {
-                    createPager($subTable, subTablePagerSelector, options.SubTableIsViewable, options.SubTableIsCreatable,
-                        options.SubTableCreateUrl, options.SubTableIsEditable, options.SubTableUpdateUrl,
-                        options.SubTableIsDeletable, options.SubTableDeleteUrl, options.SubTableIsFilterable);
+                    createPager($subTable,
+                        subTablePagerSelector,
+                        options.SubTableIsViewable,
+                        options.SubTableIsCreatable,
+                        options.SubTableCreateUrl,
+                        options.SubTableIsEditable,
+                        options.SubTableUpdateUrl,
+                        options.SubTableIsDeletable,
+                        options.SubTableDeleteUrl,
+                        options.SubTableIsFilterable,
+                        null,
+                        null,
+                        null,
+                        null,
+                        linkData);
                 }
             }
             : null
     });
 
-    createPager($table, options.Pager, options.IsViewable, options.IsCreatable, options.CreateUrl,
-        options.IsEditable, options.UpdateUrl, options.IsDeletable, options.DeleteUrl, options.IsFilterable,
-        options.SubTableDataUrl, options.ViewFormFilterParam, options.ViewFormAdditionalFieldKey,
+    createPager($table,
+        options.Pager,
+        options.IsViewable,
+        options.IsCreatable,
+        options.CreateUrl,
+        options.IsEditable,
+        options.UpdateUrl,
+        options.IsDeletable,
+        options.DeleteUrl,
+        options.IsFilterable,
+        options.SubTableDataUrl,
+        options.ViewFormFilterParam,
+        options.ViewFormAdditionalFieldKey,
         options.ViewFormAdditionalFieldValue);
 
     createFilterForm($table, options);
@@ -346,58 +408,60 @@ function createFilterForm($table, options) {
                     $(options.SearchDialog).dialog('open');
                 }
             });
-   
+
         let html = '<form>';
 
-        $.each(options.Columns, (index, item) => {
-            if (!item.Hidden) {
-                html += `<label class="search-dialog-label">${item.Label}</label>`;
+        $.each(options.Columns,
+            (index, item) => {
+                if (!item.Hidden || item.FilterHidden) {
+                    html += `<label class="search-dialog-label">${item.Label}</label>`;
 
-                if (item.Type === 'text') {
-                    html += `<input type="text" length="${item.MaxLength}" name="${item.Name}"
+                    if (item.Type === 'text') {
+                        html += `<input type="text" length="${item.MaxLength}" name="${item.Name}"
                                 class="search-form-text ui-widget-content ui-corner-all search-dialog-field">`;
-                } else if (item.Type === 'date' || item.Type === 'datetime') {
-                    html += `<input type="text" name="Min${item.Name}"
+                    } else if (item.Type === 'date' || item.Type === 'datetime') {
+                        html += `<input type="text" name="Min${item.Name}"
                                 class="datepicker ui-widget-content ui-corner-all search-dialog-date-field">
                         <label class="search-dialog-date-label">-</label>
                         <input type="text"  name="Max${item.Name}"
                             class="datepicker ui-widget-content ui-corner-all search-dialog-date-field">`;
-                } else if (item.Type === 'filterlist') {
-                    html += `<div class="search-dialog-filterlist-wrapper" >`;
-                    html += `<div class="search-dialog-filterlist-item">`;
-                    html += `<select name="${item.Name}[0].Key"
+                    } else if (item.Type === 'filterlist') {
+                        html += `<div class="search-dialog-filterlist-wrapper" >`;
+                        html += `<div class="search-dialog-filterlist-item">`;
+                        html += `<select name="${item.Name}[0].Key"
                         class="ui-widget-content ui-corner-all search-dialog-fixed-select search-dialog-filterlist-select">`;
 
-                    $.get({
-                        url: item.FilterSelectDataUrl,
-                        async: false,
-                        dataType: 'json',
-                        success: result => {
-                            $.each(result,
-                                (key, value) => {
-                                    html += `<option value=${value}>${key}</option>`;
-                                });
-                        }
-                    });
+                        $.get({
+                            url: item.FilterSelectDataUrl,
+                            async: false,
+                            dataType: 'json',
+                            success: result => {
+                                $.each(result,
+                                    (key, value) => {
+                                        html += `<option value=${value}>${key}</option>`;
+                                    });
+                            }
+                        });
 
-                    html += '</select>';
-                    html += `<input type="text" length="${item.MaxLength}" name="${item.Name}[0].Value"
+                        html += '</select>';
+                        html += `<input type="text" length="${item.MaxLength}" name="${item.Name}[0].Value"
                         class="search-form-text ui-widget-content ui-corner-all search-dialog-field search-dialog-filterlist-input">`;
-                    html += '</div>';
-                    html += '</div>';
-                    html += '<a href="#" class="search-dialog-add-link">';
-                    html += 'Добавить';
-                    html += '</a>';
-                } else if (item.Type === 'checkbox') {
-                    html += `<select name="${item.Name}" class="ui-widget-content ui-corner-all search-dialog-select">`;
-                    html += '<option value="null"></option>';
-                    html += '<option value="true">Да</option>';
-                    html += '<option value="false">Нет</option>';
-                    html += '</select>';
-                    html += '<br>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '<a href="#" class="search-dialog-add-link">';
+                        html += 'Добавить';
+                        html += '</a>';
+                    } else if (item.Type === 'checkbox') {
+                        html += `<select name="${item.Name
+                            }" class="ui-widget-content ui-corner-all search-dialog-select">`;
+                        html += '<option value="null"></option>';
+                        html += '<option value="true">Да</option>';
+                        html += '<option value="false">Нет</option>';
+                        html += '</select>';
+                        html += '<br>';
+                    }
                 }
-            }
-        });
+            });
 
         html += '<br><br>';
         html += '</form>';
@@ -422,7 +486,8 @@ function createFilterForm($table, options) {
             const item = $(options.SearchDialog).find('.search-dialog-filterlist-item').first().clone();
             item.find('input').val('');
             item.find('select').prop('selectedIndex', 0);
-            item.append('<a href="#" class="search-dialog-remove-link"><span class="ui-icon ui-icon-closethick"></span></a>');
+            item.append(
+                '<a href="#" class="search-dialog-remove-link"><span class="ui-icon ui-icon-closethick"></span></a>');
 
             $(options.SearchDialog).find('.search-dialog-filterlist-wrapper').append(item);
 
@@ -462,9 +527,10 @@ function createFilterForm($table, options) {
             let keyIndex = 0;
             let valueIndex = 0;
 
-            $.each(data, (index, item) => {
-                if (item.name === 'IsDeleted') {
-                    switch (item.value) {
+            $.each(data,
+                (index, item) => {
+                    if (item.name === 'IsDeleted') {
+                        switch (item.value) {
                         case 'true':
                             item.value = true;
                             break;
@@ -475,19 +541,19 @@ function createFilterForm($table, options) {
                         default:
                             item.value = null;
                             break;
+                        }
                     }
-                }
 
-                if (item.name.indexOf('[0].Key') >= 0) {
-                    item.name = item.name.replace('[0]', `[${keyIndex}]`);
-                    keyIndex++;
-                }
+                    if (item.name.indexOf('[0].Key') >= 0) {
+                        item.name = item.name.replace('[0]', `[${keyIndex}]`);
+                        keyIndex++;
+                    }
 
-                if (item.name.indexOf('[0].Value') >= 0) {
-                    item.name = item.name.replace('[0]', `[${valueIndex}]`);
-                    valueIndex++;
-                }
-            });
+                    if (item.name.indexOf('[0].Value') >= 0) {
+                        item.name = item.name.replace('[0]', `[${valueIndex}]`);
+                        valueIndex++;
+                    }
+                });
 
             const param = $table.jqGrid('getGridParam');
 

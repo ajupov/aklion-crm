@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Crm.Controllers
 {
+    [CheckStore]
     [AjaxErrorHandle]
     [Route("ClientAttributeLinks")]
     public class ClientAttributeLinksController : BaseController
@@ -29,19 +30,7 @@ namespace Crm.Controllers
         [Route("GetList")]
         public async Task<PagingModel<ClientAttributeLinkModel>> GetList(ClientAttributeLinkParameterModel model)
         {
-            var store = await _storage.Store.FirstOrDefaultAsync(x => x.Id == UserContext.StoreId).ConfigureAwait(false);
-            if (store == null)
-            {
-                throw new StoreNotFoundException();
-            }
-
-            if (store.IsDeleted)
-            {
-                throw new StoreIsDeletedException();
-            }
-
             var query = GetQuery(model);
-
             var list = await GetOrder(model, query).Skip(model.SkipCount).Take(model.TakeCount).ToListAsync().ConfigureAwait(false);
             var count = await query.CountAsync().ConfigureAwait(false);
 
@@ -52,7 +41,6 @@ namespace Crm.Controllers
                 AttributeId = x.AttributeId,
                 AttributeName = x.Attribute.Name,
                 Value = x.Value,
-                IsDeleted = x.IsDeleted,
                 CreateDate = x.CreateDate.ToDateTimeString()
             }).ToList();
 
@@ -63,17 +51,6 @@ namespace Crm.Controllers
         [Route("Create")]
         public async Task Create(ClientAttributeLinkModel model)
         {
-            var store = await _storage.Store.FirstOrDefaultAsync(x => x.Id == UserContext.StoreId).ConfigureAwait(false);
-            if (store == null)
-            {
-                throw new StoreNotFoundException();
-            }
-
-            if (store.IsDeleted)
-            {
-                throw new StoreIsDeletedException();
-            }
-
             var attributeId = await GetAttribute(model).ConfigureAwait(false);
 
             var clientAttributeLink = new ClientAttributeLink
@@ -82,8 +59,6 @@ namespace Crm.Controllers
                 ClientId = model.ClientId,
                 AttributeId = attributeId,
                 Value = model.Value,
-                Store = store,
-                IsDeleted = false,
                 CreateDate = DateTime.Now,
                 ModifyDate = null
             };
@@ -96,26 +71,10 @@ namespace Crm.Controllers
         [Route("Update")]
         public async Task Update(ClientAttributeLinkModel model)
         {
-            var store = await _storage.Store.FirstOrDefaultAsync(x => x.Id == UserContext.StoreId).ConfigureAwait(false);
-            if (store == null)
-            {
-                throw new StoreNotFoundException();
-            }
-
-            if (store.IsDeleted)
-            {
-                throw new StoreIsDeletedException();
-            }
-
             var clientAttributeLink = await _storage.ClientAttributeLink.FirstOrDefaultAsync(x => x.Id == model.Id).ConfigureAwait(false);
             if (clientAttributeLink.StoreId != UserContext.StoreId)
             {
                 throw new NotAccessChangingException();
-            }
-
-            if (clientAttributeLink.IsDeleted)
-            {
-                throw new ObjectIsDeletedException();
             }
 
             clientAttributeLink.AttributeId = model.AttributeId;
@@ -130,24 +89,13 @@ namespace Crm.Controllers
         [Route("Delete")]
         public async Task Delete(int id)
         {
-            var store = await _storage.Store.FirstOrDefaultAsync(x => x.Id == UserContext.StoreId).ConfigureAwait(false);
-            if (store == null)
-            {
-                throw new StoreNotFoundException();
-            }
-
-            if (store.IsDeleted)
-            {
-                throw new StoreIsDeletedException();
-            }
-
             var clientAttributeLink = await _storage.ClientAttributeLink.FirstOrDefaultAsync(x => x.Id == id).ConfigureAwait(false);
             if (clientAttributeLink.StoreId != UserContext.StoreId)
             {
                 throw new NotAccessChangingException();
             }
 
-            clientAttributeLink.IsDeleted = !clientAttributeLink.IsDeleted;
+            _storage.ClientAttributeLink.Remove(clientAttributeLink);
             await _storage.SaveChangesAsync().ConfigureAwait(false);
         }
 
@@ -161,7 +109,6 @@ namespace Crm.Controllers
                 && (!model.AttributeId.HasValue || x.AttributeId == model.AttributeId)
                 && (string.IsNullOrEmpty(model.AttributeName) || x.Attribute.Name.Contains(model.AttributeName))
                 && (string.IsNullOrEmpty(model.Value) || x.Value.Contains(model.Value))
-                && (!model.IsDeleted.HasValue || x.IsDeleted == model.IsDeleted)
                 && (!model.MinCreateDate.ToNullableDate().HasValue || x.CreateDate > model.MinCreateDate.ToNullableDate())
                 && (!model.MaxCreateDate.ToNullableDate().HasValue || x.CreateDate < model.MaxCreateDate.ToNullableDate()));
         }
@@ -172,11 +119,17 @@ namespace Crm.Controllers
             switch (model.SortingColumn)
             {
                 case "AttributeName":
-                    return model.IsDescSortingOrder ? query.OrderByDescending(x => x.Attribute.Name) : query.OrderBy(x => x.Attribute.Name);
+                    return model.IsDescSortingOrder 
+                        ? query.OrderByDescending(x => x.Attribute.Name) 
+                        : query.OrderBy(x => x.Attribute.Name);
                 case "Value":
-                    return model.IsDescSortingOrder ? query.OrderByDescending(x => x.Value) : query.OrderBy(x => x.Value);
+                    return model.IsDescSortingOrder 
+                        ? query.OrderByDescending(x => x.Value) 
+                        : query.OrderBy(x => x.Value);
                 default:
-                    return model.IsDescSortingOrder ? query.OrderByDescending(x => x.CreateDate) : query.OrderBy(x => x.CreateDate);
+                    return model.IsDescSortingOrder
+                        ? query.OrderByDescending(x => x.CreateDate)
+                        : query.OrderBy(x => x.CreateDate);
             }
         }
 
@@ -194,13 +147,8 @@ namespace Crm.Controllers
                             {
                                 Key = model.AttributeName.Trim().Replace(" ", "_"),
                                 Name = model.AttributeName.Trim(),
-                                StoreId = UserContext.StoreId,
-                                IsDeleted = false,
-                                CreateDate = DateTime.Now,
-                                ModifyDate = null
+                                StoreId = UserContext.StoreId
                             };
-
-            attribute.IsDeleted = false;
 
             if (attribute.Id > 0)
             {

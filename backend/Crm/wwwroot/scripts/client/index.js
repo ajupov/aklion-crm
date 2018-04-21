@@ -1,6 +1,4 @@
-﻿ 'use strict';
-
-function initClientsTable() {
+﻿function initClientsTable() {
     createTable({
         Element: '#clients-table',
         Pager: '#clients-table-pagination',
@@ -20,10 +18,25 @@ function initClientsTable() {
         ViewFormAdditionalFieldValue: 'Value',
         Columns: [
             { Name: 'Id', Label: '№', Type: 'number', Hidden: true },
-            { Name: 'Name', Label: 'Наименование', Type: 'text', Width: 300, Editable: true, MaxLength: 256 },
+            { Name: 'Name', Label: 'Наименование', Type: 'text', Width: 400, Editable: true, MaxLength: 256 },
             { Name: 'CreateDate', Label: 'Создан', Type: 'datetime', Width: 120 },
-            { Name: 'IsDeleted', Label: 'Удалён', Width: 100, Align: 'center', Type: 'checkbox', Formatter: clientIsDeletedFormatter, Sortable: false },
-            { Name: 'Attributes', Label: 'Атрибуты', Type: 'filterlist', FilterSelectDataUrl: '/ClientAttributes/GetSelect' }
+            {
+                Name: 'IsDeleted',
+                Label: 'Удалён',
+                Width: 100,
+                Align: 'center',
+                Type: 'checkbox',
+                Formatter: clientIsDeletedFormatter,
+                Sortable: false
+            },
+            {
+                Name: 'Attributes',
+                Label: 'Атрибуты',
+                Type: 'filterlist',
+                FilterSelectDataUrl: '/ClientAttributes/GetSelect',
+                Hidden: true,
+                FilterHidden: true
+            }
         ],
         HasSubTable: true,
         HasSubTablePager: true,
@@ -40,15 +53,16 @@ function initClientsTable() {
         SubTableColumns: [
             { Name: 'AttributeId', Type: 'number', Hidden: true, Editable: true },
             {
-                Name: 'AttributeName', Label: 'Атрибут', Type: 'autocomplete', Editable: true, Width: 200,
-                AutocompleteUrl: '/ClientAttributes/GetAutocomplete', AutocompleteHidden: 'AttributeId'
+                Name: 'AttributeName',
+                Label: 'Название атрибута',
+                Type: 'autocomplete',
+                Editable: true,
+                Width: 200,
+                AutocompleteUrl: '/ClientAttributes/GetAutocomplete',
+                AutocompleteHidden: 'AttributeId'
             },
-            { Name: 'ClientId', Type: 'number', Hidden: true, EditHidden: true},
-            { Name: 'Value', Label: 'Значение', Editable: true, EditHidden: true, Width: 300 },
-            {
-                Name: 'IsDeleted', Label: ' ', Type: 'checkbox', Width: 100, Align: 'center',
-                Formatter: clientAttributeLinksIsDeletedFormatter, Sortable: false
-            }
+            { Name: 'ClientId', Type: 'number', Hidden: true, Editable: true },
+            { Name: 'Value', Label: 'Значение', Editable: true, EditHidden: true, Width: 424 }
         ]
     });
 }
@@ -57,19 +71,19 @@ function initAttributesTable() {
     createTable({
         Element: '#attributes-table',
         Pager: '#attributes-table-pagination',
-        IsViewable: true,
         IsFilterable: true,
         IsCreatable: true,
         IsEditable: true,
+        IsDeletable: true,
         SortingColumn: 'Name',
         DataUrl: '/ClientAttributes/GetList',
         CreateUrl: '/ClientAttributes/Create',
         UpdateUrl: '/ClientAttributes/Update',
+        DeleteUrl: '/ClientAttributes/Delete',
         Columns: [
             { Name: 'Id', Label: '№', Type: 'number', Hidden: true },
-            { Name: 'Key', Label: 'Ключ', Type: 'text', Width: 200, Editable: true, MaxLength: 256 },
-            { Name: 'Name', Label: 'Название', Type: 'text', Width: 200, Editable: true, MaxLength: 256 },
-            { Name: 'IsDeleted', Label: ' ', Width: 100, Align: 'center', Formatter: clientAttributeIsDeletedFormatter, Sortable: false, Search: false }
+            { Name: 'Key', Label: 'Ключ', Type: 'text', Width: 150, Editable: true, MaxLength: 256 },
+            { Name: 'Name', Label: 'Название', Type: 'text', Width: 400, Editable: true, MaxLength: 256 }
         ]
     });
 }
@@ -80,57 +94,13 @@ function clientIsDeletedFormatter(value, options, data) {
             </button>`;
 }
 
-function clientAttributeIsDeletedFormatter(value, options, data) {
-    return `<button onclick="deleteClientAttribute(event, ${data.Id});" class="cell-button" 
-                title="${value ? 'Восстановить' : 'Удалить'}">${value ? 'Восстановить' : 'Удалить'}
-            </button>`;
-}
-
-function clientAttributeLinksIsDeletedFormatter(value, options, data) {
-    return `<button onclick="deleteClientAttributeLink(event, ${data.Id}, ${data.ClientId});" class="cell-button" 
-                title="${value ? 'Восстановить' : 'Удалить'}">${value ? 'Восстановить' : 'Удалить'}
-            </button>`;
-}
-
 function deleteClient(event, id) {
     event.preventDefault();
     event.stopPropagation();
 
-    postText('/Clients/Delete', { id: id }, result => {
-        $('#clients-table').trigger('reloadGrid');
-
-        const text = result === 'true' ? 'Восстановить' : 'Удалить';
-        const button = $('#ViewGrid_clients-table td#v_IsDeleted span button');
-        button.attr('title', text);
-        button.text(text);
-    });
-}
-
-function deleteClientAttribute(event, id) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    postText('/ClientAttributes/Delete', { id: id }, result => {
-        $('#attributes-table').trigger('reloadGrid');
-
-        const text = result === 'true' ? 'Восстановить' : 'Удалить';
-        const button = $('#ViewGrid_attributes-table td#v_IsDeleted span button');
-        button.attr('title', text);
-        button.text(text);
-    });
-}
-
-function deleteClientAttributeLink(event, id, clientId) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    postText('/ClientAttributeLinks/Delete', { id: id }, result => {
-        $(`#clients-attributes-table_${clientId}`).trigger('reloadGrid');
-
-        const text = result === 'true' ? 'Восстановить' : 'Удалить';
-        const button = $(`#ViewGrid_clients-attributes-table_${clientId}-sub-table td#v_IsDeleted span button`);
-        debugger;
-        button.attr('title', text);
-        button.text(text);
-    });
+    postText('/Clients/Delete',
+        { id: id },
+        () => {
+            $('#clients-table').trigger('reloadGrid');
+        });
 }

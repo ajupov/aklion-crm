@@ -64,6 +64,8 @@ namespace Crm.Attributes
             {
                 throw new StoreIsDeletedException();
             }
+
+            await next().ConfigureAwait(false);
         }
     }
 }

@@ -20,8 +20,6 @@ namespace Crm.Storages.Models
 
         public string Value { get; set; }
 
-        public bool IsDeleted { get; set; }
-
         public DateTime CreateDate { get; set; }
 
         public DateTime? ModifyDate { get; set; }
