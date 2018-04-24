@@ -1,12 +1,10 @@
-﻿namespace Crm.Models.User.ProductImageKeyLink
+﻿using Infrastructure.Dao.Models;
+
+namespace Crm.Models.User.ProductImageKeyLink
 {
-    public class ProductImageKeyLinkParameterModel
+    public class ProductImageKeyLinkParameterModel : BaseParameterModel
     {
-        public int? Id { get; set; }
-
         public int? ProductId { get; set; }
-
-        public string ProductName { get; set; }
 
         public int? KeyId { get; set; }
 
@@ -14,18 +12,8 @@
 
         public string KeyName { get; set; }
 
-        public bool? IsDeleted { get; set; }
+        public string MinCreateDate { get; set; }
 
-        public string CreateDate { get; set; }
-
-        public string ModifyDate { get; set; }
-
-        public string SortingColumn { get; set; }
-
-        public string SortingOrder { get; set; }
-
-        public int? Page { get; set; }
-
-        public int? Size { get; set; }
+        public string MaxCreateDate { get; set; }
     }
 }

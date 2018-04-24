@@ -4,8 +4,6 @@ namespace Crm.Models.User.ClientAttributeLink
 {
     public class ClientAttributeLinkParameterModel : BaseParameterModel
     {
-        public int? Id { get; set; }
-
         public int ClientId { get; set; }
 
         public int? AttributeId { get; set; }

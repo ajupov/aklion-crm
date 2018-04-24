@@ -99,7 +99,7 @@ namespace Crm.Controllers
             client.Name = model.Name;
             client.ModifyDate = DateTime.Now;
 
-            _storage.Update(client);
+            _storage.Client.Update(client);
             await _storage.SaveChangesAsync().ConfigureAwait(false);
         }
 
@@ -120,16 +120,18 @@ namespace Crm.Controllers
         [NonAction]
         private IQueryable<Client> GetQuery(ClientParameterModel model)
         {
+            model.Name = !string.IsNullOrWhiteSpace(model.Name) ? model.Name.Trim().ToLower() : null;
+
             return _storage.Client
-                .Include(x => x.ClientAttributeLinks)
+                .Include(x => x.AttributeLinks)
                 .Where(x => x.StoreId == UserContext.StoreId
-                            && (string.IsNullOrEmpty(model.Name) || x.Name.Contains(model.Name))
+                            && (string.IsNullOrEmpty(model.Name) || x.Name.Trim().ToLower().Contains(model.Name))
                             && (!model.MinCreateDate.ToNullableDate().HasValue || x.CreateDate > model.MinCreateDate.ToNullableDate())
                             && (!model.MaxCreateDate.ToNullableDate().HasValue || x.CreateDate < model.MaxCreateDate.ToNullableDate())
                             && (!model.IsDeleted.HasValue || x.IsDeleted == model.IsDeleted)
-                            && (x.ClientAttributeLinks == null || model.Attributes == null || !model.Attributes.Any()
+                            && (x.AttributeLinks == null || model.Attributes == null || !model.Attributes.Any()
                                 || model.Attributes.Where(a => !string.IsNullOrWhiteSpace(a.Value)).All(a =>
-                                    x.ClientAttributeLinks.Any(ca =>
+                                    x.AttributeLinks.Any(ca =>
                                         a.Key == ca.AttributeId && ca.Value.Trim().ToLower().Contains(a.Value.Trim().ToLower())))));
         }
 

@@ -13,6 +13,18 @@ namespace Crm.Storages
 
         public DbSet<ClientAttributeLink> ClientAttributeLink { get; set; }
 
+        public DbSet<Product> Product { get; set; }
+
+        public DbSet<ProductStatus> ProductStatus { get; set; }
+
+        public DbSet<ProductAttribute> ProductAttribute { get; set; }
+
+        public DbSet<ProductAttributeLink> ProductAttributeLink { get; set; }
+
+        public DbSet<ProductImageKey> ProductImageKey { get; set; }
+
+        public DbSet<ProductImageKeyLink> ProductImageKeyLink { get; set; }
+
         public Storage(DbContextOptions options) : base(options)
         {
         }

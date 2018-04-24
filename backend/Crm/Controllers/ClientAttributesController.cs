@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Crm.Attributes;
@@ -90,7 +89,7 @@ namespace Crm.Controllers
             clientAttribute.Key = model.Key.Trim();
             clientAttribute.Name = model.Name.Trim();
 
-            _storage.Update(clientAttribute);
+            _storage.ClientAttribute.Update(clientAttribute);
             await _storage.SaveChangesAsync().ConfigureAwait(false);
         }
 
@@ -111,10 +110,13 @@ namespace Crm.Controllers
         [NonAction]
         private IQueryable<ClientAttribute> GetQuery(ClientAttributeParameterModel model)
         {
+            model.Key = !string.IsNullOrWhiteSpace(model.Key) ? model.Key.Trim().ToLower() : null;
+            model.Name = !string.IsNullOrWhiteSpace(model.Name) ? model.Name.Trim().ToLower() : null;
+
             return _storage.ClientAttribute.Where(x =>
                 x.StoreId == UserContext.StoreId
-                && (string.IsNullOrEmpty(model.Key) || x.Key.StartsWith(model.Key, true, CultureInfo.InvariantCulture))
-                && (string.IsNullOrEmpty(model.Name) || x.Name.StartsWith(model.Name, true, CultureInfo.InvariantCulture)));
+                && (string.IsNullOrEmpty(model.Key) || x.Key.Trim().ToLower().Contains(model.Key))
+                && (string.IsNullOrEmpty(model.Name) || x.Name.Trim().ToLower().Contains(model.Name)));
         }
 
         [NonAction]

@@ -1,9 +1,9 @@
 ﻿@{
-    ViewBag.Title = "Продукты";
+    ViewBag.Title = "\"" + ViewBag.UserContext.StoreName + "\" - Продукты";
 }
 
 <div class="row card">
-    <button class="tab-button" onclick="openTab(this, 'products-tab'); initProductsTable();">@ViewBag.Title</button>
+    <button class="tab-button" onclick="openTab(this, 'products-tab'); initProductsTable();">Продукты</button>
     <button class="tab-button" onclick="openTab(this, 'attributes-tab'); initAttributesTable();">Атрибуты</button>
     <button class="tab-button" onclick="openTab(this, 'others-tab'); initOthersTable();">Прочее</button>
 </div>
@@ -28,6 +28,7 @@
                 <div id="products-images-table-pagination"></div>
             </div>
         </div>
+        <div id="products-table-search" class="dialog hidden table-search" title="Поиск"></div>
     </div>
 </div>
 

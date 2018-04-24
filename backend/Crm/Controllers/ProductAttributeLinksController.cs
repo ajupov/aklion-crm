@@ -1,65 +1,167 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Crm.Attributes;
-using Crm.Dao.ProductAttributeLink;
 using Crm.Exceptions;
-using Crm.Mappers.User.ProductAttributeLink;
 using Crm.Models;
 using Crm.Models.User.ProductAttributeLink;
+using Crm.Storages;
+using Crm.Storages.Models;
+using Infrastructure.Dao.Models;
+using Infrastructure.DateTime;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Crm.Controllers
 {
+    [CheckStore]
     [AjaxErrorHandle]
     [Route("ProductAttributeLinks")]
     public class ProductAttributeLinksController : BaseController
     {
-        private readonly IProductAttributeLinkDao _dao;
+        private readonly Storage _storage;
 
-        public ProductAttributeLinksController(IProductAttributeLinkDao dao)
+        public ProductAttributeLinksController(Storage storage)
         {
-            _dao = dao;
+            _storage = storage;
         }
 
         [HttpGet]
         [Route("GetList")]
         public async Task<PagingModel<ProductAttributeLinkModel>> GetList(ProductAttributeLinkParameterModel model)
         {
-            var result = await _dao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
-            return result.MapNew(model.Page, model.Size);
+            var query = GetQuery(model);
+            var list = await GetOrder(model, query).Skip(model.SkipCount).Take(model.TakeCount).ToListAsync().ConfigureAwait(false);
+            var count = await query.CountAsync().ConfigureAwait(false);
+
+            var result = list.Select(x => new ProductAttributeLinkModel
+            {
+                Id = x.Id,
+                ProductId = x.ProductId,
+                AttributeId = x.AttributeId,
+                AttributeName = x.Attribute.Name,
+                Value = x.Value,
+                CreateDate = x.CreateDate.ToDateTimeString()
+            }).ToList();
+
+            return new PagingModel<ProductAttributeLinkModel>(result, count, model.Page, model.Size);
         }
 
         [HttpPost]
         [Route("Create")]
-        public Task Create(ProductAttributeLinkModel model)
+        public async Task Create(ProductAttributeLinkModel model)
         {
-            return _dao.CreateAsync(model.MapNew(UserContext.StoreId));
+            var attributeId = await GetAttribute(model).ConfigureAwait(false);
+
+            var productAttributeLink = new ProductAttributeLink
+            {
+                StoreId = UserContext.StoreId,
+                ProductId = model.ProductId,
+                AttributeId = attributeId,
+                Value = model.Value,
+                CreateDate = DateTime.Now,
+                ModifyDate = null
+            };
+
+            await _storage.ProductAttributeLink.AddAsync(productAttributeLink).ConfigureAwait(false);
+            await _storage.SaveChangesAsync().ConfigureAwait(false);
         }
 
         [HttpPost]
         [Route("Update")]
         public async Task Update(ProductAttributeLinkModel model)
         {
-            var result = await _dao.GetAsync(model.Id).ConfigureAwait(false);
-            if (result.StoreId != UserContext.StoreId)
+            var productAttributeLink = await _storage.ProductAttributeLink.FirstOrDefaultAsync(x => x.Id == model.Id).ConfigureAwait(false);
+            if (productAttributeLink.StoreId != UserContext.StoreId)
             {
                 throw new NotAccessChangingException();
             }
 
-            await _dao.UpdateAsync(result.MapFrom(model, UserContext.StoreId)).ConfigureAwait(false);
+            productAttributeLink.AttributeId = model.AttributeId;
+            productAttributeLink.Value = model.Value;
+            productAttributeLink.ModifyDate = DateTime.Now;
+
+            _storage.ProductAttributeLink.Update(productAttributeLink);
+            await _storage.SaveChangesAsync().ConfigureAwait(false);
         }
 
         [HttpPost]
         [Route("Delete")]
         public async Task Delete(int id)
         {
-            var result = await _dao.GetAsync(id).ConfigureAwait(false);
-            if (result.StoreId != UserContext.StoreId)
+            var productAttributeLink = await _storage.ProductAttributeLink.FirstOrDefaultAsync(x => x.Id == id).ConfigureAwait(false);
+            if (productAttributeLink.StoreId != UserContext.StoreId)
             {
                 throw new NotAccessChangingException();
             }
 
-            result.IsDeleted = !result.IsDeleted;
-            await _dao.UpdateAsync(result).ConfigureAwait(false);
+            _storage.ProductAttributeLink.Remove(productAttributeLink);
+            await _storage.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        [NonAction]
+        private IQueryable<ProductAttributeLink> GetQuery(ProductAttributeLinkParameterModel model)
+        {
+            model.AttributeName = !string.IsNullOrWhiteSpace(model.AttributeName) ? model.AttributeName.Trim().ToLower() : null;
+            model.Value = !string.IsNullOrWhiteSpace(model.Value) ? model.Value.Trim().ToLower() : null;
+
+            return _storage.ProductAttributeLink.Include(x => x.Attribute).Where(x =>
+                x.StoreId == UserContext.StoreId
+                && x.ProductId == model.ProductId
+                && (!model.AttributeId.HasValue || x.AttributeId == model.AttributeId)
+                && (string.IsNullOrEmpty(model.AttributeName) || x.Attribute.Name.Trim().ToLower().Contains(model.AttributeName))
+                && (string.IsNullOrEmpty(model.Value) || x.Value.Trim().ToLower().Contains(model.Value))
+                && (!model.MinCreateDate.ToNullableDate().HasValue || x.CreateDate > model.MinCreateDate.ToNullableDate())
+                && (!model.MaxCreateDate.ToNullableDate().HasValue || x.CreateDate < model.MaxCreateDate.ToNullableDate()));
+        }
+
+        [NonAction]
+        private static IQueryable<ProductAttributeLink> GetOrder(BaseParameterModel model, IQueryable<ProductAttributeLink> query)
+        {
+            switch (model.SortingColumn)
+            {
+                case "AttributeName":
+                    return model.IsDescSortingOrder
+                        ? query.OrderByDescending(x => x.Attribute.Name)
+                        : query.OrderBy(x => x.Attribute.Name);
+                case "Value":
+                    return model.IsDescSortingOrder
+                        ? query.OrderByDescending(x => x.Value)
+                        : query.OrderBy(x => x.Value);
+                default:
+                    return model.IsDescSortingOrder
+                        ? query.OrderByDescending(x => x.CreateDate)
+                        : query.OrderBy(x => x.CreateDate);
+            }
+        }
+
+        [NonAction]
+        private async Task<int> GetAttribute(ProductAttributeLinkModel model)
+        {
+            var attribute = (model.AttributeId > 0
+                                ? await _storage.ProductAttribute
+                                    .FirstOrDefaultAsync(x => x.StoreId == UserContext.StoreId && x.Id == model.AttributeId)
+                                    .ConfigureAwait(false)
+                                : await _storage.ProductAttribute
+                                    .FirstOrDefaultAsync(x =>
+                                        x.StoreId == UserContext.StoreId && x.Name.Trim().ToLower() == model.AttributeName.Trim().ToLower())
+                                    .ConfigureAwait(false)) ?? new ProductAttribute
+                            {
+                                Key = model.AttributeName.Trim().Replace(" ", "_"),
+                                Name = model.AttributeName.Trim(),
+                                StoreId = UserContext.StoreId
+                            };
+
+            if (attribute.Id > 0)
+            {
+                _storage.ProductAttribute.Update(attribute);
+                await _storage.SaveChangesAsync().ConfigureAwait(false);
+                return attribute.Id;
+            }
+
+            var savedProductAttribute = await _storage.ProductAttribute.AddAsync(attribute).ConfigureAwait(false);
+            await _storage.SaveChangesAsync().ConfigureAwait(false);
+            return savedProductAttribute.Entity.Id;
         }
     }
 }

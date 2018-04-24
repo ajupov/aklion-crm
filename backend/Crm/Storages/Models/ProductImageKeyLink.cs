@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Crm.Storages.Models
 {
-    public class Client
+    public class ProductImageKeyLink
     {
         public int Id { get; set; }
 
@@ -11,14 +10,18 @@ namespace Crm.Storages.Models
 
         public Store Store { get; set; }
 
-        public string Name { get; set; }
+        public int ProductId { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public Product Product { get; set; }
+
+        public int KeyId { get; set; }
+
+        public ProductImageKey Key { get; set; }
+
+        public string Value { get; set; }
 
         public DateTime CreateDate { get; set; }
 
         public DateTime? ModifyDate { get; set; }
-
-        public List<ClientAttributeLink> AttributeLinks { get; set; }
     }
 }

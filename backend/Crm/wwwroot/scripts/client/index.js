@@ -3,7 +3,6 @@
         Element: '#clients-table',
         Pager: '#clients-table-pagination',
         SearchDialog: '#clients-table-search',
-        SearchDialogActivator: '#clients-table-search-activator',
         IsViewable: true,
         IsEditable: true,
         IsCreatable: true,
@@ -18,7 +17,7 @@
         ViewFormAdditionalFieldValue: 'Value',
         Columns: [
             { Name: 'Id', Label: '№', Type: 'number', Hidden: true },
-            { Name: 'Name', Label: 'Наименование', Type: 'text', Width: 400, Editable: true, MaxLength: 256 },
+            { Name: 'Name', Label: 'Наименование', Type: 'text', Width: 300, Editable: true, MaxLength: 256 },
             { Name: 'CreateDate', Label: 'Создан', Type: 'datetime', Width: 120 },
             {
                 Name: 'IsDeleted',
@@ -83,7 +82,7 @@ function initAttributesTable() {
         Columns: [
             { Name: 'Id', Label: '№', Type: 'number', Hidden: true },
             { Name: 'Key', Label: 'Ключ', Type: 'text', Width: 150, Editable: true, MaxLength: 256 },
-            { Name: 'Name', Label: 'Название', Type: 'text', Width: 400, Editable: true, MaxLength: 256 }
+            { Name: 'Name', Label: 'Название', Type: 'text', Width: 300, Editable: true, MaxLength: 256 }
         ]
     });
 }

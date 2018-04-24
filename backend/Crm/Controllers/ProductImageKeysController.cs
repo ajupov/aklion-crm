@@ -1,75 +1,127 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Crm.Attributes;
-using Crm.Dao.ProductImageKey;
 using Crm.Exceptions;
-using Crm.Mappers.User.ProductImageKey;
 using Crm.Models;
 using Crm.Models.User.ProductImageKey;
+using Crm.Storages;
+using Crm.Storages.Models;
+using Infrastructure.Dao.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Crm.Controllers
 {
+    [CheckStore]
     [AjaxErrorHandle]
     [Route("ProductImageKeys")]
     public class ProductImageKeysController : BaseController
     {
-        private readonly IProductImageKeyDao _dao;
+        private readonly Storage _storage;
 
-        public ProductImageKeysController(IProductImageKeyDao dao)
+        public ProductImageKeysController(Storage storage)
         {
-            _dao = dao;
+            _storage = storage;
         }
 
         [HttpGet]
         [Route("GetList")]
         public async Task<PagingModel<ProductImageKeyModel>> GetList(ProductImageKeyParameterModel model)
         {
-            var result = await _dao.GetPagedListAsync(model.MapNew(UserContext.StoreId)).ConfigureAwait(false);
-            return result.MapNew(model.Page, model.Size);
-        }
+            var query = GetQuery(model);
+            var list = await GetOrder(model, query).Skip(model.SkipCount).Take(model.TakeCount).ToListAsync().ConfigureAwait(false);
+            var count = await query.CountAsync().ConfigureAwait(false);
 
+            var result = list.Select(x => new ProductImageKeyModel
+            {
+                Id = x.Id,
+                Key = x.Key,
+                Name = x.Name
+            }).ToList();
+
+            return new PagingModel<ProductImageKeyModel>(result, count, model.Page, model.Size);
+        }
 
         [HttpGet]
         [Route("GetSelect")]
         public async Task<Dictionary<string, int>> GetSelect()
         {
-            var result = await _dao.GetSelectAsync(UserContext.StoreId.MapNew()).ConfigureAwait(false);
-            return result.MapNew();
+            return await _storage.ProductImageKey.Where(x => x.StoreId == UserContext.StoreId).ToDictionaryAsync(k => k.Name, v => v.Id)
+                .ConfigureAwait(false);
         }
 
         [HttpPost]
         [Route("Create")]
-        public Task Create(ProductImageKeyModel model)
+        public async Task Create(ProductImageKeyModel model)
         {
-            return _dao.CreateAsync(model.MapNew(UserContext.StoreId));
+            var clientAttribute = new ProductImageKey
+            {
+                Key = model.Key.Trim(),
+                Name = model.Name.Trim(),
+                StoreId = UserContext.StoreId
+            };
+
+            await _storage.ProductImageKey.AddAsync(clientAttribute).ConfigureAwait(false);
+            await _storage.SaveChangesAsync().ConfigureAwait(false);
         }
 
         [HttpPost]
         [Route("Update")]
         public async Task Update(ProductImageKeyModel model)
         {
-            var result = await _dao.GetAsync(model.Id).ConfigureAwait(false);
-            if (result.StoreId != UserContext.StoreId)
+            var productImageKey = await _storage.ProductImageKey.FirstOrDefaultAsync(x => x.Id == model.Id).ConfigureAwait(false);
+            if (productImageKey.StoreId != UserContext.StoreId)
             {
                 throw new NotAccessChangingException();
             }
 
-            await _dao.UpdateAsync(result.MapFrom(model, UserContext.StoreId)).ConfigureAwait(false);
+            productImageKey.Key = model.Key.Trim();
+            productImageKey.Name = model.Name.Trim();
+
+            _storage.ProductImageKey.Update(productImageKey);
+            await _storage.SaveChangesAsync().ConfigureAwait(false);
         }
 
         [HttpPost]
         [Route("Delete")]
         public async Task Delete(int id)
         {
-            var result = await _dao.GetAsync(id).ConfigureAwait(false);
-            if (result.StoreId != UserContext.StoreId)
+            var productImageKey = await _storage.ProductImageKey.FirstOrDefaultAsync(x => x.Id == id).ConfigureAwait(false);
+            if (productImageKey.StoreId != UserContext.StoreId)
             {
                 throw new NotAccessChangingException();
             }
 
-            result.IsDeleted = !result.IsDeleted;
-            await _dao.UpdateAsync(result).ConfigureAwait(false);
+            _storage.ProductImageKey.Remove(productImageKey);
+            await _storage.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        [NonAction]
+        private IQueryable<ProductImageKey> GetQuery(ProductImageKeyParameterModel model)
+        {
+            model.Name = !string.IsNullOrWhiteSpace(model.Name) ? model.Name.Trim().ToLower() : null;
+            model.Key = !string.IsNullOrWhiteSpace(model.Key) ? model.Key.Trim().ToLower() : null;
+
+            return _storage.ProductImageKey.Where(x =>
+                x.StoreId == UserContext.StoreId && (string.IsNullOrEmpty(model.Name) || x.Name.Trim().ToLower().Contains(model.Name)) &&
+                (string.IsNullOrEmpty(model.Key) || x.Name.Trim().ToLower().Contains(model.Key)));
+        }
+
+        [NonAction]
+        private static IQueryable<ProductImageKey> GetOrder(BaseParameterModel model, IQueryable<ProductImageKey> query)
+        {
+            switch (model.SortingColumn)
+            {
+                case "Key":
+                    return model.IsDescSortingOrder
+                        ? query.OrderByDescending(x => x.Key)
+                        : query.OrderBy(x => x.Key);
+                default:
+                    return model.IsDescSortingOrder
+                        ? query.OrderByDescending(x => x.Name)
+                        : query.OrderBy(x => x.Name);
+            }
         }
     }
 }

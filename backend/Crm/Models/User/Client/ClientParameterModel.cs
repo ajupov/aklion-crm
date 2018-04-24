@@ -5,8 +5,6 @@ namespace Crm.Models.User.Client
 {
     public class ClientParameterModel : BaseParameterModel
     {
-        public int? Id { get; set; }
-
         public string Name { get; set; }
 
         public bool? IsDeleted { get; set; }

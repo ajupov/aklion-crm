@@ -81,7 +81,7 @@ namespace Crm.Controllers
             clientAttributeLink.Value = model.Value;
             clientAttributeLink.ModifyDate = DateTime.Now;
 
-            _storage.Update(clientAttributeLink);
+            _storage.ClientAttributeLink.Update(clientAttributeLink);
             await _storage.SaveChangesAsync().ConfigureAwait(false);
         }
 
@@ -102,13 +102,15 @@ namespace Crm.Controllers
         [NonAction]
         private IQueryable<ClientAttributeLink> GetQuery(ClientAttributeLinkParameterModel model)
         {
+            model.AttributeName = !string.IsNullOrWhiteSpace(model.AttributeName) ? model.AttributeName.Trim().ToLower() : null;
+            model.Value = !string.IsNullOrWhiteSpace(model.Value) ? model.Value.Trim().ToLower() : null;
+
             return _storage.ClientAttributeLink.Include(x => x.Attribute).Where(x =>
                 x.StoreId == UserContext.StoreId
                 && x.ClientId == model.ClientId
-                && (!model.Id.HasValue || x.Id == model.Id)
                 && (!model.AttributeId.HasValue || x.AttributeId == model.AttributeId)
-                && (string.IsNullOrEmpty(model.AttributeName) || x.Attribute.Name.Contains(model.AttributeName))
-                && (string.IsNullOrEmpty(model.Value) || x.Value.Contains(model.Value))
+                && (string.IsNullOrEmpty(model.AttributeName) || x.Attribute.Name.Trim().ToLower().Contains(model.AttributeName))
+                && (string.IsNullOrEmpty(model.Value) || x.Value.Trim().ToLower().Contains(model.Value))
                 && (!model.MinCreateDate.ToNullableDate().HasValue || x.CreateDate > model.MinCreateDate.ToNullableDate())
                 && (!model.MaxCreateDate.ToNullableDate().HasValue || x.CreateDate < model.MaxCreateDate.ToNullableDate()));
         }
@@ -142,7 +144,7 @@ namespace Crm.Controllers
                                     .ConfigureAwait(false)
                                 : await _storage.ClientAttribute
                                     .FirstOrDefaultAsync(x =>
-                                        x.StoreId == UserContext.StoreId && x.Name.ToLower() == model.AttributeName.Trim().ToLower())
+                                        x.StoreId == UserContext.StoreId && x.Name.Trim().ToLower() == model.AttributeName.Trim().ToLower())
                                     .ConfigureAwait(false)) ?? new ClientAttribute
                             {
                                 Key = model.AttributeName.Trim().Replace(" ", "_"),
