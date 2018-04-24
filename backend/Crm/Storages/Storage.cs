@@ -25,6 +25,12 @@ namespace Crm.Storages
 
         public DbSet<ProductImageKeyLink> ProductImageKeyLink { get; set; }
 
+        public DbSet<UserPermission> UserPermission { get; set; }
+
+        public DbSet<OrderStatus> OrderStatus { get; set; }
+
+        public DbSet<OrderSource> OrderSource { get; set; }
+
         public Storage(DbContextOptions options) : base(options)
         {
         }

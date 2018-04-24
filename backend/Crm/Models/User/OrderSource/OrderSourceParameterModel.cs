@@ -1,21 +1,9 @@
-﻿namespace Crm.Models.User.OrderSource
+﻿using Infrastructure.Dao.Models;
+
+namespace Crm.Models.User.OrderSource
 {
-    public class OrderSourceParameterModel
+    public class OrderSourceParameterModel : BaseParameterModel
     {
-        public int? Id { get; set; }
-
         public string Name { get; set; }
-
-        public string CreateDate { get; set; }
-
-        public string ModifyDate { get; set; }
-
-        public string SortingColumn { get; set; }
-
-        public string SortingOrder { get; set; }
-
-        public int? Page { get; set; }
-
-        public int? Size { get; set; }
     }
 }

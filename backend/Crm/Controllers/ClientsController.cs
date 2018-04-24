@@ -125,6 +125,7 @@ namespace Crm.Controllers
             return _storage.Client
                 .Include(x => x.AttributeLinks)
                 .Where(x => x.StoreId == UserContext.StoreId
+                            && (!model.Id.HasValue || x.Id == model.Id)
                             && (string.IsNullOrEmpty(model.Name) || x.Name.Trim().ToLower().Contains(model.Name))
                             && (!model.MinCreateDate.ToNullableDate().HasValue || x.CreateDate > model.MinCreateDate.ToNullableDate())
                             && (!model.MaxCreateDate.ToNullableDate().HasValue || x.CreateDate < model.MaxCreateDate.ToNullableDate())

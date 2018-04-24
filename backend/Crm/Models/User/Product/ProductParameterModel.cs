@@ -5,6 +5,8 @@ namespace Crm.Models.User.Product
 {
     public class ProductParameterModel : BaseParameterModel
     {
+        public int? Id { get; set; }
+
         public string Name { get; set; }
 
         public int? ParentProductId { get; set; }

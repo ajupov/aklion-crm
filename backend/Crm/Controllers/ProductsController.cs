@@ -134,6 +134,7 @@ namespace Crm.Controllers
                 .Include(x => x.Status)
                 .Include(x => x.AttributeLinks)
                 .Where(x => x.StoreId == UserContext.StoreId
+                            && (!model.Id.HasValue || x.Id == model.Id)
                             && (string.IsNullOrEmpty(model.Name) || x.Name.Trim().ToLower().Contains(model.Name))
                             && (!model.MinPrice.HasValue || x.Price > model.MinPrice)
                             && (!model.MaxPrice.HasValue || x.Price < model.MaxPrice)
