@@ -1,6 +1,8 @@
-﻿namespace Crm.Models.User.OrderItem
+﻿using Infrastructure.Dao.Models;
+
+namespace Crm.Models.User.OrderItem
 {
-    public class OrderItemParameterModel
+    public class OrderItemParameterModel : BaseParameterModel
     {
         public int? Id { get; set; }
 
@@ -10,22 +12,16 @@
 
         public string ProductName { get; set; }
 
-        public decimal? Price { get; set; }
+        public decimal? MinPrice { get; set; }
 
-        public int? Count { get; set; }
+        public decimal? MaxPrice { get; set; }
 
-        public bool? IsDeleted { get; set; }
+        public int? MinCount { get; set; }
 
-        public string CreateDate { get; set; }
+        public int? MaxCount { get; set; }
 
-        public string ModifyDate { get; set; }
+        public int? MinSum { get; set; }
 
-        public string SortingColumn { get; set; }
-
-        public string SortingOrder { get; set; }
-
-        public int? Page { get; set; }
-
-        public int? Size { get; set; }
+        public int? MaxSum { get; set; }
     }
 }

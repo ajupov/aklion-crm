@@ -14,10 +14,6 @@
 
         public int Count { get; set; }
 
-        public bool IsDeleted { get; set; }
-
-        public string CreateDate { get; set; }
-
-        public string ModifyDate { get; set; }
+        public decimal Sum { get; set; }
     }
 }

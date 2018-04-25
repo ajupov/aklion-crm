@@ -1,8 +1,9 @@
 ﻿using Crm.Enums;
+using Infrastructure.Dao.Models;
 
 namespace Crm.Models.User.User
 {
-    public class UserParameterModel
+    public class UserParameterModel : BaseParameterModel
     {
         public int? Id { get; set; }
 
@@ -24,16 +25,8 @@ namespace Crm.Models.User.User
 
         public bool? IsDeleted { get; set; }
 
-        public string CreateDate { get; set; }
+        public string MinCreateDate { get; set; }
 
-        public string ModifyDate { get; set; }
-
-        public string SortingColumn { get; set; }
-
-        public string SortingOrder { get; set; }
-
-        public int? Page { get; set; }
-
-        public int? Size { get; set; }
+        public string MaxCreateDate { get; set; }
     }
 }

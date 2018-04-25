@@ -27,7 +27,5 @@ namespace Crm.Models.User.User
         public string AvatarUrl { get; set; }
 
         public string CreateDate { get; set; }
-
-        public string ModifyDate { get; set; }
     }
 }

@@ -22,6 +22,6 @@
 
         public bool IsDeleted { get; set; }
 
-        public sbyte CreateDate { get; set; }
+        public string CreateDate { get; set; }
     }
 }
