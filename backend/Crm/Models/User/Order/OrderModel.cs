@@ -1,4 +1,6 @@
-﻿namespace Crm.Models.User.Order
+﻿using System.Collections.Generic;
+
+namespace Crm.Models.User.Order
 {
     public class OrderModel
     {
@@ -23,5 +25,9 @@
         public bool IsDeleted { get; set; }
 
         public string CreateDate { get; set; }
+
+        public List<Storages.Models.OrderAttributeLink> AttributeLinks { get; set; }
+
+        public List<Storages.Models.OrderItem> OrderItems { get; set; }
     }
 }

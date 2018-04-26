@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Crm.Attributes;
@@ -65,16 +64,42 @@ namespace Crm.Controllers
         [Route("Create")]
         public async Task Create(OrderModel model)
         {
+            var now = DateTime.Now;
+
             var order = new Order
             {
-                Name = model.Name,
                 StoreId = UserContext.StoreId,
-                IsDeleted = false,
-                CreateDate = DateTime.Now,
-                ModifyDate = null
+                ClientId = model.ClientId,
+                SourceId = model.SourceId,
+                StatusId = model.StatusId,
+                DiscountSum = model.DiscountSum,
+                CreateDate = now
             };
 
-            await _storage.Order.AddAsync(order).ConfigureAwait(false);
+            var savedOrder = await _storage.Order.AddAsync(order).ConfigureAwait(false);
+            await _storage.SaveChangesAsync().ConfigureAwait(false);
+
+            var orderAttributeLins = model.AttributeLinks.Select(x => new OrderAttributeLink
+            {
+                StoreId = UserContext.StoreId,
+                OrderId = savedOrder.Entity.Id,
+                AttributeId = x.AttributeId,
+                Value = x.Value,
+                CreateDate = now
+            });
+
+            await _storage.OrderAttributeLink.AddRangeAsync(orderAttributeLins).ConfigureAwait(false);
+
+            var orderItems = model.OrderItems.Select(x => new OrderItem
+            {
+                StoreId = UserContext.StoreId,
+                OrderId = savedOrder.Entity.Id,
+                ProductId = x.ProductId,
+                Price = x.Price,
+                Count = x.Count
+            });
+
+            await _storage.OrderItem.AddRangeAsync(orderItems).ConfigureAwait(false);
             await _storage.SaveChangesAsync().ConfigureAwait(false);
         }
 
@@ -82,7 +107,10 @@ namespace Crm.Controllers
         [Route("Update")]
         public async Task Update(OrderModel model)
         {
-            var order = await _storage.Order.FirstOrDefaultAsync(x => x.Id == model.Id).ConfigureAwait(false);
+            var now = DateTime.Now;
+
+            var order = await _storage.Order.Include(x => x.AttributeLinks).Include(x => x.OrderItems).FirstOrDefaultAsync(x => x.Id == model.Id)
+                .ConfigureAwait(false);
             if (order.StoreId != UserContext.StoreId)
             {
                 throw new NotAccessChangingException();
@@ -93,10 +121,64 @@ namespace Crm.Controllers
                 throw new ObjectIsDeletedException();
             }
 
-            order.Name = model.Name;
-            order.ModifyDate = DateTime.Now;
+            order.ClientId = model.ClientId;
+            order.SourceId = model.SourceId;
+            order.StatusId = model.StatusId;
+            order.DiscountSum = model.DiscountSum;
+            order.ModifyDate = now;
+
+            order.AttributeLinks.ForEach(x =>
+            {
+                var orderAttributeLink = model.AttributeLinks.FirstOrDefault(l => l.Id == x.Id);
+                if (orderAttributeLink == null)
+                {
+                    return;
+                }
+
+                x.AttributeId = orderAttributeLink.AttributeId;
+                x.Value = orderAttributeLink.Value;
+                x.ModifyDate = now;
+            });
+
+            order.OrderItems.ForEach(x =>
+            {
+                var orderItem = model.OrderItems.FirstOrDefault(l => l.Id == x.Id);
+                if (orderItem == null)
+                {
+                    return;
+                }
+
+                x.ProductId = orderItem.ProductId;
+                x.Price = orderItem.Price;
+                x.Count = orderItem.Count;
+            });
 
             _storage.Order.Update(order);
+
+            var orderAttributeLinks = model.AttributeLinks.Where(x => !order.AttributeLinks.Select(i => i.Id).Contains(x.Id)).Select(x =>
+                new OrderAttributeLink
+                {
+                    StoreId = UserContext.StoreId,
+                    OrderId = order.Id,
+                    AttributeId = x.AttributeId,
+                    Value = x.Value,
+                    CreateDate = now
+                }).ToList();
+
+            await _storage.OrderAttributeLink.AddRangeAsync(orderAttributeLinks).ConfigureAwait(false);
+
+            var orderItems = model.OrderItems.Where(x => !order.OrderItems.Select(i => i.Id).Contains(x.Id)).Select(x =>
+                new OrderItem
+                {
+                    StoreId = UserContext.StoreId,
+                    OrderId = order.Id,
+                    ProductId = x.ProductId,
+                    Price = x.Price,
+                    Count = x.Count
+                }).ToList();
+
+            await _storage.OrderItem.AddRangeAsync(orderItems).ConfigureAwait(false);
+
             await _storage.SaveChangesAsync().ConfigureAwait(false);
         }
 
@@ -117,22 +199,29 @@ namespace Crm.Controllers
         [NonAction]
         private IQueryable<Order> GetQuery(OrderParameterModel model)
         {
-            model.Name = !string.IsNullOrWhiteSpace(model.Name) ? model.Name.Trim().ToLower() : null;
-            model.VendorCode = !string.IsNullOrWhiteSpace(model.VendorCode) ? model.VendorCode.Trim().ToLower() : null;
+            model.ClientName = !string.IsNullOrWhiteSpace(model.ClientName) ? model.ClientName.Trim().ToLower() : null;
+            model.SourceName = !string.IsNullOrWhiteSpace(model.SourceName) ? model.SourceName.Trim().ToLower() : null;
+            model.StatusName = !string.IsNullOrWhiteSpace(model.StatusName) ? model.StatusName.Trim().ToLower() : null;
 
             return _storage.Order
-                .Include(x => x.ParentOrder)
+                .Include(x => x.Client)
+                .Include(x => x.Source)
                 .Include(x => x.Status)
                 .Include(x => x.AttributeLinks)
+                .Include(x => x.OrderItems)
                 .Where(x => x.StoreId == UserContext.StoreId
                             && (!model.Id.HasValue || x.Id == model.Id)
-                            && (string.IsNullOrEmpty(model.Name) || x.Name.Trim().ToLower().Contains(model.Name))
-                            && (!model.MinPrice.HasValue || x.Price > model.MinPrice)
-                            && (!model.MaxPrice.HasValue || x.Price < model.MaxPrice)
+                            && (!model.ClientId.HasValue || x.ClientId == model.ClientId)
+                            && (string.IsNullOrEmpty(model.ClientName) || x.Client.Name.Trim().ToLower().Contains(model.ClientName))
+                            && (!model.SourceId.HasValue || x.SourceId == model.SourceId)
+                            && (string.IsNullOrEmpty(model.SourceName) || x.Source.Name.Trim().ToLower().Contains(model.SourceName))
                             && (!model.StatusId.HasValue || x.StatusId == model.StatusId)
-                            && (!model.ParentOrderId.HasValue || x.ParentOrderId == model.ParentOrderId)
-                            && (string.IsNullOrEmpty(model.VendorCode) || x.VendorCode.Trim() == model.VendorCode)
-                            && (!model.MinCreateDate.ToNullableDate().HasValue || x.CreateDate > model.MinCreateDate.ToNullableDate())
+                            && (string.IsNullOrEmpty(model.StatusName) || x.Status.Name.Trim().ToLower().Contains(model.StatusName))
+                            && (!model.MinTotalSum.HasValue || x.OrderItems.Sum(i => i.Price) > model.MinTotalSum)
+                            && (!model.MaxTotalSum.HasValue || x.OrderItems.Sum(i => i.Price) < model.MaxTotalSum)
+                            && (!model.MinDiscountSum.HasValue || x.DiscountSum < model.MinDiscountSum)
+                            && (!model.MaxDiscountSum.HasValue || x.DiscountSum < model.MaxDiscountSum)
+                            && (!model.MinCreateDate.ToNullableDate().HasValue || x.CreateDate < model.MinCreateDate.ToNullableDate())
                             && (!model.MaxCreateDate.ToNullableDate().HasValue || x.CreateDate < model.MaxCreateDate.ToNullableDate())
                             && (!model.IsDeleted.HasValue || x.IsDeleted == model.IsDeleted)
                             && (x.AttributeLinks == null || model.Attributes == null || !model.Attributes.Any()
@@ -146,18 +235,26 @@ namespace Crm.Controllers
         {
             switch (model.SortingColumn)
             {
-                case "Name":
+                case "ClientName":
                     return model.IsDescSortingOrder
-                        ? query.OrderBy(x => x.IsDeleted).ThenByDescending(x => x.Name)
-                        : query.OrderBy(x => x.IsDeleted).ThenBy(x => x.Name);
-                case "Price":
+                        ? query.OrderBy(x => x.IsDeleted).ThenByDescending(x => x.Client.Name)
+                        : query.OrderBy(x => x.IsDeleted).ThenBy(x => x.Client.Name);
+                case "SourceName":
                     return model.IsDescSortingOrder
-                        ? query.OrderBy(x => x.IsDeleted).ThenByDescending(x => x.Price)
-                        : query.OrderBy(x => x.IsDeleted).ThenBy(x => x.Price);
-                case "VendorCode":
+                        ? query.OrderBy(x => x.IsDeleted).ThenByDescending(x => x.Source.Name)
+                        : query.OrderBy(x => x.IsDeleted).ThenBy(x => x.Source.Name);
+                case "StatusName":
                     return model.IsDescSortingOrder
-                        ? query.OrderBy(x => x.IsDeleted).ThenByDescending(x => x.VendorCode)
-                        : query.OrderBy(x => x.IsDeleted).ThenBy(x => x.VendorCode);
+                        ? query.OrderBy(x => x.IsDeleted).ThenByDescending(x => x.Status.Name)
+                        : query.OrderBy(x => x.IsDeleted).ThenBy(x => x.Status.Name);
+                case "TotalSum":
+                    return model.IsDescSortingOrder
+                        ? query.OrderBy(x => x.IsDeleted).ThenByDescending(x => x.OrderItems.Sum(i => i.Price))
+                        : query.OrderBy(x => x.IsDeleted).ThenBy(x => x.OrderItems.Sum(i => i.Price));
+                case "DiscountSum":
+                    return model.IsDescSortingOrder
+                        ? query.OrderBy(x => x.IsDeleted).ThenByDescending(x => x.DiscountSum)
+                        : query.OrderBy(x => x.IsDeleted).ThenBy(x => x.DiscountSum);
                 default:
                     return model.IsDescSortingOrder
                         ? query.OrderBy(x => x.IsDeleted).ThenByDescending(x => x.CreateDate)

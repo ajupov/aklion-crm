@@ -32,5 +32,7 @@ namespace Crm.Storages.Models
         public DateTime? ModifyDate { get; set; }
 
         public List<OrderAttributeLink> AttributeLinks { get; set; }
+
+        public List<OrderItem> OrderItems { get; set; }
     }
 }
